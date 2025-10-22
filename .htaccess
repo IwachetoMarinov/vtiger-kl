@@ -1,0 +1,8 @@
+# Disable directory browsing
+   Options -Indexes
+
+   # Prevent access to config files
+   <FilesMatch "^(config\.inc\.php|config\.performance\.php)$">
+       Order allow,deny
+       Deny from all
+   </FilesMatch>
