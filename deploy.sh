@@ -11,7 +11,7 @@ DB_PASS=""
 BACKUP_DIR="./db_backups"
 DATE=$(date +"%Y_%m_%d_%H%M")
 SQL_FILE="$BACKUP_DIR/${DB_NAME}_$DATE.sql"
-GIT_BRANCH="main"
+GIT_BRANCH="develop"
 
 # === CHECKS ===
 if [ ! -d "$BACKUP_DIR" ]; then

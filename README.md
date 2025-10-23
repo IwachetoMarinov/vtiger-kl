@@ -6,7 +6,7 @@ Vtiger is a PHP based web application that enables businesses to increase sales 
 
 Development on vtiger is done at https://code.vtiger.com
 
-**Note**: Any contributions submitted to Vtiger project should be made available under Vtiger Public License. 
+**Note**: Any contributions submitted to Vtiger project should be made available under Vtiger Public License.
 If contribution has any patented code, or commercial code, then please communicate with Vtiger team before making the contribution.
 
 https://www.vtiger.com/vtiger-public-license/
@@ -18,7 +18,7 @@ to report you can [create an issue](https://code.vtiger.com/vtiger/vtigercrm/iss
 
 If you then want to fix the issue (or another issue) you can create your own fork of vtiger to work on using the
 fork button on the vtiger project, this will create a new git repository for you at
-    
+
     https://code.vtiger.com/yourname/vtigercrm.git
 
 on your computer you will need a git client installed and you need to tell git who you are:
@@ -38,7 +38,7 @@ you will switch to that branch using the checkout command
     git branch fix_projects_on_calendar
     git checkout fix_projects_on_calendar
 
-Before you install, you need to run ```composer update```
+Before you install, you need to run `composer update`
 
 Now you can make your changes and commit all changed files with
 
@@ -52,7 +52,7 @@ Now you can push your branch to the server, this creates the branch on the serve
     git push --set-upstream origin fix_projects_on_calendar
 
 look at the branch on code.vtiger.com and create a merge request from your branch
-to the upstream master, this will be reviewed to see if it fixes the 
+to the upstream master, this will be reviewed to see if it fixes the
 issue and if all is good will be merged into the upstream code.
 You can then switch back to your master branch with
 
@@ -67,7 +67,7 @@ repository as an upstream remote (only need to do this bit once), then you can f
     git fetch upstream
     git merge upstream/master
 
+Deploy in github with export/import database
 
-Deploy in github with export/import database    
-1. chmod +x deploy.sh
+1. chmod +x deploy.sh // Only first time
 2. ./deploy.sh
