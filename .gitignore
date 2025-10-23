@@ -1,3 +1,8 @@
 vendor/*
 !vendor/.htaccess
 .vscode/*
+config.inc.php
+.htaccess
+logs/
+storage/
+cache/
