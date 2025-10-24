@@ -5,6 +5,8 @@
  * Log: vtigercrm/api/api_debug.log
  */
 
+use Dotenv\Dotenv;
+
 date_default_timezone_set('UTC');
 
 header('Content-Type: application/json');
@@ -67,12 +69,21 @@ try {
     } else {
         throw new Exception('vendor/autoload.php not found — run `composer install` in vtiger root.');
     }
+
     require_once 'config.inc.php';
-    // require_once 'include/loader.php';
     require_once 'include/utils/utils.php';
     require_once 'include/database/PearDatabase.php';
     require_once 'modules/Users/Users.php';
     require_once 'include/QueryGenerator/QueryGenerator.php';
+
+    $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
+    $dotenv->safeLoad();
+
+    define('OAUTH_ISSUER',      getenv('OAUTH_ISSUER') ?: 'http://localhost/vtiger-gpm/');
+    define('OAUTH_AUDIENCE',    getenv('OAUTH_AUDIENCE') ?: 'vtiger-api');
+    define('OAUTH_SIGNING_KEY', getenv('OAUTH_SIGNING_KEY') ?: 'K9e$z3!hP0wR7uX1tL@vN6s#JgY8fD2mQbE4pA^iC5rT*oW0xV&Z7yB1lH9nU');
+    define('OAUTH_ACCESS_TTL',  (int)(getenv('OAUTH_ACCESS_TTL') ?: 3600));
+    define('OAUTH_REFRESH_TTL', (int)(getenv('OAUTH_REFRESH_TTL') ?: 2592000));
 
     $db = PearDatabase::getInstance();
     if (!$db) {
@@ -92,6 +103,7 @@ try {
 
 /* ---------------- Include app classes ---------------- */
 require_once __DIR__ . '/helpers/Auth.php';
+require_once __DIR__ . '/helpers/OAuth.php';
 require_once __DIR__ . '/controllers/AssetsController.php';
 require_once __DIR__ . '/models/AssetsModel.php';
 
@@ -102,18 +114,32 @@ try {
 
     $method = $_SERVER['REQUEST_METHOD'];
     $path   = get_path_after_api();
-    logf('request', ['method' => $method, 'path' => $path, 'qs' => $_GET]);
+    $segments = $path === '' ? [] : explode('/', $path);
+    $resource = $segments[0] ?? '';
+    $id = $segments[1] ?? null;
+
+    // Public endpoints
+    if ($resource === 'oauth' && ($segments[1] ?? '') === 'token' && $method === 'POST') {
+        // Add logging context
+        logf('oauth.token', ['method' => $method, 'path' => $path, 'qs' => $_GET]);
+        \Api\Helper\OAuth::tokenEndpoint($db);
+        exit;
+    }
 
     switch ($path) {
         case '':
         case '/':
-            json_ok(['status' => 'ok', 'service' => 'vtiger-api', 'message' => 'Welcome to the vtiger API', 'php' => PHP_VERSION]);
+            $hash =  password_hash('supersecret', PASSWORD_DEFAULT);
+
+            json_ok(['status' => 'ok', 'service' => 'vtiger-api', 'message' => 'Welcome to the vtiger API', 'php' => PHP_VERSION, 'hash_example' => $hash]);
 
         case 'metals':
+            \Api\Helper\OAuth::requireBearer(['assets:read']); // example scope
             json_ok(['status' => 'ok', 'service' => 'vtiger-api', 'message' => 'Get metals', 'php' => PHP_VERSION]);
             break;
 
         case 'assets':
+            \Api\Helper\OAuth::requireBearer(['assets:read']); // example scope
             $model      = new \Api\Model\AssetsModel($db);
             $controller = new \Api\Controller\AssetsController($model);
 
