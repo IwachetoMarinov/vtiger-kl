@@ -79,11 +79,11 @@ try {
     $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
     $dotenv->safeLoad();
 
-    define('OAUTH_ISSUER',      getenv('OAUTH_ISSUER') ?: 'http://localhost/vtiger-gpm/');
-    define('OAUTH_AUDIENCE',    getenv('OAUTH_AUDIENCE') ?: 'vtiger-api');
-    define('OAUTH_SIGNING_KEY', getenv('OAUTH_SIGNING_KEY') ?: 'K9e$z3!hP0wR7uX1tL@vN6s#JgY8fD2mQbE4pA^iC5rT*oW0xV&Z7yB1lH9nU');
-    define('OAUTH_ACCESS_TTL',  (int)(getenv('OAUTH_ACCESS_TTL') ?: 3600));
-    define('OAUTH_REFRESH_TTL', (int)(getenv('OAUTH_REFRESH_TTL') ?: 2592000));
+    define('OAUTH_ISSUER',      $_ENV['OAUTH_ISSUER']      ?? getenv('OAUTH_ISSUER')      ?: 'http://localhost/vtiger-gpm/');
+    define('OAUTH_AUDIENCE',    $_ENV['OAUTH_AUDIENCE']    ?? getenv('OAUTH_AUDIENCE')    ?: 'vtiger-api');
+    define('OAUTH_SIGNING_KEY', $_ENV['OAUTH_SIGNING_KEY'] ?? getenv('OAUTH_SIGNING_KEY') ?? 'CHANGE_ME');
+    define('OAUTH_ACCESS_TTL',  (int)($_ENV['OAUTH_ACCESS_TTL']  ?? getenv('OAUTH_ACCESS_TTL')  ?: 3600));
+    define('OAUTH_REFRESH_TTL', (int)($_ENV['OAUTH_REFRESH_TTL'] ?? getenv('OAUTH_REFRESH_TTL') ?: 2592000));
 
     $db = PearDatabase::getInstance();
     if (!$db) {

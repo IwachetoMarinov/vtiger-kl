@@ -357,23 +357,18 @@
 [2025-10-24T14:03:52+00:00] auth.ok | {"remote":"::1"}
 [2025-10-24T14:03:52+00:00] resource.segments | {"method":"GET","path":"assets","segments":["assets"],"resource":"assets"}
 [2025-10-24T14:03:52+00:00] request | {"method":"GET","path":"assets","qs":[]}
-[2025-10-24T14:03:52+00:00] oauth.verify | {"jwt":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L3Z0aWdlci1ncG0vIiwiYXVkIjoidnRpZ2VyLWFwaSIsImlhdCI6MTc2MTMxNDM3OSwibmJmIjoxNzYxMzE0Mzc5LCJleHAiOjE3NjEzMTc5NzksImNpZCI6ImFwaS10b2tlbiIsInNjb3BlIjoiYXNzZXRzOnJlYWQifQ.7DJo03K3Ciyt7JB52-s8xQAEhF7gTMdWqYp8bsItrvw","key":"K9e$z3!hP0wR7uX1tL@vN6s#JgY8fD2mQbE4pA^iC5rT*oW0xV&Z7yB1lH9nU"}
-[2025-10-24T14:06:21+00:00] auth.check | {"provided":"yes"}
 [2025-10-24T14:06:21+00:00] auth.ok | {"remote":"::1"}
 [2025-10-24T14:06:21+00:00] resource.segments | {"method":"GET","path":"assets","segments":["assets"],"resource":"assets"}
 [2025-10-24T14:06:21+00:00] request | {"method":"GET","path":"assets","qs":[]}
-[2025-10-24T14:06:21+00:00] oauth.verify | {"key":"K9e$z3!hP0wR7uX1tL@vN6s#JgY8fD2mQbE4pA^iC5rT*oW0xV&Z7yB1lH9nU"}
 [2025-10-24T14:07:12+00:00] bootstrap.exception | {"err":"Failed to parse dotenv file. Encountered an invalid name at [; OAUTH_SIGNING_KEY].","include_path":"C:\\laragon\\www\\vtiger-gpm;.;C:/laragon/etc/php/pear","cwd":"C:\\laragon\\www\\vtiger-gpm"}
 [2025-10-24T14:07:40+00:00] auth.check | {"provided":"yes"}
 [2025-10-24T14:07:40+00:00] auth.ok | {"remote":"::1"}
 [2025-10-24T14:07:40+00:00] resource.segments | {"method":"GET","path":"assets","segments":["assets"],"resource":"assets"}
 [2025-10-24T14:07:40+00:00] request | {"method":"GET","path":"assets","qs":[]}
-[2025-10-24T14:07:40+00:00] oauth.verify | {"key":"K9e$z3!hP0wR7uX1tL@vN6s#JgY8fD2mQbE4pA^iC5rT*oW0xV&Z7yB1lH9nU"}
 [2025-10-24T14:08:00+00:00] auth.check | {"provided":"yes"}
 [2025-10-24T14:08:00+00:00] auth.ok | {"remote":"::1"}
 [2025-10-24T14:08:00+00:00] resource.segments | {"method":"GET","path":"assets","segments":["assets"],"resource":"assets"}
 [2025-10-24T14:08:00+00:00] request | {"method":"GET","path":"assets","qs":[]}
-[2025-10-24T14:08:00+00:00] oauth.verify | {"key":"K9e$z3!hP0wR7uX1tL@vN6s#JgY8fD2mQbE4pA^iC5rT*oW0xV&Z7yB1lH9nU"}
 [2025-10-24T14:09:02+00:00] auth.check | {"provided":"yes"}
 [2025-10-24T14:09:02+00:00] auth.ok | {"remote":"::1"}
 [2025-10-24T14:09:02+00:00] resource.segments | {"method":"POST","path":"oauth/token","segments":["oauth","token"],"resource":"oauth"}
@@ -383,7 +378,6 @@
 [2025-10-24T14:09:18+00:00] auth.ok | {"remote":"::1"}
 [2025-10-24T14:09:18+00:00] resource.segments | {"method":"GET","path":"assets","segments":["assets"],"resource":"assets"}
 [2025-10-24T14:09:18+00:00] request | {"method":"GET","path":"assets","qs":[]}
-[2025-10-24T14:09:18+00:00] oauth.verify | {"key":"K9e$z3!hP0wR7uX1tL@vN6s#JgY8fD2mQbE4pA^iC5rT*oW0xV&Z7yB1lH9nU"}
 [2025-10-24T14:09:18+00:00] sql.select.metals | {"sql":"SELECT * FROM vtiger_metals ORDER BY metalsid DESC LIMIT ? OFFSET ?","params":[50,0]}
 [2025-10-24T14:09:55+00:00] auth.check | {"provided":"yes"}
 [2025-10-24T14:09:55+00:00] auth.ok | {"remote":"::1"}
@@ -394,3 +388,25 @@
 [2025-10-24T14:09:57+00:00] auth.check | {"provided":"yes"}
 [2025-10-24T14:09:57+00:00] auth.ok | {"remote":"::1"}
 [2025-10-24T14:09:57+00:00] sql.select.metals | {"sql":"SELECT * FROM vtiger_metals ORDER BY metalsid DESC LIMIT ? OFFSET ?","params":[50,0]}
+[2025-10-24T14:12:59+00:00] auth.check | {"provided":"yes"}
+[2025-10-24T14:12:59+00:00] auth.ok | {"remote":"::1"}
+[2025-10-24T14:13:00+00:00] auth.check | {"provided":"yes"}
+[2025-10-24T14:13:00+00:00] auth.ok | {"remote":"::1"}
+[2025-10-24T14:13:01+00:00] auth.check | {"provided":"yes"}
+[2025-10-24T14:13:01+00:00] auth.ok | {"remote":"::1"}
+[2025-10-24T14:13:02+00:00] auth.check | {"provided":"yes"}
+[2025-10-24T14:13:02+00:00] auth.ok | {"remote":"::1"}
+[2025-10-24T14:13:10+00:00] auth.check | {"provided":"yes"}
+[2025-10-24T14:13:10+00:00] auth.ok | {"remote":"::1"}
+[2025-10-24T14:13:10+00:00] oauth.verify | {"key":""}
+[2025-10-24T14:16:09+00:00] auth.check | {"provided":"yes"}
+[2025-10-24T14:16:09+00:00] auth.ok | {"remote":"::1"}
+[2025-10-24T14:16:09+00:00] oauth.verify | {"key":""}
+[2025-10-24T14:19:52+00:00] env.constants | {"issuer":"http://localhost/vtiger-gpm/","audience":"vtiger-api","key_len":61}
+[2025-10-24T14:19:52+00:00] auth.check | {"provided":"yes"}
+[2025-10-24T14:19:52+00:00] auth.ok | {"remote":"::1"}
+[2025-10-24T14:19:52+00:00] sql.select.metals | {"sql":"SELECT * FROM vtiger_metals ORDER BY metalsid DESC LIMIT ? OFFSET ?","params":[50,0]}
+[2025-10-24T14:20:24+00:00] auth.check | {"provided":"yes"}
+[2025-10-24T14:20:24+00:00] auth.ok | {"remote":"::1"}
+[2025-10-24T14:20:24+00:00] oauth.verify | {"key":"K9e$z3!hP0wR7uX1tL@vN6s#JgY8fD2mQbE4pA^iC5rT*oW0xV&Z7yB1lH9nU"}
+[2025-10-24T14:20:24+00:00] sql.select.metals | {"sql":"SELECT * FROM vtiger_metals ORDER BY metalsid DESC LIMIT ? OFFSET ?","params":[50,0]}
