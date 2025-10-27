@@ -71,3 +71,6 @@ Deploy in github with export/import database
 
 1. chmod +x deploy.sh // Only first time
 2. ./deploy.sh
+
+
+3. 
