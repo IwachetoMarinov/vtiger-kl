@@ -73,4 +73,11 @@ Deploy in github with export/import database
 2. ./deploy.sh
 
 
-3. 
+3. Pull all changes from github repo: `sudo git pull origin main`
+4. Install new packages if need it `composer install`
+5. Give permissions:
+     `sudo chown -R $USER:$USER /var/www/html`
+     `sudo chmod -R 775 /var/www/html`
+6. Login to mysql `mysql -u vtigeruser -p` after that enter the password
+7. import database (if it neeed) `mysql -u vtigeruser -p vtiger_gpm < vtiger_gpm_2025_10_27_1054.sql`
+   
