@@ -63,7 +63,15 @@ class OAuth
     /** Protect routes: require a valid Bearer token and (optional) scopes */
     public static function requireBearer(array $requiredScopes = []): array
     {
-        $auth = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+        // $auth = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+        // if (!preg_match('/^Bearer\s+(.+)$/i', $auth, $m)) {
+        //     self::unauthorized('missing_bearer');
+        // }
+
+        $auth = trim($_SERVER['HTTP_AUTHORIZATION']
+            ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
+            ?? '');
+
         if (!preg_match('/^Bearer\s+(.+)$/i', $auth, $m)) {
             self::unauthorized('missing_bearer');
         }
