@@ -63,43 +63,42 @@ class OAuth
     /** Protect routes: require a valid Bearer token and (optional) scopes */
     public static function requireBearer(array $requiredScopes = []): array
     {
-        // $auth = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
-        // if (!preg_match('/^Bearer\s+(.+)$/i', $auth, $m)) {
-        //     self::unauthorized('missing_bearer');
-        // }
-
-        $auth = trim($_SERVER['HTTP_AUTHORIZATION']
-            ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
-            ?? '');
+        // --- Capture Authorization header reliably ---
+        $auth = trim(
+            $_SERVER['HTTP_AUTHORIZATION']
+                ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
+                ?? (getallheaders()['Authorization'] ?? '')
+        );
 
         if (!preg_match('/^Bearer\s+(.+)$/i', $auth, $m)) {
             self::unauthorized('missing_bearer');
         }
+
         $jwt = $m[1];
 
         try {
             $tok = JWT::decode($jwt, new Key(OAUTH_SIGNING_KEY, 'HS256'));
         } catch (\Throwable $e) {
-            // Add logging context if needed
-            if (function_exists('logf'))
+            if (function_exists('logf')) {
                 logf('oauth.token_decode_fail', ['error' => $e->getMessage()]);
+            }
             self::unauthorized('invalid_token');
         }
 
-        // exp, nbf, iss, aud checks
+        // --- Token validation ---
         $now = time();
         if (!empty($tok->nbf) && $now < (int)$tok->nbf) self::unauthorized('token_not_active');
         if (!empty($tok->exp) && $now >= (int)$tok->exp) self::unauthorized('token_expired');
         if (!empty($tok->iss) && $tok->iss !== OAUTH_ISSUER) self::unauthorized('bad_issuer');
         if (!empty($tok->aud) && $tok->aud !== OAUTH_AUDIENCE) self::unauthorized('bad_audience');
 
-        // scope check
+        // --- Scope validation ---
         $scopes = isset($tok->scope) ? explode(' ', (string)$tok->scope) : [];
         foreach ($requiredScopes as $s) {
             if (!in_array($s, $scopes, true)) self::forbidden('insufficient_scope');
         }
 
-        // Return claims for downstream use
+        // --- Return decoded claims ---
         return [
             'client_id' => $tok->cid ?? null,
             'sub'       => $tok->sub ?? null,
@@ -107,6 +106,7 @@ class OAuth
             'claims'    => (array)$tok,
         ];
     }
+
 
     /* ---------------- internals ---------------- */
 
