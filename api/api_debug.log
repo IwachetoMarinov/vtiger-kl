@@ -410,3 +410,74 @@
 [2025-10-24T14:20:24+00:00] auth.ok | {"remote":"::1"}
 [2025-10-24T14:20:24+00:00] oauth.verify | {"key":"K9e$z3!hP0wR7uX1tL@vN6s#JgY8fD2mQbE4pA^iC5rT*oW0xV&Z7yB1lH9nU"}
 [2025-10-24T14:20:24+00:00] sql.select.metals | {"sql":"SELECT * FROM vtiger_metals ORDER BY metalsid DESC LIMIT ? OFFSET ?","params":[50,0]}
+[2025-10-27T08:00:13+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:00:13+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:00:17+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:00:17+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:00:18+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:00:18+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:00:19+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:00:19+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:00:57+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:00:57+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:00:57+00:00] oauth.token | {"method":"POST","path":"oauth/token","qs":[]}
+[2025-10-27T08:01:08+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:01:08+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:01:10+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:01:10+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:01:11+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:01:11+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:01:19+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:01:19+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:01:20+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:01:20+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:01:21+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:01:21+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:01:54+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:01:54+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:05:48+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:05:48+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:05:52+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:05:52+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:07:36+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:07:36+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:08:10+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:08:10+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:08:59+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:08:59+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:09:06+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:09:06+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:09:06+00:00] oauth.bearer->key_length | {"length":61}
+[2025-10-27T08:10:32+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:10:32+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:10:32+00:00] oauth.token | {"token":"present"}
+[2025-10-27T08:10:32+00:00] oauth.bearer->key_length | {"length":61,"jwt_length":280}
+[2025-10-27T08:11:03+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:11:03+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:11:03+00:00] oauth.token | {"token":"present"}
+[2025-10-27T08:11:03+00:00] oauth.bearer->key_length | {"length":61,"jwt_length":280}
+[2025-10-27T08:11:56+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:11:56+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:11:56+00:00] oauth.bearer->fail | {"error":"Signature verification failed"}
+[2025-10-27T08:12:09+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:12:09+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:12:09+00:00] oauth.token | {"method":"POST","path":"oauth/token","qs":[]}
+[2025-10-27T08:12:23+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:12:23+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:12:23+00:00] oauth.bearer->data | {"client_id":"api-token","sub":null,"scopes":["assets:read"],"claims":{"iss":"http://localhost/vtiger-gpm/","aud":"vtiger-api","iat":1761552729,"nbf":1761552729,"exp":1761556329,"cid":"api-token","scope":"assets:read"}}
+[2025-10-27T08:12:23+00:00] sql.select.metals | {"sql":"SELECT * FROM vtiger_metals ORDER BY metalsid DESC LIMIT ? OFFSET ?","params":[50,0]}
+[2025-10-27T08:13:44+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:13:44+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:13:44+00:00] sql.select.metals | {"sql":"SELECT * FROM vtiger_metals ORDER BY metalsid DESC LIMIT ? OFFSET ?","params":[50,0]}
+[2025-10-27T08:13:45+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:13:45+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:13:45+00:00] sql.select.metals | {"sql":"SELECT * FROM vtiger_metals ORDER BY metalsid DESC LIMIT ? OFFSET ?","params":[50,0]}
+[2025-10-27T08:28:03+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:28:03+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:28:03+00:00] sql.select.metals | {"sql":"SELECT * FROM vtiger_metals ORDER BY metalsid DESC LIMIT ? OFFSET ?","params":[50,0]}
+[2025-10-27T08:41:05+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:41:05+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:41:05+00:00] sql.select.metals | {"sql":"SELECT * FROM vtiger_metals ORDER BY metalsid DESC LIMIT ? OFFSET ?","params":[50,0]}
+[2025-10-27T08:47:11+00:00] auth.check | {"provided":"yes"}
+[2025-10-27T08:47:11+00:00] auth.ok | {"remote":"::1"}
+[2025-10-27T08:47:11+00:00] sql.select.metals | {"sql":"SELECT * FROM vtiger_metals ORDER BY metalsid DESC LIMIT ? OFFSET ?","params":[50,0]}

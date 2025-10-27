@@ -110,7 +110,7 @@ require_once __DIR__ . '/models/AssetsModel.php';
 /* ---------------- Routing ---------------- */
 try {
     // Auth (class-based in helpers/)
-    \Api\Helper\Auth::requireApiKey(API_KEY);
+    // \Api\Helper\Auth::requireApiKey(API_KEY);
 
     $method = $_SERVER['REQUEST_METHOD'];
     $path   = get_path_after_api();
@@ -147,7 +147,6 @@ try {
                 if ($method === 'GET') {
                     $res = $controller->list($_GET);
                     json_ok($res);
-                    // json_ok(['status' => 'ok', 'service' => 'vtiger-api', 'message' => 'Get assets', 'php' => PHP_VERSION]);
                 }
                 if ($method === 'POST') {
                     $res = $controller->create(file_get_contents('php://input'));

@@ -21,7 +21,6 @@ class AssetsModel
             $params[] = (int)$limit;
             $params[] = (int)$offset;
 
-            if (function_exists('logf')) logf('sql.select.metals', ['sql' => $sql, 'params' => $params]);
             $rs = $this->db->pquery($sql, $params);
 
             $rows = [];

@@ -72,6 +72,9 @@ class OAuth
         try {
             $tok = JWT::decode($jwt, new Key(OAUTH_SIGNING_KEY, 'HS256'));
         } catch (\Throwable $e) {
+            // Add logging context if needed
+            if (function_exists('logf'))
+                logf('oauth.token_decode_fail', ['error' => $e->getMessage()]);
             self::unauthorized('invalid_token');
         }
 
