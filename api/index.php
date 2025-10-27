@@ -23,39 +23,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 const API_KEY  = '02i34nm34j32423j4lk983u';
 const LOG_FILE = __DIR__ . '/api_debug.log';
 
+require_once __DIR__ . '/helpers/Utils.php';
 /* --------------- Utils ------------------ */
-function logf(string $msg, array $ctx = []): void
-{
-    @file_put_contents(
-        LOG_FILE,
-        sprintf("[%s] %s %s%s\n", date('c'), $msg, $ctx ? '| ' : '', $ctx ? json_encode($ctx, JSON_UNESCAPED_SLASHES) : ''),
-        FILE_APPEND
-    );
-}
 
-function json_ok($data, int $code = 200)
-{
-    http_response_code($code);
-    echo json_encode(['success' => true, 'data' => $data, 'timestamp' => date('c')], JSON_PRETTY_PRINT);
-    exit;
-}
+use function Api\Helper\{
+    logf,
+    json_ok,
+    json_err,
+    get_path_after_api
+};
 
-function json_err(string $msg, int $code = 400)
-{
-    http_response_code($code);
-    echo json_encode(['success' => false, 'error' => $msg, 'timestamp' => date('c')], JSON_PRETTY_PRINT);
-    exit;
-}
-
-function get_path_after_api(): string
-{
-    $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
-    $pos  = stripos($path, '/api/');
-    if ($pos !== false) $path = substr($path, $pos + 5);
-    return trim($path, '/');
-}
 
 /* --------- Bootstrap vtiger (buffer only here) ---------- */
+
 try {
     $ROOT = realpath(__DIR__ . '/..'); // vtigercrm/
     if (!$ROOT) throw new Exception('Root resolve failed');
