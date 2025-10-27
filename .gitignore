@@ -7,4 +7,6 @@ logs/
 storage/
 cache/
 
+api/api_debug.log
+
 .env
