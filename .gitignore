@@ -6,3 +6,5 @@ config.inc.php
 logs/
 storage/
 cache/
+
+.env
