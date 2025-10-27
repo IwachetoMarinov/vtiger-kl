@@ -139,7 +139,7 @@ try {
             break;
 
         case 'assets':
-            // \Api\Helper\OAuth::requireBearer(['assets:read']); // example scope
+            \Api\Helper\OAuth::requireBearer(['assets:read']); // example scope
             $model      = new \Api\Model\AssetsModel($db);
             $controller = new \Api\Controller\AssetsController($model);
 
