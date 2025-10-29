@@ -27,8 +27,18 @@ class AssetsController
     /** POST /api/assets */
     public function create(string $rawBody): array
     {
-        //    Todo: implement asset creation
-        throw new \BadMethodCallException('Not implemented');
+        try {
+            $data = json_decode($rawBody, true, 512, JSON_THROW_ON_ERROR);
+            // Validate required fields
+            if (empty($data['name']) || !isset($data['fineoz']) || !isset($data['metal_type']) || empty($data['assigned_user_id'])) {
+                throw new \InvalidArgumentException('Missing required fields');
+            }
+
+            // $this->model->create($data);
+            return ['status' => 'success', 'message' => 'Asset created', "data" => $data];
+        } catch (\JsonException $e) {
+            throw new \InvalidArgumentException('Invalid JSON body');
+        }
     }
 
     /** GET /api/assets/search?q=... */

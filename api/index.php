@@ -86,6 +86,8 @@ require_once __DIR__ . '/helpers/Auth.php';
 require_once __DIR__ . '/helpers/OAuth.php';
 require_once __DIR__ . '/controllers/AssetsController.php';
 require_once __DIR__ . '/models/AssetsModel.php';
+require_once __DIR__ . '/controllers/OrdersController.php';
+require_once __DIR__ . '/models/OrdersModel.php';
 
 /* ---------------- Routing ---------------- */
 try {
@@ -124,6 +126,24 @@ try {
             $controller = new \Api\Controller\AssetsController($model);
 
             if ($path === 'assets') {
+                if ($method === 'GET') {
+                    $res = $controller->list($_GET);
+                    json_ok($res);
+                }
+                if ($method === 'POST') {
+                    $res = $controller->create(file_get_contents('php://input'));
+                    json_ok($res, 201);
+                }
+                json_err('Method not allowed', 405);
+            }
+            break;
+
+        case 'orders':
+            \Api\Helper\OAuth::requireBearer(['assets:read']); // example scope
+            $model      = new \Api\Model\OrdersModel($db);
+            $controller = new \Api\Controller\OrdersController($model);
+
+            if ($path === 'orders') {
                 if ($method === 'GET') {
                     $res = $controller->list($_GET);
                     json_ok($res);

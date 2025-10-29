@@ -56,8 +56,9 @@ class Metals extends CRMEntity
     public $mandatory_fields = array('name', 'assigned_user_id');
 
     /** Default ordering */
-    public $default_order_by   = 'name';
-    public $default_sort_order = 'ASC';
+    public $default_order_by   = 'createdtime';
+    // public $default_sort_order = 'ASC';
+    public $default_sort_order = 'DESC';
 
     /** Important flag */
     public $IsCustomModule = true;
