@@ -1,4 +1,5 @@
 vendor/*
+test/*
 !vendor/.htaccess
 .vscode/*
 config.inc.php
