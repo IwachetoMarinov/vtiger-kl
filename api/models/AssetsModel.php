@@ -13,6 +13,7 @@ class AssetsModel
     }
 
 
+    // Fetch list of assets
     public function fetchList(int $limit = 5, int $offset = 0): array
     {
         try {
@@ -37,6 +38,26 @@ class AssetsModel
             return $rows;
         } catch (\Exception $e) {
             return [];
+        }
+    }
+
+    //    Create asset
+    public function create(array $data): bool
+    {
+        try {
+            $sql = 'INSERT INTO vtiger_metals (name, fineoz, metal_type, createdtime, assigned_user_id) VALUES (?, ?, ?, ?, ?)';
+            $params = [
+                $data['name'],
+                $data['fineoz'],
+                $data['metal_type'],
+                date('Y-m-d H:i:s'),
+                $data['assigned_user_id'],
+            ];
+
+            $this->db->pquery($sql, $params);
+            return true;
+        } catch (\Exception $e) {
+            return false;
         }
     }
 }
