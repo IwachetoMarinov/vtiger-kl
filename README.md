@@ -79,9 +79,22 @@ Deploy in github with export/import database
      `sudo chown -R $USER:$USER /var/www/html`
      `sudo chmod -R 775 /var/www/html`
 6. Login to mysql `mysql -u vtigeruser -p` after that enter the password
-7. import database (if it neeed) `mysql -u vtigeruser -p vtiger_gpm < vtiger_gpm_2025_10_27_1054.sql`
+7. import database (if it neeed) `mysql -u vtigeruser -p vtiger_gpm < db_backups/vtiger_gpm_2025_11_03_1051.sql`
 8. Restart apache server `sudo service apache2 restart`
 
 9. If VM instalation failed and got 'Access to restricted file' 
-   9.1 
+    9.1 Check in config file: $dbconfig['db_server'] = 'localhost';
+                                $dbconfig['db_port'] = ':3306';
+                                $dbconfig['db_username'] = 'root';
+                                $dbconfig['db_password'] = '';
+                                $dbconfig['db_name'] = 'vtiger_gpm';
+                                $dbconfig['db_type'] = 'mysqli';
+                                $dbconfig['db_status'] = 'true';
+                                $site_URL = 'http://localhost/vtiger-gpm/';
+                                $root_directory = '/var/www/html/';
+
+10. Clear cache: `rm -rf test/templates_c/v7`
+   10.1 After that you should create this folder `mkdir -p test/templates_c/v7`
+   10.2 Perrmission to this folder: `sudo chown -R www-data:www-data test/templates_c`, `sudo chmod -R 775 test/templates_c`
+
    
