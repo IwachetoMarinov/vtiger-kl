@@ -8,7 +8,6 @@ DB_NAME="vtiger_gpm"
 DB_USER="root"
 DB_PASS=""
 BACKUP_DIR="./db_backups"
-LOG_FILE="$BACKUP_DIR/deploy.log"
 DATE=$(date +"%Y-%m-%d %H:%M:%S")
 STAMP=$(date +"%Y_%m_%d_%H%M")
 
@@ -19,9 +18,6 @@ GIT_BRANCH="develop"
 
 mkdir -p "$BACKUP_DIR"
 
-log() {
-  echo "[$(date +"%Y-%m-%d %H:%M:%S")] $1" | tee -a "$LOG_FILE"
-}
 
 # 1️⃣ Dump current DB schema (no data, no comments)
 log "🔄 Dumping current schema for '$DB_NAME' (no data)..."
