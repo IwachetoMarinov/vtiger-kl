@@ -1,15 +1,13 @@
-++ ./db_backups/tmp_schema.sql	2025-11-05 16:12:53.827683100 +0200
+++ ./db_backups/tmp_schema.sql	2025-11-05 16:16:23.938040000 +0200
 DROP TABLE IF EXISTS `vtiger_account_currency`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `vtiger_account_currency` (
-  `account_currencyid` int NOT NULL AUTO_INCREMENT,
   `account_currency` varchar(200) NOT NULL,
   `sortorderid` int DEFAULT NULL,
   `presence` int NOT NULL DEFAULT '1',
   `color` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`account_currencyid`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `vtiger_account_currency_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -43,7 +41,6 @@ CREATE TABLE `vtiger_bankaccount` (
   `footer_company_fax` varchar(64) DEFAULT NULL,
   `footer_company_website` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`bankaccountid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `vtiger_bankaccountcf`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -51,21 +48,16 @@ DROP TABLE IF EXISTS `vtiger_bankaccountcf`;
 CREATE TABLE `vtiger_bankaccountcf` (
   `bankaccountid` int NOT NULL,
   PRIMARY KEY (`bankaccountid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb3;
-) ENGINE=InnoDB AUTO_INCREMENT=1125 DEFAULT CHARSET=utf8mb3;
 DROP TABLE IF EXISTS `vtiger_related_entity`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `vtiger_related_entity` (
-  `related_entityid` int NOT NULL AUTO_INCREMENT,
   `related_entity` varchar(200) NOT NULL,
   `sortorderid` int DEFAULT NULL,
   `presence` int NOT NULL DEFAULT '1',
   `color` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`related_entityid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `vtiger_related_entity_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -74,4 +66,3 @@ CREATE TABLE `vtiger_related_entity_seq` (
   `id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb3;
