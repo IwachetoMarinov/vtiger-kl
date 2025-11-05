@@ -1,6 +1,6 @@
 #!/bin/bash
 # ----------------------------------------------
-# vTiger Solo Dev Auto Deploy Script (Schema diff only + Logging)
+# vTiger Solo Dev Auto Deploy Script (Schema diff only + Server-safe SQL)
 # Author: Ivaylo Marinov
 # ----------------------------------------------
 
@@ -13,11 +13,14 @@ STAMP=$(date +"%Y_%m_%d_%H%M")
 
 TEMP_SCHEMA="$BACKUP_DIR/tmp_schema.sql"
 LAST_SCHEMA=$(ls -t "$BACKUP_DIR"/*_schema_*.sql 2>/dev/null | head -n 1)
-DIFF_FILE="$BACKUP_DIR/${DB_NAME}_changes_${STAMP}.sql"
+DIFF_FILE="$BACKUP_DIR/${DB_NAME}_changes_${STAMP}.diff"
+SQL_FILE="$BACKUP_DIR/${DB_NAME}_changes_${STAMP}.sql"
 GIT_BRANCH="develop"
 
-mkdir -p "$BACKUP_DIR"
 
+log() {
+  echo "[$(date +"%Y-%m-%d %H:%M:%S")] $1"
+}
 
 # 1️⃣ Dump current DB schema (no data, no comments)
 log "🔄 Dumping current schema for '$DB_NAME' (no data)..."
@@ -36,6 +39,32 @@ if [ -f "$LAST_SCHEMA" ]; then
   if [ -s "$DIFF_FILE" ]; then
     log "✅ Schema changes detected — saving new schema and diff."
     mv "$TEMP_SCHEMA" "$BACKUP_DIR/${DB_NAME}_schema_${STAMP}.sql"
+
+    # 🧹 CLEAN THE DIFF → BUILD COMPLETE SQL BLOCKS
+    # 🧹 CLEAN THE DIFF → BUILD COMPLETE SQL BLOCKS FROM ADDED LINES
+    awk '
+      /^\+DROP TABLE/      { sub(/^\+/, "", $0); print; next }
+      /^\+CREATE TABLE/    { sub(/^\+/, "", $0); in_create=1; print; next }
+      in_create && /^\+/   {
+        sub(/^\+/, "", $0)
+        print
+        if ($0 ~ /ENGINE=|CHARSET=|COLLATE=|\);$/) in_create=0
+        next
+      }
+    ' "$DIFF_FILE" > "$SQL_FILE"
+
+
+
+
+    if [ -s "$SQL_FILE" ]; then
+      log "✅ Server-ready SQL file created: $SQL_FILE"
+      log "💡 To apply changes on the server, run:"
+      log "   mysql -u $DB_USER -p $DB_NAME < $SQL_FILE"
+    else
+      log "⚠️ No valid SQL statements found in diff (only metadata changes)."
+      rm -f "$SQL_FILE"
+    fi
+
   else
     log "ℹ️ No schema differences detected — cleaning up temp files."
     rm -f "$TEMP_SCHEMA" "$DIFF_FILE"
