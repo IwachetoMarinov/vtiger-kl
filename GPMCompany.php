@@ -6,7 +6,6 @@ include_once('vtlib/Vtiger/Menu.php');
 include_once('vtlib/Vtiger/Module.php');
 
 
-
 $module = Vtiger_Module::getInstance('GPMCompany');
 
 if (!$module) {
