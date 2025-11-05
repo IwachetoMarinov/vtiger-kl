@@ -1,5 +1,5 @@
 --- ./db_backups/vtiger_gpm_schema_2025_11_05_1128.sql	2025-11-05 11:28:29.814886600 +0200
-+++ ./db_backups/tmp_schema.sql	2025-11-05 15:41:57.534911700 +0200
++++ ./db_backups/tmp_schema.sql	2025-11-05 16:22:09.664069700 +0200
 @@ -163,6 +163,25 @@
    CONSTRAINT `fk_1_vtiger_account` FOREIGN KEY (`accountid`) REFERENCES `vtiger_crmentity` (`crmid`) ON DELETE CASCADE
  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
