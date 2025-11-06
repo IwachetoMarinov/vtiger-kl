@@ -50,6 +50,12 @@ class GPMIntent_DocView_View extends Vtiger_Index_View
             error_log("wkhtmltopdf failed (status $status):\n" . implode("\n", $output));
         }
 
+        if (!file_exists($root_directory . "$fileName.pdf") || filesize($root_directory . "$fileName.pdf") === 0) {
+            file_put_contents($root_directory . "pdf_debug.log", "PDF empty! status=$status output:\n" . implode("\n", $output));
+            throw new Exception("wkhtmltopdf failed: see pdf_debug.log");
+        }
+
+
         unlink($htmlPath);
 
         // 4) serve the PDF exactly as you did
@@ -59,6 +65,7 @@ class GPMIntent_DocView_View extends Vtiger_Index_View
         header("Content-Description: Global Precious Metals CRM Data");
         ob_clean();
         flush();
+        // LOG output for debugging
         readfile($pdfPath);
         unlink($pdfPath);
         exit;
