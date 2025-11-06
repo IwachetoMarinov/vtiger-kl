@@ -47,25 +47,25 @@ class GPMIntent_DetailView_Model extends Vtiger_DetailView_Model
 			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
 		}
 
-		if (Users_Privileges_Model::isPermitted($moduleName, 'ViewInvoice', $recordId) && !empty($recordModel->get('document_no'))) {
-			$basicActionLink = array(
-				'linktype' => 'DETAILVIEWBASIC',
-				'linklabel' => 'View Invoice',
-				'linkurl' => 'index.php?module=Contacts&view=DocumentPrintPreview&record=' . $recordModel->get('contact_id') . '&docNo=' . $recordModel->get('document_no') . '&fromIntent=' . $recordId,
-				'linkicon' => ''
-			);
-			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
-		}
+		// if (Users_Privileges_Model::isPermitted($moduleName, 'ViewInvoice', $recordId) && !empty($recordModel->get('document_no'))) {
+		// 	$basicActionLink = array(
+		// 		'linktype' => 'DETAILVIEWBASIC',
+		// 		'linklabel' => 'View Invoice',
+		// 		'linkurl' => 'index.php?module=Contacts&view=DocumentPrintPreview&record=' . $recordModel->get('contact_id') . '&docNo=' . $recordModel->get('document_no') . '&fromIntent=' . $recordId,
+		// 		'linkicon' => ''
+		// 	);
+		// 	$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
+		// }
 
-		if (Users_Privileges_Model::isPermitted($moduleName, 'ViewTradeConfirmation', $recordId) && !empty($recordModel->get('document_no'))) {
-			$basicActionLink = array(
-				'linktype' => 'DETAILVIEWBASIC',
-				'linklabel' => 'View TC',
-				'linkurl' => 'index.php?module=Contacts&view=TCPrintPreview&record=' . $recordModel->get('contact_id') . '&docNo=' . $recordModel->get('document_no'),
-				'linkicon' => ''
-			);
-			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
-		}
+		// if (Users_Privileges_Model::isPermitted($moduleName, 'ViewTradeConfirmation', $recordId) && !empty($recordModel->get('document_no'))) {
+		// 	$basicActionLink = array(
+		// 		'linktype' => 'DETAILVIEWBASIC',
+		// 		'linklabel' => 'View TC',
+		// 		'linkurl' => 'index.php?module=Contacts&view=TCPrintPreview&record=' . $recordModel->get('contact_id') . '&docNo=' . $recordModel->get('document_no'),
+		// 		'linkicon' => ''
+		// 	);
+		// 	$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
+		// }
 
 
 

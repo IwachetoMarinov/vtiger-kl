@@ -142,7 +142,7 @@ try {
             break;
 
         case 'trades':
-            // \Api\Helper\OAuth::requireBearer(['assets:read']); // example scope
+            \Api\Helper\OAuth::requireBearer(['assets:read']); // example scope
             $model      = new \Api\Model\KryptoTradesModel($db);
             $controller = new \Api\Controller\KryptoTradesController($model);
 
