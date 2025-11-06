@@ -24,6 +24,7 @@ const API_KEY  = '02i34nm34j32423j4lk983u';
 const LOG_FILE = __DIR__ . '/api_debug.log';
 
 require_once __DIR__ . '/helpers/Utils.php';
+require_once __DIR__ . '/helpers/Validate.php';
 /* --------------- Utils ------------------ */
 
 use function Api\Helper\{
@@ -88,6 +89,8 @@ require_once __DIR__ . '/controllers/AssetsController.php';
 require_once __DIR__ . '/models/AssetsModel.php';
 require_once __DIR__ . '/controllers/OrdersController.php';
 require_once __DIR__ . '/models/OrdersModel.php';
+require_once __DIR__ . '/controllers/KryptoTradesController.php';
+require_once __DIR__ . '/models/KryptoTradesModel.php';
 
 /* ---------------- Routing ---------------- */
 try {
@@ -126,6 +129,24 @@ try {
             $controller = new \Api\Controller\AssetsController($model);
 
             if ($path === 'assets') {
+                if ($method === 'GET') {
+                    $res = $controller->list($_GET);
+                    json_ok($res);
+                }
+                if ($method === 'POST') {
+                    $res = $controller->create(file_get_contents('php://input'));
+                    json_ok($res, 201);
+                }
+                json_err('Method not allowed', 405);
+            }
+            break;
+
+        case 'trades':
+            // \Api\Helper\OAuth::requireBearer(['assets:read']); // example scope
+            $model      = new \Api\Model\KryptoTradesModel($db);
+            $controller = new \Api\Controller\KryptoTradesController($model);
+
+            if ($path === 'trades') {
                 if ($method === 'GET') {
                     $res = $controller->list($_GET);
                     json_ok($res);
