@@ -1,4 +1,5 @@
 <?php
+
 $languageStrings = [
     'Metals'                 => 'Assets',
     'SINGLE_Metals'          => 'Asset',

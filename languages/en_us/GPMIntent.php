@@ -8,11 +8,11 @@
  * All Rights Reserved.
  ************************************************************************************/
 
-$languageStrings = array(
-    'ModuleName' => 'Module Name',
-    'SINGLE_ModuleName' => 'Module Name',
-    'ModuleName ID' => 'Module Name ID',
+$languageStrings = [
+    'GPMIntent' => 'Intent',
+    'SINGLE_GPMIntent' => 'Intent',
+    'GPMIntent ID' => 'Intent ID',
     'LBL_CUSTOM_INFORMATION' => 'Custom Information',
     'LBL_MODULEBLOCK_INFORMATION' => 'ModuleBlock Information',
     'ModuleFieldLabel' => 'ModuleFieldLabel Text',
-);
+];
