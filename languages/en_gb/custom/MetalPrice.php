@@ -1,9 +1,9 @@
 <?php
 $languageStrings = array(
-'Gold'	=>	'Gold',
-'Silver'	=>	'Silver',
-'Platinum'	=>	'Platinum',
-'Palladium'	=>	'Palladium',
-'mBitCoin'	=>	'mBitCoin',
 'ETH'	=>	'ETH',
+'XAU'	=>	'XAU',
+'XAG'	=>	'XAG',
+'XPT'	=>	'XPT',
+'XPD'	=>	'XPD',
+'MBTC'	=>	'MBTC',
 );

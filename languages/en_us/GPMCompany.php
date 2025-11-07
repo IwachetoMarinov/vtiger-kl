@@ -8,15 +8,11 @@
  * All Rights Reserved.
  ************************************************************************************/
 
-$languageStrings = Array(
-	'ModuleName' => 'Module Name',
-	'SINGLE_ModuleName' => 'Module Name',
-	'ModuleName ID' => 'Module Name ID',
-
-	'LBL_CUSTOM_INFORMATION' => 'Custom Information',
-	'LBL_MODULEBLOCK_INFORMATION' => 'ModuleBlock Information',
-
-	'ModuleFieldLabel' => 'ModuleFieldLabel Text',
+$languageStrings = array(
+    'GPMCompany' => 'Company',
+    'SINGLE_GPMCompany' => 'Company',
+    'GPMCompany ID' => 'Company ID',
+    'LBL_CUSTOM_INFORMATION' => 'Custom Information',
+    'LBL_MODULEBLOCK_INFORMATION' => 'ModuleBlock Information',
+    'ModuleFieldLabel' => 'ModuleFieldLabel Text',
 );
-
-?>
