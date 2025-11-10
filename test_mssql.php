@@ -1,6 +1,5 @@
 <?php
 
-
 $serverName = "qcpitech.ddns.net";
 $connectionOptions = array(
     "Database" => "GPM_DW",
