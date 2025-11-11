@@ -101,6 +101,7 @@ class GPMIntent extends Vtiger_CRMEntity
 			// TODO Handle actions after this module is updated.
 		}
 	}
+
 	function save_module($module)
 	{
 		if ($this->mode == 'edit') {
@@ -124,8 +125,6 @@ class GPMIntent extends Vtiger_CRMEntity
 		}
 	}
 
-
-
 	function saveItemLine()
 	{
 		GPMIntent_Line_Model::deleteByIntent($this->id);
@@ -134,6 +133,7 @@ class GPMIntent extends Vtiger_CRMEntity
 			$item->save();
 		}
 	}
+
 	function addClientIdFromERPNumber()
 	{
 		$db = PearDatabase::getInstance();
