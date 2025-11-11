@@ -102,4 +102,6 @@ Deploy in github with export/import database
 
 12. count how many times cron ran with log file `grep -c "Cron job completed" logs/order_cron.log`
 
+13. Check the system’s cron logs (server-wide) `sudo grep CRON /var/log/syslog`
+
    

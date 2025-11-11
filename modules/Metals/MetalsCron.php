@@ -43,7 +43,7 @@ class MetalsCron
     }
 
     /**
-     * This will be called by vtiger cron.
+     * Create or update daily metal prices in vtiger_metals table, also add record in metal price table for every run.
      */
     public function createUpdateDailyMetal()
     {
@@ -54,7 +54,104 @@ class MetalsCron
         $current_user = Users::getActiveAdminUser();
         $metals = $this->fetchMetals();
 
-        $unique_metals = $this->getUniqueMetals($metals);
+        $unique_metals = $this->getUniqueMetals($metals, "USD");
+
+        // echo '<pre>';
+        // var_dump($unique_metals);
+        // echo '</pre>';
+
+        // return;
+
+        // echo "Starting MetalsCron job..." . PHP_EOL;
+
+        // $this->updateOrInsertMetals($unique_metals, $current_user);
+
+        $this->addMetalPrice($unique_metals, $current_user);
+    }
+
+    public function addMetalPrice(array $unique_metals = [], $current_user = null): void
+    {
+        global $adb;
+
+        // ✅ Ensure we have an active user
+        if (empty($current_user) || empty($current_user->id)) {
+            $current_user = Users::getActiveAdminUser();
+        }
+
+        foreach ($unique_metals as $metal_data) {
+            $type_of_metal = $metal_data['MT_Code'];
+            $spot_price = (float)$metal_data['SpotPriceUSD'];
+            $pm_rate = (float)$metal_data['SpotPriceCurr'];
+            $price_date = $metal_data['Date'];
+
+            // ✅ Step 1: Generate new CRM ID safely (from vtiger_crmentity_seq)
+            $res = $adb->pquery("SELECT id FROM vtiger_crmentity_seq", []);
+            $nextId = (int)$adb->query_result($res, 0, 'id') + 1;
+            $adb->pquery("UPDATE vtiger_crmentity_seq SET id = ?", [$nextId]);
+
+            // ✅ Step 2: Insert into vtiger_crmentity
+            $adb->pquery(
+                "INSERT INTO vtiger_crmentity 
+                (crmid, smcreatorid, smownerid, setype, createdtime, modifiedtime, presence, deleted)
+             VALUES (?, ?, ?, ?, NOW(), NOW(), 1, 0)",
+                [$nextId, $current_user->id, $current_user->id, 'MetalPrice']
+            );
+
+            // ✅ Step 3: Insert into vtiger_metalprice
+            $adb->pquery(
+                "INSERT INTO vtiger_metalprice (metalpriceid, type_of_metal, price_date, am_rate, pm_rate)
+             VALUES (?, ?, ?, ?, ?)",
+                [$nextId, $type_of_metal, $price_date, $spot_price, $pm_rate]
+            );
+
+            // echo "\n[MetalsCron] ✅ Created MetalPrice record ID {$nextId} ({$type_of_metal}, {$price_date})" . PHP_EOL;
+        }
+
+        // echo "\n[MetalsCron] All MetalPrice records processed successfully.\n";
+    }
+
+
+
+    protected function fetchMetals()
+    {
+        if (!$this->connection) {
+            die(print_r(sqlsrv_errors(), true));
+        }
+
+        $sql = "
+        SELECT 
+            [Date],
+            [MT_Code],
+            [Curr_Code],
+            [SpotPriceUSD],
+            [Exc_Rate],
+            [SpotPriceCurr]
+        FROM [HFS_SQLEXPRESS].[GPM].[dbo].[Metal_Spot_Price]
+        ";
+
+        $stmt = sqlsrv_query($this->connection, $sql);
+
+        if ($stmt === false) {
+            die(print_r(sqlsrv_errors(), true));
+        }
+
+        $data = [];
+        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+            // Convert DateTime objects to strings for var_dump readability
+            if (isset($row['Date']) && $row['Date'] instanceof DateTime) {
+                $row['Date'] = $row['Date']->format('Y-m-d');
+            }
+            $data[] = $row;
+        }
+
+        sqlsrv_free_stmt($stmt);
+
+        return $data;
+    }
+
+    protected function updateOrInsertMetals(array $unique_metals, $current_user): void
+    {
+        global $adb;
 
         // Update or insert metals
         foreach ($unique_metals as $metal_data) {
@@ -97,54 +194,17 @@ class MetalsCron
                 echo "\n [MetalsCron] Created new metal record with ID: {$new_metal_id}" . PHP_EOL;
             }
         }
-
-        echo "Cron job completed" . PHP_EOL;
     }
 
-    protected function fetchMetals()
-    {
-        if (!$this->connection) {
-            die(print_r(sqlsrv_errors(), true));
-        }
-
-        $sql = "
-        SELECT 
-            [Date],
-            [MT_Code],
-            [Curr_Code],
-            [SpotPriceUSD],
-            [Exc_Rate],
-            [SpotPriceCurr]
-        FROM [HFS_SQLEXPRESS].[GPM].[dbo].[Metal_Spot_Price]
-        ";
-
-        $stmt = sqlsrv_query($this->connection, $sql);
-
-        if ($stmt === false) {
-            die(print_r(sqlsrv_errors(), true));
-        }
-
-        $data = [];
-        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-            // Convert DateTime objects to strings for var_dump readability
-            if (isset($row['Date']) && $row['Date'] instanceof DateTime) {
-                $row['Date'] = $row['Date']->format('Y-m-d');
-            }
-            $data[] = $row;
-        }
-
-        sqlsrv_free_stmt($stmt);
-
-        return $data;
-    }
-
-    protected function getUniqueMetals($metals): array
+    protected function getUniqueMetals($metals, $currencyCode = "USD"): array
     {
         $unique_metals = [];
 
         foreach ($metals as $metal) {
             $code = $metal['MT_Code'];
+            $currency = $metal['Curr_Code'];
 
+            if ($currency !== $currencyCode) continue;
 
             if (!isset($unique_metals[$code])) {
                 $unique_metals[$code] = $metal;

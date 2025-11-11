@@ -108,8 +108,10 @@ Vtiger_Edit_Js("GPMIntent_Edit_Js", {}, {
 	registerAddButton: function () {
 		var thisInstance = this;
 		jQuery('#add-btn').on('click', function () {
-			if (thisInstance.selectedMetal === false || jQuery('select[name="gpm_order_type"]').val() == '') {
-				app.helper.showErrorNotification({ "message": 'Please select the Metal Type and Order Type!' });
+			console.log('thisInstance',thisInstance);
+			
+			if (thisInstance.selectedMetal === false || jQuery('select[name="gpm_order_type"]').val() == '' || jQuery('select[name="cf_1132"]').val() == '') {
+				app.helper.showErrorNotification({ "message": 'Please select the Metal Type, Currency and Order Type!' });
 			} else {
 				itemLine = jQuery('#item_raw').html().replaceAll('raw', thisInstance.itemIndex).replaceAll('{{xxx}}', thisInstance.metalOption[thisInstance.selectedMetal]);
 
@@ -121,6 +123,7 @@ Vtiger_Edit_Js("GPMIntent_Edit_Js", {}, {
 			}
 		})
 	},
+
 	registerLineItemDelete: function () {
 		var thisInstance = this;
 		jQuery('body').on('click', '.delete-row', function (e) {
