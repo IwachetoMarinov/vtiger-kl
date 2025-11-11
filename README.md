@@ -98,6 +98,8 @@ Deploy in github with export/import database
    10.1 After that you should create this folder `mkdir -p test/templates_c/v7`
    10.2 Perrmission to this folder: `sudo chown -R www-data:www-data test/templates_c`, `sudo chmod -R 775 test/templates_c`
 
-12. Open config.ini  file `nano config.inc.php`
+11. Open config.ini  file `nano config.inc.php`
+
+12. count how many times cron ran with log file `grep -c "Cron job completed" logs/order_cron.log`
 
    
