@@ -55,13 +55,13 @@ class MetalsCron
 
         $unique_metals = $this->getUniqueMetals($metals, "USD");
 
-        echo '<pre>';
-        var_dump($unique_metals);
-        echo '</pre>';
+        // echo '<pre>';
+        // var_dump($unique_metals);
+        // echo '</pre>';
 
         $this->updateOrInsertMetals($unique_metals, $current_user);
 
-        // $this->addMetalPrice($unique_metals, $current_user);
+        $this->addMetalPrice($unique_metals, $current_user);
 
         // $this->addExchangeRates($unique_metals, $current_user);
     }
