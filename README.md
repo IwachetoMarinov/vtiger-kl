@@ -104,4 +104,10 @@ Deploy in github with export/import database
 
 13. Check the system’s cron logs (server-wide) `sudo grep CRON /var/log/syslog`
 
+14. Change field in CRM
+    14.1 First select table and field id from table based on label `SELECT fieldid, fieldlabel, fieldname, columnname, tablename, typeofdata FROM vtiger_field WHERE fieldlabel = 'Indicative FX spot';`
+    14.2 Change database column to TEXT (if you wanna change other type must add type) `ALTER TABLE vtiger_gpmintent MODIFY COLUMN indicative_fx_spot VARCHAR(255);` 
+    14.3 Update field metadata `UPDATE vtiger_field SET typeofdata = 'V~O' WHERE fieldid = 1035;`
+    14.4 Change UI type (VERY IMPORTANT) `UPDATE vtiger_field SET uitype = 1 WHERE fieldid = 1035;`
+
    
