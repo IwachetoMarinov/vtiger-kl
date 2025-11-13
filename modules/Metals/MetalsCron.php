@@ -61,7 +61,7 @@ class MetalsCron
 
         $this->updateOrInsertMetals($unique_metals, $current_user);
 
-        $this->addMetalPrice($unique_metals, $current_user);
+        // $this->addMetalPrice($unique_metals, $current_user);
 
         // $this->addExchangeRates($unique_metals, $current_user);
     }
