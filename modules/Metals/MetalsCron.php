@@ -47,7 +47,6 @@ class MetalsCron
      */
     public function createUpdateDailyMetal()
     {
-        global $adb;
         global $current_user;
 
         // Run as admin
@@ -60,13 +59,11 @@ class MetalsCron
         // var_dump($unique_metals);
         // echo '</pre>';
 
-        // return;
-
-        // echo "Starting MetalsCron job..." . PHP_EOL;
-
-        // $this->updateOrInsertMetals($unique_metals, $current_user);
+        $this->updateOrInsertMetals($unique_metals, $current_user);
 
         $this->addMetalPrice($unique_metals, $current_user);
+
+        // $this->addExchangeRates($unique_metals, $current_user);
     }
 
     public function addMetalPrice(array $unique_metals = [], $current_user = null): void
@@ -111,7 +108,6 @@ class MetalsCron
     }
 
 
-
     protected function fetchMetals()
     {
         if (!$this->connection) {
@@ -148,6 +144,7 @@ class MetalsCron
 
         return $data;
     }
+
 
     protected function updateOrInsertMetals(array $unique_metals, $current_user): void
     {
@@ -192,6 +189,64 @@ class MetalsCron
                 );
 
                 echo "\n [MetalsCron] Created new metal record with ID: {$new_metal_id}" . PHP_EOL;
+            }
+        }
+    }
+
+
+    protected function addExchangeRates(array $unique_metals, $current_user): void
+    {
+        global $adb;
+
+        echo '<pre>';
+        var_dump($unique_metals);
+        echo '</pre>';
+
+        return;
+
+        foreach ($unique_metals as $metal_data) {
+            $currency_code = $metal_data['Curr_Code'];
+            $exchange_rate = (float)$metal_data['Exc_Rate'];
+            $date = $metal_data['Date'];
+
+            // Check if exchange rate for this currency and date already exists
+            $result = $adb->pquery(
+                "SELECT exchangerateid FROM vtiger_exchangerate WHERE currency_code = ? AND rate_date = ?",
+                [$currency_code, $date]
+            );
+
+            if ($adb->num_rows($result) > 0) {
+                // Update existing record
+                $adb->pquery(
+                    "UPDATE vtiger_exchangerate SET exchange_rate = ? WHERE currency_code = ? AND rate_date = ?",
+                    [$exchange_rate, $currency_code, $date]
+                );
+                echo "[MetalsCron] Updated existing exchange rate: {$currency_code} on {$date} with rate: {$exchange_rate}" . PHP_EOL;
+            } else {
+                // Create new record
+                $created_time = date('Y-m-d H:i:s');
+
+                // Generate new CRM ID safely
+                $res = $adb->pquery("SELECT id FROM vtiger_crmentity_seq", []);
+                $nextId = (int)$adb->query_result($res, 0, 'id') + 1;
+                $adb->pquery("UPDATE vtiger_crmentity_seq SET id = ?", [$nextId]);
+
+                // Insert into vtiger_crmentity
+                $adb->pquery(
+                    "INSERT INTO vtiger_crmentity 
+                    (crmid, smcreatorid, smownerid, setype, createdtime, modifiedtime, presence, deleted)
+                 VALUES (?, ?, ?, ?, NOW(), NOW(), 1, 0)",
+                    [$nextId, $current_user->id, $current_user->id, 'ExchangeRate']
+                );
+
+                // Insert into vtiger_exchangerate
+                $adb->pquery(
+                    "INSERT INTO vtiger_exchangerate (exchangerateid, currency_code, rate_date, exchange_rate)
+                 VALUES (?, ?, ?, ?)",
+                    [$nextId, $currency_code, $date, $exchange_rate]
+                );
+
+                echo "\n [MetalsCron] Created new exchange rate record with ID: {$nextId} for {$currency_code} on {$date}" . PHP_EOL;
             }
         }
     }
