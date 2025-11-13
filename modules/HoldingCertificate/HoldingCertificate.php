@@ -15,6 +15,9 @@ class HoldingCertificate extends Vtiger_CRMEntity
 	var $table_name = 'vtiger_holdingcertificate';
 	var $table_index = 'holdingcertificateid';
 
+	// Optional but nice to have
+	var $IsCustomModule = true;
+
 	/**
 	 * Mandatory table for supporting custom fields.
 	 */
@@ -29,23 +32,20 @@ class HoldingCertificate extends Vtiger_CRMEntity
 	 * Mandatory for Saving, Include tablename and tablekey columnname here.
 	 */
 	var $tab_name_index = array(
-		'vtiger_crmentity' => 'crmid',
+		'vtiger_crmentity'          => 'crmid',
 		'vtiger_holdingcertificate' => 'holdingcertificateid',
-		'vtiger_holdingcertificatecf' => 'holdingcertificateid'
+		'vtiger_holdingcertificatecf' => 'holdingcertificateid',
 	);
 
 	/**
 	 * Mandatory for Listing (Related listview)
 	 */
 	var $list_fields = array(
-		/* Format: Field Label => Array(tablename, columnname) */
-		// tablename should not have prefix 'vtiger_'
-		'GUID' => array('holdingcertificate', 'guid'),
-		'Assigned To' => array('crmentity', 'smownerid')
+		'GUID'        => array('holdingcertificate', 'guid'),
+		'Assigned To' => array('crmentity', 'smownerid'),
 	);
 	var $list_fields_name = array(
-		/* Format: Field Label => fieldname */
-		'GUID' => 'guid',
+		'GUID'        => 'guid',
 		'Assigned To' => 'assigned_user_id',
 	);
 
@@ -54,14 +54,11 @@ class HoldingCertificate extends Vtiger_CRMEntity
 
 	// For Popup listview and UI type support
 	var $search_fields = array(
-		/* Format: Field Label => Array(tablename, columnname) */
-		// tablename should not have prefix 'vtiger_'
-		'GUID' => array('holdingcertificate', 'guid'),
-		'Assigned To' => array('vtiger_crmentity', 'assigned_user_id'),
+		'GUID'        => array('holdingcertificate', 'guid'),
+		'Assigned To' => array('crmentity', 'smownerid'),
 	);
 	var $search_fields_name = array(
-		/* Format: Field Label => fieldname */
-		'GUID' => 'guid',
+		'GUID'        => 'guid',
 		'Assigned To' => 'assigned_user_id',
 	);
 
@@ -75,7 +72,7 @@ class HoldingCertificate extends Vtiger_CRMEntity
 	var $def_detailview_recname = 'guid';
 
 	// Used when enabling/disabling the mandatory fields for the module.
-	// Refers to vtiger_field.fieldname values.
+	// Make sure typeofdata for these fields is V~M in vtiger_field if you really want them mandatory.
 	var $mandatory_fields = array('guid', 'assigned_user_id');
 
 	var $default_order_by = 'guid';
@@ -89,48 +86,61 @@ class HoldingCertificate extends Vtiger_CRMEntity
 	function vtlib_handler($moduleName, $eventType)
 	{
 		global $adb;
+
 		if ($eventType == 'module.postinstall') {
-			// TODO Handle actions after this module is installed.
-		} else if ($eventType == 'module.disabled') {
-			// TODO Handle actions before this module is being uninstalled.
-		} else if ($eventType == 'module.preuninstall') {
-			// TODO Handle actions when this module is about to be deleted.
-		} else if ($eventType == 'module.preupdate') {
-			// TODO Handle actions before this module is updated.
-		} else if ($eventType == 'module.postupdate') {
-			// TODO Handle actions after this module is updated.
+			// Handle actions after this module is installed.
+		} elseif ($eventType == 'module.disabled') {
+			// Handle actions before this module is disabled.
+		} elseif ($eventType == 'module.preuninstall') {
+			// Handle actions when this module is about to be deleted.
+		} elseif ($eventType == 'module.preupdate') {
+			// Handle actions before this module is updated.
+		} elseif ($eventType == 'module.postupdate') {
+			// Handle actions after this module is updated.
 		}
 	}
 
 	function save_module($module)
 	{
+		global $CERTIFICATE_APP_KEY, $log;
 
-		global $CERTIFICATE_APP_KEY;
-
-		$guid = $this->column_fields['guid'];
-		$certificate_hash = $this->column_fields['certificate_hash'];
+		$guid               = $this->column_fields['guid'];
+		$certificate_hash   = $this->column_fields['certificate_hash'];
 		$certificate_status = $this->column_fields['certificate_status'];
-		$certificate_date = date('Y-m-d');
+		$certificate_date   = date('Y-m-d');
 
-		$sig = hash_hmac('sha256', $guid . $certificate_hash . $certificate_date . $certificate_status, $CERTIFICATE_APP_KEY);
+		if (empty($CERTIFICATE_APP_KEY) || empty($guid) || empty($certificate_hash)) {
+			// Optionally log and bail out quietly
+			$log->debug('HoldingCertificate: missing APP_KEY / guid / hash, skipping remote call');
+			return;
+		}
+
+		$sig = hash_hmac(
+			'sha256',
+			$guid . $certificate_hash . $certificate_date . $certificate_status,
+			$CERTIFICATE_APP_KEY
+		);
 
 		$ch = curl_init();
 
-		curl_setopt($ch, CURLOPT_URL, "https://certificates.global-precious-metals.com/create/" . $sig);
+		curl_setopt($ch, CURLOPT_URL, 'https://certificates.global-precious-metals.com/create/' . $sig);
 		curl_setopt($ch, CURLOPT_POST, 1);
-
-		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(
-			array(
-				'guid' => $guid,
-				'hash' => $certificate_hash,
-				'certificate_date' => $certificate_date,
-				'status' => $certificate_status
-			)
-		));
-
+		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array(
+			'guid'             => $guid,
+			'hash'             => $certificate_hash,
+			'certificate_date' => $certificate_date,
+			'status'           => $certificate_status,
+		)));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
 		$server_output = curl_exec($ch);
+
+		if ($server_output === false) {
+			$error = curl_error($ch);
+			$log->fatal("HoldingCertificate: CURL error: $error");
+		}
 
 		curl_close($ch);
 	}

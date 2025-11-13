@@ -1,32 +1,38 @@
 <?php
 
-
 $Vtiger_Utils_Log = true;
-require_once __DIR__ . '/vendor/autoload.php';
-include_once('vtlib/Vtiger/Menu.php');
-include_once('vtlib/Vtiger/Module.php');
 
+require_once __DIR__ . '/vendor/autoload.php';
+include_once 'vtlib/Vtiger/Menu.php';
+include_once 'vtlib/Vtiger/Module.php';
+include_once 'include/utils/utils.php';
+
+/**
+ * CREATE OR UPDATE MODULE
+ */
 $module = Vtiger_Module::getInstance('HoldingCertificate');
+
 if (!$module) {
     $module = new Vtiger_Module();
     $module->name = 'HoldingCertificate';
-    $module->parent = 'Tools';
-    $module->parent = 'Tools';
     $module->label = 'Holding Certificate';
+    $module->parent = 'Tools';
 
     $module->save();
-    $module->initTables();
-    $module->initWebservice();
+    $module->initTables();       // Creates vtiger_holdingcertificate + cf table
+    $module->initWebservice();   // Adds Webservice entry
 }
 
-//     info block
+/**
+ * BLOCKS
+ */
 $infoBlock = Vtiger_Block::getInstance('Certificate Details', $module);
 if (!$infoBlock) {
     $infoBlock = new Vtiger_Block();
     $infoBlock->label = 'Certificate Details';
     $module->addBlock($infoBlock);
 }
-//Description Details
+
 $descriptionBlock = Vtiger_Block::getInstance('LBL_DESCRIPTION_INFORMATION', $module);
 if (!$descriptionBlock) {
     $descriptionBlock = new Vtiger_Block();
@@ -34,6 +40,11 @@ if (!$descriptionBlock) {
     $module->addBlock($descriptionBlock);
 }
 
+/**
+ * FIELDS
+ */
+
+/* ------- GUID (Entity Label) ------- */
 $guidField = Vtiger_Field::getInstance('guid', $module);
 if (!$guidField) {
     $guidField = new Vtiger_Field();
@@ -44,56 +55,61 @@ if (!$guidField) {
     $guidField->columntype = 'VARCHAR(128)';
     $guidField->uitype = 1;
     $guidField->typeofdata = 'V~O';
+
     $infoBlock->addField($guidField);
-    /** Creates the field and adds to block */
+
+    // Set as display label (entity name column)
     $module->setEntityIdentifier($guidField);
 }
-/*
- * Related To
- */
+
+/* ------- Related To (Contacts) ------- */
 $relatedToField = Vtiger_Field::getInstance('contact_id', $module);
 if (!$relatedToField) {
     $relatedToField = new Vtiger_Field();
     $relatedToField->name = 'contact_id';
     $relatedToField->label = 'Related To';
     $relatedToField->table = $module->basetable;
+    $relatedToField->column = 'contact_id';
     $relatedToField->columntype = 'INT(11)';
     $relatedToField->uitype = 10;
     $relatedToField->typeofdata = 'V~M';
+
     $infoBlock->addField($relatedToField);
-    $relatedToField->setRelatedModules(array('Contacts'));
+    $relatedToField->setRelatedModules(['Contacts']);
 }
 
-/*
- * Certificate
- */
+/* ------- Certificate (Document) ------- */
 $certificateField = Vtiger_Field::getInstance('notes_id', $module);
 if (!$certificateField) {
     $certificateField = new Vtiger_Field();
     $certificateField->name = 'notes_id';
     $certificateField->label = 'Certificate';
     $certificateField->table = $module->basetable;
+    $certificateField->column = 'notes_id';
     $certificateField->columntype = 'INT(11)';
     $certificateField->uitype = 10;
     $certificateField->typeofdata = 'V~O';
+
     $infoBlock->addField($certificateField);
-    $certificateField->setRelatedModules(array('Documents'));
+    $certificateField->setRelatedModules(['Documents']);
 }
 
-
+/* ------- Certificate Hash ------- */
 $hashField = Vtiger_Field::getInstance('certificate_hash', $module);
 if (!$hashField) {
     $hashField = new Vtiger_Field();
     $hashField->name = 'certificate_hash';
-    $hashField->label = 'Certificate Hash(SHA256)';
+    $hashField->label = 'Certificate Hash (SHA256)';
     $hashField->table = $module->basetable;
     $hashField->column = 'certificate_hash';
     $hashField->columntype = 'VARCHAR(128)';
     $hashField->uitype = 1;
     $hashField->typeofdata = 'V~O';
+
     $infoBlock->addField($hashField);
 }
 
+/* ------- Verification URL ------- */
 $urlField = Vtiger_Field::getInstance('verify_url', $module);
 if (!$urlField) {
     $urlField = new Vtiger_Field();
@@ -102,13 +118,13 @@ if (!$urlField) {
     $urlField->table = $module->basetable;
     $urlField->column = 'verify_url';
     $urlField->columntype = 'VARCHAR(256)';
-    $urlField->uitype = 17;
+    $urlField->uitype = 17; // URL
     $urlField->typeofdata = 'V~O';
-    $urlField->displaytype = 2;
+
     $infoBlock->addField($urlField);
 }
 
-
+/* ------- Status Picklist ------- */
 $certificateStatusField = Vtiger_Field::getInstance('certificate_status', $module);
 if (!$certificateStatusField) {
     $certificateStatusField = new Vtiger_Field();
@@ -116,27 +132,28 @@ if (!$certificateStatusField) {
     $certificateStatusField->label = 'Status';
     $certificateStatusField->column = 'certificate_status';
     $certificateStatusField->columntype = 'VARCHAR(100)';
-    $certificateStatusField->uitype = 16;
+    $certificateStatusField->uitype = 16; // Picklist
     $certificateStatusField->typeofdata = 'V~M';
+
     $infoBlock->addField($certificateStatusField);
-    $certificateStatusField->setPicklistValues(array('Active', 'Inactive'));
+    $certificateStatusField->setPicklistValues(['Active', 'Inactive']);
 }
 
-/*
- * Field For Assigned To
- */
+/* ------- Assigned User ------- */
 $assignedToField = Vtiger_Field::getInstance('assigned_user_id', $module);
 if (!$assignedToField) {
     $assignedToField = new Vtiger_Field();
     $assignedToField->name = 'assigned_user_id';
-    $assignedToField->label = 'Created By';
+    $assignedToField->label = 'Assigned To';
     $assignedToField->table = 'vtiger_crmentity';
     $assignedToField->column = 'smownerid';
     $assignedToField->uitype = 53;
     $assignedToField->typeofdata = 'V~M';
+
     $infoBlock->addField($assignedToField);
 }
 
+/* ------- Created Time ------- */
 $createdTimeField = Vtiger_Field::getInstance('createdtime', $module);
 if (!$createdTimeField) {
     $createdTimeField = new Vtiger_Field();
@@ -147,11 +164,11 @@ if (!$createdTimeField) {
     $createdTimeField->uitype = 70;
     $createdTimeField->typeofdata = 'T~O';
     $createdTimeField->displaytype = 2;
+
     $infoBlock->addField($createdTimeField);
 }
-/*
- * Modified Time
- */
+
+/* ------- Modified Time ------- */
 $modifiedTimeField = Vtiger_Field::getInstance('modifiedtime', $module);
 if (!$modifiedTimeField) {
     $modifiedTimeField = new Vtiger_Field();
@@ -162,9 +179,11 @@ if (!$modifiedTimeField) {
     $modifiedTimeField->uitype = 70;
     $modifiedTimeField->typeofdata = 'T~O';
     $modifiedTimeField->displaytype = 2;
+
     $infoBlock->addField($modifiedTimeField);
 }
 
+/* ------- Description (long text) ------- */
 $descriptionField = Vtiger_Field::getInstance('description', $module);
 if (!$descriptionField) {
     $descriptionField = new Vtiger_Field();
@@ -172,40 +191,46 @@ if (!$descriptionField) {
     $descriptionField->label = 'Certificate Data';
     $descriptionField->table = 'vtiger_crmentity';
     $descriptionField->column = 'description';
-    $descriptionField->uitype = 19;
+    $descriptionField->uitype = 19; // Textarea
     $descriptionField->typeofdata = 'V~O';
-    $descriptionField->displaytype = 2;
+
     $descriptionBlock->addField($descriptionField);
-    /** Creates the field and adds to block */
 }
 
+/**
+ * LIST VIEW FILTER
+ */
 $allFilter = Vtiger_Filter::getInstance('All', $module);
+
 if (!$allFilter) {
     $allFilter = new Vtiger_Filter();
     $allFilter->name = 'All';
     $allFilter->isdefault = true;
     $module->addFilter($allFilter);
-    // Add fields to the filter created
-    $allFilter->addField($guidField)
-        ->addField($relatedToField, 1)
-        ->addField($certificateField, 2)
-        ->addField($hashField, 3)
+
+    $allFilter->addField($guidField, 1)
+        ->addField($relatedToField, 2)
+        ->addField($certificateField, 3)
         ->addField($certificateStatusField, 4)
         ->addField($assignedToField, 5)
         ->addField($createdTimeField, 6);
 }
 
+/**
+ * APP REGISTRATION
+ */
+$adb->pquery(
+    'DELETE FROM vtiger_app2tab WHERE tabid = ?',
+    [getTabid('HoldingCertificate')]
+);
 
-/** Set sharing access of this module */
-$module->setDefaultSharing('Private');
-
-$module->disableTools(array('Import', 'Merge'));
-
-global $adb;
-
-$adb->pquery('INSERT INTO vtiger_app2tab(tabid,appname,sequence,visible) values(?,?,?,?)', array(getTabid('HoldingCertificate'), 'SUPPORT', 30, 1));
+$adb->pquery(
+    'INSERT INTO vtiger_app2tab(tabid, appname, sequence, visible) VALUES(?,?,?,?)',
+    [getTabid('HoldingCertificate'), 'TOOLS', 10, 1]
+);
 
 echo "Module HoldingCertificate created successfully.\n";
+
 
 // $result = $adb->pquery("select * from vtiger_cron_task where module = ?", array('HoldingCertificate'));
 
