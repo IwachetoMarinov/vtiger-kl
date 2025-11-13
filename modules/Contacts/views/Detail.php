@@ -104,12 +104,11 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$recordId = $request->get('record');
 		$moduleName = $request->getModule();
 
-		// Get model (same as core logic)
 		if (!$this->record) {
 			$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
 		}
 
-		// --- HARDCODED DATA FOR TESTING ---
+		// HARDCODED DATA FOR NOW
 		$oroSOftData = [
 			'CURRENCY' => 'USD',
 			'BALANCES' => [
@@ -125,40 +124,58 @@ class Contacts_Detail_View extends Accounts_Detail_View
 				['metal' => 'Silver', 'oz' => 320.1, 'location' => 'Brinks HK'],
 			],
 		];
-		// ----------------------------------
+
+		// -------------------------------------------
+		// 🔥 HARDCODED ACTIVITY SUMMARY DATA
+		// -------------------------------------------
+		$activityData = [
+			'CURRENCY_LIST' => ['USD', 'EUR', 'GBP'],
+			'CURRENCY_SELECTED' => 'USD',
+
+			'TRANSACTIONS' => [
+				[
+					'voucher_no' => 'SAL/2025/001',
+					'voucher_type' => 'Sales Invoice',
+					'doctype' => 'Sales Invoice',
+					'posting_date' => '2025-01-10',
+					'amount_in_account_currency' => 25000.00
+				],
+				[
+					'voucher_no' => 'PUR/2025/002',
+					'voucher_type' => 'Purchase Invoice',
+					'doctype' => 'Purchase Invoice',
+					'posting_date' => '2025-01-15',
+					'amount_in_account_currency' => -12000.00
+				],
+				[
+					'voucher_no' => 'DEP/2025/003',
+					'voucher_type' => 'Deposit',
+					'doctype' => '',
+					'posting_date' => '2025-02-01',
+					'amount_in_account_currency' => 5000.00
+				]
+			]
+		];
 
 		$viewer = $this->getViewer($request);
 
-		// Assign dummy data
-		$viewer->assign('CLIENT_CURRENCY', $oroSOftData['CURRENCY']);
-		$viewer->assign('CLIENT_BALANCES', $oroSOftData['BALANCES']);
-		$viewer->assign('OROSOFT_TRANSACTION', $oroSOftData['Transactions']);
-		$viewer->assign('OROSOFT_HOLDINGS', $oroSOftData['Holdings']);
+		// Assign safely to TPL
+		$viewer->assign('CLIENT_CURRENCY', $activityData['CURRENCY_LIST']);
+		$viewer->assign('ACTIVITY_SUMMERY_CURRENCY', $activityData['CURRENCY_SELECTED']);
+		$viewer->assign('OROSOFT_TRANSACTION', $activityData['TRANSACTIONS']);
 
-		// Inline display (no tpl, no ajax)
-		echo "<div style='border:2px solid #008ECA;padding:12px;margin:8px 0;background:#f7fcff;'>
-                <h3 style='color:#008ECA;margin-top:0;'>Holdings Summary (Hardcoded)</h3>
-                <p><strong>Currency:</strong> {$oroSOftData['CURRENCY']}</p>
-                <p><strong>Balances:</strong> Available {$oroSOftData['BALANCES']['available']} / Pending {$oroSOftData['BALANCES']['pending']}</p>
-                <hr>
-                <h4>Holdings:</h4>
-                <ul>";
-		foreach ($oroSOftData['Holdings'] as $h) {
-			echo "<li>{$h['metal']} — {$h['oz']} oz @ {$h['location']}</li>";
-		}
-		echo "  </ul>
-                <hr>
-                <h4>Recent Transactions:</h4>
-                <ul>";
-		foreach ($oroSOftData['Transactions'] as $t) {
-			echo "<li>{$t['date']} — {$t['desc']} — {$t['amount']}</li>";
-		}
-		echo "  </ul>
-              </div>";
+		$viewer->assign('TEST_CURRENCY', $oroSOftData['CURRENCY']);
+		$viewer->assign('TEST_BALANCES', $oroSOftData['BALANCES']);
+		$viewer->assign('TEST_HOLDINGS', $oroSOftData['Holdings']);
+		$viewer->assign('TEST_TRANSACTIONS', $oroSOftData['Transactions']);
 
-		// Keep rest of page working
+		// RENDER NEW CUSTOM BLOCK HERE
+		// $viewer->view('HoldingsWalletSummary.tpl', $moduleName);
+
+		// Continue normal summary
 		return parent::showModuleSummaryView($request);
 	}
+
 
 	function getCertificateId($recordId)
 	{
