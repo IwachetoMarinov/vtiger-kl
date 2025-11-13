@@ -7,6 +7,7 @@ try {
     echo "Cron execution in MetalsCron started at " . date('Y-m-d H:i:s') . PHP_EOL;
 
     $job = new MetalsCron();
+    // Run the daily metal update operation
     $job->createUpdateDailyMetal();
 
     echo "\n Cron execution ended at " . date('Y-m-d H:i:s') . PHP_EOL;
