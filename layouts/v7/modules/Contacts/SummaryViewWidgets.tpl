@@ -29,6 +29,9 @@
 			<div class="summaryViewFields">
 				{$MODULE_SUMMARY}
 			</div>
+
+			{* INSERT YOUR WIDGET HERE *}
+			{include file="HoldingsWalletSummary.tpl"|vtemplate_path:$MODULE_NAME}
 		</div>
 	{* Module Summary View Ends Here*}
 
@@ -74,11 +77,22 @@
 	{* Summary View Documents Widget Ends Here*}
 </div>
 
+{assign var="ASYEAR" value=$smarty.request.ActivtySummeryDate|default:""}
+
 <div class="middle-block col-lg-8">
 	{* Summary View Related Activities Widget*}
-		<div id="relatedActivities">
-			{$RELATED_ACTIVITIES}
-		</div>
+	   {* Decide which template to load *}
+		{if $ASYEAR neq "" && $ASYEAR < 2023}
+			{include file='SummaryOld.tpl'|@vtemplate_path:$MODULE_NAME}
+		{else}
+			{include file='SummaryNew.tpl'|@vtemplate_path:$MODULE_NAME}
+		{/if}
+		
+        {* Summary View Related Activities Widget*}
+        <div id="relatedActivities">
+            {$RELATED_ACTIVITIES}
+        </div>
+        {* Summary View Related Activities Widget Ends Here*}
 	{* Summary View Related Activities Widget Ends Here*}
 
 	{* Summary View Comments Widget*}
