@@ -116,8 +116,12 @@ Vtiger_Detail_Js(
     registerActivitySummaryCurrencyChange: function () {
       var thisInstance = this;
 
+      console.log("registerActivitySummaryCurrencyChange");
+
       jQuery("#currencySelect").on("change", function () {
         var selectedCurrency = jQuery(this).val();
+
+        console.log("selectedCurrency", selectedCurrency);
 
         // Build new AJAX URL (keeps record/module params)
         var baseUrl = window.location.href.split("&ActivtySummeryCurrency=")[0];
@@ -126,7 +130,7 @@ Vtiger_Detail_Js(
 
         // Trigger AJAX reload like native widgets
         // thisInstance.getDetailViewContents(url);
-		window.location.replace(url);
+        window.location.replace(url);
       });
     },
     /**
@@ -138,7 +142,7 @@ Vtiger_Detail_Js(
       this.registerAjaxPreSaveEvents(form);
       this.registerActivtySummeryDateChange();
       this.registerCertificateClick();
-	   this.registerActivitySummaryCurrencyChange();
+      this.registerActivitySummaryCurrencyChange();
     },
   }
 );
