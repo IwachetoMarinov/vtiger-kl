@@ -1,5 +1,8 @@
 <?php
 
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+
 class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
 {
 
@@ -14,22 +17,67 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
         }
     }
 
-    function fetchOROSOft(Vtiger_Request $request)
-    {
-        include_once 'modules/Settings/OROSoft/api.php';
-        $recordModel = $this->record->getRecord();
-        $clientID = $recordModel->get('cf_950');
-        $year = $request->get('ActivtySummeryDate');
-        $comId = $recordModel->get('related_entity');
-        return array(
-            'Transactions' => getOROSoftTransaction($clientID, $year, $comId)
-        );
-    }
+    // function fetchOROSOft(Vtiger_Request $request)
+    // {
+    //     include_once 'modules/Settings/OROSoft/api.php';
+    //     $recordModel = $this->record->getRecord();
+    //     $clientID = $recordModel->get('cf_950');
+    //     $year = $request->get('ActivtySummeryDate');
+    //     $comId = $recordModel->get('related_entity');
+    //     return array(
+    //         'Transactions' => getOROSoftTransaction($clientID, $year, $comId)
+    //     );
+    // }
 
     public function process(Vtiger_Request $request)
     {
         $moduleName = $request->getModule();
-        $oroSOftData = $this->fetchOROSOft($request);
+        // $oroSOftData = $this->fetchOROSOft($request);
+
+        // Temporary hardcoded data for testing
+        $oroSOftData = [
+            'Transactions' => [
+                [
+                    'voucher_no' => 'SAL-00123',
+                    'doctype' => 'Sales Invoice',
+                    'posting_date' => '2024-01-15',
+                    'voucher_type' => 'Sale of Gold 1kg',
+                    'amount_in_account_currency' => 15000.00,
+                    'amount' => 15000.00,
+                    'usdVal' => 15000.00,
+                ],
+                [
+                    'voucher_no' => 'PUR-00077',
+                    'doctype' => 'Purchase Invoice',
+                    'posting_date' => '2024-01-05',
+                    'voucher_type' => 'Purchase of Silver 5kg',
+                    'amount_in_account_currency' => -4500.00,
+                    'amount' => -4500.00,
+                    'usdVal' => -4500.00,
+                ],
+                [
+                    'voucher_no' => 'REC-00210',
+                    'doctype' => 'Receipt',
+                    'posting_date' => '2024-01-02',
+                    'voucher_type' => 'Deposit Payment',
+                    'amount_in_account_currency' => 8000.00,
+                    'amount' => 8000.00,
+                    'usdVal' => 8000.00,
+                ],
+                // Example TOTAL row (if template expects it)
+                [
+                    'voucher_no' => 'Total',
+                    'doctype' => '',
+                    'posting_date' => '',
+                    'voucher_type' => '',
+                    'amount_in_account_currency' => 18500.00,
+                    'amount' => 18500.00,
+                    'usdVal' => 18500.00,
+                ]
+            ]
+        ];
+
+
         $recordModel = $this->record->getRecord();
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
@@ -83,6 +131,3 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
         exit;
     }
 }
-
-#First Page 18
-#from Second page onwards 25 

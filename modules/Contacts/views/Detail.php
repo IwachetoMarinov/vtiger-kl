@@ -8,8 +8,10 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  * *********************************************************************************** */
+
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+
 class Contacts_Detail_View extends Accounts_Detail_View
 {
 
