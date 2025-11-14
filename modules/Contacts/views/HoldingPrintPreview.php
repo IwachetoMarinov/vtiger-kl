@@ -61,7 +61,10 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('LBMA_DATE', date('d-M-y', strtotime($oroSOftData['MetalPrice']['XAU']['price_date'])));
-        $viewer->assign('OROSOFT_HOLDINGS', $this->processHoldingData($oroSOftData['Holdings']));
+        // SHOULD  be checked this data
+        // $viewer->assign('OROSOFT_HOLDINGS', $this->processHoldingData($oroSOftData['Holdings']));
+        // HARDCODED OROSOFT_HOLDINGS
+        $viewer->assign('OROSOFT_HOLDINGS', []);
         $viewer->assign('OROSOFT_METALPRICE', $oroSOftData['MetalPrice']);
         $viewer->assign('OROSOFT_HOLDINGMETALS', array_unique(array_column($oroSOftData['Holdings'], 'metal')));
         $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($recordModel->get('related_entity')));
