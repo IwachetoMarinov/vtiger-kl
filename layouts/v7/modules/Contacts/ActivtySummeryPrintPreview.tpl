@@ -241,34 +241,74 @@
                                         <th style="width: 22mm;">DEPOSIT/(WITHDRAWAL)</th>
                                         <th style="text-align: center">BALANCE</th>
                                     </tr>
-                                    {for $loopStart=$start to $end}
-                                        {assign var="start" value=($loopStart+1)}
-                                        {assign var="TRANSACTION" value=$OROSOFT_TRANSACTION[$loopStart]}
-					{if in_array(substr($TRANSACTION->docNo,0,3),array('FXP','FXR','MPD','MRD'))}
-						{continue}
-					{/if}
-					{assign var="grandTotal" value=($grandTotal)+($TRANSACTION->usdVal)}
-                                        {if substr($TRANSACTION->docNo,0,3) eq 'AOP'}
-                                            <tr>
-                                                <td colspan="4" ><strong>OPENING BALANCE</strong></td>
-						 <td style="text-align:right"><strong> {if $TRANSACTION->usdVal > 0 }{number_format($TRANSACTION->usdVal, 2, '.', ',')}{else}({number_format(abs($TRANSACTION->usdVal), 2, '.', ',')}){/if}</strong></td>
-                                            </tr>
-                                            {assign var="balanceAmount" value=$TRANSACTION->usdVal}
-                                            {continue}
-                                        {/if}
-                                        {assign var="movementTotal" value=($movementTotal)+($TRANSACTION->usdVal)}
-                                        {assign var="balanceAmount" value=($balanceAmount)+($TRANSACTION->usdVal)}
-                                        {if $loopStart eq count($OROSOFT_TRANSACTION)}
-                                            {break}
-                                        {/if}
+                                    
+                                  {for $loopStart=$start to $end}
+                                    {if $loopStart >= count($OROSOFT_TRANSACTION)}{break}{/if}
+
+                                    {assign var="start" value=($loopStart+1)}
+                                    {assign var="TRANSACTION" value=$OROSOFT_TRANSACTION[$loopStart]}
+
+                                    {* Normalize values to avoid null warnings *}
+                                    {assign var="docNo" value=$TRANSACTION.docNo|default:''}
+                                    {assign var="usdVal" value=$TRANSACTION.usdVal|default:0}
+                                    {assign var="transDate" value=$TRANSACTION.transDate|default:''}
+
+                                    {* Skip FX / MP transactions *}
+                                    {if in_array($docNo|substr:0:3, array('FXP','FXR','MPD','MRD'))}
+                                        {continue}
+                                    {/if}
+
+                                    {* Grand total always accumulates *}
+                                    {assign var="grandTotal" value=$grandTotal+$usdVal}
+
+                                    {* Opening balance row *}
+                                    {if $docNo|substr:0:3 eq 'AOP'}
                                         <tr>
-                                            <td>{$TRANSACTION->docNo}</td>
-                                            <td>{date('d-M-y',strtotime($TRANSACTION->transDate))}</td>
-                                            <td>{vtranslate(substr($TRANSACTION->docNo,0,3),'Contacts')}</td>
-                                            <td style="text-align:right"> {if $TRANSACTION->usdVal > 0 }{number_format($TRANSACTION->usdVal, 2, '.', ',')}{else}({number_format(abs($TRANSACTION->usdVal), 2, '.', ',')}){/if}</td>
-                                            <td style="text-align:right"> {if $balanceAmount gte 0 }{number_format($balanceAmount,2, '.', ',')}{else}({number_format(abs($balanceAmount),2, '.', ',')}){/if}</td>
+                                            <td colspan="4"><strong>OPENING BALANCE</strong></td>
+                                            <td style="text-align:right">
+                                                <strong>
+                                                    {if $usdVal > 0}
+                                                        {number_format($usdVal, 2, '.', ',')}
+                                                    {else}
+                                                        ({number_format($usdVal|abs, 2, '.', ',')})
+                                                    {/if}
+                                                </strong>
+                                            </td>
                                         </tr>
-                                    {/for}
+                                        {assign var="balanceAmount" value=$usdVal}
+                                        {continue}
+                                    {/if}
+
+                                    {* Movement + running balance *}
+                                    {assign var="movementTotal" value=$movementTotal+$usdVal}
+                                    {assign var="balanceAmount" value=$balanceAmount+$usdVal}
+
+                                    <tr>
+                                        <td>{$docNo}</td>
+                                        <td>
+                                            {if $transDate ne ''}
+                                                {date('d-M-y', strtotime($transDate))}
+                                            {/if}
+                                        </td>
+                                        <td>{vtranslate($docNo|substr:0:3, 'Contacts')}</td>
+                                        <td style="text-align:right">
+                                            {if $usdVal > 0}
+                                                {number_format($usdVal, 2, '.', ',')}
+                                            {else}
+                                                ({number_format($usdVal|abs, 2, '.', ',')})
+                                            {/if}
+                                        </td>
+                                        <td style="text-align:right">
+                                            {if $balanceAmount gte 0}
+                                                {number_format($balanceAmount, 2, '.', ',')}
+                                            {else}
+                                                ({number_format(abs($balanceAmount), 2, '.', ',')})
+                                            {/if}
+                                        </td>
+                                    </tr>
+                                {/for}
+
+
                                     {if $PAGES eq $page}
                                         <tr>
                                             <td><strong>Total Movement</strong></td>
