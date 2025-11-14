@@ -16,18 +16,58 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
 
     public function process(Vtiger_Request $request)
     {
-        include_once 'modules/Settings/OROSoft/api.php';
+        // include_once 'modules/Settings/OROSoft/api.php';
         $docNo = $request->get('docNo');
         $docType = substr($docNo, 0, 3);
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
         $comId = $recordModel->get('related_entity');
-        $oroSOftDoc = ($docType == 'STI') ? getOROSoftSTIDoc($docNo, $comId) : getOROSoftDoc($docNo, $comId);
+        // $oroSOftDoc = ($docType == 'STI') ? getOROSoftSTIDoc($docNo, $comId) : getOROSoftDoc($docNo, $comId);
+        // HARDCODED TEST DATA (simulate OROSoft return)
+        $oroSOftDoc = (object) [
+            'docNo' => $docNo,
+            'postingDate' => '2022-10-10',
+            'voucherType' => 'Sales Invoice',
+            'GST' => true,
+            'currency' => 'USD',
+            'grandTotal' => 25000.55,
+            'barItems' => [
+                (object)[
+                    'quantity' => 1,
+                    'serials' => ['ABC123-XYZ789'],
+                    'itemCode' => 'GOLD999',
+                    'description' => '999.9 Gold Bar',
+                    'weight' => 1000,
+                    'unitPrice' => 60.00,
+                    'amount' => 60000.00,
+                    'barNumber' => 'B0001',
+                    'purity' => '999.9',
+                    'voucherType' => 'SAL',
+                ],
+                (object)[
+                    'quantity' => 2,
+                    'serials' => ['SER0001', 'SER0002'],
+                    'itemCode' => 'SLV995',
+                    'description' => 'Silver Bar',
+                    'weight' => 500,
+                    'unitPrice' => 20.00,
+                    'amount' => 20000.00,
+                    'barNumber' => 'B0002',
+                    'purity' => '995',
+                    'voucherType' => 'SAL',
+                ]
+            ]
+        ];
+
         //	print_r($this->processDoc($oroSOftDoc));
         $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($comId);
         $bankAccountId = $request->get('bank');
         if (empty($bankAccountId)) {
-            $bankAccountId = $allBankAccounts[0]->getId();
+            // SHOULD HAVE DEFAULT BANK ACCOUNT SETUP IN COMPANY SETTINGS
+            // $bankAccountId = $allBankAccounts[0]->getId();
+
+            // HARDCODED TEST DATA
+            $bankAccountId = 1;
         }
         //if($docType == 'STI' && !$oroSOftDoc['GST']){
         //	$docType = 'OLD_STI';
@@ -36,7 +76,17 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         if (!empty($request->get('fromIntent'))) {
             $intent = Vtiger_Record_Model::getInstanceById($request->get('fromIntent'), 'GPMIntent');
         }
-        $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
+        // SHOULD HANDLE SWD/PWD AS SI/PI
+        // $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
+        // HARDCODED TEST DATA
+        $selectedBank = (object) [
+            'accountNumber' => '123-456-789',
+            'accountName' => 'GPM Main Account',
+            'bankName' => 'Global Bank',
+            'branchCode' => '001',
+            'swiftCode' => 'GBLBB22',
+            'bankAddress' => '123 Global St, Metropolis, Country'
+        ];
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);
@@ -77,9 +127,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         return $datas;
     }
 
-    public function postProcess(Vtiger_Request $request)
-    {
-    }
+    public function postProcess(Vtiger_Request $request) {}
 
     function downloadPDF($html, Vtiger_Request $request)
     {

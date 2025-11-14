@@ -178,13 +178,17 @@
                 padding: 0;
                 overflow: hidden;
                 background-color: #333;">
-            <li style="float:right"><a style="display: block;
-                color: white;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: none;
-                background-color: #bea364;"
-                    href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo}">Download</a>
+            <li style="float:right">
+            {assign var="hideInfo" value=$smarty.request.hideCustomerInfo|default:0}
+            {assign var="docNo" value=$smarty.request.docNo|default:''}
+            <a style="display: block;color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
+                href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$docNo}&PDFDownload=true&hideCustomerInfo={$hideInfo}">
+                Download
+            </a>
+
+
+            
+            
             </li>
             <li id='printConf' style="float:right">
                 <span style="float: right;margin-right: 1px;color: white;background-color: #bea364;text-decoration: none;
@@ -283,36 +287,50 @@
                                     </th>
                                     <th style="width:25%;text-align:center">TOTAL US$</th>
                                 </tr>
-                                {assign var="balanceAmount" value=($balanceAmount)+($TRANSACTION->usdVal)}
+
+                                {assign var="balanceAmount" value=0}
                                 {assign var="serials" value=""}
                                 {assign var="storageCharge" value=0}
                                 {assign var="calcTotal" value=0}
+
                                 {for $loopStart=$start to $end}
+                                    {if $loopStart >= count($OROSOFT_DOCUMENT->barItems)}{break}{/if}
                                     {assign var="barItem" value=$OROSOFT_DOCUMENT->barItems[$loopStart]}
                                     {assign var="start" value=($loopStart+1)}
-                                    {assign var="serials" value=$serials|cat:$barItem->serials|cat:','}
-                                    {* (metalPrice x pureOz) + othercharge *}
+
+                                    {* Build serial list safely *}
+                                    {assign var="serials" value=$serials|cat:implode(',', $barItem->serials)|cat:','}
+
+                                    {* Total price calculation *}
                                     {assign var="total" value=((($barItem->price)*($barItem->pureOz))+$barItem->otherCharge)}
-                                    {if $loopStart eq count($OROSOFT_DOCUMENT->barItems)}
-                                        {break}
-                                    {/if}
+
+                                    {* Skip empty lines (STORAGE) *}
                                     {if empty($barItem->quantity) and empty($barItem->longDesc) and $OROSOFT_DOCTYPE eq 'SWD'}
                                         {assign var="storageCharge" value=$storageCharge+round($total,2)}
                                         {continue}
                                     {else}
                                         {assign var="calcTotal" value=$calcTotal+round($total,2)}
-                                        <tr>
-                                            <td style="vertical-align: top">{number_format($barItem->quantity,0)}</td>
-                                            <td style="border-bottom:none;vertical-align: top">{$barItem->longDesc}</td>
-                                            <td style="text-align:right;vertical-align: top">{number_format($barItem->pureOz,3)}
-                                            </td>
-                                            <td style="text-align:right;vertical-align: top">
-                                                {abs(number_format($barItem->otherCharge/($barItem->pureOz*$metalPrice)*100,2))} %
-                                            </td>
-                                            <td style="text-align:right;vertical-align: top">{number_format($total,2)} </td>
-                                        </tr>
                                     {/if}
+
+                                    {* ROW DISPLAY *}
+                                    <tr>
+                                        <td style="vertical-align: top">{number_format($barItem->quantity,0)}</td>
+                                        <td style="border-bottom:none;vertical-align: top">{$barItem->longDesc}</td>
+                                        <td style="text-align:right;vertical-align: top">{number_format($barItem->pureOz,3)}</td>
+
+                                        {if $barItem->pureOz > 0 && $metalPrice > 0}
+                                            <td style="text-align:right;vertical-align: top">
+                                                {abs(number_format(($barItem->otherCharge/($barItem->pureOz*$metalPrice))*100,2))} %
+                                            </td>
+                                        {else}
+                                            <td style="text-align:right;vertical-align: top">0 %</td>
+                                        {/if}
+
+                                        <td style="text-align:right;vertical-align: top">{number_format($total,2)}</td>
+                                    </tr>
                                 {/for}
+
+
                                 {if $PAGES eq $page}
                                     <tr>
                                         <th style="width:75%;" colspan="4">TOTAL TRADE AMOUNT:</th>
