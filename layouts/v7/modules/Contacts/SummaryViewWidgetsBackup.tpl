@@ -1,13 +1,13 @@
 {*<!--
 /*********************************************************************************
 ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
-* ("License"); You may not use this file except in compliance with the License
-* The Original Code is: vtiger CRM Open Source
-* The Initial Developer of the Original Code is vtiger.
-* Portions created by vtiger are Copyright (C) vtiger.
-* All Rights Reserved.
+ * ("License"); You may not use this file except in compliance with the License
+ * The Original Code is: vtiger CRM Open Source
+ * The Initial Developer of the Original Code is vtiger.
+ * Portions created by vtiger are Copyright (C) vtiger.
+ * All Rights Reserved.
 *
-********************************************************************************/
+ ********************************************************************************/
 -->*}
 {strip}
 	{foreach item=DETAIL_VIEW_WIDGET from=$DETAILVIEW_LINKS['DETAILVIEWWIDGET']}
@@ -29,84 +29,11 @@
 			<div class="summaryViewFields">
 				{$MODULE_SUMMARY}
 			</div>
-		</div>
-		{* Module Summary View Ends Here*}
 
-		{* BALANCE BY WALLET WIDGET *}
-		<div class="summaryWidgetContainer">
+			{* INSERT YOUR WIDGET HERE *}
 			{include file="HoldingsWalletSummary.tpl"|vtemplate_path:$MODULE_NAME}
 		</div>
-		{* BALANCE BY WALLET WIDGET ENDS HERE *}
-
-		{* HOLDINGS WIDGET *}
-		<div class="summaryWidgetContainer">
-			<div class="customwidgetContainer_ widgetContentBlock" data-url="" data-name="Contacts"
-				data-type="RelatedModule">
-				<div class="widget_header row-fluid">
-					<span class="span11 margin0px">
-						<div class="row-fluid">
-							<h4 class="display-inline-block">Holdings</h4>
-							<span class="pull-right">
-								<a href="index.php?module=Contacts&view=HoldingPrintPreview&record={$RECORD->getId()}"
-									target="_blank">
-									<button class="btn btn-default vteWidgetCreateButton" type="button">
-										<span class="fa fa-download"></span>
-										&nbsp;Download
-									</button>
-								</a>
-							</span>
-							<span class="pull-right" style="margin-right:10px;">
-								<button id="generateHoldingCertificate" data-certificateid="{$CERTIFICATE_HOLDING|default:''}"
-									class="btn btn-default vteWidgetCreateButton" type="button">
-									<span class="fa fa-certificate"></span>
-									&nbsp;Certificate
-								</button>
-							</span>
-						</div>
-					</span>
-				</div>
-				<div class="widget_contents">
-					<div class="relatedContents contents-bottomscroll" style="border: none;">
-						<table class="table table-strip listViewEntriesTable">
-							<thead>
-								<tr class="listViewHeaders">
-
-									<th nowrap="">
-										Description
-									</th>
-									<th nowrap="">
-										Quantity
-									</th>
-									<th colspan="2" nowrap="">
-										Location
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-								{foreach item=HOLDING from=$OROSOFT_HOLDINGS|default:[]}
-									<tr class="listViewEntries1" data-id="20" data-recordurl=''>
-
-										<td class="fieldValue" nowrap>
-											<span class="value">{$HOLDING->sku|default:''}</span>
-										</td>
-
-										<td class="fieldValue" nowrap>
-											<span class="value">{$HOLDING->quantity|default:0}</span>
-										</td>
-
-										<td class="fieldValue" nowrap>
-											<span class="value">{vtranslate($HOLDING->location|default:'','MetalPrice')}</span>
-										</td>
-
-									</tr>
-								{/foreach}
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-		{* HOLDINGS WIDGET ENDS HERE *}
+		{* Module Summary View Ends Here*}
 
 		{* Summary View Documents Widget*}
 		{if $DOCUMENT_WIDGET_MODEL}
@@ -166,11 +93,11 @@
 		{* Summary View Documents Widget Ends Here*}
 	</div>
 
+	{assign var="ASYEAR" value=$smarty.request.ActivtySummeryDate|default:""}
+
 	<div class="middle-block col-lg-8">
-
-
-		{assign var="ASYEAR" value=$smarty.request.ActivtySummeryDate|default:""}
-
+		{* Summary View Related Activities Widget*}
+		{* Decide which template to load *}
 		{if $ASYEAR neq "" && $ASYEAR < 2023}
 			{include file='SummaryOld.tpl'|@vtemplate_path:$MODULE_NAME}
 		{else}
@@ -181,6 +108,7 @@
 		<div id="relatedActivities">
 			{$RELATED_ACTIVITIES}
 		</div>
+		{* Summary View Related Activities Widget Ends Here*}
 		{* Summary View Related Activities Widget Ends Here*}
 
 		{* Summary View Comments Widget*}

@@ -40,7 +40,7 @@
 
 
 {* Holdings Section *}
-<div class="summaryWidgetContainer" style="margin-bottom:20px;">
+{* <div class="summaryWidgetContainer" style="margin-bottom:20px;">
     <div class="widget_header clearfix">
         <h4 class="display-inline-block">Holdings</h4>
 
@@ -74,4 +74,4 @@
             </tbody>
         </table>
     </div>
-</div>
+</div> *}
