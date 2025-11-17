@@ -110,10 +110,14 @@ Deploy in github with export/import database
     14.1 First select table and field id from table based on label `SELECT fieldid, fieldlabel, fieldname, columnname, tablename, typeofdata FROM vtiger_field WHERE fieldlabel = 'Indicative FX spot';`
     14.2 Change database column to TEXT (if you wanna change other type must add type) `ALTER TABLE vtiger_gpmintent MODIFY COLUMN indicative_fx_spot VARCHAR(255);` 
     14.3 Update field metadata `UPDATE vtiger_field SET typeofdata = 'V~O' WHERE fieldid = 1035;`
-    14.4 Change UI type (VERY IMPORTANT) `UPDATE vtiger_field SET uitype = 1 WHERE fieldid = 1035;``
+    14.4 Change UI type (VERY IMPORTANT) `UPDATE vtiger_field SET uitype = 1 WHERE fieldid = 1035;`
 
 
 15. Run cron for metals manually: `bash /var/www/html/vtiger_metals_cron.sh`
+
+16. Check cron jobs for my current user `sudo crontab -u iwacheto -l`
+
+17. Open file for current user `sudo crontab -u iwacheto -e`
      
 
    
