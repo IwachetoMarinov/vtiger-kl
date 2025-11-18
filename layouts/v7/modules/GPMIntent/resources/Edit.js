@@ -33,9 +33,10 @@ Vtiger_Edit_Js(
       thisInstance
         .getCurruntMetalSpotPrice(selectedMetal)
         .then(function (data) {
-          console.log("getCurruntMetalSpotPrice then", data);
           data = JSON.parse(data);
-          jQuery('input[name="indicative_spot_price"]').val(data.price);
+          jQuery(
+            'input[name="indicative_spot_price"], input[name="cf_1136"]'
+          ).val(data.price);
         });
       //}
     },
@@ -70,8 +71,6 @@ Vtiger_Edit_Js(
       }
     },
     getCurruntMetalSpotPrice: function (metal) {
-      console.log("getCurruntMetalSpotPrice fuction:", metal);
-
       var aDeferred = jQuery.Deferred();
       var params = {
         module: "MetalPrice",
