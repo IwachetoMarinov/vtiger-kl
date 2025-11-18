@@ -18,6 +18,7 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
     public function process(Vtiger_Request $request)
     {
         // include_once 'modules/Settings/OROSoft/api.php';
+        include_once 'modules/Contacts/models/MetalsAPI.php';
         $docNo = $request->get('docNo');
         $docType = substr($docNo, 0, 3);
         $moduleName = $request->getModule();
@@ -25,6 +26,8 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         $comId = $recordModel->get('related_entity');
         // $oroSOftDoc = ($docType == 'STI') ? getOROSoftSTIDoc($docNo, $comId) : getOROSoftDoc($docNo, $comId);
 
+        $metalsAPI = new MetalsAPI();
+        $metals = $metalsAPI->getMetals();
 
         // ------------------------------------------------------
         // FINAL, FULLY COMPATIBLE OFFLINE OROSOFT MOCK FOR TC.PHP
@@ -80,6 +83,7 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('OROSOFT_DOCUMENT', $oroSOftDoc);
+        $viewer->assign('METALS_DATA', $metals);
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('OROSOFT_DOCTYPE', $docType);
         $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($comId));

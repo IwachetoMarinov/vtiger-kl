@@ -27,7 +27,6 @@ Vtiger_Edit_Js(
 
     setSpotPrice: function (selectedMetal) {
       var thisInstance = this;
-      console.log("setSpotPrice", thisInstance, selectedMetal);
 
       //if (jQuery('input[name="indicative_spot_price"]').val() == '') {
       thisInstance
@@ -117,7 +116,6 @@ Vtiger_Edit_Js(
         "change.select2",
         function (e) {
           console.log("currentTarget", e.currentTarget);
-          console.log("currentTarget->val", jQuery(e.currentTarget).val());
 
           selectedMetal = jQuery(e.currentTarget).val();
           // selectedMetal = jQuery(e.currentTarget).find("option:selected").data("metalcode");
@@ -132,8 +130,6 @@ Vtiger_Edit_Js(
     registerAddButton: function () {
       var thisInstance = this;
       jQuery("#add-btn").on("click", function () {
-        console.log("thisInstance", thisInstance);
-
         if (
           thisInstance.selectedMetal === false ||
           jQuery('select[name="gpm_order_type"]').val() == "" ||
@@ -216,7 +212,6 @@ Vtiger_Edit_Js(
 
       item_pre_disc = line.find(".item_premium").val();
       item_pre_disc_usd = line.find(".item_premium_usd").val();
-      console.log("item_pre_disc", item_pre_disc);
 
       prem_disc = 0;
       if (jQuery('select[name="gpm_order_type"]').val() == "Sale") {
@@ -225,11 +220,6 @@ Vtiger_Edit_Js(
         prem_disc = 1 + item_pre_disc / 100;
       }
 
-      console.log("prem_disc", prem_disc);
-      console.log("currentSpotPrice", currentSpotPrice);
-      console.log("itemTotalOz", itemTotalOz);
-
-      console.log("item_pre_disc_usd", item_pre_disc_usd);
       if (item_pre_disc_usd != 0) {
         itemUSD =
           itemTotalOz * currentSpotPrice + parseFloat(item_pre_disc_usd);
@@ -239,8 +229,6 @@ Vtiger_Edit_Js(
           .find(".item_premium_usd")
           .val(itemUSD - itemTotalOz * currentSpotPrice);
       }
-
-      console.log("itemUSD", itemUSD);
 
       line.find(".item_value_usd").val(itemUSD.toFixed(2));
     },
