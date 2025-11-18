@@ -171,24 +171,33 @@
 </head>
 
 <body>
+    {* Dump data here *}
+
+    {* <pre> *}
+    {* {$OROSOFT_DOCUMENT|@var_dump} *}
+    {* {$METALS_DATA|@var_dump} *}
+    {* </pre> *}
+
+
+
     {if $smarty.request.PDFDownload neq true}
-	<script type="text/javascript" src="layouts/v7/lib/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="layouts/v7/lib/jquery/jquery.min.js"></script>
         <ul style="list-style-type: none;
                 margin: 0;
                 padding: 0;
                 overflow: hidden;
                 background-color: #333;">
             <li style="float:right">
-            {assign var="hideInfo" value=$smarty.request.hideCustomerInfo|default:0}
-            {assign var="docNo" value=$smarty.request.docNo|default:''}
-            <a style="display: block;color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
-                href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$docNo}&PDFDownload=true&hideCustomerInfo={$hideInfo}">
-                Download
-            </a>
+                {assign var="hideInfo" value=$smarty.request.hideCustomerInfo|default:0}
+                {assign var="docNo" value=$smarty.request.docNo|default:''}
+                <a style="display: block;color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
+                    href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$docNo}&PDFDownload=true&hideCustomerInfo={$hideInfo}">
+                    Download
+                </a>
 
 
-            
-            
+
+
             </li>
             <li id='printConf' style="float:right">
                 <span style="float: right;margin-right: 1px;color: white;background-color: #bea364;text-decoration: none;
@@ -316,7 +325,8 @@
                                     <tr>
                                         <td style="vertical-align: top">{number_format($barItem->quantity,0)}</td>
                                         <td style="border-bottom:none;vertical-align: top">{$barItem->longDesc}</td>
-                                        <td style="text-align:right;vertical-align: top">{number_format($barItem->pureOz,3)}</td>
+                                        <td style="text-align:right;vertical-align: top">{number_format($barItem->pureOz,3)}
+                                        </td>
 
                                         {if $barItem->pureOz > 0 && $metalPrice > 0}
                                             <td style="text-align:right;vertical-align: top">
@@ -348,6 +358,32 @@
                             </div>
                         </td>
                     </tr>
+
+                    {* New TEST row for Unique Metals *}
+                    <tr class="{if $PAGES neq $page} hidden {/if}">
+                        <td style="font-size: 9pt; height: auto; vertical-align: top;">
+                            <strong>METAL PRICES USED IN THIS TRANSACTION:</strong>
+                            <table class="activity-tbl" style="margin-top:5mm">
+                                <tr>
+                                    <th style="width:33.33%;text-align:center">METAL</th>
+                                    <th style="width:33.33%;text-align:center">PRICE (US$ / OZ)</th>
+                                    <th style="width:33.33%;text-align:center">CURRENCY</th>
+                                </tr>
+                                {foreach from=$METALS_DATA item=metal}
+
+                                    {* dump item *}
+                                    {* <pre>{var_dump($metal)}</pre> *}
+                                    <tr>
+                                        <td style='text-align:center;'>{$metal.MT_Code}</td>
+                                        <td style='text-align:center;'>{number_format($metal.SpotPriceUSD,3)}</td>
+                                        <td style='text-align:center;'>{$metal.Curr_Code}</td>
+                                    </tr>
+                                {/foreach}
+                            </table>
+                        </td>
+                    </tr>
+                    {* End of TEST row *}
+
                     <tr>
                         <td style='font-size: 8pt;font-weight: bold;position: absolute;bottom: 14px;width: 85%'>
                             <div>
