@@ -213,7 +213,6 @@ Vtiger_Edit_Js(
       exactSpotPrice = jQuery('input[name="spot_price"]').val();
       currentSpotPrice =
         parseFloat(exactSpotPrice) > 0 ? exactSpotPrice : indicativeSpotPrice;
-      console.log("currentSpotPrice", currentSpotPrice);
 
       item_pre_disc = line.find(".item_premium").val();
       item_pre_disc_usd = line.find(".item_premium_usd").val();
@@ -226,6 +225,10 @@ Vtiger_Edit_Js(
         prem_disc = 1 + item_pre_disc / 100;
       }
 
+      console.log("prem_disc", prem_disc);
+      console.log("currentSpotPrice", currentSpotPrice);
+      console.log("itemTotalOz", itemTotalOz);
+
       console.log("item_pre_disc_usd", item_pre_disc_usd);
       if (item_pre_disc_usd != 0) {
         itemUSD =
@@ -236,6 +239,8 @@ Vtiger_Edit_Js(
           .find(".item_premium_usd")
           .val(itemUSD - itemTotalOz * currentSpotPrice);
       }
+
+      console.log("itemUSD", itemUSD);
 
       line.find(".item_value_usd").val(itemUSD.toFixed(2));
     },
