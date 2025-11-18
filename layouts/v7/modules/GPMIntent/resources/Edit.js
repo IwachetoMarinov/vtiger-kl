@@ -210,8 +210,12 @@ Vtiger_Edit_Js(
       exactSpotPrice = jQuery('input[name="spot_price"]').val();
       currentSpotPrice =
         parseFloat(exactSpotPrice) > 0 ? exactSpotPrice : indicativeSpotPrice;
+      console.log("currentSpotPrice", currentSpotPrice);
+
       item_pre_disc = line.find(".item_premium").val();
       item_pre_disc_usd = line.find(".item_premium_usd").val();
+      console.log("item_pre_disc", item_pre_disc);
+      
       prem_disc = 0;
       if (jQuery('select[name="gpm_order_type"]').val() == "Sale") {
         prem_disc = 1 - item_pre_disc / 100;
@@ -219,7 +223,7 @@ Vtiger_Edit_Js(
         prem_disc = 1 + item_pre_disc / 100;
       }
 
-      console.log(item_pre_disc_usd);
+      console.log("item_pre_disc_usd", item_pre_disc_usd);
       if (item_pre_disc_usd != 0) {
         itemUSD =
           itemTotalOz * currentSpotPrice + parseFloat(item_pre_disc_usd);
