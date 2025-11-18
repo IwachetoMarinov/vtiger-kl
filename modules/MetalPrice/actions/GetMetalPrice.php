@@ -9,21 +9,22 @@
  * All Rights Reserved.
  * *********************************************************************************** */
 
-class GPMIntent_Edit_View extends Vtiger_Edit_View
+class MetalPrice_GetMetalPrice_Action extends Vtiger_Action_Controller
 {
 
-	
-	public function process(Vtiger_Request $request)
-	{
-		$recordId = $request->get('record');
-		$moduleName = $request->getModule();
-		$products = GPMIntent_Line_Model::getInstanceByIntent($recordId);
-		$viewer = $this->getViewer($request);
-		$viewer->assign('RELATED_PRODUCTS', $products);
+    function checkPermission(Vtiger_Request $request)
+    {
+        return true;
+    }
 
-		echo '<pre>';
-		echo($products);
-		echo '</pre>';
-		return parent::process($request);
-	}
+    public function process(Vtiger_Request $request)
+    {
+        $metal = $request->get('metal');
+        $record = MetalPrice_Record_Model::getLatestPriceByName($metal);
+        if ($record) {
+            echo json_encode (array('price'=>$record->get('pm_rate')));
+        } else {
+            echo json_encode (array('price'=>null));
+        }
+    }
 }
