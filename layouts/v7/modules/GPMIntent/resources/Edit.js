@@ -54,8 +54,9 @@ Vtiger_Edit_Js(
     createMetalOption: function (selectedMetal) {
       var thisInstance = this;
       if (
-        thisInstance.metalOption === false ||
-        typeof thisInstance.metalOption[selectedMetal] == "undefined"
+        (thisInstance.metalOption === false ||
+          typeof thisInstance.metalOption[selectedMetal] == "undefined") &&
+        thisInstance.itemList[selectedMetal]
       ) {
         Object.keys(thisInstance.itemList[selectedMetal]).forEach(
           (item, index) => {
@@ -92,7 +93,8 @@ Vtiger_Edit_Js(
     getAvailableMetals: function () {
       var aDeferred = jQuery.Deferred();
       var params = {
-        module: "GPMMetal",
+        // module: "GPMMetal",
+        module: "Assets",
         action: "GetAllMetals",
       };
 
