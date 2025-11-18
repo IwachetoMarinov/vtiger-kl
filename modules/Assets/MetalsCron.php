@@ -1,8 +1,8 @@
 <?php
-/* modules/Metals/MetalsCron.php */
+/* modules/Assets/MetalsCron.php */
 
 include_once 'data/CRMEntity.php';
-include_once 'modules/Metals/Metals.php';
+// include_once 'modules/Metals/Metals.php';
 include_once 'modules/Users/Users.php';
 
 use Dotenv\Dotenv;
@@ -47,6 +47,7 @@ class MetalsCron
      */
     public function createUpdateDailyMetal()
     {
+        echo "[MetalsCron] Starting createUpdateDailyMetal process..." . PHP_EOL;
         global $current_user;
 
         // Run as admin
@@ -61,7 +62,7 @@ class MetalsCron
 
         // $this->updateOrInsertMetals($unique_metals, $current_user);
 
-        // $this->addMetalPrice($unique_metals, $current_user);
+        $this->addMetalPrice($unique_metals, $current_user);
 
         // $this->addExchangeRates($unique_metals, $current_user);
     }
