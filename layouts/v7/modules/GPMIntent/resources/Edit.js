@@ -116,7 +116,12 @@ Vtiger_Edit_Js(
       jQuery('select[name="gpm_metal_type"]').on(
         "change.select2",
         function (e) {
+          console.log("currentTarget", e.currentTarget);
+          console.log("currentTarget->val", jQuery(e.currentTarget).val());
+
           selectedMetal = jQuery(e.currentTarget).val();
+          // selectedMetal = jQuery(e.currentTarget).find("option:selected").data("metalcode");
+
           thisInstance.setSpotPrice(selectedMetal);
           thisInstance.setupMetalOption(selectedMetal);
           thisInstance.selectedMetal = selectedMetal;
