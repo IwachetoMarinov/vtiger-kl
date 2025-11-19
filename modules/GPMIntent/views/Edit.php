@@ -12,7 +12,7 @@
 class GPMIntent_Edit_View extends Vtiger_Edit_View
 {
 
-	
+
 	public function process(Vtiger_Request $request)
 	{
 		$recordId = $request->get('record');
@@ -21,9 +21,6 @@ class GPMIntent_Edit_View extends Vtiger_Edit_View
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RELATED_PRODUCTS', $products);
 
-		echo '<pre>';
-		echo($products);
-		echo '</pre>';
 		return parent::process($request);
 	}
 }

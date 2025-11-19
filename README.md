@@ -118,6 +118,8 @@ Deploy in github with export/import database
 16. Check cron jobs for my current user `sudo crontab -u iwacheto -l`
 
 17. Open file for current user `sudo crontab -u iwacheto -e`
+
+18. Make it executable any cron job `sudo chmod +x /var/www/html/vtiger_metals_cron.sh` and `sudo chown iwacheto:iwacheto /var/www/html/vtiger_metals_cron.sh`
      
 
    
