@@ -25,12 +25,20 @@ Vtiger_Edit_Js(
       //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
     }),
 
-    setSpotPrice: function (selectedMetal) {
+    toggleCurrencySelect: function (value) {
+      const currencySelect = jQuery(
+        'select[name="cf_1132"], select[name="cf_1134"]'
+      );
+
+      currencySelect.prop("disabled", value);
+    },
+
+    setSpotPrice: function (selectedMetal, currency = "USD") {
       var thisInstance = this;
 
       //if (jQuery('input[name="indicative_spot_price"]').val() == '') {
       thisInstance
-        .getCurruntMetalSpotPrice(selectedMetal)
+        .getCurruntMetalSpotPrice(selectedMetal, currency)
         .then(function (data) {
           data = JSON.parse(data);
           jQuery(
@@ -70,12 +78,13 @@ Vtiger_Edit_Js(
         );
       }
     },
-    getCurruntMetalSpotPrice: function (metal) {
+    getCurruntMetalSpotPrice: function (metal, currency = "USD") {
       var aDeferred = jQuery.Deferred();
       var params = {
         module: "MetalPrice",
         action: "GetMetalPrice",
         metal: metal,
+        currency: currency,
       };
 
       app.helper.showProgress();
@@ -115,12 +124,33 @@ Vtiger_Edit_Js(
       jQuery('select[name="gpm_metal_type"]').on(
         "change.select2",
         function (e) {
-          console.log("currentTarget", e.currentTarget);
-
-          selectedMetal = jQuery(e.currentTarget).val();
+          // Enable currency select on metal type change
+          thisInstance.toggleCurrencySelect(false);
           // selectedMetal = jQuery(e.currentTarget).find("option:selected").data("metalcode");
+          selectedMetal = jQuery(e.currentTarget).val();
+          // These functions goes to currency select on change instead of metal type
+          // thisInstance.setSpotPrice(selectedMetal);
+          // thisInstance.setupMetalOption(selectedMetal);
+          // thisInstance.selectedMetal = selectedMetal;
+        }
+      );
+    },
 
-          thisInstance.setSpotPrice(selectedMetal);
+    registerCurrencySelectChangeEvent: function () {
+      var thisInstance = this;
+
+      jQuery('select[name="cf_1132"], select[name="cf_1134"]').on(
+        "change.select2",
+        function (e) {
+          selectedMetal = jQuery('select[name="gpm_metal_type"]').val();
+
+          const currency = jQuery(e.currentTarget).val() || "USD";
+
+          if (selectedMetal === "") return;
+
+          console.log("selectedMetal", selectedMetal, "currency", currency);
+
+          thisInstance.setSpotPrice(selectedMetal, currency);
           thisInstance.setupMetalOption(selectedMetal);
           thisInstance.selectedMetal = selectedMetal;
         }
@@ -433,7 +463,9 @@ Vtiger_Edit_Js(
      */
     registerBasicEvents: function (container) {
       this._super(container);
+      this.toggleCurrencySelect(true);
       this.registerMetalTypeChangeEvent();
+      this.registerCurrencySelectChangeEvent();
       this.registerAddButton();
       this.registerLineItemDelete();
       this.registerOrderTypeChange();

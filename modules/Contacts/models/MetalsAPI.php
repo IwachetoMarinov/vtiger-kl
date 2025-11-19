@@ -42,6 +42,22 @@ class MetalsAPI
         }
     }
 
+    public function getLatestPriceByName($metal, $currency)
+    {
+        // check db_username and db_password
+        if (empty($this->db_username) || empty($this->db_password)) return null;
+
+        $metals = $this->fetchMetals();
+
+        foreach ($metals as $m) {
+            if ($m['MT_Code'] === $metal && $m['Curr_Code'] === $currency) {
+                return $m;
+            }
+        }
+
+        return null;
+    }
+
     public function getMetals()
     {
         // check db_username and db_password
