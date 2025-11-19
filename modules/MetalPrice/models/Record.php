@@ -26,7 +26,7 @@ class MetalPrice_Record_Model extends Vtiger_Record_Model
     //     Vtiger_Record_Model::getInstanceById($recordId, 'MetalPrice');
     // }
 
-    static function getLatestPriceByName($metal)
+    static function getLatestPriceByName($metal, $currency)
     {
         $adb = PearDatabase::getInstance();
 
