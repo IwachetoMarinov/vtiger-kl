@@ -72,9 +72,17 @@ class MetalsAPI
         return $unique_metals;
     }
 
-    protected function fetchMetals()
+    protected function fetchMetals($date = null)
     {
         if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+
+        $params = [];
+        $where  = '';
+
+        if ($date) {
+            $where = "WHERE [Date] = ?";
+            $params[] = $date;
+        }
 
         $sql = "
         SELECT 
@@ -85,9 +93,10 @@ class MetalsAPI
             [Exc_Rate],
             [SpotPriceCurr]
         FROM [HFS_SQLEXPRESS].[GPM].[dbo].[Metal_Spot_Price]
-        ";
+        $where
+        ORDER BY [Date] DESC, [Curr_Code]";
 
-        $stmt = sqlsrv_query($this->connection, $sql);
+        $stmt = sqlsrv_query($this->connection, $sql, $params);
 
         if ($stmt === false) {
             die(print_r(sqlsrv_errors(), true));
