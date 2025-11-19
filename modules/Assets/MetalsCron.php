@@ -47,17 +47,18 @@ class MetalsCron
      */
     public function createUpdateDailyMetal()
     {
-        echo "[MetalsCron] Starting createUpdateDailyMetal process..." . PHP_EOL;
         global $current_user;
 
         // Run as admin
         $current_user = Users::getActiveAdminUser();
         $metals = $this->fetchMetals();
+        // Fetch metals for a specific date
+        // $metals = $this->fetchMetals('2025-11-18');
 
         $unique_metals = $this->getUniqueMetals($metals, "USD");
 
         // echo '<pre>';
-        // var_dump($unique_metals);
+        // var_dump($metals);
         // echo '</pre>';
 
         // $this->updateOrInsertMetals($unique_metals, $current_user);
@@ -109,10 +110,16 @@ class MetalsCron
     }
 
 
-    protected function fetchMetals()
+    protected function fetchMetals($date = null)
     {
-        if (!$this->connection) {
-            die(print_r(sqlsrv_errors(), true));
+        if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+
+        $params = [];
+        $where  = '';
+
+        if ($date) {
+            $where = "WHERE [Date] = ?";
+            $params[] = $date;
         }
 
         $sql = "
@@ -124,17 +131,15 @@ class MetalsCron
             [Exc_Rate],
             [SpotPriceCurr]
         FROM [HFS_SQLEXPRESS].[GPM].[dbo].[Metal_Spot_Price]
-        ";
+        $where
+        ORDER BY [Date] DESC, [Curr_Code]";
 
-        $stmt = sqlsrv_query($this->connection, $sql);
+        $stmt = sqlsrv_query($this->connection, $sql, $params);
 
-        if ($stmt === false) {
-            die(print_r(sqlsrv_errors(), true));
-        }
+        if ($stmt === false) die(print_r(sqlsrv_errors(), true));
 
         $data = [];
         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-            // Convert DateTime objects to strings for var_dump readability
             if (isset($row['Date']) && $row['Date'] instanceof DateTime) {
                 $row['Date'] = $row['Date']->format('Y-m-d');
             }

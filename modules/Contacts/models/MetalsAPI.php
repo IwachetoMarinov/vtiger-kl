@@ -72,9 +72,17 @@ class MetalsAPI
         return $unique_metals;
     }
 
-    protected function fetchMetals()
+    protected function fetchMetals($date = null)
     {
         if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+
+        $params = [];
+        $where  = '';
+
+        if ($date) {
+            $where = "WHERE [Date] = ?";
+            $params[] = $date;
+        }
 
         $sql = "
         SELECT 
@@ -85,9 +93,10 @@ class MetalsAPI
             [Exc_Rate],
             [SpotPriceCurr]
         FROM [HFS_SQLEXPRESS].[GPM].[dbo].[Metal_Spot_Price]
-        ";
+        $where
+        ORDER BY [Date] DESC, [Curr_Code]";
 
-        $stmt = sqlsrv_query($this->connection, $sql);
+        $stmt = sqlsrv_query($this->connection, $sql, $params);
 
         if ($stmt === false) {
             die(print_r(sqlsrv_errors(), true));
@@ -122,5 +131,37 @@ class MetalsAPI
         }
 
         return array_values($unique_metals);
+    }
+
+    public function getLatestExchangeRate()
+    {
+        $metals = $this->fetchMetals();
+
+        $unique_rates = $this->getUniqueRates($metals);
+
+        return $unique_rates;
+    }
+
+    protected function getUniqueRates($metals): array
+    {
+        $unique = [];
+        $result = [];
+
+        foreach ($metals as $row) {
+            $curr = $row['Curr_Code'];
+            $rate = $row['Exc_Rate'];
+
+            if (isset($unique[$curr])) continue;
+
+            $unique[$curr] = true;
+
+            $result[] = [
+                'Curr_Code' => $curr,
+                'column'    => strtolower($curr) . '_sgd',
+                'rate'      => $rate,
+            ];
+        }
+
+        return $result;
     }
 }

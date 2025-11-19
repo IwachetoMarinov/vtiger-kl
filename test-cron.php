@@ -9,7 +9,6 @@ try {
     $job = new MetalsCron();
     $job->createUpdateDailyMetal();
 
-
     echo "\n Cron execution ended at " . date('Y-m-d H:i:s') . PHP_EOL;
 } catch (Exception $e) {
     echo 'ERROR: ' . $e->getMessage() . PHP_EOL;
