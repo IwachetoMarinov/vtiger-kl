@@ -123,4 +123,36 @@ class MetalsAPI
 
         return array_values($unique_metals);
     }
+
+    public function getLatestExchangeRate()
+    {
+        $metals = $this->fetchMetals();
+
+        $unique_rates = $this->getUniqueRates($metals);
+
+        return $unique_rates;
+    }
+
+    protected function getUniqueRates($metals): array
+    {
+        $unique = [];
+        $result = [];
+
+        foreach ($metals as $row) {
+            $curr = $row['Curr_Code'];
+            $rate = $row['Exc_Rate'];
+
+            if (isset($unique[$curr])) continue;
+
+            $unique[$curr] = true;
+
+            $result[] = [
+                'Curr_Code' => $curr,
+                'column'    => strtolower($curr) . '_sgd',
+                'rate'      => $rate,
+            ];
+        }
+
+        return $result;
+    }
 }
