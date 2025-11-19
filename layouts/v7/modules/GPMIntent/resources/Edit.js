@@ -295,7 +295,11 @@ Vtiger_Edit_Js(
         "change.select2",
         function (e) {
           forexDate = JSON.parse(jQuery("#GPMForexValue").val());
+          console.log("forexDate", forexDate);
+
           selectedCurrency = jQuery(e.currentTarget).val();
+          console.log("selectedCurrency", selectedCurrency);
+
           if (selectedCurrency == "USD") {
             jQuery('input[name="indicative_fx_spot"]').val(1);
           } else if (selectedCurrency == "SGD") {
