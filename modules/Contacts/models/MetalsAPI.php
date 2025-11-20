@@ -133,9 +133,9 @@ class MetalsAPI
         return array_values($unique_metals);
     }
 
-    public function getLatestExchangeRate()
+    public function getLatestExchangeRate($date = null): array
     {
-        $metals = $this->fetchMetals();
+        $metals = $this->fetchMetals($date);
 
         $unique_rates = $this->getUniqueRates($metals);
 

@@ -57,9 +57,11 @@ class MetalsCron
 
         $unique_metals = $this->getUniqueMetals($metals, "USD");
 
-        // echo '<pre>';
+        echo '<pre>';
+        // dump Metals length
+        echo "Fetched Metals: " . count($metals) . PHP_EOL;
         // var_dump($metals);
-        // echo '</pre>';
+        echo '</pre>';
 
         // $this->updateOrInsertMetals($unique_metals, $current_user);
 
@@ -103,7 +105,7 @@ class MetalsCron
                 [$nextId, $type_of_metal, $price_date, $spot_price, $pm_rate]
             );
 
-            // echo "\n[MetalsCron] ✅ Created MetalPrice record ID {$nextId} ({$type_of_metal}, {$price_date})" . PHP_EOL;
+            echo "\n[MetalsCron] ✅ Created MetalPrice record ID {$nextId} ({$type_of_metal}, {$price_date})" . PHP_EOL;
         }
 
         // echo "\n[MetalsCron] All MetalPrice records processed successfully.\n";
