@@ -105,7 +105,7 @@ class MetalsCron
                 [$nextId, $type_of_metal, $price_date, $spot_price, $pm_rate]
             );
 
-            // echo "\n[MetalsCron] ✅ Created MetalPrice record ID {$nextId} ({$type_of_metal}, {$price_date})" . PHP_EOL;
+            echo "\n[MetalsCron] ✅ Created MetalPrice record ID {$nextId} ({$type_of_metal}, {$price_date})" . PHP_EOL;
         }
 
         // echo "\n[MetalsCron] All MetalPrice records processed successfully.\n";
