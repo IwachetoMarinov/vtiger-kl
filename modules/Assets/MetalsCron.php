@@ -57,9 +57,11 @@ class MetalsCron
 
         $unique_metals = $this->getUniqueMetals($metals, "USD");
 
-        // echo '<pre>';
+        echo '<pre>';
+        // dump Metals length
+        echo "Fetched Metals: " . count($metals) . PHP_EOL;
         // var_dump($metals);
-        // echo '</pre>';
+        echo '</pre>';
 
         // $this->updateOrInsertMetals($unique_metals, $current_user);
 
