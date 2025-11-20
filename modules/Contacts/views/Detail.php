@@ -12,6 +12,9 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
+include_once 'dbo_db/ActivitySummary.php';
+include_once 'dbo_db/HoldingsDB.php';
+
 class Contacts_Detail_View extends Accounts_Detail_View
 {
 
@@ -110,8 +113,19 @@ class Contacts_Detail_View extends Accounts_Detail_View
 			$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
 		}
 
+
+		$recordModel = $this->record->getRecord();
+		// SHOULD be get right field from record model
+		$clientID = $recordModel->get('contact_no');
+		// $recordModelData = $recordModel->getData();
+
+		// echo "<pre>";
+		// // print_r($recordModelData);
+		// print_r($clientID);
+		// echo "</pre>";
+
 		// HARDCODED DATA FOR NOW
-		$oroSOftData = [
+		$erpData = [
 			'CURRENCY' => 'USD',
 			'BALANCES' => [
 				'available' => 12500.55,
@@ -128,35 +142,59 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		];
 
 		// -------------------------------------------
+		// 🔥 REAL ACTIVITY SUMMARY DATA
+		// -------------------------------------------
+		$fieldModel = Vtiger_Field_Model::getInstance('package_currency', Vtiger_Module_Model::getInstance('GPMIntent'));
+		$values = $fieldModel->getPicklistValues();
+		$currency_list = array_keys($values);
+
+		// HARDCODED CUSTOMER ID FOR TESTING
+		$customer_id = 'D2013';
+		// REAL CUSTOMER ID FROM RECORD
+		// $customer_id = $recordId;
+		$activity = new dbo_db\ActivitySummary();
+		$activity_data = $activity->getActivitySummary($customer_id);
+
+		$holdings = new dbo_db\HoldingsDB();
+		$holding_customer_id = 'M2001';
+		$holdings_data = $holdings->getHoldingsData($holding_customer_id);
+
+		// echo '<pre>';
+		// echo "\n Data fetched from ActivitySummary: " . date('Y-m-d H:i:s') . PHP_EOL;
+		// var_dump($holdings_data);
+		// echo '</pre>';
+
+		// -------------------------------------------
 		// 🔥 HARDCODED ACTIVITY SUMMARY DATA
 		// -------------------------------------------
 		$activityData = [
-			'CURRENCY_LIST' => ['USD', 'EUR', 'GBP'],
+			'CURRENCY_LIST' => $currency_list,
 			'CURRENCY_SELECTED' => 'USD',
 
-			'TRANSACTIONS' => [
-				[
-					'voucher_no' => 'SAL/2025/001',
-					'voucher_type' => 'Sales Invoice',
-					'doctype' => 'Sales Invoice',
-					'posting_date' => '2025-01-10',
-					'amount_in_account_currency' => 25000.00
-				],
-				[
-					'voucher_no' => 'PUR/2025/002',
-					'voucher_type' => 'Purchase Invoice',
-					'doctype' => 'Purchase Invoice',
-					'posting_date' => '2025-01-15',
-					'amount_in_account_currency' => -12000.00
-				],
-				[
-					'voucher_no' => 'DEP/2025/003',
-					'voucher_type' => 'Deposit',
-					'doctype' => '',
-					'posting_date' => '2025-02-01',
-					'amount_in_account_currency' => 5000.00
-				]
-			]
+			'TRANSACTIONS' => $activity_data,
+			// 'TRANSACTIONS' => [
+			// 	[
+			// 		'voucher_no' => 'SAL/2025/001',
+			// 		'voucher_type' => 'Sales Invoice',
+			// 		'doctype' => 'Sales Invoice',
+			// 		'posting_date' => '2025-01-10',
+			// 		'amount_in_account_currency' => 25000.00
+			// 	],
+			// 	[
+			// 		'voucher_no' => 'PUR/2025/002',
+			// 		'voucher_type' => 'Purchase Invoice',
+			// 		'doctype' => 'Purchase Invoice',
+			// 		'posting_date' => '2025-01-15',
+			// 		'amount_in_account_currency' => -12000.00
+			// 	],
+			// 	[
+			// 		'voucher_no' => 'DEP/2025/003',
+			// 		'voucher_type' => 'Deposit',
+			// 		'doctype' => '',
+			// 		'posting_date' => '2025-02-01',
+			// 		'amount_in_account_currency' => 5000.00
+			// 	]
+			// ]
 		];
 
 		$viewer = $this->getViewer($request);
@@ -166,10 +204,10 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$viewer->assign('ACTIVITY_SUMMERY_CURRENCY', $activityData['CURRENCY_SELECTED']);
 		$viewer->assign('OROSOFT_TRANSACTION', $activityData['TRANSACTIONS']);
 
-		$viewer->assign('TEST_CURRENCY', $oroSOftData['CURRENCY']);
-		$viewer->assign('TEST_BALANCES', $oroSOftData['BALANCES']);
-		$viewer->assign('TEST_HOLDINGS', $oroSOftData['Holdings']);
-		$viewer->assign('TEST_TRANSACTIONS', $oroSOftData['Transactions']);
+		$viewer->assign('CURRENCY', $erpData['CURRENCY']);
+		$viewer->assign('BALANCES', $erpData['BALANCES']);
+		$viewer->assign('TEST_TRANSACTIONS', $erpData['Transactions']);
+		$viewer->assign('HOLDINGS', $holdings_data);
 
 		// RENDER NEW CUSTOM BLOCK HERE
 		// $viewer->view('HoldingsWalletSummary.tpl', $moduleName);

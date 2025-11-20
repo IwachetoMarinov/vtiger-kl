@@ -249,7 +249,7 @@
                                     <th style="width:20%;text-align:center">TOTAL</th>
                                 </tr>
 				{assign var="grandTotal" value=0}
-                                {foreach item=HOLDINGS key=location from=$OROSOFT_HOLDINGS}
+                                {foreach item=HOLDINGS key=location from=$HOLDINGS}
 				 <tr class="no-border">
                                     <td></td>
                                     <td><strong>{vtranslate($location,'MetalPrice')}</strong></td>

@@ -56,7 +56,8 @@
 								</a>
 							</span>
 							<span class="pull-right" style="margin-right:10px;">
-								<button id="generateHoldingCertificate" data-certificateid="{$CERTIFICATE_HOLDING|default:''}"
+								<button id="generateHoldingCertificate"
+									data-certificateid="{$CERTIFICATE_HOLDING|default:''}"
 									class="btn btn-default vteWidgetCreateButton" type="button">
 									<span class="fa fa-certificate"></span>
 									&nbsp;Certificate
@@ -83,21 +84,20 @@
 								</tr>
 							</thead>
 							<tbody>
-								{foreach item=HOLDING from=$OROSOFT_HOLDINGS|default:[]}
+								{foreach item=HOLDING from=$HOLDINGS|default:[]}
 									<tr class="listViewEntries1" data-id="20" data-recordurl=''>
 
 										<td class="fieldValue" nowrap>
-											<span class="value">{$HOLDING->sku|default:''}</span>
+											<span class="value">{$HOLDING.description|default:''}</span>
 										</td>
 
 										<td class="fieldValue" nowrap>
-											<span class="value">{$HOLDING->quantity|default:0}</span>
+											<span class="value">{$HOLDING.quantity|default:0}</span>
 										</td>
 
 										<td class="fieldValue" nowrap>
-											<span class="value">{vtranslate($HOLDING->location|default:'','MetalPrice')}</span>
+											<span class="value">{$HOLDING.location|default:''}</span>
 										</td>
-
 									</tr>
 								{/foreach}
 							</tbody>

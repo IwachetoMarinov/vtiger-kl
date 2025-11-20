@@ -107,7 +107,7 @@
                                     This certificate attests that {$RECORD_MODEL->get('salutationtype')}
                                     {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')} is the rightful
                                     owner of the following metals:<br><br>
-                                    {foreach item=HOLDINGS key=location from=$OROSOFT_HOLDINGS}
+                                    {foreach item=HOLDINGS key=location from=$HOLDINGS}
                                         {foreach item=HOLDING from=$HOLDINGS}
                                             <span style="display:inline-block; width: 20px;"></span>-<span
                                                 style="display:inline-block; width: 20px;"></span>
