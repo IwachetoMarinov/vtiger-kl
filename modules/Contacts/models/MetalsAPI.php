@@ -4,42 +4,17 @@
 include_once 'data/CRMEntity.php';
 include_once 'modules/Metals/Metals.php';
 include_once 'modules/Users/Users.php';
+include_once 'helpers/DBConnection.php';
 
-use Dotenv\Dotenv;
+use helpers\DBConnection;
 
 class MetalsAPI
 {
-
-    private $db_username;
-    private $db_password;
     private $connection;
 
     public function __construct()
     {
-        // Load environment variables
-        $dotenv = Dotenv::createImmutable(__DIR__ . '/../../../');
-        $dotenv->safeLoad();
-
-        $this->db_username = $_ENV['DB_USERNAME'] ?? getenv('DB_USERNAME') ?: '';
-        $this->db_password = $_ENV['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?: '';
-
-        $serverName = "qcpitech.ddns.net";
-        $connectionOptions = array(
-            "Database" => "GPM_DW",
-            "Uid" => $this->db_username,
-            "PWD" => $this->db_password,
-            "TrustServerCertificate" => true,
-            "Encrypt" => false
-        );
-
-        $this->connection = sqlsrv_connect($serverName, $connectionOptions);
-    }
-
-    public function __destruct()
-    {
-        if ($this->connection) {
-            sqlsrv_close($this->connection);
-        }
+        $this->connection = DBConnection::getConnection();
     }
 
     public function getLatestPriceByName($metal, $currency)

@@ -57,11 +57,10 @@ class MetalsCron
 
         $unique_metals = $this->getUniqueMetals($metals, "USD");
 
-        echo '<pre>';
-        // dump Metals length
         echo "Fetched Metals: " . count($metals) . PHP_EOL;
+        // echo '<pre>';
         // var_dump($metals);
-        echo '</pre>';
+        // echo '</pre>';
 
         // $this->updateOrInsertMetals($unique_metals, $current_user);
 
@@ -107,8 +106,6 @@ class MetalsCron
 
             echo "\n[MetalsCron] ✅ Created MetalPrice record ID {$nextId} ({$type_of_metal}, {$price_date})" . PHP_EOL;
         }
-
-        // echo "\n[MetalsCron] All MetalPrice records processed successfully.\n";
     }
 
 
@@ -132,7 +129,7 @@ class MetalsCron
             [SpotPriceUSD],
             [Exc_Rate],
             [SpotPriceCurr]
-        FROM [HFS_SQLEXPRESS].[GPM].[dbo].[Metal_Spot_Price]
+        FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_SpotPrice]
         $where
         ORDER BY [Date] DESC, [Curr_Code]";
 
