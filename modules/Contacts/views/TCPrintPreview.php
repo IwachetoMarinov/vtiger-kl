@@ -1,5 +1,10 @@
 <?php
 
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+
+include_once 'dbo_db/ActivitySummary.php';
+include_once 'dbo_db/HoldingsDB.php';
 
 class Contacts_TCPrintPreview_View extends Vtiger_Index_View
 {
@@ -17,38 +22,59 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
 
     public function process(Vtiger_Request $request)
     {
-        // include_once 'modules/Settings/OROSoft/api.php';
         include_once 'modules/Contacts/models/MetalsAPI.php';
         $docNo = $request->get('docNo');
         $docType = substr($docNo, 0, 3);
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
         $comId = $recordModel->get('related_entity');
-        // $oroSOftDoc = ($docType == 'STI') ? getOROSoftSTIDoc($docNo, $comId) : getOROSoftDoc($docNo, $comId);
 
-        $metalsAPI = new MetalsAPI();
-        $metals = $metalsAPI->getMetals();
+        $accountId = $recordModel->get('account_id');
+
+        $organizationName = '';
+
+        if (!empty($accountId)) {
+            $accountRecord = Vtiger_Record_Model::getInstanceById($accountId, 'Accounts');
+            $organizationName = $accountRecord->get('accountname');
+        }
+
+        $activity = new dbo_db\ActivitySummary();
+        $activity_data = $activity->getTCPrintPreviewData($docNo);
+
+        // echo '<pre>';
+        // // var_dump('ACTIVITY DATA: ', GPMCompany_Record_Model::getInstanceByCode($comId));
+        // var_dump($activity_data);
+        // echo '</pre>';
+
+        // $metalsAPI = new MetalsAPI();
+        // $metals = $metalsAPI->getMetals();
+
+        // ------------------------------------------------------
+        // GET DATA FROM new ERP HOLDINGSDB CLASS
+        // ------------------------------------------------------
 
         // ------------------------------------------------------
         // FINAL, FULLY COMPATIBLE OFFLINE OROSOFT MOCK FOR TC.PHP
         // ------------------------------------------------------
-        $oroSOftDoc = (object) [
+        $erpDoc = (object) [
             'docNo' => $docNo,
             'docType' => $docType,
-            'documentDate' => '2024-01-15',
-            'postingDate' => '2024-01-15',
-            'voucherType' => 'SAL',
-            'companyName' => 'Global Precious Metals',
-            'currency' => 'USD',
-            'grandTotal' => 80000.00,
-            'totalusdVal' => 80000.00,
+            'documentDate' => $activity_data['document_date'] ?? '',
+            'postingDate' => $activity_data['posting_date'] ?? '',
+            'voucherType' => $activity_data['voucher_type'] ?? 'Sales Invoice',
+            'companyName' => $organizationName,
+            'currency' => $activity_data['currency'] ?? 'USD',
+            'grandTotal' => $activity_data['grand_total'] ?? 0.00,
+            'totalusdVal' => $activity_data['totalusd_val'] ?? 0.00,
 
             // REQUIRED BY TEMPLATE (missing in your version)
+            // HARDCODED TEST DATA
             'balanceAmount' => 0,
             'value' => 0,
 
             // THIS IS CRITICAL: template iterates beyond length
             // so we add 30 items (enough for page count)
+            // HARDCODED TEST DATA
             'barItems' => []
         ];
 
@@ -56,7 +82,7 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         // Populate barItems with 30 fully valid items
         // ------------------------------------------
         for ($i = 1; $i <= 10; $i++) {
-            $oroSOftDoc->barItems[] = (object)[
+            $erpDoc->barItems[] = (object)[
                 'quantity' => ($i % 3) + 1,
                 'serials' => ["SERIAL-$i-A", "SERIAL-$i-B"],
                 'itemCode' => 'GOLD999',
@@ -76,18 +102,14 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         }
 
 
-        // echo '<pre>';
-        // echo($oroSOftDoc);
-        // echo '</pre>';
-        $recordModel = $this->record->getRecord();
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
-        $viewer->assign('OROSOFT_DOCUMENT', $oroSOftDoc);
+        $viewer->assign('OROSOFT_DOCUMENT', $erpDoc);
         $viewer->assign('METALS_DATA', $metals);
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('OROSOFT_DOCTYPE', $docType);
         $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($comId));
-        $viewer->assign('PAGES', $this->makeDataPage($oroSOftDoc->barItems, $docType));
+        $viewer->assign('PAGES', $this->makeDataPage($erpDoc->barItems, $docType));
         if ($request->get('PDFDownload')) {
             $html = $viewer->view("TC.tpl", $moduleName, true);
             $this->downloadPDF($html, $request);

@@ -115,18 +115,19 @@ class Contacts_Detail_View extends Accounts_Detail_View
 
 
 		$recordModel = $this->record->getRecord();
-		// SHOULD be get right field from record model
-		$clientID = $recordModel->get('contact_no');
+
+		// REAL CUSTOMER ID FROM RECORD
+		$clientID = $recordModel->get('cf_898');
+
 		// $recordModelData = $recordModel->getData();
 
 		// echo "<pre>";
-		// // print_r($recordModelData);
-		// print_r($clientID);
+		// // var_dump($recordModelData);
+		// var_dump($clientID);
 		// echo "</pre>";
 
 		// HARDCODED DATA FOR NOW
 		$erpData = [
-			'CURRENCY' => 'USD',
 			'BALANCES' => [
 				'available' => 12500.55,
 				'pending'   => 300.00,
@@ -149,15 +150,13 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$currency_list = array_keys($values);
 
 		// HARDCODED CUSTOMER ID FOR TESTING
-		$customer_id = 'D2013';
-		// REAL CUSTOMER ID FROM RECORD
-		// $customer_id = $recordId;
+		// $customer_id = 'D2013';
 		$activity = new dbo_db\ActivitySummary();
-		$activity_data = $activity->getActivitySummary($customer_id);
+		$activity_data = $activity->getActivitySummary($clientID);
 
 		$holdings = new dbo_db\HoldingsDB();
-		$holding_customer_id = 'M2001';
-		$holdings_data = $holdings->getHoldingsData($holding_customer_id);
+		// $holding_customer_id = 'M2001';
+		$holdings_data = $holdings->getHoldingsData($clientID);
 
 		// echo '<pre>';
 		// echo "\n Data fetched from ActivitySummary: " . date('Y-m-d H:i:s') . PHP_EOL;
@@ -204,9 +203,8 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$viewer->assign('ACTIVITY_SUMMERY_CURRENCY', $activityData['CURRENCY_SELECTED']);
 		$viewer->assign('OROSOFT_TRANSACTION', $activityData['TRANSACTIONS']);
 
-		$viewer->assign('CURRENCY', $erpData['CURRENCY']);
+		$viewer->assign('CURRENCY', $activityData['CURRENCY_SELECTED']);
 		$viewer->assign('BALANCES', $erpData['BALANCES']);
-		$viewer->assign('TEST_TRANSACTIONS', $erpData['Transactions']);
 		$viewer->assign('HOLDINGS', $holdings_data);
 
 		// RENDER NEW CUSTOM BLOCK HERE

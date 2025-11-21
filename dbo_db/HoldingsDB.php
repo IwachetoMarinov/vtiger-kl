@@ -18,8 +18,10 @@ class HoldingsDB
         $this->connection = DBConnection::getConnection();
     }
 
-    public function getHoldingsData($customer_id = null, $startDate = null, $endDate = null)
+    public function getHoldingsData($customer_id = null)
     {
+        if (!$customer_id) return [];
+
         if (!$this->connection) die(print_r(sqlsrv_errors(), true));
 
         $where = '';
