@@ -21,7 +21,7 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
     // {
     //     include_once 'modules/Settings/OROSoft/api.php';
     //     $recordModel = $this->record->getRecord();
-    //     $clientID = $recordModel->get('cf_950');
+    //     $clientID = $recordModel->get('cf_898');
     //     $year = $request->get('ActivtySummeryDate');
     //     $comId = $recordModel->get('related_entity');
     //     return array(
@@ -110,7 +110,7 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
     {
         global $root_directory;
         $recordModel = $this->record->getRecord();
-        $clientID = $recordModel->get('cf_950');
+        $clientID = $recordModel->get('cf_898');
 
         $fileName = $clientID . "_activity-summary";
         $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');

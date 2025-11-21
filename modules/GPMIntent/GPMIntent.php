@@ -138,13 +138,13 @@ class GPMIntent extends Vtiger_CRMEntity
 	{
 		$db = PearDatabase::getInstance();
 		$erpNumber = $this->column_fields['contact_erp_no'];
-		$db->pquery("update vtiger_gpmintent set contact_id = (select contactid from vtiger_contactscf AS A LEFT JOIN vtiger_crmentity AS B ON (A.contactid = B.crmid)  where A.cf_950 = ? AND B.deleted = 0  limit 1) where gpmintentid = ? ", array($erpNumber, $this->id));
+		$db->pquery("update vtiger_gpmintent set contact_id = (select contactid from vtiger_contactscf AS A LEFT JOIN vtiger_crmentity AS B ON (A.contactid = B.crmid)  where A.cf_898 = ? AND B.deleted = 0  limit 1) where gpmintentid = ? ", array($erpNumber, $this->id));
 	}
 
 	function addIntroducer()
 	{
 		$db = PearDatabase::getInstance();
 		$erpNumber = $this->column_fields['contact_erp_no'];
-		$db->pquery("update vtiger_gpmintent set introducer_id = (select introducer_id from vtiger_contactdetails where contactid = (select contactid from vtiger_contactscf AS A LEFT JOIN vtiger_crmentity AS B ON (A.contactid = B.crmid)  where A.cf_950 = ? AND B.deleted = 0  limit 1)) where gpmintentid = ? ", array($erpNumber, $this->id));
+		$db->pquery("update vtiger_gpmintent set introducer_id = (select introducer_id from vtiger_contactdetails where contactid = (select contactid from vtiger_contactscf AS A LEFT JOIN vtiger_crmentity AS B ON (A.contactid = B.crmid)  where A.cf_898 = ? AND B.deleted = 0  limit 1)) where gpmintentid = ? ", array($erpNumber, $this->id));
 	}
 }

@@ -185,7 +185,7 @@
 			<td  style="height: 144px;vertical-align: top;">
                             <img src='layouts/v7/modules/Contacts/resources/gpm-new-logo.png' style="height: 103px; margin-top: -14px;float:right;width: 154px;">
                             <div style="font-size:11pt;">
-                                {$RECORD_MODEL->get('cf_950')}<br>
+                                {$RECORD_MODEL->get('cf_898')}<br>
                                 {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
                                 {if !empty($RECORD_MODEL->get('cf_968'))} {$RECORD_MODEL->get('cf_968')}<br>{/if}
                                 {if !empty($RECORD_MODEL->get('mailingstreet'))} {$RECORD_MODEL->get('mailingstreet')}<br>{/if}
