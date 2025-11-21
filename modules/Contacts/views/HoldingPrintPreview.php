@@ -18,7 +18,7 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
     // {
     //     include_once 'modules/Settings/OROSoft/api.php';
     //     $recordModel = $this->record->getRecord();
-    //     $clientID = $recordModel->get('cf_950');
+    //     $clientID = $recordModel->get('cf_898');
     //     $comId = $recordModel->get('related_entity');
     //     return array(
     //         'Holdings' => getOROSoftHolding($clientID, $comId),
@@ -155,7 +155,7 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
     {
         global $root_directory;
         $recordModel = $this->record->getRecord();
-        $clientID = $recordModel->get('cf_950');
+        $clientID = $recordModel->get('cf_898');
 
         $fileName = "statement_of_holdings_and_valuation_$clientID";
         $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');

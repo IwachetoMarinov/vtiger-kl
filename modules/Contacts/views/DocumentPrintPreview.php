@@ -133,7 +133,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
     {
         global $root_directory;
         $recordModel = $this->record->getRecord();
-        $clientID = $recordModel->get('cf_950');
+        $clientID = $recordModel->get('cf_898');
         $docType = substr($request->get('docNo'), 0, 3);
         if ($docType == 'SWD' || $docType == 'SAL') {
             $docType = 'SI';

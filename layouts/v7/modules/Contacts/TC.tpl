@@ -358,31 +358,6 @@
                         </td>
                     </tr>
 
-                    {* New TEST row for Unique Metals *}
-                    <tr class="{if $PAGES neq $page} hidden {/if}">
-                        <td style="font-size: 9pt; height: auto; vertical-align: top;">
-                            <strong>METAL PRICES USED IN THIS TRANSACTION:</strong>
-                            <table class="activity-tbl" style="margin-top:5mm">
-                                <tr>
-                                    <th style="width:33.33%;text-align:center">METAL</th>
-                                    <th style="width:33.33%;text-align:center">PRICE (US$ / OZ)</th>
-                                    <th style="width:33.33%;text-align:center">CURRENCY</th>
-                                </tr>
-                                {foreach from=$METALS_DATA item=metal}
-
-                                    {* dump item *}
-                                    {* <pre>{var_dump($metal)}</pre> *}
-                                    <tr>
-                                        <td style='text-align:center;'>{$metal.MT_Code}</td>
-                                        <td style='text-align:center;'>{number_format($metal.SpotPriceUSD,3)}</td>
-                                        <td style='text-align:center;'>{$metal.Curr_Code}</td>
-                                    </tr>
-                                {/foreach}
-                            </table>
-                        </td>
-                    </tr>
-                    {* End of TEST row *}
-
                     <tr>
                         <td style='font-size: 8pt;font-weight: bold;position: absolute;bottom: 14px;width: 85%'>
                             <div>

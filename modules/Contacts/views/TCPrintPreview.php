@@ -46,15 +46,8 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         // var_dump($activity_data);
         // echo '</pre>';
 
-        // $metalsAPI = new MetalsAPI();
-        // $metals = $metalsAPI->getMetals();
-
         // ------------------------------------------------------
         // GET DATA FROM new ERP HOLDINGSDB CLASS
-        // ------------------------------------------------------
-
-        // ------------------------------------------------------
-        // FINAL, FULLY COMPATIBLE OFFLINE OROSOFT MOCK FOR TC.PHP
         // ------------------------------------------------------
         $erpDoc = (object) [
             'docNo' => $docNo,
@@ -105,7 +98,6 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('OROSOFT_DOCUMENT', $erpDoc);
-        $viewer->assign('METALS_DATA', $metals);
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('OROSOFT_DOCTYPE', $docType);
         $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($comId));

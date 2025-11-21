@@ -71,7 +71,7 @@ class GPM_CertificateHandler
 
     function createHoldingCertificate(Contacts_Record_Model $recordModel, $guid)
     {
-        $clientID = $recordModel->get('cf_950');
+        $clientID = $recordModel->get('cf_898');
         $comId = $recordModel->get('related_entity');
         //echo "Trying to fetch Holding details of $clientID from ORO Soft\n";
         $this->holdings = getOROSoftHolding($clientID, $comId);

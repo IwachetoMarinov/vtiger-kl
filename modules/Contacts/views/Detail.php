@@ -43,7 +43,7 @@ class Contacts_Detail_View extends Accounts_Detail_View
 	// {
 	// 	include_once 'modules/Settings/OROSoft/api.php';
 	// 	$recordModel = $this->record->getRecord();
-	// 	$clientID = $recordModel->get('cf_950');
+	// 	$clientID = $recordModel->get('cf_898');
 	// 	$comId = $recordModel->get('related_entity');
 	// 	$year =  $request->get('ActivtySummeryDate');
 	// 	return array(
@@ -57,7 +57,7 @@ class Contacts_Detail_View extends Accounts_Detail_View
 
 	// 	include_once 'modules/Settings/Frappe/api.php';
 	// 	$recordModel = $this->record->getRecord();
-	// 	$clientID = $recordModel->get('cf_950');
+	// 	$clientID = $recordModel->get('cf_898');
 	// 	$comId = $recordModel->get('related_entity');
 	// 	$year =  $request->get('ActivtySummeryDate');
 
