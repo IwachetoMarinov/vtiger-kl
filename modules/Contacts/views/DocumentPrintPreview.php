@@ -1,5 +1,8 @@
 <?php
 
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
 {
 
@@ -13,6 +16,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
         }
     }
+
 
     public function process(Vtiger_Request $request)
     {
@@ -72,6 +76,10 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         //if($docType == 'STI' && !$oroSOftDoc['GST']){
         //	$docType = 'OLD_STI';
         //}
+
+        echo '<!-- DEBUG: Rendering template ' . "$docType.tpl" . ' -->';
+        var_dump("$docType.tpl");
+
         $intent = false;
         if (!empty($request->get('fromIntent'))) {
             $intent = Vtiger_Record_Model::getInstanceById($request->get('fromIntent'), 'GPMIntent');

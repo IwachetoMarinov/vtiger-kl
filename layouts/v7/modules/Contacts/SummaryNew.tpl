@@ -120,6 +120,15 @@
                             {else}
                                 <td></td><td></td><td></td>
                             {/if}
+                            {*  New MPD button *}
+                                <td>
+                                    <a href="index.php?module=Contacts&view=MPDPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}"
+                                       target="_blank">
+                                        <button type="button" class="btn btn-default module-buttons">
+                                            <span class="fa fa-download"></span>&nbsp;MPD
+                                        </button>
+                                    </a>
+                                </td>
 
                             <!-- Date -->
                             <td nowrap>
