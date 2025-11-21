@@ -194,10 +194,6 @@
                     href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$docNo}&PDFDownload=true&hideCustomerInfo={$hideInfo}">
                     Download
                 </a>
-
-
-
-
             </li>
             <li id='printConf' style="float:right">
                 <span style="float: right;margin-right: 1px;color: white;background-color: #bea364;text-decoration: none;
@@ -225,10 +221,13 @@
                             <img src='layouts/v7/modules/Contacts/resources/gpm-new-logo.png'
                                 style="max-height: 100%; float:right;width: 154px;">
                             <div style="font-size: 11pt;margin-top: 14px;margin-bottom: 32px">
-                                {$RECORD_MODEL->get('cf_950')}<br>
+                                {* ERP Client number *}
+                                {$RECORD_MODEL->get('cf_898')}<br>
                                 {if !$HIDE_BP_INFO}
+                                    {* First Name and Last Name *}
                                     {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
                                     {if !empty($RECORD_MODEL->get('cf_968'))} {$RECORD_MODEL->get('cf_968')}<br>{/if}
+                                    {* Mailing street *}
                                     {if !empty($RECORD_MODEL->get('mailingstreet'))}
                                     {$RECORD_MODEL->get('mailingstreet')}<br>{/if}
                                     {if !empty($RECORD_MODEL->get('cf_970'))} {$RECORD_MODEL->get('cf_970')}<br>{/if}
