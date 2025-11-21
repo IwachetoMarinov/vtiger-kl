@@ -127,7 +127,7 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
     {
         global $root_directory;
         $recordModel = $this->record->getRecord();
-        $clientID = $recordModel->get('cf_950');
+        $clientID = $recordModel->get('cf_898');
 
         $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . "-TC";
         $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
