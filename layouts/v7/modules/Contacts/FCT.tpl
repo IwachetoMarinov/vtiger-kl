@@ -236,7 +236,7 @@
                     </td>
                 </tr>
                 <tr>
-                    {assign var="metalPrice" value=($OROSOFT_DOCUMENT->barItems[0]->price)}
+                    {assign var="metalPrice" value=($ERP_DOCUMENT->barItems[0]->price)}
                     <td style="font-size: 9pt; height: 168mm; vertical-align: top;">
                         <table class="activity-tbl" style="margin-bottom:5mm">
                             <tr>
@@ -247,8 +247,8 @@
                             </tr>
                             <tr>
                                 <td colspan="2" style='text-align:center;'>{$smarty.request.docNo}</td>
-                                <td style='text-align:center;'>{$OROSOFT_DOCUMENT->documentDate}</td>
-                                <td style='text-align:center;'>{$OROSOFT_DOCUMENT->deliveryDate}</td>
+                                <td style='text-align:center;'>{$ERP_DOCUMENT->documentDate}</td>
+                                <td style='text-align:center;'>{$ERP_DOCUMENT->deliveryDate}</td>
                                 <td style='text-align:center;'>FX Spot</td>
                             </tr>
                         </table>
@@ -258,20 +258,20 @@
                                 <th style="width:25%;text-align:center">CURRENCY</th>
                                 <th style="width:25%;text-align:center">AMOUNT</th>
                             </tr>
-                            {foreach item=barItem from=$OROSOFT_DOCUMENT->barItems}
+                            {foreach item=barItem from=$ERP_DOCUMENT->barItems}
                                 {assign var="metal" value="-"|explode:$barItem->metal}
                                 {assign var="spotPrice" value=$barItem->price}
                                 {if $metal[0] eq 'USD'}
-                                    {assign var="FIRST_PRICE" value=$OROSOFT_DOCUMENT->totalusdVal}
-                                    {assign var="SECOND_PRICE" value=$OROSOFT_DOCUMENT->totalusdVal*$spotPrice}
+                                    {assign var="FIRST_PRICE" value=$ERP_DOCUMENT->totalusdVal}
+                                    {assign var="SECOND_PRICE" value=$ERP_DOCUMENT->totalusdVal*$spotPrice}
                                 {else}
-                                    {assign var="FIRST_PRICE" value=$OROSOFT_DOCUMENT->totalusdVal/$spotPrice}
-                                    {assign var="SECOND_PRICE" value=$OROSOFT_DOCUMENT->totalusdVal}
+                                    {assign var="FIRST_PRICE" value=$ERP_DOCUMENT->totalusdVal/$spotPrice}
+                                    {assign var="SECOND_PRICE" value=$ERP_DOCUMENT->totalusdVal}
                                 {/if}
                                 <tr>
                                     <td style="border-bottom:none;vertical-align: top">
-                                        We {strtolower($OROSOFT_DOCUMENT->direction)}:<br><br>
-                                        We {if strtolower($OROSOFT_DOCUMENT->direction) eq 'sell'}buy:{else}sell:{/if}
+                                        We {strtolower($ERP_DOCUMENT->direction)}:<br><br>
+                                        We {if strtolower($ERP_DOCUMENT->direction) eq 'sell'}buy:{else}sell:{/if}
                                         <br><br>
                                     </td>
                                     <td style="text-align:right;vertical-align: top">

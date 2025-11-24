@@ -174,7 +174,7 @@
     {* Dump data here *}
 
     {* <pre> *}
-    {* {$OROSOFT_DOCUMENT|@var_dump} *}
+    {* {$ERP_DOCUMENT|@var_dump} *}
     {* {$METALS_DATA|@var_dump} *}
     {* </pre> *}
 
@@ -269,7 +269,7 @@
                         </td>
                     </tr>
                     <tr>
-                        {assign var="metalPrice" value=($OROSOFT_DOCUMENT->barItems[0]->price)}
+                        {assign var="metalPrice" value=($ERP_DOCUMENT->barItems[0]->price)}
                         <td style="font-size: 9pt; height: 168mm; vertical-align: top;">
                             <table class="activity-tbl" style="margin-bottom:5mm">
                                 <tr>
@@ -280,7 +280,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2" style='text-align:center;'>{$smarty.request.docNo}</td>
-                                    <td style='text-align:center;'>{$OROSOFT_DOCUMENT->documentDate}</td>
+                                    <td style='text-align:center;'>{$ERP_DOCUMENT->documentDate}</td>
                                     <td style='text-align:center;'>{number_format($metalPrice,3)}</td>
                                     <td style='text-align:center;'>{vtranslate($OROSOFT_DOCTYPE,'Contacts')}</td>
                                 </tr>
@@ -291,7 +291,7 @@
                                     <th style="width:40%;">DESCRIPTION</th>
                                     <th style="width:12.5%;text-align:center">FINE OZ.</th>
                                     <th style="width:12.5%;text-align:center">
-                                        {if $OROSOFT_DOCUMENT->barItems[0]->otherCharge < 0}DISCOUNT{else}PREMIUM{/if}(%)
+                                        {if $ERP_DOCUMENT->barItems[0]->otherCharge < 0}DISCOUNT{else}PREMIUM{/if}(%)
                                     </th>
                                     <th style="width:25%;text-align:center">TOTAL US$</th>
                                 </tr>
@@ -302,8 +302,8 @@
                                 {assign var="calcTotal" value=0}
 
                                 {for $loopStart=$start to $end}
-                                    {if $loopStart >= count($OROSOFT_DOCUMENT->barItems)}{break}{/if}
-                                    {assign var="barItem" value=$OROSOFT_DOCUMENT->barItems[$loopStart]}
+                                    {if $loopStart >= count($ERP_DOCUMENT->barItems)}{break}{/if}
+                                    {assign var="barItem" value=$ERP_DOCUMENT->barItems[$loopStart]}
                                     {assign var="start" value=($loopStart+1)}
 
                                     {* Build serial list safely *}
@@ -344,7 +344,7 @@
                                     <tr>
                                         <th style="width:75%;" colspan="4">TOTAL TRADE AMOUNT:</th>
                                         <td style="text-align:right"><strong>US$
-                                                {number_format(($OROSOFT_DOCUMENT->totalusdVal-$storageCharge),2)} </strong>
+                                                {number_format(($ERP_DOCUMENT->totalusdVal-$storageCharge),2)} </strong>
                                         </td>
                                     </tr>
                                 {/if}

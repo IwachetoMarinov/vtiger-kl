@@ -245,8 +245,8 @@
                             </tr>
                             <tr>
                                 <td colspan="2" style="text-align: center;">{$smarty.request.docNo}</td>
-                                <td style="text-align: center;">{$OROSOFT_DOCUMENT->documentDate}</td>
-                                <td style="text-align: center;">{$OROSOFT_DOCUMENT->deliveryDate}</td>
+                                <td style="text-align: center;">{$ERP_DOCUMENT->documentDate}</td>
+                                <td style="text-align: center;">{$ERP_DOCUMENT->deliveryDate}</td>
                                 <td style="text-align: center;">Sale</td>
                             </tr>
                         </table>
@@ -258,13 +258,13 @@
                                 <th style="width:12%;text-align:center">FINE OZ.</th>
                                 <th style="width:30%;text-align:center">TOTAL US$</th>
                             </tr>
-                            {*assign var="metalPrice" value=($OROSOFT_DOCUMENT->xauPrice)+($OROSOFT_DOCUMENT->mbtcPrice)+($OROSOFT_DOCUMENT->xagPrice)+($OROSOFT_DOCUMENT->xptPrice)+($OROSOFT_DOCUMENT->xpdPrice)*}
+                            {*assign var="metalPrice" value=($ERP_DOCUMENT->xauPrice)+($ERP_DOCUMENT->mbtcPrice)+($ERP_DOCUMENT->xagPrice)+($ERP_DOCUMENT->xptPrice)+($ERP_DOCUMENT->xpdPrice)*}
 
 
                             {assign var="balanceAmount" value=($balanceAmount)+($TRANSACTION->usdVal)}
                             {assign var="serials" value=""}
 
-                            {foreach item=barItem from=$OROSOFT_DOCUMENT->barItems}
+                            {foreach item=barItem from=$ERP_DOCUMENT->barItems}
                                 {if $barItem->quantity eq 1}
                                     {assign var="serialPart" value=explode('-',$barItem->serials[0])}
                                     {assign var="serials" value=$serials|cat:$serialPart[0]|cat:', '}
@@ -295,7 +295,7 @@
                             <tr>
                                 <th style="width:75%;" colspan="4">TOTAL INVOICE AMOUNT:</th>
                                 <td style="text-align:right"><strong>US$
-                                        {CurrencyField::convertToUserFormat($OROSOFT_DOCUMENT->totalusdVal)}</strong>
+                                        {CurrencyField::convertToUserFormat($ERP_DOCUMENT->totalusdVal)}</strong>
                                 </td>
                             </tr>
                             {if $INTENT}

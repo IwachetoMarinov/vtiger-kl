@@ -241,7 +241,7 @@
                         </td>
                     </tr>
                     <tr>
-                        {assign var="metalPrice" value=($OROSOFT_DOCUMENT->barItems[0]->price)}
+                        {assign var="metalPrice" value=($ERP_DOCUMENT->barItems[0]->price)}
                         <td style="font-size: 9pt; height: 168mm; vertical-align: top;">
                             <table class="activity-tbl" style="margin-bottom:5mm">
                                 <tr>
@@ -252,11 +252,11 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2" style='text-align:center;'>{$smarty.request.docNo}</td>
-                                    <td style='text-align:center;'>{$OROSOFT_DOCUMENT->documentDate}</td>
-                                    <td style='text-align:center;'>{$OROSOFT_DOCUMENT->deliveryDate}</td>
+                                    <td style='text-align:center;'>{$ERP_DOCUMENT->documentDate}</td>
+                                    <td style='text-align:center;'>{$ERP_DOCUMENT->deliveryDate}</td>
                                     <td style='text-align:center;'>
-                                        {vtranslate($OROSOFT_DOCUMENT->barItems[0]->location,'MetalPrice')}</td>
-                                    <!-- td style='text-align:center;'>{$OROSOFT_DOCUMENT->barItems[0]->location}</td -->
+                                        {vtranslate($ERP_DOCUMENT->barItems[0]->location,'MetalPrice')}</td>
+                                    <!-- td style='text-align:center;'>{$ERP_DOCUMENT->barItems[0]->location}</td -->
                                 </tr>
                             </table>
                             <table class="activity-tbl">
@@ -266,10 +266,10 @@
                                     <th style="width:12.5%;text-align:center">FINE OZ.</th>
                                 </tr>
                                 {for $loopStart=$start to $end}
-                                    {assign var="barItem" value=$OROSOFT_DOCUMENT->barItems[$loopStart]}
+                                    {assign var="barItem" value=$ERP_DOCUMENT->barItems[$loopStart]}
                                     {assign var="start" value=($loopStart+1)}
                                     {assign var="calcTotal" value=$calcTotal+$barItem->pureOz}
-                                    {if $loopStart eq count($OROSOFT_DOCUMENT->barItems)}
+                                    {if $loopStart eq count($ERP_DOCUMENT->barItems)}
                                         {break}
                                     {/if}
                                     <tr>

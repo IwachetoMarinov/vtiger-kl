@@ -272,8 +272,8 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2" style="text-align:center">{$smarty.request.docNo}</td>
-                                    <td style="text-align:center">{$OROSOFT_DOCUMENT->documentDate}</td>
-                                    <td style="text-align:center">{$OROSOFT_DOCUMENT->deliveryDate}</td>
+                                    <td style="text-align:center">{$ERP_DOCUMENT->documentDate}</td>
+                                    <td style="text-align:center">{$ERP_DOCUMENT->deliveryDate}</td>
                                     <td style="text-align:center">Purchase & Delivery</td>
                                 </tr>
                             </table>
@@ -285,12 +285,12 @@
                                     <th style="width:12%;text-align:center">FINE OZ.</th>
                                     <th style="width:30%;text-align:center">TOTAL US$</th>
                                 </tr>
-                                {assign var="metalPrice" value=($OROSOFT_DOCUMENT->xauPrice)+($OROSOFT_DOCUMENT->mbtcPrice)+($OROSOFT_DOCUMENT->xagPrice)+($OROSOFT_DOCUMENT->xptPrice)+($OROSOFT_DOCUMENT->xpdPrice)}
+                                {assign var="metalPrice" value=($ERP_DOCUMENT->xauPrice)+($ERP_DOCUMENT->mbtcPrice)+($ERP_DOCUMENT->xagPrice)+($ERP_DOCUMENT->xptPrice)+($ERP_DOCUMENT->xpdPrice)}
                                 {assign var="balanceAmount" value=($balanceAmount)+($TRANSACTION->usdVal)}
                                 {assign var="serials" value=""}
                                 {assign var="GST_ITEM" value=false}
                                 {for $loopStart=$start to $end}
-                                    {assign var="barItem" value=$OROSOFT_DOCUMENT->barItems[$loopStart]}
+                                    {assign var="barItem" value=$ERP_DOCUMENT->barItems[$loopStart]}
                                     {assign var="start" value=($loopStart+1)}
 
                                     {if $barItem->quantity eq 1}
@@ -302,7 +302,7 @@
                                     {* (metalPrice x pureOz) + othercharge *}
                                     {assign var="total" value=((($barItem->price)*($barItem->pureOz))+$barItem->otherCharge)}
                                     {assign var="calcTotal" value=$calcTotal+round($total,2)}
-                                    {if $loopStart eq count($OROSOFT_DOCUMENT->barItems)}
+                                    {if $loopStart eq count($ERP_DOCUMENT->barItems)}
                                         {break}
                                     {/if}
                                     {if empty($barItem->quantity) and empty($barItem->longDesc)}
@@ -387,7 +387,7 @@
                                         *Remarks: USD/SGD exchange rate at SGD {$INTENT->get('fx_spot_price')} / USD
                                     {else}
                                         *Remarks: USD/SGD exchange rate at SGD
-                                        {MASForex_Record_Model::getExchangeRate($OROSOFT_DOCUMENT->documentDate, 'usd_sgd')} / USD
+                                        {MASForex_Record_Model::getExchangeRate($ERP_DOCUMENT->documentDate, 'usd_sgd')} / USD
                                     {/if}
                                 </div>
                             {/if}

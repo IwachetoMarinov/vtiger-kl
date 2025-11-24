@@ -121,7 +121,8 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);
         $viewer->assign('SELECTED_BANK', $selectedBank);
-        $viewer->assign('OROSOFT_DOCUMENT', $this->processDoc($oroSOftDoc));
+        $viewer->assign('ERP_DOCUMENT', $this->processDoc($oroSOftDoc));
+        // $viewer->assign('OROSOFT_DOCUMENT', $this->processDoc($oroSOftDoc));
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('INTENT', $intent);
         $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($comId));

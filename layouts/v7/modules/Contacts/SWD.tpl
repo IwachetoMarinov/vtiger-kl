@@ -260,8 +260,8 @@
                             </tr>
                             <tr>
                                 <td colspan="2" style="text-align:center">{$smarty.request.docNo}</td>
-                                <td style="text-align:center">{$OROSOFT_DOCUMENT->documentDate}</td>
-                                <td style="text-align:center">{$OROSOFT_DOCUMENT->deliveryDate}</td>
+                                <td style="text-align:center">{$ERP_DOCUMENT->documentDate}</td>
+                                <td style="text-align:center">{$ERP_DOCUMENT->deliveryDate}</td>
                                 <td style="text-align:center">Purchase & Storage</td>
                             </tr>
                         </table>
@@ -273,13 +273,13 @@
                                 <th style="width:12%;text-align:center">FINE OZ.</th>
                                 <th style="width:30%;text-align:center">TOTAL US$</th>
                             </tr>
-                            {assign var="metalPrice" value=($OROSOFT_DOCUMENT->xauPrice)+($OROSOFT_DOCUMENT->mbtcPrice)+($OROSOFT_DOCUMENT->xagPrice)+($OROSOFT_DOCUMENT->xptPrice)+($OROSOFT_DOCUMENT->xpdPrice)}
+                            {assign var="metalPrice" value=($ERP_DOCUMENT->xauPrice)+($ERP_DOCUMENT->mbtcPrice)+($ERP_DOCUMENT->xagPrice)+($ERP_DOCUMENT->xptPrice)+($ERP_DOCUMENT->xpdPrice)}
                             {assign var="balanceAmount" value=($balanceAmount)+($TRANSACTION->usdVal)}
                             {assign var="serials" value=""}
                             {assign var="SUB_TOTAL" value=0}
                             {assign var="calcTotal" value=0}
                             {assign var="GST_ITEM" value=false}
-                            {foreach item=barItem from=$OROSOFT_DOCUMENT->barItems}
+                            {foreach item=barItem from=$ERP_DOCUMENT->barItems}
                                 {if $barItem->quantity eq 1}
                                     {assign var="serialPart" value=explode('-',$barItem->serials[0])}
                                     {assign var="serials" value=$serials|cat:$serialPart[0]|cat:', '}
@@ -369,7 +369,7 @@
                                     *Remarks: USD/SGD exchange rate at SGD {$INTENT->get('fx_spot_price')} / USD
                                 {else}
                                     *Remarks: USD/SGD exchange rate at SGD
-                                    {MASForex_Record_Model::getExchangeRate($OROSOFT_DOCUMENT->documentDate, 'usd_sgd')} / USD
+                                    {MASForex_Record_Model::getExchangeRate($ERP_DOCUMENT->documentDate, 'usd_sgd')} / USD
                                 {/if}
                             </div>
                         {/if}
