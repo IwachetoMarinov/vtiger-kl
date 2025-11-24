@@ -9,6 +9,8 @@ include_once 'dbo_db/HoldingsDB.php';
 class Contacts_TCPrintPreview_View extends Vtiger_Index_View
 {
 
+    protected $record = null;
+    
     public function preProcess(Vtiger_Request $request, $display = false)
     {
         $recordId = $request->get('record');
