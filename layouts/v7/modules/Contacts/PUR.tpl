@@ -267,7 +267,7 @@
                                 <tr>
                                     <td colspan="2" style="text-align: center;">{$smarty.request.docNo}</td>
                                     <td style="text-align: center;">{$ERP_DOCUMENT->documentDate}</td>
-                                    <td style="text-align: center;">{$ERP_DOCUMENT->deliveryDate}</td>
+                                    <td style="text-align: center;">{$ERP_DOCUMENT->postingDate}</td>
                                     <td style="text-align: center;">Sale</td>
                                 </tr>
                             </table>
@@ -280,7 +280,7 @@
                                     <th style="width:30%;text-align:center">TOTAL US$</th>
                                 </tr>
                                 {assign var="metalPrice" value=($ERP_DOCUMENT->xauPrice)+($ERP_DOCUMENT->mbtcPrice)+($ERP_DOCUMENT->xagPrice)+($ERP_DOCUMENT->xptPrice)+($ERP_DOCUMENT->xpdPrice)}
-                                {assign var="balanceAmount" value=($balanceAmount)+($TRANSACTION->usdVal)}
+                                {assign var="balanceAmount" value=($ERP_DOCUMENT->grandTotal)+($ERP_DOCUMENT->totalusd_val)}
                                 {assign var="serials" value=""}
 
                                 {for $loopStart=$start to $end}

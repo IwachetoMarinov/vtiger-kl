@@ -1,7 +1,7 @@
 <?php
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
@@ -31,18 +31,19 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $recordModel = $this->record->getRecord();
         $comId = $recordModel->get('related_entity');
 
-
-
         $activity = new dbo_db\ActivitySummary();
         $activity_data = $activity->getTCPrintPreviewData($docNo);
 
         $docType = $activity_data['voucher_type'] ?? "";
 
-        echo '<pre>';
-        // var_dump('ACTIVITY DATA: ', GPMCompany_Record_Model::getInstanceByCode($comId));
+        $exchange_rates = MASForex_Record_Model::getExchangeRate($activity_data['document_date'] ?? '', 'usd_sgd');
+
+        // echo '<pre>';
+        // // var_dump('ACTIVITY DATA: ', GPMCompany_Record_Model::getInstanceByCode($comId));
+        // // var_dump($activity_data);
+        // var_dump($exchange_rates);
         // var_dump($activity_data);
-        var_dump($activity_data);
-        echo '</pre>';
+        // echo '</pre>';
 
         $oroSOftDoc = (object) [
             'docNo' => $docNo,
@@ -50,9 +51,11 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             'postingDate' => $activity_data['posting_date'] ?? '',
             'voucherType' => $activity_data['voucher_type'] ?? 'Sales Invoice',
             'GST' => true,
+            'exchange_rates' => $exchange_rates ?? 0.00,
             'currency' => $activity_data['currency'] ?? 'USD',
             'grandTotal' => $activity_data['grand_total'] ?? 0.00,
             'totalusdVal' => $activity_data['totalusd_val'] ?? 0.00,
+
 
             'barItems' => [
                 (object)[
@@ -66,7 +69,10 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
                     'barNumber' => 'B0001',
                     'purity' => '999.9',
                     'voucherType' => 'SAL',
+                    "pureOz" => 32.1507,
+                    "otherCharge" => 5.00,
                     'narration' => 'Sale of Gold Bar',
+                    'longDesc' => 'Sale of Gold Bar',
                 ],
                 (object)[
                     'quantity' => 2,
@@ -79,7 +85,10 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
                     'barNumber' => 'B0002',
                     'purity' => '995',
                     'voucherType' => 'SAL',
+                    "pureOz" => 32.1507,
+                    "otherCharge" => 5.00,
                     'narration' => 'Purchase of Silver Bars',
+                    'longDesc' => 'Purchase of Silver Bars',
                 ]
             ]
         ];

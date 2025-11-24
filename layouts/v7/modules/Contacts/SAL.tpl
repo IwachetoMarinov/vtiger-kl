@@ -182,10 +182,13 @@
                 padding: 0;
                 overflow: hidden;
                 background-color: #333;">
-            <li style="float:right">
-                <a style="display: block;color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
-                    href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&PDFDownload=true&bank={$SELECTED_BANK->getId()}{if $INTENT}&fromIntent={$smarty.request.fromIntent}&hideCustomerInfo={$smarty.request.hideCustomerInfo}{/if}">Download</a>
-            </li>
+
+            {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
+                <li style="float:right">
+                    <a style="display: block;color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
+                        href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&PDFDownload=true&bank={$SELECTED_BANK->getId()}{if $INTENT}&fromIntent={$smarty.request.fromIntent}&hideCustomerInfo={$smarty.request.hideCustomerInfo}{/if}">Download</a>
+                </li>
+            {/if}
             <li id='printConf' style="float:right">
                 <span style="float: right;margin-right: 1px;color: white;background-color: #bea364;text-decoration: none;
                 display: block;
@@ -273,7 +276,7 @@
                                 <tr>
                                     <td colspan="2" style="text-align:center">{$smarty.request.docNo}</td>
                                     <td style="text-align:center">{$ERP_DOCUMENT->documentDate}</td>
-                                    <td style="text-align:center">{$ERP_DOCUMENT->deliveryDate}</td>
+                                    <td style="text-align:center">{$ERP_DOCUMENT->postingDate}</td>
                                     <td style="text-align:center">Purchase & Delivery</td>
                                 </tr>
                             </table>
@@ -387,51 +390,56 @@
                                         *Remarks: USD/SGD exchange rate at SGD {$INTENT->get('fx_spot_price')} / USD
                                     {else}
                                         *Remarks: USD/SGD exchange rate at SGD
-                                        {MASForex_Record_Model::getExchangeRate($ERP_DOCUMENT->documentDate, 'usd_sgd')} / USD
+                                        {$ERP_DOCUMENT->exchange_rates} / USD
                                     {/if}
                                 </div>
                             {/if}
                             <br>
                             <br>
-                            <div>
-                                Please transfer the payment net of charges to our bank account:<br>
-                                Beneficiary: {$SELECTED_BANK->get('beneficiary_name')}<br>
-                                Account No: {$SELECTED_BANK->get('account_no')}
-                                {$SELECTED_BANK->get('account_currency')}<br>
-                                {if trim(count_chars(strtolower($SELECTED_BANK->get('iban_no')),3)) != 'x'}
-                                    IBAN: {$SELECTED_BANK->get('iban_no')}<br>
+                            {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'get')}
+                                {assign var=iban value=$SELECTED_BANK->get('iban_no')|lower|replace:' ':''}
+                                {assign var=bank_routing_no value=$SELECTED_BANK->get('bank_routing_no')|lower|replace:' ':''}
+                                <div>
+                                    Please transfer the payment net of charges to our bank account:<br>
+                                    Beneficiary: {$SELECTED_BANK->get('beneficiary_name')}<br>
+                                    Account No: {$SELECTED_BANK->get('account_no')}
+                                    {$SELECTED_BANK->get('account_currency')}<br>
+                                    {if $iban neq 'x'}
+                                        IBAN: {$SELECTED_BANK->get('iban_no')}<br>
+                                    {/if}
+                                    Bank: {$SELECTED_BANK->get('bank_name')}<br>
+                                    Bank Address: {$SELECTED_BANK->get('bank_address')}<br>
+                                    Swift Code: {$SELECTED_BANK->get('swift_code')}<br>
+                                    {* {if trim(count_chars(strtolower($SELECTED_BANK->get('bank_routing_no')),3)) == 'x'} *}
+                                        {if $bank_routing_no neq 'x'}
+                                            Bank Code: {$SELECTED_BANK->get('bank_code')}<br>
+                                            Branch Code: {$SELECTED_BANK->get('branch_code')}<br>
+                                        {else}
+                                            Routing No: {$SELECTED_BANK->get('bank_routing_no')}<br>
+                                        {/if}
+                                        <br>
+                                        <br>
+                                        {if !empty($SELECTED_BANK->get('intermediary_bank'))}
+                                            Intermediary Bank: {$SELECTED_BANK->get('intermediary_bank')}<br>
+                                            Swift Code: {$SELECTED_BANK->get('intermediary_swift_code')}<br>
+                                        {/if}
+                                    </div>
                                 {/if}
-                                Bank: {$SELECTED_BANK->get('bank_name')}<br>
-                                Bank Address: {$SELECTED_BANK->get('bank_address')}<br>
-                                Swift Code: {$SELECTED_BANK->get('swift_code')}<br>
-                                {if trim(count_chars(strtolower($SELECTED_BANK->get('bank_routing_no')),3)) == 'x'}
-                                    Bank Code: {$SELECTED_BANK->get('bank_code')}<br>
-                                    Branch Code: {$SELECTED_BANK->get('branch_code')}<br>
-                                {else}
-                                    Routing No: {$SELECTED_BANK->get('bank_routing_no')}<br>
-                                {/if}
-                                <br>
-                                <br>
-                                {if !empty($SELECTED_BANK->get('intermediary_bank'))}
-                                    Intermediary Bank: {$SELECTED_BANK->get('intermediary_bank')}<br>
-                                    Swift Code: {$SELECTED_BANK->get('intermediary_swift_code')}<br>
-                                {/if}
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style='font-size: 8pt;font-weight: bold;position: absolute;bottom: 14px;'>
-                            {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
-                            {$COMPANY->get('company_reg_no')}){/if}<br>
-                            {$COMPANY->get('company_address')}<br>
-                            T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
-                        </td>
-                    </tr>
-                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style='font-size: 8pt;font-weight: bold;position: absolute;bottom: 14px;'>
+                                {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
+                                {$COMPANY->get('company_reg_no')}){/if}<br>
+                                {$COMPANY->get('company_address')}<br>
+                                T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
+                                {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-        </div>
-    {/for}
-</body>
+        {/for}
+    </body>
 
-</html>
+    </html>
