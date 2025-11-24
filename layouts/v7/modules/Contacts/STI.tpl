@@ -261,10 +261,10 @@
                                 <th colspan="2" style="width:50%;text-align: center;">AVERAGE LONDON FIX</th>
                             </tr>
                             <tr>
-                                <td colspan="2" style="text-align: center;">{$OROSOFT_DOCUMENT['docno']}</td>
-                                <td style="text-align: center;">{$OROSOFT_DOCUMENT['docDate']}</td>
-                                <td style="width:25%;text-align: center;">{$OROSOFT_DOCUMENT['metal']}</td>
-                                <td style="width:25%;text-align: center;">US$ {$OROSOFT_DOCUMENT['metalOz']} / Oz.</td>
+                                <td colspan="2" style="text-align: center;">{$ERP_DOCUMENT['docno']}</td>
+                                <td style="text-align: center;">{$ERP_DOCUMENT['docDate']}</td>
+                                <td style="width:25%;text-align: center;">{$ERP_DOCUMENT['metal']}</td>
+                                <td style="width:25%;text-align: center;">US$ {$ERP_DOCUMENT['metalOz']} / Oz.</td>
                             </tr>
                         </table>
                         <table class="activity-tbl">
@@ -274,34 +274,34 @@
                             </tr>
                             <tr>
                                 <td style="height:50mm;border-bottom:none;vertical-align: top;line-height: 2">Storage
-                                    charge for {$OROSOFT_DOCUMENT['metal']} for the period from
-                                    {$OROSOFT_DOCUMENT['fromDate']} to {$OROSOFT_DOCUMENT['toDate']}:<br>
-                                    {foreach from=$OROSOFT_DOCUMENT['priceDate']['charge'] item=charge}
+                                    charge for {$ERP_DOCUMENT['metal']} for the period from
+                                    {$ERP_DOCUMENT['fromDate']} to {$ERP_DOCUMENT['toDate']}:<br>
+                                    {foreach from=$ERP_DOCUMENT['priceDate']['charge'] item=charge}
                                         &nbsp;&nbsp;&nbsp;&nbsp;- {$charge['label']}<br>
                                     {/foreach}
                                 </td>
                                 <td style="text-align:right;vertical-align: top;line-height: 2"><br>
-                                    {foreach from=$OROSOFT_DOCUMENT['priceDate']['charge'] item=charge}
+                                    {foreach from=$ERP_DOCUMENT['priceDate']['charge'] item=charge}
                                         {number_format($charge['amount'],2)}<br>
                                     {/foreach}
                                 </td>
                             </tr>
-                            {if $OROSOFT_DOCUMENT['GST']}
+                            {if $ERP_DOCUMENT['GST']}
                                 <tr>
                                     <td style="width:75%;">SUBTOTAL:</td>
                                     <td style="text-align:right"><strong>US$
-                                            {number_format($OROSOFT_DOCUMENT['priceDate']['subtotal'],2)}</strong></td>
+                                            {number_format($ERP_DOCUMENT['priceDate']['subtotal'],2)}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td style="width:75%;">{$OROSOFT_DOCUMENT['priceDate']['GST']['label']}</td>
+                                    <td style="width:75%;">{$ERP_DOCUMENT['priceDate']['GST']['label']}</td>
                                     <td style="text-align:right"><strong>US$
-                                            {number_format($OROSOFT_DOCUMENT['priceDate']['GST']['amount'],2)}</strong></td>
+                                            {number_format($ERP_DOCUMENT['priceDate']['GST']['amount'],2)}</strong></td>
                                 </tr>
                             {/if}
-                            {if !empty($COMPANY->get('company_gst_no')) && empty($OROSOFT_DOCUMENT['GST'])}
+                            {if !empty($COMPANY->get('company_gst_no')) && empty($ERP_DOCUMENT['GST'])}
                                 <tr>
                                     <td style="width:75%;">SUBTOTAL:</td>
-                                    <td style="text-align:right"><strong>US$ {$OROSOFT_DOCUMENT['amount']}</strong></td>
+                                    <td style="text-align:right"><strong>US$ {$ERP_DOCUMENT['amount']}</strong></td>
                                 </tr>
                                 <tr>
                                     <td style="width:75%;">GST on Storage charge (0%)</td>
@@ -310,7 +310,7 @@
                             {/if}
                             <tr>
                                 <th style="width:75%;">TOTAL STORAGE FEE:</th>
-                                <td style="text-align:right"><strong>US$ {$OROSOFT_DOCUMENT['amount']}</strong></td>
+                                <td style="text-align:right"><strong>US$ {$ERP_DOCUMENT['amount']}</strong></td>
                             </tr>
                         </table>
 
@@ -319,7 +319,7 @@
                         {if !empty($COMPANY->get('company_gst_no'))}
                             <div>
                                 *Remarks: USD/SGD exchange rate at SGD
-                                {MASForex_Record_Model::getExchangeRate($OROSOFT_DOCUMENT['rawDocDate'], 'usd_sgd')} / USD
+                                {MASForex_Record_Model::getExchangeRate($ERP_DOCUMENT['rawDocDate'], 'usd_sgd')} / USD
                             </div>
                         {/if}
                         <br>

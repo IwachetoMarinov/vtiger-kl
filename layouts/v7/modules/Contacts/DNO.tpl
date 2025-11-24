@@ -266,7 +266,7 @@
                             </tr>
                             <tr>
                                 <td style="text-align:center">{$smarty.request.docNo}</td>
-                                <td style="text-align:center">{$OROSOFT_DOCUMENT->documentDate}</td>
+                                <td style="text-align:center">{$ERP_DOCUMENT->documentDate}</td>
                             </tr>
                         </table>
                     </td>
@@ -285,15 +285,15 @@
                             </tr>
                             <tr>
                                 <td style="height: 30mm;border-bottom:none;vertical-align: top">
-                                    {$OROSOFT_DOCUMENT->barItems[0]->narration}
+                                    {$ERP_DOCUMENT->barItems[0]->narration}
                                 </td>
                                 <td style="text-align:right;vertical-align: top">
-                                    {CurrencyField::convertToUserFormat($OROSOFT_DOCUMENT->totalusdVal)}</td>
+                                    {CurrencyField::convertToUserFormat($ERP_DOCUMENT->totalusdVal)}</td>
                             </tr>
                             <tr>
                                 <th>TOTAL DEBIT AMOUNT:</th>
                                 <td style="text-align:right"><strong>US$
-                                        {CurrencyField::convertToUserFormat($OROSOFT_DOCUMENT->totalusdVal)}</strong>
+                                        {CurrencyField::convertToUserFormat($ERP_DOCUMENT->totalusdVal)}</strong>
                                 </td>
                             </tr>
                         </table>

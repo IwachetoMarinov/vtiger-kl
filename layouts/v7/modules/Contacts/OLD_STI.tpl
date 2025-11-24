@@ -235,10 +235,10 @@
                                     <th colspan="2" style="width:50%;text-align: center;">AVERAGE LONDON FIX</th>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" style="text-align: center;">{$OROSOFT_DOCUMENT['docno']}</td>
-                                    <td style="text-align: center;">{$OROSOFT_DOCUMENT['docDate']}</td>
-                                    <td style="width:25%;text-align: center;" >{$OROSOFT_DOCUMENT['metal']}</td>
-                                    <td style="width:25%;text-align: center;">US$ {$OROSOFT_DOCUMENT['metalOz']} / Oz.</td>
+                                    <td colspan="2" style="text-align: center;">{$ERP_DOCUMENT['docno']}</td>
+                                    <td style="text-align: center;">{$ERP_DOCUMENT['docDate']}</td>
+                                    <td style="width:25%;text-align: center;" >{$ERP_DOCUMENT['metal']}</td>
+                                    <td style="width:25%;text-align: center;">US$ {$ERP_DOCUMENT['metalOz']} / Oz.</td>
                                 </tr>
                             </table>
                             <table class="activity-tbl">
@@ -247,12 +247,12 @@
                                     <th style="width:25%;text-align: center">TOTAL US$</th>
                                 </tr>
                                 <tr>
-                                    <td style="height:70mm;border-bottom:none;vertical-align: top">Storage charge for the period from {$OROSOFT_DOCUMENT['fromDate']} to {$OROSOFT_DOCUMENT['toDate']}:<br>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;{$OROSOFT_DOCUMENT['metal']}
-                                    <td style="text-align:right;vertical-align: top"><br>{$OROSOFT_DOCUMENT['amount']}</td>
+                                    <td style="height:70mm;border-bottom:none;vertical-align: top">Storage charge for the period from {$ERP_DOCUMENT['fromDate']} to {$ERP_DOCUMENT['toDate']}:<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;{$ERP_DOCUMENT['metal']}
+                                    <td style="text-align:right;vertical-align: top"><br>{$ERP_DOCUMENT['amount']}</td>
                                 <tr>
                                     <th style="width:75%;">TOTAL STORAGE FEE:</th>
-                                    <td style="text-align:right"><strong>US$ {$OROSOFT_DOCUMENT['amount']}</strong></td>
+                                    <td style="text-align:right"><strong>US$ {$ERP_DOCUMENT['amount']}</strong></td>
                                 </tr>
                             </table> 
                             <br>

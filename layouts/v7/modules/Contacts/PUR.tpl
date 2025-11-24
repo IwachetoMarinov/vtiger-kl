@@ -266,8 +266,8 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2" style="text-align: center;">{$smarty.request.docNo}</td>
-                                    <td style="text-align: center;">{$OROSOFT_DOCUMENT->documentDate}</td>
-                                    <td style="text-align: center;">{$OROSOFT_DOCUMENT->deliveryDate}</td>
+                                    <td style="text-align: center;">{$ERP_DOCUMENT->documentDate}</td>
+                                    <td style="text-align: center;">{$ERP_DOCUMENT->deliveryDate}</td>
                                     <td style="text-align: center;">Sale</td>
                                 </tr>
                             </table>
@@ -279,12 +279,12 @@
                                     <th style="width:12%;text-align:center">FINE OZ.</th>
                                     <th style="width:30%;text-align:center">TOTAL US$</th>
                                 </tr>
-                                {assign var="metalPrice" value=($OROSOFT_DOCUMENT->xauPrice)+($OROSOFT_DOCUMENT->mbtcPrice)+($OROSOFT_DOCUMENT->xagPrice)+($OROSOFT_DOCUMENT->xptPrice)+($OROSOFT_DOCUMENT->xpdPrice)}
+                                {assign var="metalPrice" value=($ERP_DOCUMENT->xauPrice)+($ERP_DOCUMENT->mbtcPrice)+($ERP_DOCUMENT->xagPrice)+($ERP_DOCUMENT->xptPrice)+($ERP_DOCUMENT->xpdPrice)}
                                 {assign var="balanceAmount" value=($balanceAmount)+($TRANSACTION->usdVal)}
                                 {assign var="serials" value=""}
 
                                 {for $loopStart=$start to $end}
-                                    {assign var="barItem" value=$OROSOFT_DOCUMENT->barItems[$loopStart]}
+                                    {assign var="barItem" value=$ERP_DOCUMENT->barItems[$loopStart]}
                                     {assign var="start" value=($loopStart+1)}
 
                                     {if $barItem->quantity eq 1}
@@ -296,7 +296,7 @@
                                     {* (metalPrice x pureOz) + othercharge *}
                                     {assign var="total" value=((($barItem->price)*($barItem->pureOz))+$barItem->otherCharge)}
 
-                                    {if $loopStart eq count($OROSOFT_DOCUMENT->barItems)}
+                                    {if $loopStart eq count($ERP_DOCUMENT->barItems)}
                                         {break}
                                     {/if}
                                     <tr>
@@ -322,7 +322,7 @@
                                     <tr>
                                         <th style="width:75%;" colspan="4">TOTAL INVOICE AMOUNT:</th>
                                         <td style="text-align:right"><strong>US$
-                                                {CurrencyField::convertToUserFormat($OROSOFT_DOCUMENT->totalusdVal)}</strong>
+                                                {CurrencyField::convertToUserFormat($ERP_DOCUMENT->totalusdVal)}</strong>
                                         </td>
                                     </tr>
                                     {if $INTENT}
