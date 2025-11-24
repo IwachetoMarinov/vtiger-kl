@@ -170,22 +170,33 @@
 </head>
 
 <body>
+    {assign var=FROM_INTENT value=""}
+    {if isset($smarty.request.fromIntent) && $smarty.request.fromIntent neq ""}
+        {assign var=FROM_INTENT value="&fromIntent=`$smarty.request.fromIntent`"}
+    {/if}
+
+    {assign var=HCI value=""}
+    {if isset($smarty.request.hideCustomerInfo) && $smarty.request.hideCustomerInfo neq ""}
+        {assign var=HCI value="&hideCustomerInfo=`$smarty.request.hideCustomerInfo`"}
+    {/if}
+
     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-        <ul style="list-style-type: none;
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-                background-color: #333;">
-            <li style="float:right"><a style="display: block;
-                color: white;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: none;
-                background-color: #bea364;"
-                    href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&PDFDownload=true{if $INTENT}&fromIntent={$smarty.request.fromIntent}{/if}&hideCustomerInfo={$smarty.request.hideCustomerInfo}">Download</a>
+        <ul style="list-style-type:none;margin:0;padding:0;overflow:hidden;background-color:#333;">
+            <li style="float:right">
+                <a style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
+                    href="index.php?module=Contacts
+                &view=DocumentPrintPreview
+                &record={$RECORD_MODEL->getId()}
+                &docNo={$smarty.request.docNo}
+                &PDFDownload=true
+                {$FROM_INTENT}
+                {$HCI}">
+                    Download
+                </a>
             </li>
         </ul>
     {/if}
+
     {assign var="start" value=0}
     {assign var="end" value=1}
     {for $page=1 to $PAGES}
