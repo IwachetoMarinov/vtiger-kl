@@ -41,7 +41,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         // echo '<pre>';
         // // var_dump('ACTIVITY DATA: ', GPMCompany_Record_Model::getInstanceByCode($comId));
         // // var_dump($activity_data);
-        // var_dump($exchange_rates);
+        // var_dump("$docType.tpl");
         // var_dump($activity_data);
         // echo '</pre>';
 
