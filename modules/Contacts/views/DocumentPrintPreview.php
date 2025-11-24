@@ -3,6 +3,9 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
+include_once 'dbo_db/ActivitySummary.php';
+include_once 'dbo_db/HoldingsDB.php';
+
 class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
 {
 
@@ -22,19 +25,33 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
     {
         // include_once 'modules/Settings/OROSoft/api.php';
         $docNo = $request->get('docNo');
-        $docType = substr($docNo, 0, 3);
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
         $comId = $recordModel->get('related_entity');
-        // $oroSOftDoc = ($docType == 'STI') ? getOROSoftSTIDoc($docNo, $comId) : getOROSoftDoc($docNo, $comId);
-        // HARDCODED TEST DATA (simulate OROSoft return)
+
+
+
+        $activity = new dbo_db\ActivitySummary();
+        $activity_data = $activity->getTCPrintPreviewData($docNo);
+
+        $docType = $activity_data['voucher_type'] ?? "";
+
+        echo '<pre>';
+        // var_dump('ACTIVITY DATA: ', GPMCompany_Record_Model::getInstanceByCode($comId));
+        // var_dump($activity_data);
+        var_dump($activity_data);
+        echo '</pre>';
+
         $oroSOftDoc = (object) [
             'docNo' => $docNo,
-            'postingDate' => '2022-10-10',
-            'voucherType' => 'Sales Invoice',
+            'documentDate' => $activity_data['document_date'] ?? '',
+            'postingDate' => $activity_data['posting_date'] ?? '',
+            'voucherType' => $activity_data['voucher_type'] ?? 'Sales Invoice',
             'GST' => true,
-            'currency' => 'USD',
-            'grandTotal' => 25000.55,
+            'currency' => $activity_data['currency'] ?? 'USD',
+            'grandTotal' => $activity_data['grand_total'] ?? 0.00,
+            'totalusdVal' => $activity_data['totalusd_val'] ?? 0.00,
+
             'barItems' => [
                 (object)[
                     'quantity' => 1,
@@ -47,6 +64,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
                     'barNumber' => 'B0001',
                     'purity' => '999.9',
                     'voucherType' => 'SAL',
+                    'narration' => 'Sale of Gold Bar',
                 ],
                 (object)[
                     'quantity' => 2,
@@ -59,6 +77,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
                     'barNumber' => 'B0002',
                     'purity' => '995',
                     'voucherType' => 'SAL',
+                    'narration' => 'Purchase of Silver Bars',
                 ]
             ]
         ];
@@ -73,12 +92,6 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             // HARDCODED TEST DATA
             $bankAccountId = 1;
         }
-        //if($docType == 'STI' && !$oroSOftDoc['GST']){
-        //	$docType = 'OLD_STI';
-        //}
-
-        echo '<!-- DEBUG: Rendering template ' . "$docType.tpl" . ' -->';
-        var_dump("$docType.tpl");
 
         $intent = false;
         if (!empty($request->get('fromIntent'))) {
@@ -88,6 +101,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         // $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
         // HARDCODED TEST DATA
         $selectedBank = (object) [
+            'id' => "123",
             'accountNumber' => '123-456-789',
             'accountName' => 'GPM Main Account',
             'bankName' => 'Global Bank',
@@ -95,6 +109,12 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             'swiftCode' => 'GBLBB22',
             'bankAddress' => '123 Global St, Metropolis, Country'
         ];
+
+        // echo '<pre>';
+        // echo "\n Data fetched from OROSoft Document: " . date('Y-m-d H:i:s') . PHP_EOL;
+        // var_dump($oroSOftDoc);
+        // echo '</pre>';
+
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);

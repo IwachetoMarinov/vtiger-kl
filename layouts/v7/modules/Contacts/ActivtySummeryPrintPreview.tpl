@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>ACTIVITY SUMMARY</title>
+        <title>TRANSACTION HISTORY</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
@@ -217,7 +217,7 @@
 			{if $page eq 1}
                         <tr>
                             <td  style="height: 10mm; text-decoration: underline;text-align: center">
-                                <strong>ACTIVITY SUMMARY</strong>
+                                <strong>TRANSACTION HISTORY</strong>
                             </td>
                         </tr>
                         <tr>

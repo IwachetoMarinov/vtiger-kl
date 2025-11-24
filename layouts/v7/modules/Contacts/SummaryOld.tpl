@@ -25,7 +25,7 @@
                 <span class="span11 margin0px">
 
                     <div class="row-fluid">
-                        <h4 class="display-inline-block" style="width:12em;">ACTIVITY SUMMARY</h4>
+                        <h4 class="display-inline-block" style="width:12em;">TRANSACTION HISTORY</h4>
                         <div class="pull-right span2">
                             <label style="font-family: 'OpenSans-Semibold', 'ProximaNova-Semibold', sans-serif;
                                        font-weight: normal;

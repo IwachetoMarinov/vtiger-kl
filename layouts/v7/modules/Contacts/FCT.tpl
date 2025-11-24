@@ -170,7 +170,7 @@
 </head>
 
 <body>
-    {if $smarty.request.PDFDownload neq true}
+    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
         <ul style="list-style-type: none;
                 margin: 0;
                 padding: 0;
