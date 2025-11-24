@@ -180,7 +180,7 @@
 
 
 
-    {if $smarty.request.PDFDownload neq true}
+    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
         <script type="text/javascript" src="layouts/v7/lib/jquery/jquery.min.js"></script>
         <ul style="list-style-type: none;
                 margin: 0;

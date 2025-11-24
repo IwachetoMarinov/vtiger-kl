@@ -140,7 +140,7 @@
         </style>
     </head>
     <body>
-        {if $smarty.request.PDFDownload neq true}
+        {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
             <script  type="text/javascript" src="layouts/v7/lib/jquery/jquery.min.js"></script>
             <link type='text/css' rel='stylesheet' href='layouts/v7/lib/jquery/select2/select2.css'>
             <link type='text/css' rel='stylesheet' href='layouts/v7/lib/select2-bootstrap/select2-bootstrap.css'>

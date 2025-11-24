@@ -23,7 +23,7 @@
             <span class="span11 margin0px">
                 <div class="row-fluid">
                     <h4 class="display-inline-block" style="font-size: 18px; margin: 0; padding: 0;">
-                        ACTIVITY SUMMARY
+                        TRANSACTION HISTORY
                     </h4>
 
                     <!-- NEW CLEAN FLEX CONTAINER -->

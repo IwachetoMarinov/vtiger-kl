@@ -39,22 +39,11 @@ class ActivitySummary
 
         $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_ActivitySumm] $where";
 
-        // $stmt = sqlsrv_query($this->connection, $sql, $params);
-
-        // if ($stmt === false) die(print_r(sqlsrv_errors(), true));
-
-        // $summary = [];
-        // while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-        //     $summary[] = $row;
-        // }
-
-        // sqlsrv_free_stmt($stmt);
-
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
-        echo '<pre>';
-        var_dump($summary);
-        echo '</pre>';
+        // echo '<pre>';
+        // var_dump($summary);
+        // echo '</pre>';
 
         $results  = [];
         foreach ($summary as $item) {
