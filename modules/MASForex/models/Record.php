@@ -7,7 +7,6 @@ class MASForex_Record_Model extends Vtiger_Record_Model
 
     public static function getExchangeRate($date, $currency_pair)
     {
-
         $metalsAPI = new MetalsAPI();
         $data = $metalsAPI->getLatestExchangeRate($date);
 

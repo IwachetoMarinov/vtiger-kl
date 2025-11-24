@@ -2,7 +2,7 @@
 /* modules/Contacts/models/MetalsAPI.php */
 
 include_once 'data/CRMEntity.php';
-include_once 'modules/Metals/Metals.php';
+// include_once 'modules/Metals/Metals.php';
 include_once 'modules/Users/Users.php';
 include_once 'helpers/DBConnection.php';
 
@@ -67,7 +67,7 @@ class MetalsAPI
             [SpotPriceUSD],
             [Exc_Rate],
             [SpotPriceCurr]
-        FROM [HFS_SQLEXPRESS].[GPM].[dbo].[Metal_Spot_Price]
+        FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_SpotPrice]
         $where
         ORDER BY [Date] DESC, [Curr_Code]";
 

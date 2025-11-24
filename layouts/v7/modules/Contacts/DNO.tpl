@@ -180,10 +180,13 @@
                 padding: 0;
                 overflow: hidden;
                 background-color: #333;">
-            <li style="float:right">
-                <a style="display: block;color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
-                    href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&PDFDownload=true&bank={$SELECTED_BANK->getId()}&hideCustomerInfo={$smarty.request.hideCustomerInfo}}">Download</a>
-            </li>
+
+            {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
+                <li style="float:right">
+                    <a style="display: block;color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
+                        href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&PDFDownload=true&bank={$SELECTED_BANK->getId()}&hideCustomerInfo={$smarty.request.hideCustomerInfo}}">Download</a>
+                </li>
+            {{/if}}
             <li style="float: right;margin-top: 5px;margin-right: 5px;width: 198px;">
                 <select class="inputElement select2" name="bank_accounts" id="bank_accounts">
                     <option value="">Select Bank Account</option>
@@ -221,34 +224,34 @@
                             style="max-height: 100%; float:right;width: 154px;">
                         <div style="font-size:11pt;margin-top: 14px;margin-bottom: 32px">
                             {$RECORD_MODEL->get('cf_898')}<br>
-                            
-                                {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
-                                {if !empty($RECORD_MODEL->get('cf_968'))} {$RECORD_MODEL->get('cf_968')}<br>{/if}
-                                {if !empty($RECORD_MODEL->get('mailingstreet'))}
-                                {$RECORD_MODEL->get('mailingstreet')}<br>{/if}
-                                {if !empty($RECORD_MODEL->get('cf_970'))} {$RECORD_MODEL->get('cf_970')}<br>{/if}
-                                {if empty($RECORD_MODEL->get('mailingpobox'))}
-                                    {if !empty($RECORD_MODEL->get('mailingcity')) && !empty($RECORD_MODEL->get('mailingzip')) }
-                                        {$RECORD_MODEL->get('mailingcity')} {$RECORD_MODEL->get('mailingzip')}<br>
-                                    {else if !empty($RECORD_MODEL->get('mailingcity'))}
-                                        {$RECORD_MODEL->get('mailingcity')}<br>
-                                    {else}
-                                        {$RECORD_MODEL->get('mailingzip')}<br>
-                                    {/if}
-                                    {$RECORD_MODEL->get('mailingcountry')}
+
+                            {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
+                            {if !empty($RECORD_MODEL->get('cf_968'))} {$RECORD_MODEL->get('cf_968')}<br>{/if}
+                            {if !empty($RECORD_MODEL->get('mailingstreet'))}
+                            {$RECORD_MODEL->get('mailingstreet')}<br>{/if}
+                            {if !empty($RECORD_MODEL->get('cf_970'))} {$RECORD_MODEL->get('cf_970')}<br>{/if}
+                            {if empty($RECORD_MODEL->get('mailingpobox'))}
+                                {if !empty($RECORD_MODEL->get('mailingcity')) && !empty($RECORD_MODEL->get('mailingzip')) }
+                                    {$RECORD_MODEL->get('mailingcity')} {$RECORD_MODEL->get('mailingzip')}<br>
+                                {else if !empty($RECORD_MODEL->get('mailingcity'))}
+                                    {$RECORD_MODEL->get('mailingcity')}<br>
                                 {else}
-                                    {if !empty($RECORD_MODEL->get('mailingcity'))}
-                                        P.O. Box {$RECORD_MODEL->get('mailingpobox')}, {$RECORD_MODEL->get('mailingcity')}<br>
-                                    {else}
-                                        P.O. Box {$RECORD_MODEL->get('mailingpobox')}<br>
-                                    {/if}
-                                    {if !empty($RECORD_MODEL->get('mailingstate'))}
-                                        {$RECORD_MODEL->get('mailingstate')}, {$RECORD_MODEL->get('mailingcountry')}
-                                    {else}
-                                        {$RECORD_MODEL->get('mailingcountry')}
-                                    {/if}
+                                    {$RECORD_MODEL->get('mailingzip')}<br>
                                 {/if}
-                                
+                                {$RECORD_MODEL->get('mailingcountry')}
+                            {else}
+                                {if !empty($RECORD_MODEL->get('mailingcity'))}
+                                    P.O. Box {$RECORD_MODEL->get('mailingpobox')}, {$RECORD_MODEL->get('mailingcity')}<br>
+                                {else}
+                                    P.O. Box {$RECORD_MODEL->get('mailingpobox')}<br>
+                                {/if}
+                                {if !empty($RECORD_MODEL->get('mailingstate'))}
+                                    {$RECORD_MODEL->get('mailingstate')}, {$RECORD_MODEL->get('mailingcountry')}
+                                {else}
+                                    {$RECORD_MODEL->get('mailingcountry')}
+                                {/if}
+                            {/if}
+
                         </div>
                     </td>
                 </tr>

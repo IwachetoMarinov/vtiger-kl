@@ -64,16 +64,23 @@
             {/foreach}
         </select>
         <br>
-        <span style="margin-top: 10px; display:block">Hide Customer Info : <input type="checkbox" id="hideCustomerInfo" name="hideCustomerInfo" {if $smarty.request.hideCustomerInfo}value="1" checked {else}value="0"{/if}></span>
+        <span style="margin-top: 10px; display:block">Hide Customer Info : <input type="checkbox" id="hideCustomerInfo"
+                name="hideCustomerInfo" {if $smarty.request.hideCustomerInfo}value="1" checked 
+                {else}value="0"
+                {/if}></span>
         <br>
-        <span>    
-                <a id="printConfSave" style="color: white;text-align: center;padding: 10px;text-decoration: none;background-color: #bea364;"
+
+        {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
+            <span>
+                <a id="printConfSave"
+                    style="color: white;text-align: center;padding: 10px;text-decoration: none;background-color: #bea364;"
                     href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&bank={$SELECTED_BANK->getId()}{if $INTENT}&fromIntent={$smarty.request.fromIntent}{/if}&hideCustomerInfo={$smarty.request.hideCustomerInfo}">Save</a>
-        </span>
+            </span>
+        {/if}
     </div>
 </div>
 <style>
-.select2-container .select2-choice>.select2-chosen {
-    width: 171px;
-}
+    .select2-container .select2-choice>.select2-chosen {
+        width: 171px;
+    }
 </style>
