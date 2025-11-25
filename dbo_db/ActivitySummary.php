@@ -50,8 +50,10 @@ class ActivitySummary
             $results[] = [
                 'voucher_no' => $item['TxNo'],
                 'voucher_type' => $item['TxType'],
+                'usd_val' => $item['Matched_Amt'] ? floatval($item['Matched_Amt']) : 0.00,
                 'doctype' => $item['DocType'] ?? 'Sales Invoice',
-                'posting_date' => $item['Tx_Date'] instanceof \DateTime ? $item['Tx_Date']->format('Y-m-d') : $item['Tx_Date'],
+                'document_date' => $item['Tx_Date'] instanceof \DateTime ? $item['Tx_Date']->format('Y-m-d') : $item['Tx_Date'],
+                'posting_date' => $item['Appr_Date'] instanceof \DateTime ? $item['Appr_Date']->format('Y-m-d') : $item['Appr_Date'],
                 'amount_in_account_currency' => $item['TxAmt'] ?? 0.00
             ];
         }
