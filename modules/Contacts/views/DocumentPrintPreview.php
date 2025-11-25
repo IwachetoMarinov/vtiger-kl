@@ -25,7 +25,6 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
 
     public function process(Vtiger_Request $request)
     {
-        // include_once 'modules/Settings/OROSoft/api.php';
         $docNo = $request->get('docNo');
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
@@ -45,7 +44,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         // var_dump($activity_data);
         // echo '</pre>';
 
-        $oroSOftDoc = (object) [
+        $erpDoc = (object) [
             'docNo' => $docNo,
             'documentDate' => $activity_data['document_date'] ?? '',
             'postingDate' => $activity_data['posting_date'] ?? '',
@@ -93,7 +92,6 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             ]
         ];
 
-        //	print_r($this->processDoc($oroSOftDoc));
         $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($comId);
         $bankAccountId = $request->get('bank');
         if (empty($bankAccountId)) {
@@ -123,19 +121,18 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
 
         // echo '<pre>';
         // echo "\n Data fetched from OROSoft Document: " . date('Y-m-d H:i:s') . PHP_EOL;
-        // var_dump($oroSOftDoc);
+        // var_dump($erpDoc);
         // echo '</pre>';
 
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);
         $viewer->assign('SELECTED_BANK', $selectedBank);
-        $viewer->assign('ERP_DOCUMENT', $this->processDoc($oroSOftDoc));
-        // $viewer->assign('OROSOFT_DOCUMENT', $this->processDoc($oroSOftDoc));
+        $viewer->assign('ERP_DOCUMENT', $this->processDoc($erpDoc));
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('INTENT', $intent);
         $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($comId));
-        $viewer->assign('PAGES', $this->makeDataPage($oroSOftDoc->barItems, $docType));
+        $viewer->assign('PAGES', $this->makeDataPage($erpDoc->barItems, $docType));
         if ($request->get('PDFDownload')) {
             $html = $viewer->view("$docType.tpl", $moduleName, true);
             $this->downloadPDF($html, $request);
@@ -163,7 +160,6 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
                 $datas->barItems[$key]->serials[0] = $serials[0];
             }
         }
-        //print_r(array_values($newData));exit();
         return $datas;
     }
 
