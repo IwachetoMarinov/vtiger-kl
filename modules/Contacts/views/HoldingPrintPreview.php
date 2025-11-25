@@ -1,7 +1,15 @@
 <?php
 
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+
+include_once 'dbo_db/HoldingsDB.php';
+include_once 'modules/Contacts/models/MetalsAPI.php';
+
 class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
 {
+
+    protected $record = null;
 
     public function preProcess(Vtiger_Request $request, $display = false)
     {
@@ -14,60 +22,74 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
         }
     }
 
-    // public function fetchOROSOft()
-    // {
-    //     include_once 'modules/Settings/OROSoft/api.php';
-    //     $recordModel = $this->record->getRecord();
-    //     $clientID = $recordModel->get('cf_898');
-    //     $comId = $recordModel->get('related_entity');
-    //     return array(
-    //         'Holdings' => getOROSoftHolding($clientID, $comId),
-    //         'MetalPrice' => MetalPrice_Record_Model::getLatestPriceOfAllMetal()
-    //     );
-    // }
-
-    // $oroSOftData = $this->fetchOROSOft();
-
     public function process(Vtiger_Request $request)
     {
         $moduleName = $request->getModule();
-        // $oroSOftData = $this->fetchOROSOft();
+        $recordModel = $this->record->getRecord();
 
-        // Temporary hardcoded data for testing
-        $oroSOftData = [
-            'Holdings' => [
-                (object)[
-                    'metal' => 'Gold',
-                    'location' => 'Brinks Singapore',
-                    'pureOz' => 25.45,
-                    'serials' => ['G1001', 'G1002', 'G1003']
-                ],
-                (object)[
-                    'metal' => 'Silver',
-                    'location' => 'Brinks Hong Kong',
-                    'pureOz' => 320.10,
-                    'serials' => ['S5001', 'S5002']
+        // REAL CUSTOMER ID FROM RECORD
+        $clientID = $recordModel->get('cf_898');
+
+        $holdings = new dbo_db\HoldingsDB();
+        $holdings_data = $holdings->getHoldingsData($clientID);
+
+        $metalsAPI = new MetalsAPI();
+        $metals_data = $metalsAPI->getMetals();
+
+        // Holdings formatting
+        $holdings = [];
+        foreach ($holdings_data as $data) {
+            $holdings[] = [
+                // HARDCODED SHOULD BE REPLACED WITH REAL METAL FROM ERP
+                'metal' => "XAU",
+                // 'metal' => $data['brand'],
+                'location' => $data['location'],
+                'pureOz' => $data['fine_oz'],
+                // HARDCODED SHOULD BE REPLACED WITH REAL SERIALS FROM ERP
+                'serials' => ['G1001', 'G1002', 'G1003']
+            ];
+        }
+
+        $grouped = [];
+        foreach ($holdings as $item) {
+            $location = $item['location'];
+
+            $grouped[$location][] = (object) [
+                'metal' => $item['metal'],
+                'location' => $item['location'],
+                'pureOz' => (float) $item['pureOz'],
+                'quantity' => count($item['serials']),
+                'modiefiedSerials' => $item['serials'],
+                'longDesc' => $item['metal'] . " - " . implode(", ", $item['serials'])
+            ];
+        }
+
+        // Metals data formatting
+        $metals = [];
+        foreach ($metals_data as $data) {
+            $item = [
+                $data['MT_Code'] => [
+                    'price_date' => $data['Date'],
+                    'price' => $data['SpotPriceCurr'] ?? 0.00
                 ]
-            ],
-            'MetalPrice' => [
-                'XAU' => ['price_date' => date('Y-m-d'), 'price' => 2300],
-                'XAG' => ['price_date' => date('Y-m-d'), 'price' => 28.5],
-            ]
+            ];
+            $metals = array_merge($metals, $item);
+        }
+
+        $erpData = [
+            'Holdings' => $grouped,
+            'MetalPrice' => $metals
         ];
-
-
 
         $recordModel = $this->record->getRecord();
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
-        $viewer->assign('LBMA_DATE', date('d-M-y', strtotime($oroSOftData['MetalPrice']['XAU']['price_date'])));
-        // SHOULD  be checked this data
-        // $viewer->assign('OROSOFT_HOLDINGS', $this->processHoldingData($oroSOftData['Holdings']));
-        // HARDCODED OROSOFT_HOLDINGS
-        $viewer->assign('OROSOFT_HOLDINGS', []);
-        $viewer->assign('OROSOFT_METALPRICE', $oroSOftData['MetalPrice']);
-        $viewer->assign('OROSOFT_HOLDINGMETALS', array_unique(array_column($oroSOftData['Holdings'], 'metal')));
+        $viewer->assign('LBMA_DATE', date('d-M-y', strtotime($erpData['MetalPrice']['XAU']['price_date'])));
+        $viewer->assign('ERP_HOLDINGS', $grouped);
+        $viewer->assign('ERP_METALPRICE', $erpData['MetalPrice']);
+        $viewer->assign('ERP_HOLDINGMETALS', array_unique(array_column($holdings, 'metal')));
         $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($recordModel->get('related_entity')));
+
         if ($request->get('PDFDownload')) {
             $viewer->assign('ENABLE_DOWNLOAD_BUTTON', false);
             $html = $viewer->view('HoldingPrintPreview.tpl', $moduleName, true);
@@ -95,7 +117,6 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
             }
             $newData[$data->location][] = $data;
         }
-        //print_r(array_values($newData));exit();
         return $newData;
     }
 
