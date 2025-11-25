@@ -18,6 +18,8 @@ include_once 'dbo_db/HoldingsDB.php';
 class Contacts_Detail_View extends Accounts_Detail_View
 {
 
+	protected $record = null;
+
 	function __construct()
 	{
 		parent::__construct();
@@ -149,13 +151,10 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$values = $fieldModel->getPicklistValues();
 		$currency_list = array_keys($values);
 
-		// HARDCODED CUSTOMER ID FOR TESTING
-		// $customer_id = 'D2013';
 		$activity = new dbo_db\ActivitySummary();
 		$activity_data = $activity->getActivitySummary($clientID);
 
 		$holdings = new dbo_db\HoldingsDB();
-		// $holding_customer_id = 'M2001';
 		$holdings_data = $holdings->getHoldingsData($clientID);
 
 		// echo '<pre>';

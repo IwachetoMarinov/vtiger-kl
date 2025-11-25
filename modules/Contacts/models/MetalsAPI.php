@@ -2,7 +2,6 @@
 /* modules/Contacts/models/MetalsAPI.php */
 
 include_once 'data/CRMEntity.php';
-// include_once 'modules/Metals/Metals.php';
 include_once 'modules/Users/Users.php';
 include_once 'helpers/DBConnection.php';
 
@@ -20,7 +19,8 @@ class MetalsAPI
     public function getLatestPriceByName($metal, $currency)
     {
         // check db_username and db_password
-        if (empty($this->db_username) || empty($this->db_password)) return null;
+        // if (empty($this->db_username) || empty($this->db_password)) return null;
+        if (!$this->connection) die(print_r(sqlsrv_errors(), true));
 
         $metals = $this->fetchMetals();
 
@@ -36,11 +36,8 @@ class MetalsAPI
     public function getMetals()
     {
         // check db_username and db_password
-        if (empty($this->db_username) || empty($this->db_password)) {
-            throw new Exception("Database credentials are not set in environment variables.");
+        if (!$this->connection) die(print_r(sqlsrv_errors(), true));
 
-            return [];
-        }
         $metals = $this->fetchMetals();
         $unique_metals = $this->getUniqueMetals($metals, "USD");
 

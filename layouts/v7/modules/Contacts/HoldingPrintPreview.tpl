@@ -222,13 +222,14 @@
                                     <th>LONDON FIX ON</th>
                                     <td style="text-align:center" >{$LBMA_DATE}</td>
                                 </tr>
-				{foreach from=$OROSOFT_HOLDINGMETALS item=metal}
+				{foreach from=$ERP_HOLDINGMETALS item=metal}
 				{if strtoupper($metal) eq 'MBTC'}
 					{continue}
 				{/if}
 				<tr>
                                     <th>{vtranslate($metal,'MetalPrice')}</th>
-                                    <td style="text-align:center">US$ {number_format($OROSOFT_METALPRICE[strtoupper($metal)].pm_rate,3, '.', ',')} / Oz.</td>
+                                    {assign var="rate" value=$ERP_METALPRICE[strtoupper($metal)].price|default:0}
+                                    <td style="text-align:center">US$ {number_format($rate, 3, '.', ',')} / Oz..</td>
                                 </tr>
 				{/foreach}
                             </table>
@@ -249,7 +250,7 @@
                                     <th style="width:20%;text-align:center">TOTAL</th>
                                 </tr>
 				{assign var="grandTotal" value=0}
-                                {foreach item=HOLDINGS key=location from=$HOLDINGS}
+                                {foreach item=HOLDINGS key=location from=$ERP_HOLDINGS}
 				 <tr class="no-border">
                                     <td></td>
                                     <td><strong>{vtranslate($location,'MetalPrice')}</strong></td>
@@ -257,7 +258,8 @@
                                     <td style='text-align:right'></td>
                                 </tr>     
 				    {foreach item=HOLDING from=$HOLDINGS}
-                                    {assign var="totalPrice" value=$HOLDING->pureOz * $OROSOFT_METALPRICE[strtoupper($HOLDING->metal)]['pm_rate']}
+                                    {assign var="totalPrice" value=$HOLDING->pureOz * $ERP_METALPRICE[strtoupper($HOLDING->metal)]['price']|default:0}
+                                    
 
                                     {assign var="grandTotal" value=($grandTotal)+($totalPrice)}
                                     <tr class="no-border">

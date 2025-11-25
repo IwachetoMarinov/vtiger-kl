@@ -48,9 +48,16 @@ class HoldingsDB
         $results = [];
         foreach ($summary as $item) {
             $results[] = [
+                'serial_no' => $item['Ser_No'],
+                'gross_oz' => $item['GrossOz'] ?? 0,
+                'fine_oz' => $item['FineOz'] ?? 0,
+                'purity' => $item['Purity'] ?? 0,
+                'acq_tx_no' => $item['Acq_Tx_No'] ?? '',
+                'item_code' => $item['Item_Code'],
                 'description' => $item['Item_Desc'],
                 'quantity' => $item['Quantity'] ?? 0,
                 'location' => $item['WH_Code'] ?? '',
+                'brand' => $item['Brand'] ?? '',
             ];
         }
         return $results;
