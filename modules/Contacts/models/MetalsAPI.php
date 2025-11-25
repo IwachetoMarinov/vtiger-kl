@@ -59,17 +59,43 @@ class MetalsAPI
             $params[] = $date;
         }
 
-        $sql = "
-        SELECT 
-            [Date],
-            [MT_Code],
-            [Curr_Code],
-            [SpotPriceUSD],
-            [Exc_Rate],
-            [SpotPriceCurr]
+        $sql = "SELECT [Date],[MT_Code],[Curr_Code],[SpotPriceUSD],[Exc_Rate],[SpotPriceCurr]
         FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_SpotPrice]
         $where
         ORDER BY [Date] DESC, [Curr_Code]";
+
+        $stmt = sqlsrv_query($this->connection, $sql, $params);
+
+        if ($stmt === false) die(print_r(sqlsrv_errors(), true));
+
+        $data = [];
+        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+            if (isset($row['Date']) && $row['Date'] instanceof DateTime) {
+                $row['Date'] = $row['Date']->format('Y-m-d');
+            }
+            $data[] = $row;
+        }
+
+        sqlsrv_free_stmt($stmt);
+
+        return $data;
+    }
+
+    protected function fetchExchangeRateHistoric($date = null)
+    {
+        if (!$date) return [];
+
+        if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+
+        $params = [];
+        $where  = '';
+
+        if ($date) {
+            $where = "WHERE [Exc_Date] = ?";
+            $params[] = $date;
+        }
+
+        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_ExcRateHistoric] $where ORDER BY [Exc_Date] DESC";
 
         $stmt = sqlsrv_query($this->connection, $sql, $params);
 
@@ -79,8 +105,8 @@ class MetalsAPI
 
         $data = [];
         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-            if (isset($row['Date']) && $row['Date'] instanceof DateTime) {
-                $row['Date'] = $row['Date']->format('Y-m-d');
+            if (isset($row['Exc_Date']) && $row['Exc_Date'] instanceof DateTime) {
+                $row['Exc_Date'] = $row['Exc_Date']->format('Y-m-d');
             }
             $data[] = $row;
         }
@@ -110,11 +136,7 @@ class MetalsAPI
 
     public function getLatestExchangeRate($date = null): array
     {
-        $metals = $this->fetchMetals($date);
-
-        $unique_rates = $this->getUniqueRates($metals);
-
-        return $unique_rates;
+        return $this->fetchExchangeRateHistoric($date);
     }
 
     protected function getUniqueRates($metals): array

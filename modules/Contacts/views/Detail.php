@@ -160,7 +160,7 @@ class Contacts_Detail_View extends Accounts_Detail_View
 
 		// echo '<pre>';
 		// echo "\n Data fetched from ActivitySummary: " . date('Y-m-d H:i:s') . PHP_EOL;
-		// var_dump($activity_data);
+		// var_dump($holdings_data);
 		// echo '</pre>';
 
 		// -------------------------------------------
