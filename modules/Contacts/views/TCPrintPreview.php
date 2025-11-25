@@ -1,7 +1,7 @@
 <?php
 
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
@@ -10,7 +10,7 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
 {
 
     protected $record = null;
-    
+
     public function preProcess(Vtiger_Request $request, $display = false)
     {
         $recordId = $request->get('record');
@@ -96,10 +96,9 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
             ];
         }
 
-
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
-        $viewer->assign('OROSOFT_DOCUMENT', $erpDoc);
+        $viewer->assign('ERP_DOCUMENT', $erpDoc);
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('OROSOFT_DOCTYPE', $docType);
         $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($comId));

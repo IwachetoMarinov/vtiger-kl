@@ -301,9 +301,11 @@
                                 {assign var="storageCharge" value=0}
                                 {assign var="calcTotal" value=0}
 
+                                {assign var="barItems" value=$ERP_DOCUMENT->barItems|default:[]}
+
                                 {for $loopStart=$start to $end}
-                                    {if $loopStart >= count($ERP_DOCUMENT->barItems)}{break}{/if}
-                                    {assign var="barItem" value=$ERP_DOCUMENT->barItems[$loopStart]}
+                                    {if $loopStart >= count($barItems)}{break}{/if}
+                                    {assign var="barItem" value=$barItems[$loopStart]}
                                     {assign var="start" value=($loopStart+1)}
 
                                     {* Build serial list safely *}
