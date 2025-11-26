@@ -37,14 +37,6 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
 
         $exchange_rates = MASForex_Record_Model::getExchangeRate($activity_data['document_date'] ?? '', 'usd_sgd');
 
-        // echo '<pre>';
-        // // var_dump('ACTIVITY DATA: ', GPMCompany_Record_Model::getInstanceByCode($comId));
-        // // var_dump($activity_data);
-        // // var_dump("$docType.tpl");
-        // var_dump($exchange_rates);
-        // // var_dump($activity_data);
-        // echo '</pre>';
-
         $erpDoc = (object) [
             'docNo' => $docNo,
             'documentDate' => $activity_data['document_date'] ?? '',
@@ -121,7 +113,6 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         ];
 
         // echo '<pre>';
-        // echo "\n Data fetched from OROSoft Document: " . date('Y-m-d H:i:s') . PHP_EOL;
         // var_dump($erpDoc);
         // echo '</pre>';
 
