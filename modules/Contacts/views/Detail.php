@@ -82,19 +82,25 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$values = $fieldModel->getPicklistValues();
 		$currency_list = array_keys($values);
 
-		// $activity = new dbo_db\ActivitySummary();
-		// $activity_data = $activity->getActivitySummary($clientID);
-		$activity_data = [];
+		$activity = new dbo_db\ActivitySummary();
+		$activity_data = $activity->getActivitySummary($clientID);
 
 		$holdings = new dbo_db\HoldingsDB();
 		$holdings_data = $holdings->getHoldingsData($clientID);
 
 		$certificate_id = $this->getCertificateId($recordId);
 
-		// echo '<pre>';
-		// echo "\n Data fetched from ActivitySummary: " . date('Y-m-d H:i:s') . PHP_EOL;
-		// var_dump($holdings_data);
-		// echo '</pre>';
+		$years = [];
+		for ($i = 0; $i <= 5; $i++) {
+			$years[] = date('Y', strtotime("-$i year"));
+		}
+
+
+
+		echo '<pre>';
+		echo "\n Data fetched from ActivitySummary: " . date('Y-m-d H:i:s') . PHP_EOL;
+		var_dump($activity_data);
+		echo '</pre>';
 
 		// -------------------------------------------
 		// 🔥 HARDCODED ACTIVITY SUMMARY DATA
@@ -139,6 +145,7 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$viewer->assign('CURRENCY', $activityData['CURRENCY_SELECTED']);
 		$viewer->assign('BALANCES', $erpData['BALANCES']);
 		$viewer->assign('HOLDINGS', $holdings_data);
+		$viewer->assign('YEARS', $years);
 
 		// RENDER NEW CUSTOM BLOCK HERE
 		// $viewer->view('HoldingsWalletSummary.tpl', $moduleName);

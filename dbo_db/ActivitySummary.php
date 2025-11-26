@@ -36,7 +36,8 @@ class ActivitySummary
             $params[] = $customer_id;
         }
 
-        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_ActivitySumm] $where";
+        // $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_ActivitySumm] $where";
+        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_TxHx] $where";
 
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
@@ -47,10 +48,12 @@ class ActivitySummary
         $results  = [];
         foreach ($summary as $item) {
             $results[] = [
-                'voucher_no' => $item['TxNo'],
-                'voucher_type' => $item['TxType'],
+                'voucher_no' => $item['Tx_No'] ?? '',
+                'voucher_type' => $item['Tx_Type'] ?? '',
+                'description' => $item['Description'] ?? '',
+                'table_name' => $item['TableName'] ?? '',
                 'usd_val' => $item['Matched_Amt'] ? floatval($item['Matched_Amt']) : 0.00,
-                'doctype' => $item['DocType'] ?? 'Sales Invoice',
+                'doctype' => $item['Description'] ?? 'Sales Invoice',
                 'document_date' => $item['Tx_Date'] instanceof \DateTime ? $item['Tx_Date']->format('Y-m-d') : $item['Tx_Date'],
                 'posting_date' => $item['Appr_Date'] instanceof \DateTime ? $item['Appr_Date']->format('Y-m-d') : $item['Appr_Date'],
                 'amount_in_account_currency' => $item['TxAmt'] ?? 0.00
@@ -71,7 +74,7 @@ class ActivitySummary
             $where  = '';
 
             if ($doc_no) {
-                $where = "WHERE [TxNo] = ?";
+                $where = "WHERE [Tx_No] = ?";
                 $params[] = $doc_no;
             }
 
@@ -82,13 +85,13 @@ class ActivitySummary
 
             foreach ($summary as $item) {
                 $results = [
-                    'doc_no' => $item['TxNo'],
-                    'voucher_type' => $item['TxType'],
+                    'doc_no' => $item['Tx_No'],
+                    'voucher_type' => $item['Tx_Type'],
                     'currency' => $item['Curr_Code'],
-                    'doctype' => substr($item['TxNo'], 0, 3),
+                    'doctype' => substr($item['Tx_No'], 0, 3),
                     'document_date' => $item['Tx_Date'] instanceof \DateTime ? $item['Tx_Date']->format('Y-m-d') : $item['Tx_Date'],
                     'posting_date' => $item['Appr_Date'] instanceof \DateTime ? $item['Appr_Date']->format('Y-m-d') : $item['Appr_Date'],
-                    'grand_total' => $item['TxAmt'] ?? 0.00,
+                    'grand_total' => $item['Tx_Amt'] ?? 0.00,
                     'totalusd_val' => $item['Matched_Amt'] ?? 0.00,
                 ];
             }
