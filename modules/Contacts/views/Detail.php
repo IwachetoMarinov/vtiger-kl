@@ -14,6 +14,7 @@ error_reporting(E_ALL);
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
+// include_once 'modules/HoldingCertificate/CertificateHandler.php';
 
 class Contacts_Detail_View extends Accounts_Detail_View
 {
@@ -121,6 +122,12 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		// REAL CUSTOMER ID FROM RECORD
 		$clientID = $recordModel->get('cf_898');
 
+		// $certificateHandler = new GPM_CertificateHandler();
+		// $result = $certificateHandler->generateCertificate(13);
+
+		// echo '<pre>';
+		// var_dump($result);
+		// echo '</pre>';
 		// $recordModelData = $recordModel->getData();
 
 		// echo "<pre>";
@@ -205,6 +212,9 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$viewer->assign('CURRENCY', $activityData['CURRENCY_SELECTED']);
 		$viewer->assign('BALANCES', $erpData['BALANCES']);
 		$viewer->assign('HOLDINGS', $holdings_data);
+
+		// SHOULD be checked this function
+		// $viewer->assign('CERTIFICATE_HOLDING', $this->getCertificateId($recordId));
 
 		// RENDER NEW CUSTOM BLOCK HERE
 		// $viewer->view('HoldingsWalletSummary.tpl', $moduleName);
