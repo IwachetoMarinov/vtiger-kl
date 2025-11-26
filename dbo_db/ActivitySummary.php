@@ -4,7 +4,6 @@
 // ini_set('display_errors', 1);
 // error_reporting(E_ALL);
 
-
 namespace dbo_db;
 
 include_once 'data/CRMEntity.php';
