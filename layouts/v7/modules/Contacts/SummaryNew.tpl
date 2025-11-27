@@ -47,11 +47,14 @@
                             <label style="margin: 0; font-size: 13px;">By Year</label>
                             <select id="ActivtySummeryDate" class="inputElement select2" style="width: 110px;">
                                 <option value="">Current Year</option>
-                                <option value="{date('Y',strtotime('-1 year'))}">{date('Y',strtotime('-1 year'))}</option>
+                                {foreach from=$YEARS item=YEAR}
+                                    <option value="{$YEAR}">{$YEAR}</option>
+                                {/foreach}
+                                {* <option value="{date('Y',strtotime('-1 year'))}">{date('Y',strtotime('-1 year'))}</option>
                                 <option value="{date('Y',strtotime('-2 year'))}">{date('Y',strtotime('-2 year'))}</option>
                                 <option value="{date('Y',strtotime('-3 year'))}">{date('Y',strtotime('-3 year'))}</option>
                                 <option value="{date('Y',strtotime('-4 year'))}">{date('Y',strtotime('-4 year'))}</option>
-                                <option value="{date('Y',strtotime('-5 year'))}">{date('Y',strtotime('-5 year'))}</option>
+                                <option value="{date('Y',strtotime('-5 year'))}">{date('Y',strtotime('-5 year'))}</option> *}
                             </select>
 
                             <!-- Download button -->
@@ -90,48 +93,58 @@
                         <tbody>
                             {foreach item=TX from=$OROSOFT_TRANSACTION}
 
+                                {* {var_dump('TX ITEM:', $TX.doctype);} *}
+                                {* {var_dump('TX ITEM:', $TX.voucher_type);} *}
+
                                 <tr class="listViewEntries1">
                                     <!-- Document number -->
                                     <td style="width: 140px;">
                                         {$TX.voucher_no}
                                     </td>
 
+
                                     <!-- INV button (only for Sales/Purchase Invoice) -->
-                                    {if in_array($TX.doctype, ['Purchase Invoice','Sales Invoice'])}
+
+                                    {if in_array($TX.voucher_type, ['SAL','PUR', 'SWD', 'PWD'])}
                                         <td>
-                                            <a href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}"
+                                            <a href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">
                                                 <button type="button" class="btn btn-default module-buttons">
                                                     <span class="fa fa-download"></span>&nbsp;INV
                                                 </button>
                                             </a>
                                         </td>
+                                    {else}
+                                        <td></td>
+                                    {/if}
 
-                                        <!-- TC button -->
+                                    <!-- TC button -->
+                                    {if in_array($TX.voucher_type, ['SAL','PUR', 'SWD', 'PWD', 'MPD', 'MRD', 'FCT', 'CN'])}
                                         <td>
-                                            <a href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}"
+                                            <a href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">
                                                 <button type="button" class="btn btn-default module-buttons">
                                                     <span class="fa fa-download"></span>&nbsp;TC
                                                 </button>
                                             </a>
                                         </td>
-
-                                        <td></td>
                                     {else}
                                         <td></td>
-                                        <td></td>
+                                    {/if}
+
+                                    {*  New MPD button *}
+                                    {if in_array($TX.voucher_type, ['SAL','PUR', 'SWD', 'MPD'])}
+                                        <td>
+                                            <a href="index.php?module=Contacts&view=MPDPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
+                                                target="_blank">
+                                                <button type="button" class="btn btn-default module-buttons">
+                                                    <span class="fa fa-download"></span>&nbsp;MPD
+                                                </button>
+                                            </a>
+                                        </td>
+                                    {else}
                                         <td></td>
                                     {/if}
-                                    {*  New MPD button *}
-                                    <td>
-                                        <a href="index.php?module=Contacts&view=MPDPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}"
-                                            target="_blank">
-                                            <button type="button" class="btn btn-default module-buttons">
-                                                <span class="fa fa-download"></span>&nbsp;MPD
-                                            </button>
-                                        </a>
-                                    </td>
 
                                     <!-- Date -->
                                     <td nowrap>
@@ -140,6 +153,7 @@
 
                                     <!-- Type -->
                                     <td nowrap>
+                                        {$TX.table_name} -
                                         {$TX.voucher_type}
                                     </td>
 

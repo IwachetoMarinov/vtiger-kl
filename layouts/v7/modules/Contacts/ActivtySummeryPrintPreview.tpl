@@ -26,7 +26,7 @@
 
         .printAreaContainer {
             height: 297mm;
-            width: 210mm;
+            width: 230mm;
             border: 1px solid #fff;
             margin: auto;
             margin-top: 10px;
@@ -257,7 +257,7 @@
                             <table class="activity-tbl">
                                 <tr>
                                     <th>DOCUMENT NO.</th>
-                                    <th style="width: 22mm;text-align: center">DATE</th>
+                                    <th style="width: 22mm;text-align: center;min-width: 28mm;">DATE</th>
                                     <th>DESCRIPTION</th>
                                     <th style="width: 22mm;">DEPOSIT/(WITHDRAWAL)</th>
                                     <th style="text-align: center">BALANCE</th>
@@ -268,6 +268,9 @@
 
                                     {assign var="start" value=($loopStart+1)}
                                     {assign var="TRANSACTION" value=$TRANSACTIONS[$loopStart]}
+
+                                    {* Asign description *}
+                                    {assign var="description" value=$TRANSACTION['description']|default:''}
 
 
                                     {* Normalize values to avoid null warnings *}
@@ -322,7 +325,7 @@
                                                 {$transDate|date_format:"%d-%b-%y"}
                                             {/if}
                                         </td>
-                                        <td>{vtranslate($docNo|substr:0:3, 'Contacts')}</td>
+                                        <td>{$description}</td>
                                         <td style="text-align:right">
                                             {if $usdVal > 0}
                                                 {number_format($usdVal, 2, '.', ',')}

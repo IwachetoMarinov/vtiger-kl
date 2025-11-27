@@ -26,6 +26,7 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
     {
         include_once 'modules/Contacts/models/MetalsAPI.php';
         $docNo = $request->get('docNo');
+        $tableName = $request->get('tableName');
         $docType = substr($docNo, 0, 3);
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
@@ -41,12 +42,12 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         }
 
         $activity = new dbo_db\ActivitySummary();
-        $activity_data = $activity->getTCPrintPreviewData($docNo);
+        $activity_data = $activity->getTCPrintPreviewData($docNo, $tableName);
 
-        // echo '<pre>';
-        // // var_dump('ACTIVITY DATA: ', GPMCompany_Record_Model::getInstanceByCode($comId));
-        // var_dump($activity_data);
-        // echo '</pre>';
+        echo '<pre>';
+        // var_dump('ACTIVITY DATA: ', GPMCompany_Record_Model::getInstanceByCode($comId));
+        var_dump($activity_data);
+        echo '</pre>';
 
         // ------------------------------------------------------
         // GET DATA FROM new ERP HOLDINGSDB CLASS

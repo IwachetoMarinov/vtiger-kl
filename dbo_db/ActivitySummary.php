@@ -26,7 +26,10 @@ class ActivitySummary
     {
         if (!$customer_id) return [];
 
-        if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+        if (!$this->connection) {
+            die(print_r(sqlsrv_errors(), true));
+            return [];
+        }
 
         $params = [];
         $where  = '';
@@ -36,59 +39,91 @@ class ActivitySummary
             $params[] = $customer_id;
         }
 
-        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_ActivitySumm] $where";
+        // $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_ActivitySumm] $where";
+        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_TxHx] $where";
 
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
         // echo '<pre>';
+        // echo 'getActivitySummary items: ';
         // var_dump($summary);
         // echo '</pre>';
 
         $results  = [];
         foreach ($summary as $item) {
             $results[] = [
-                'voucher_no' => $item['TxNo'],
-                'voucher_type' => $item['TxType'],
+                'voucher_no' => $item['Tx_No'] ?? '',
+                'voucher_type' => $item['Tx_Type'] ?? '',
+                'description' => $item['Description'] ?? '',
+                'table_name' => $item['TableName'] ?? '',
                 'usd_val' => $item['Matched_Amt'] ? floatval($item['Matched_Amt']) : 0.00,
-                'doctype' => $item['DocType'] ?? 'Sales Invoice',
+                'doctype' => $item['Description'] ?? 'Sales Invoice',
                 'document_date' => $item['Tx_Date'] instanceof \DateTime ? $item['Tx_Date']->format('Y-m-d') : $item['Tx_Date'],
                 'posting_date' => $item['Appr_Date'] instanceof \DateTime ? $item['Appr_Date']->format('Y-m-d') : $item['Appr_Date'],
-                'amount_in_account_currency' => $item['TxAmt'] ?? 0.00
+                'мatched_аmt' => isset($item['Matched_Amt']) ? floatval($item['Matched_Amt']) : 0.00,
+                'amount_in_account_currency' =>
+                isset($item['TxAmt']) ? (float) $item['TxAmt'] : (isset($item['Tx_Amt']) ? (float) $item['Tx_Amt'] : 0.00),
+
             ];
         }
 
         return $results;
     }
 
-    public function getTCPrintPreviewData($doc_no = null)
+    public function getTCPrintPreviewData($doc_no = null, $table_name = null)
     {
-        if (!$doc_no) return [];
+        if (!$doc_no || !$table_name || !$this->connection) {
+            die(print_r(sqlsrv_errors(), true));
+            return [];
+        }
+
+        // HARDCODED docNo
+        // $doc_no = 'DO/2025/000012';
+
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $table_name)) return [];
 
         try {
             if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+
+            // $transaction  = $this->getSingleTransaction($doc_no);
 
             $params = [];
             $where  = '';
 
             if ($doc_no) {
-                $where = "WHERE [TxNo] = ?";
+                // $where = "WHERE [CN_No] = ?";
+                $where = "WHERE [Tx_No] = ?";
                 $params[] = $doc_no;
             }
 
-            $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_ActivitySumm] $where";
+            // $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_DocDo] $where";
+            $sql = "
+                SELECT *
+                FROM [HFS_SQLEXPRESS].[GPM].[dbo].[$table_name]
+                $where
+            ";
+
+            var_dump($sql, $params);
 
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
+
+            echo '<pre>';
+            echo 'getTCPrintPreviewData items: ';
+            var_dump($summary);
+            echo '</pre>';
+
             $results  = [];
 
             foreach ($summary as $item) {
                 $results = [
-                    'doc_no' => $item['TxNo'],
-                    'voucher_type' => $item['TxType'],
+                    'doc_no' => $item['Tx_No'],
+                    'voucher_type' => $item['Tx_Type'],
                     'currency' => $item['Curr_Code'],
-                    'doctype' => substr($item['TxNo'], 0, 3),
+                    'description' => $item['Description'] ?? '',
+                    'doctype' => substr($item['Tx_No'], 0, 3),
                     'document_date' => $item['Tx_Date'] instanceof \DateTime ? $item['Tx_Date']->format('Y-m-d') : $item['Tx_Date'],
                     'posting_date' => $item['Appr_Date'] instanceof \DateTime ? $item['Appr_Date']->format('Y-m-d') : $item['Appr_Date'],
-                    'grand_total' => $item['TxAmt'] ?? 0.00,
+                    'grand_total' => $item['Tx_Amt'] ?? 0.00,
                     'totalusd_val' => $item['Matched_Amt'] ?? 0.00,
                 ];
             }
@@ -99,5 +134,159 @@ class ActivitySummary
             var_dump('Error: ' . $e->getMessage());
             return [];
         }
+    }
+
+    public function getDocumentPrintPreviewData($doc_no = null, $table_name = null)
+    {
+        if (!$doc_no || !$table_name || !$this->connection) {
+            die(print_r(sqlsrv_errors(), true));
+            return [];
+        }
+
+        // Table DW_DocSaI
+        // $doc_no = 'SAL/2025/000019';
+
+        // Table DW_DocSaI
+        // $doc_no = 'PUR/2025/000008';
+
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $table_name)) return [];
+
+        try {
+            if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+
+            $transaction = $this->getSingleTransaction($doc_no);
+
+            $params = [];
+            $where  = '';
+
+            if ($doc_no) {
+                $where = "WHERE [Tx_No] = ?";
+                $params[] = $doc_no;
+            }
+
+            // Get items for this transaction
+            $sql = "
+                SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[$table_name]
+                $where";
+
+            // var_dump($sql, $params, $table_name);
+
+            $summary = GetDBRows::getRows($this->connection, $sql, $params);
+
+            // echo '<pre>';
+            // echo 'getDocumentPrintPreviewData: ';
+            // var_dump($summary);
+            // echo '</pre>';
+
+            $items = [];
+
+            foreach ($summary as $item) {
+                $items[] = (object) [
+                    'quantity'          => isset($item['Qty']) ? (int)$item['Qty'] : 1,
+                    'transactionType'   => $item['Tax_Type'] ?? '',
+                    'currency'          => $item['Curr_Code'] ?? '',
+                    'metal'             => $item['MT_Code'] ?? '',
+                    'warehouse'         => $item['WH_Name'] ?? '',
+                    'description'       => isset($item['Description']) ? $item['Description'] : (isset($item['Item_Desc']) ? $item['Item_Desc'] : ''),
+
+                    'taxAmount'         => isset($item['Tx_Amt']) ? (float)$item['Tx_Amt'] : 0.00,
+
+                    'postingDate'       =>
+                    isset($item['Appr_Date']) && $item['Appr_Date'] instanceof \DateTime
+                        ? $item['Appr_Date']->format('Y-m-d')
+                        : ($item['Appr_Date'] ?? null),
+
+                    'documentDate'      =>
+                    isset($item['Tx_Date']) && $item['Tx_Date'] instanceof \DateTime
+                        ? $item['Tx_Date']->format('Y-m-d')
+                        : ($item['Tx_Date'] ?? null),
+
+                    'exchangeRate'      => isset($item['Exc_Rate']) ? (float)$item['Exc_Rate'] : 0.00,
+                    'itemCode'          => $item['Item_Code'] ?? '',
+                    'itemDescription'   => $item['Item_Desc'] ?? '',
+                    'fineOz'            => isset($item['FineOz']) ? (float)$item['FineOz'] : 0.00,
+                    'totalFineOz'       => isset($item['Tot_FineOz']) ? (float)$item['Tot_FineOz'] : 0.00,
+                    'grossOz'           => isset($item['GrossOz']) ? (float)$item['GrossOz'] : 0.00,
+                    'purity'            => $item['Purity'] ?? '',
+                    'price'         => isset($item['Item_Price']) ? (float)$item['Item_Price'] : 0.00,
+                    'premiumFinal'      => isset($item['Premium_Final']) ? (float)$item['Premium_Final'] : 0.00,
+                    'totalItemAmount'   => isset($item['Total_Item_Amt']) ? (float)$item['Total_Item_Amt'] : 0.00,
+                    'totalItemDcAmount' => isset($item['Total_Item_DC_Amt']) ? (float)$item['Total_Item_DC_Amt'] : 0.00,
+
+                    'serialNumbers'     => $item['Ser_No'] ?? '',
+                    'serials'           => isset($item['Ser_No']) ? explode(',', $item['Ser_No']) : [],
+
+                    'voucherType'       => $transaction['voucherType'] ?? '',
+                    'docNo'             => $item['Tx_No'] ?? '',
+
+                    'weight' => max((float)($item['Weight'] ?? 0), 1), // ??? check
+                    'barNumber'         => $item['Bar_No'] ?? '', // ??? check
+                    'pureOz'            => isset($item['GrossOz']) ? (float)$item['GrossOz'] : 0.00, // ??? check
+                    // 'pureOz'            => isset($item['Pure_Oz']) ? (float)$item['Pure_Oz'] : 0.00, // ??? check
+                    'otherCharge'       => isset($item['Other_Charge']) ? (float)$item['Other_Charge'] : 0.00, // ??? check
+                    'narration'         => $item['Narration'] ?? '', // ??? check
+                    'longDesc'          => $item['Long_Desc'] ?? '', // ??? check
+                ];
+            }
+
+            $transaction['barItems'] = $items;
+            return $transaction;
+        } catch (\Exception $e) {
+            // Handle exception or log error
+            var_dump('Error: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    protected function getSingleTransaction($doc_no)
+    {
+        if (!$doc_no || !$this->connection) {
+            die(print_r(sqlsrv_errors(), true));
+            return [];
+        }
+
+        // HARDCODED docNo
+        // $doc_no = 'PUR/2025/000012';
+
+        $params = [];
+        $where  = '';
+
+        if ($doc_no) {
+            $where = "WHERE [Tx_No] = ?";
+            $params[] = $doc_no;
+        }
+
+        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_TxHx] $where";
+        $summary = GetDBRows::getRows($this->connection, $sql, $params);
+
+        if (count($summary) === 0) {
+            return [];
+        }
+
+        $row = $summary[0];
+
+        // echo '<pre>';
+        // echo 'getSingleTransaction row: ';
+        // print_r($row);
+        // echo '</pre>';
+
+        return [
+            'docNo'        => $row['Tx_No'] ?? '',
+            'GST'          => true,
+            'voucherType'  => $row['Tx_Type'] ?? '',
+            'currency'     => $row['Curr_Code'] ?? '',
+            'description'  => $row['Description'] ?? '',
+            'doctype'      => $row['Tx_Type'] ?? '',
+            'documentDate' =>
+            isset($row['Tx_Date']) && $row['Tx_Date'] instanceof \DateTime
+                ? $row['Tx_Date']->format('Y-m-d')
+                : ($row['Tx_Date'] ?? null),
+            'postingDate' =>
+            isset($row['Appr_Date']) && $row['Appr_Date'] instanceof \DateTime
+                ? $row['Appr_Date']->format('Y-m-d')
+                : ($row['Appr_Date'] ?? null),
+            'grandTotal'   => isset($row['Tx_Amt']) ? (float)$row['Tx_Amt'] : 0.00,
+            'totalusdVal'  => isset($row['Matched_Amt']) ? (float)$row['Matched_Amt'] : 0.00,
+        ];
     }
 }
