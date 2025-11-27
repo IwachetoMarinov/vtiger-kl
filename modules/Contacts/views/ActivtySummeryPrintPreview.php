@@ -13,9 +13,7 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
         $moduleName = $request->getModule();
 
         // Getting model to reuse it in parent
-        if (!$this->record) {
-            $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
-        }
+        if (!$this->record) $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
     }
 
     public function process(Vtiger_Request $request)
@@ -28,6 +26,11 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
         $activity = new dbo_db\ActivitySummary();
         // Get all transactions for the client
         $transactions = $activity->getActivitySummary($clientID);
+
+        // echo '<pre>';
+        // echo 'Transactions Data: ';
+        // var_dump($transactions);
+        // echo '</pre>';
 
         $recordModel = $this->record->getRecord();
         $viewer = $this->getViewer($request);

@@ -24,7 +24,6 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
     {
 
         $docNo = $request->get('docNo');
-        $docType = substr($docNo, 0, 3);
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
         $comId = $recordModel->get('related_entity');
@@ -32,40 +31,36 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
 
         // $accountId = $recordModel->get('account_id');
         $activity = new dbo_db\ActivitySummary();
-        // $activity_data = $activity->getTCPrintPreviewData($docNo, $tableName);
-        $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);
-
-        echo '<pre>';
-        var_dump($activity_data);
-        echo '</pre>';
-
-        // OROSOFT DOCUMENT (CUSTOM OBJECT)
-        $oroDoc = [
-            'documentDate' => '2025-01-20',
-            'deliveryDate' => '2025-01-21',
-            'barItems' => [
-                [
-                    'quantity' => 2,
-                    'longDesc' => 'Gold Bar 100g',
-                    'serials' => ['G100-44521', 'G100-44522'],
-                    'pureOz' => 3.215,
-                    'price' => 2100,
-                    'location' => 'DUBAI'
-                ],
-                [
-                    'quantity' => 1,
-                    'longDesc' => 'Gold Bar 50g',
-                    'serials' => ['G50-78451'],
-                    'pureOz' => 1.607,
-                    'price' => 1050,
-                    'location' => 'DUBAI'
-                ]
-            ]
-        ];
+        $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
         // echo '<pre>';
-        // print_r($activity_data);
+        // echo 'Activity Data: ';
+        // var_dump($erpData);
         // echo '</pre>';
+
+        // OROSOFT DOCUMENT (CUSTOM OBJECT)
+        // $erpData = [
+        //     'documentDate' => '2025-01-20',
+        //     'deliveryDate' => '2025-01-21',
+        //     'barItems' => [
+        //         [
+        //             'quantity' => 2,
+        //             'longDesc' => 'Gold Bar 100g',
+        //             'serials' => ['G100-44521', 'G100-44522'],
+        //             'pureOz' => 3.215,
+        //             'price' => 2100,
+        //             'location' => 'DUBAI'
+        //         ],
+        //         [
+        //             'quantity' => 1,
+        //             'longDesc' => 'Gold Bar 50g',
+        //             'serials' => ['G50-78451'],
+        //             'pureOz' => 1.607,
+        //             'price' => 1050,
+        //             'location' => 'DUBAI'
+        //         ]
+        //     ]
+        // ];
 
 
         $viewer = $this->getViewer($request);
@@ -73,7 +68,7 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('PAGES', 1);
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($comId));
-        $viewer->assign('ERP_DOCUMENT', $oroDoc);
+        $viewer->assign('ERP_DOCUMENT', $erpData);
 
         // REQUEST VALUES PASSED BY CONTROLLER
         $viewer->assign('DOCNO', $request->get('docNo'));

@@ -44,9 +44,10 @@ class ActivitySummary
 
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
-        echo '<pre>';
-        var_dump($summary);
-        echo '</pre>';
+        // echo '<pre>';
+        // echo 'getActivitySummary items: ';
+        // var_dump($summary);
+        // echo '</pre>';
 
         $results  = [];
         foreach ($summary as $item) {
@@ -59,7 +60,10 @@ class ActivitySummary
                 'doctype' => $item['Description'] ?? 'Sales Invoice',
                 'document_date' => $item['Tx_Date'] instanceof \DateTime ? $item['Tx_Date']->format('Y-m-d') : $item['Tx_Date'],
                 'posting_date' => $item['Appr_Date'] instanceof \DateTime ? $item['Appr_Date']->format('Y-m-d') : $item['Appr_Date'],
-                'amount_in_account_currency' => $item['TxAmt'] ?? 0.00
+                'мatched_аmt' => isset($item['Matched_Amt']) ? floatval($item['TxAmt']) : 0.00,
+                'amount_in_account_currency' =>
+                isset($item['TxAmt']) ? (float) $item['TxAmt'] : (isset($item['Tx_Amt']) ? (float) $item['Tx_Amt'] : 0.00),
+
             ];
         }
 
@@ -260,6 +264,11 @@ class ActivitySummary
         }
 
         $row = $summary[0];
+
+        // echo '<pre>';
+        // echo 'getSingleTransaction row: ';
+        // print_r($row);
+        // echo '</pre>';
 
         return [
             'docNo'        => $row['Tx_No'] ?? '',
