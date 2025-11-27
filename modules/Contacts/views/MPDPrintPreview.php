@@ -28,10 +28,16 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
         $comId = $recordModel->get('related_entity');
+        $tableName = $request->get('tableName');
 
         // $accountId = $recordModel->get('account_id');
         $activity = new dbo_db\ActivitySummary();
-        $activity_data = $activity->getTCPrintPreviewData($docNo);
+        // $activity_data = $activity->getTCPrintPreviewData($docNo, $tableName);
+        $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);
+
+        echo '<pre>';
+        var_dump($activity_data);
+        echo '</pre>';
 
         // OROSOFT DOCUMENT (CUSTOM OBJECT)
         $oroDoc = [

@@ -94,13 +94,11 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		for ($i = 0; $i <= 5; $i++) {
 			$years[] = date('Y', strtotime("-$i year"));
 		}
-
-
-
-		echo '<pre>';
-		echo "\n Data fetched from ActivitySummary: " . date('Y-m-d H:i:s') . PHP_EOL;
-		var_dump($activity_data);
-		echo '</pre>';
+		
+		// echo '<pre>';
+		// echo "\n Data fetched from ActivitySummary: " . date('Y-m-d H:i:s') . PHP_EOL;
+		// var_dump($activity_data);
+		// echo '</pre>';
 
 		// -------------------------------------------
 		// 🔥 HARDCODED ACTIVITY SUMMARY DATA
