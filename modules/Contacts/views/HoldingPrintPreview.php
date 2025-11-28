@@ -1,7 +1,7 @@
 <?php
 
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 include_once 'dbo_db/HoldingsDB.php';
 include_once 'modules/Contacts/models/MetalsAPI.php';
@@ -32,6 +32,11 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
 
         $holdings = new dbo_db\HoldingsDB();
         $holdings_data = $holdings->getHoldingsData($clientID);
+
+        // echo '<pre>';
+        // echo 'Holdings Data: ';
+        // var_dump($holdings_data);
+        // echo '</pre>';
 
         $metalsAPI = new MetalsAPI();
         $metals_data = $metalsAPI->getMetals();
@@ -80,6 +85,11 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
             'Holdings' => $grouped,
             'MetalPrice' => $metals
         ];
+
+        // echo '<pre>';
+        // echo 'Formatted Holdings Data: ';
+        // var_dump($metals);
+        // echo '</pre>';
 
         $recordModel = $this->record->getRecord();
         $viewer = $this->getViewer($request);
