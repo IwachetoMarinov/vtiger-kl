@@ -1,7 +1,7 @@
 <?php
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
@@ -33,34 +33,10 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
         $activity = new dbo_db\ActivitySummary();
         $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
-        echo '<pre>';
-        echo 'Activity Data: ';
-        var_dump($erpData);
-        echo '</pre>';
-
-        // OROSOFT DOCUMENT (CUSTOM OBJECT)
-        // $erpData = [
-        //     'documentDate' => '2025-01-20',
-        //     'deliveryDate' => '2025-01-21',
-        //     'barItems' => [
-        //         [
-        //             'quantity' => 2,
-        //             'longDesc' => 'Gold Bar 100g',
-        //             'serials' => ['G100-44521', 'G100-44522'],
-        //             'pureOz' => 3.215,
-        //             'price' => 2100,
-        //             'location' => 'DUBAI'
-        //         ],
-        //         [
-        //             'quantity' => 1,
-        //             'longDesc' => 'Gold Bar 50g',
-        //             'serials' => ['G50-78451'],
-        //             'pureOz' => 1.607,
-        //             'price' => 1050,
-        //             'location' => 'DUBAI'
-        //         ]
-        //     ]
-        // ];
+        // echo '<pre>';
+        // echo 'Activity Data: ';
+        // var_dump($erpData);
+        // echo '</pre>';
 
 
         $viewer = $this->getViewer($request);

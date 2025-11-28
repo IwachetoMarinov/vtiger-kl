@@ -151,7 +151,7 @@ class ActivitySummary
 
             // HARDCODED for testing PUR
             // $doc_no = 'PUR/2025/000008';
-            
+
             // HARDCODED for testing SAL
             // $doc_no = 'SAL/2025/000019';
 
