@@ -32,9 +32,8 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$moduleName = $request->getModule();
 
 		// Getting model to reuse it in parent 
-		if (!$this->record) {
-			$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
-		}
+		if (!$this->record) $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
+
 		$recordModel = $this->record->getRecord();
 		$viewer = $this->getViewer($request);
 		$viewer->assign('IMAGE_DETAILS', $recordModel->getImageDetails());
@@ -94,7 +93,7 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		for ($i = 0; $i <= 5; $i++) {
 			$years[] = date('Y', strtotime("-$i year"));
 		}
-		
+
 		// echo '<pre>';
 		// echo "\n Data fetched from ActivitySummary: " . date('Y-m-d H:i:s') . PHP_EOL;
 		// var_dump($activity_data);
@@ -104,7 +103,6 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		// 🔥 HARDCODED ACTIVITY SUMMARY DATA
 		// -------------------------------------------
 		$activityData = [
-			'CURRENCY_LIST' => $currency_list,
 			'CURRENCY_SELECTED' => 'USD',
 
 			'TRANSACTIONS' => $activity_data,
@@ -136,7 +134,7 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$viewer = $this->getViewer($request);
 
 		// Assign safely to TPL
-		$viewer->assign('CLIENT_CURRENCY', $activityData['CURRENCY_LIST']);
+		$viewer->assign('CLIENT_CURRENCY', $currency_list);
 		$viewer->assign('ACTIVITY_SUMMERY_CURRENCY', $activityData['CURRENCY_SELECTED']);
 		$viewer->assign('OROSOFT_TRANSACTION', $activityData['TRANSACTIONS']);
 		$viewer->assign('CERTIFICATE_HOLDING', $certificate_id);

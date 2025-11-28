@@ -85,7 +85,7 @@ class ActivitySummary
         try {
             if (!$this->connection) die(print_r(sqlsrv_errors(), true));
 
-            // $transaction  = $this->getSingleTransaction($doc_no);
+            $transaction  = $this->getSingleTransaction($doc_no);
 
             $params = [];
             $where  = '';
@@ -108,27 +108,20 @@ class ActivitySummary
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
             echo '<pre>';
-            echo 'getTCPrintPreviewData items: ';
+            echo 'DATA from Vick DB: ';
             var_dump($summary);
             echo '</pre>';
 
-            $results  = [];
+            $items = $this->mapTransactionItems($summary, $transaction);
 
-            foreach ($summary as $item) {
-                $results = [
-                    'doc_no' => $item['Tx_No'],
-                    'voucher_type' => $item['Tx_Type'],
-                    'currency' => $item['Curr_Code'],
-                    'description' => $item['Description'] ?? '',
-                    'doctype' => substr($item['Tx_No'], 0, 3),
-                    'document_date' => $item['Tx_Date'] instanceof \DateTime ? $item['Tx_Date']->format('Y-m-d') : $item['Tx_Date'],
-                    'posting_date' => $item['Appr_Date'] instanceof \DateTime ? $item['Appr_Date']->format('Y-m-d') : $item['Appr_Date'],
-                    'grand_total' => $item['Tx_Amt'] ?? 0.00,
-                    'totalusd_val' => $item['Matched_Amt'] ?? 0.00,
-                ];
-            }
+            echo '<pre>';
+            echo 'MAPPED items: ';
+            var_dump($items);
+            echo '</pre>';
 
-            return $results;
+            $transaction['barItems'] = $items;
+
+            return $transaction;
         } catch (\Exception $e) {
             // Handle exception or log error
             var_dump('Error: ' . $e->getMessage());
@@ -156,6 +149,9 @@ class ActivitySummary
 
             $transaction = $this->getSingleTransaction($doc_no);
 
+            // HARDCODED for testing
+            $doc_no = 'PUR/2025/000008';
+
             $params = [];
             $where  = '';
 
@@ -166,68 +162,20 @@ class ActivitySummary
 
             // Get items for this transaction
             $sql = "
-                SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[$table_name]
-                $where";
+                SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[$table_name] $where";
 
             // var_dump($sql, $params, $table_name);
 
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
-            // echo '<pre>';
+            echo '<pre>';
             // echo 'getDocumentPrintPreviewData: ';
+            echo 'transaction: ';
+            var_dump($transaction);
             // var_dump($summary);
-            // echo '</pre>';
+            echo '</pre>';
+            $items = $this->mapTransactionItems($summary, $transaction);
 
-            $items = [];
-
-            foreach ($summary as $item) {
-                $items[] = (object) [
-                    'quantity'          => isset($item['Qty']) ? (int)$item['Qty'] : 1,
-                    'transactionType'   => $item['Tax_Type'] ?? '',
-                    'currency'          => $item['Curr_Code'] ?? '',
-                    'metal'             => $item['MT_Code'] ?? '',
-                    'warehouse'         => $item['WH_Name'] ?? '',
-                    'description'       => isset($item['Description']) ? $item['Description'] : (isset($item['Item_Desc']) ? $item['Item_Desc'] : ''),
-
-                    'taxAmount'         => isset($item['Tx_Amt']) ? (float)$item['Tx_Amt'] : 0.00,
-
-                    'postingDate'       =>
-                    isset($item['Appr_Date']) && $item['Appr_Date'] instanceof \DateTime
-                        ? $item['Appr_Date']->format('Y-m-d')
-                        : ($item['Appr_Date'] ?? null),
-
-                    'documentDate'      =>
-                    isset($item['Tx_Date']) && $item['Tx_Date'] instanceof \DateTime
-                        ? $item['Tx_Date']->format('Y-m-d')
-                        : ($item['Tx_Date'] ?? null),
-
-                    'exchangeRate'      => isset($item['Exc_Rate']) ? (float)$item['Exc_Rate'] : 0.00,
-                    'itemCode'          => $item['Item_Code'] ?? '',
-                    'itemDescription'   => $item['Item_Desc'] ?? '',
-                    'fineOz'            => isset($item['FineOz']) ? (float)$item['FineOz'] : 0.00,
-                    'totalFineOz'       => isset($item['Tot_FineOz']) ? (float)$item['Tot_FineOz'] : 0.00,
-                    'grossOz'           => isset($item['GrossOz']) ? (float)$item['GrossOz'] : 0.00,
-                    'purity'            => $item['Purity'] ?? '',
-                    'price'         => isset($item['Item_Price']) ? (float)$item['Item_Price'] : 0.00,
-                    'premiumFinal'      => isset($item['Premium_Final']) ? (float)$item['Premium_Final'] : 0.00,
-                    'totalItemAmount'   => isset($item['Total_Item_Amt']) ? (float)$item['Total_Item_Amt'] : 0.00,
-                    'totalItemDcAmount' => isset($item['Total_Item_DC_Amt']) ? (float)$item['Total_Item_DC_Amt'] : 0.00,
-
-                    'serialNumbers'     => $item['Ser_No'] ?? '',
-                    'serials'           => isset($item['Ser_No']) ? explode(',', $item['Ser_No']) : [],
-
-                    'voucherType'       => $transaction['voucherType'] ?? '',
-                    'docNo'             => $item['Tx_No'] ?? '',
-
-                    'weight' => max((float)($item['Weight'] ?? 0), 1), // ??? check
-                    'barNumber'         => $item['Bar_No'] ?? '', // ??? check
-                    'pureOz'            => isset($item['GrossOz']) ? (float)$item['GrossOz'] : 0.00, // ??? check
-                    // 'pureOz'            => isset($item['Pure_Oz']) ? (float)$item['Pure_Oz'] : 0.00, // ??? check
-                    'otherCharge'       => isset($item['Other_Charge']) ? (float)$item['Other_Charge'] : 0.00, // ??? check
-                    'narration'         => $item['Narration'] ?? '', // ??? check
-                    'longDesc'          => $item['Long_Desc'] ?? '', // ??? check
-                ];
-            }
 
             $transaction['barItems'] = $items;
             return $transaction;
@@ -288,5 +236,68 @@ class ActivitySummary
             'grandTotal'   => isset($row['Tx_Amt']) ? (float)$row['Tx_Amt'] : 0.00,
             'totalusdVal'  => isset($row['Matched_Amt']) ? (float)$row['Matched_Amt'] : 0.00,
         ];
+    }
+
+
+    protected function mapTransactionItems($summary, $transaction)
+    {
+        $items = [];
+
+        foreach ($summary as $item) {
+            // echo '<pre>';
+            // echo 'Mapping item: ';
+            // print_r($item);
+            // echo '</pre>';
+            $items[] = (object) [
+                'quantity'          => isset($item['Qty']) ? (int)$item['Qty'] : 1,
+                'transactionType'   => $item['Tax_Type'] ?? '',
+                'currency'          => $item['Curr_Code'] ?? '',
+                'metal'             => $item['MT_Code'] ?? '',
+                'warehouse'         => $item['WH_Name'] ?? '',
+                'description'       => isset($item['Description']) ? $item['Description'] : (isset($item['Item_Desc']) ? $item['Item_Desc'] : ''),
+
+                'taxAmount'         => isset($item['Tx_Amt']) ? (float)$item['Tx_Amt'] : 0.00,
+
+                'postingDate'       =>
+                isset($item['Appr_Date']) && $item['Appr_Date'] instanceof \DateTime
+                    ? $item['Appr_Date']->format('Y-m-d')
+                    : ($item['Appr_Date'] ?? null),
+
+                'documentDate'      =>
+                isset($item['Tx_Date']) && $item['Tx_Date'] instanceof \DateTime
+                    ? $item['Tx_Date']->format('Y-m-d')
+                    : ($item['Tx_Date'] ?? null),
+
+                'exchangeRate'      => isset($item['Exc_Rate']) ? (float)$item['Exc_Rate'] : 0.00,
+                'itemCode'          => $item['Item_Code'] ?? '',
+                'itemDescription'   => $item['Item_Desc'] ?? '',
+                'fineOz'            => isset($item['FineOz']) ? (float)$item['FineOz'] : 0.00,
+                'totalFineOz'       => isset($item['Tot_FineOz']) ? (float)$item['Tot_FineOz'] : 0.00,
+                'grossOz'           => isset($item['GrossOz']) ? (float)$item['GrossOz'] : 0.00,
+                'purity'            => $item['Purity'] ?? '',
+                'price'         => isset($item['Item_Price']) ? (float)$item['Item_Price'] : 0.00,
+                'unitPrice'         => isset($item['Unit_Price']) ? (float)$item['Unit_Price'] : 0.00,
+                'premium'          => isset($item['Premium_Perc']) ? (float)$item['Premium_Perc'] : 0.00,
+                'premiumFinal'      => isset($item['Premium_Final']) ? (float)$item['Premium_Final'] : 0.00,
+                'totalItemAmount'   => isset($item['Total_Item_Amt']) ? (float)$item['Total_Item_Amt'] : 0.00,
+                'totalItemDcAmount' => isset($item['Total_Item_DC_Amt']) ? (float)$item['Total_Item_DC_Amt'] : 0.00,
+
+                'serialNumbers'     => $item['Ser_No'] ?? '',
+                'serials'           => isset($item['Ser_No']) ? explode(',', $item['Ser_No']) : [],
+
+                'voucherType'       => $transaction['voucherType'] ?? '',
+                'docNo'             => $item['Tx_No'] ?? '',
+
+                'weight' => max((float)($item['Weight'] ?? 0), 1), // ??? check
+                'barNumber'         => $item['Bar_No'] ?? '', // ??? check
+                'pureOz'            => isset($item['GrossOz']) ? (float)$item['GrossOz'] : 0.00, // ??? check
+                // 'pureOz'            => isset($item['Pure_Oz']) ? (float)$item['Pure_Oz'] : 0.00, // ??? check
+                'otherCharge'       => isset($item['Other_Charge']) ? (float)$item['Other_Charge'] : 0.00, // ??? check
+                'narration'         => $item['Narration'] ?? '', // ??? check
+                'longDesc'          => $item['Long_Desc'] ?? '', // ??? check
+            ];
+        }
+
+        return $items;
     }
 }

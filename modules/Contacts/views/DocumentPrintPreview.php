@@ -34,10 +34,10 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $activity = new dbo_db\ActivitySummary();
         $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
-        // echo '<pre>';
-        // echo 'Activity Data: ';
-        // var_dump($activity_data);
-        // echo '</pre>';
+        echo '<pre>';
+        echo 'Activity Data: ';
+        var_dump($activity_data);
+        echo '</pre>';
 
         $docType = $activity_data['voucherType'] ?? "";
 

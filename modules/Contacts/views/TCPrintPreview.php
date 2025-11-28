@@ -45,7 +45,7 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         $activity_data = $activity->getTCPrintPreviewData($docNo, $tableName);
 
         echo '<pre>';
-        // var_dump('ACTIVITY DATA: ', GPMCompany_Record_Model::getInstanceByCode($comId));
+        var_dump('ACTIVITY DATA: ');
         var_dump($activity_data);
         echo '</pre>';
 
@@ -97,11 +97,13 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
             ];
         }
 
+        $erpDoc = (object) $activity_data;
+
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('ERP_DOCUMENT', $erpDoc);
-        $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('OROSOFT_DOCTYPE', $docType);
+        $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($comId));
         $viewer->assign('PAGES', $this->makeDataPage($erpDoc->barItems, $docType));
         if ($request->get('PDFDownload')) {
