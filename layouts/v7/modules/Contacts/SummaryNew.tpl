@@ -118,7 +118,7 @@
                                     {/if}
 
                                     <!-- TC button -->
-                                    {if in_array($TX.voucher_type, ['SAL','PUR', 'SWD', 'PWD', 'MPD', 'MRD', 'FCT', 'CN'])}
+                                    {if in_array($TX.voucher_type, ['SAL','PUR', 'SWD', 'PWD', 'MPD', 'MRD', 'FCT'])}
                                         <td>
                                             <a href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">
@@ -132,7 +132,7 @@
                                     {/if}
 
                                     {*  New MPD button *}
-                                    {if in_array($TX.voucher_type, ['SAL', 'MPD'])}
+                                    {if in_array($TX.voucher_type, ['SAL', 'MRD', 'MPD'])}
                                         <td>
                                             <a href="index.php?module=Contacts&view=MPDPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">

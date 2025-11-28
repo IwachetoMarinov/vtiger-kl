@@ -257,7 +257,7 @@
                     </tr>
                     <tr>
                         <td style="text-align: right;font-size: 9pt">
-                            All amounts in US Dollars
+                            All amounts in {$ERP_DOCUMENT->currency} Dollars
                         </td>
                     </tr>
                     <tr>
@@ -267,13 +267,17 @@
                                 <tr>
                                     <th colspan="2" style="width:25%;text-align:center">TRANSACTION ID</th>
                                     <th style="width:25%;text-align:center">TRANSACTION DATE</th>
-                                    <th style="width:25%;text-align:center">SPOT PRICE (US$ / OZ)</th>
+                                    <th style="width:25%;text-align:center">SPOT PRICE ({$ERP_DOCUMENT->currency} / OZ)</th>
                                     <th style="width:25%;text-align:center">ORDER</th>
                                 </tr>
                                 <tr>
                                     <td colspan="2" style='text-align:center;'>{$smarty.request.docNo}</td>
                                     <td style='text-align:center;'>{$ERP_DOCUMENT->documentDate}</td>
-                                    <td style='text-align:center;'>{number_format($metalPrice,3)}</td>
+                                    {if $metalPrice gt 0}
+                                        <td style='text-align:center;'> {number_format($metalPrice,3)} </td>
+                                    {else}
+                                        <td style='text-align:center;'> N/A </td>
+                                    {/if}
                                     <td style='text-align:center;'>{$ERP_DOCUMENT->description}</td>
                                 </tr>
                             </table>
@@ -283,9 +287,10 @@
                                     <th style="width:40%;">DESCRIPTION</th>
                                     <th style="width:12.5%;text-align:center">FINE OZ.</th>
                                     <th style="width:12.5%;text-align:center">
-                                        {if $ERP_DOCUMENT->barItems[0]->otherCharge < 0}DISCOUNT{else}PREMIUM{/if}(%)
+                                       PREMIUM(%)
+                                        {* {if $ERP_DOCUMENT->barItems[0]->otherCharge < 0}DISCOUNT{else}PREMIUM{/if}(%) *}
                                     </th>
-                                    <th style="width:25%;text-align:center">TOTAL US$</th>
+                                    <th style="width:25%;text-align:center">TOTAL {$ERP_DOCUMENT->currency}</th>
                                 </tr>
 
                                 {assign var="balanceAmount" value=0}
@@ -304,10 +309,10 @@
                                     {assign var="serials" value=$serials|cat:implode(',', $barItem->serials)|cat:','}
 
                                     {* Total price calculation *}
-                                    {assign var="total" value=((($barItem->price)*($barItem->pureOz))+$barItem->otherCharge)}
+                                    {assign var="total" value=((($barItem->price)*($barItem->totalFineOz))+$barItem->otherCharge)}
 
                                     {* Skip empty lines (STORAGE) *}
-                                    {if empty($barItem->quantity) and empty($barItem->longDesc) and $OROSOFT_DOCTYPE eq 'SWD'}
+                                    {if empty($barItem->quantity) and empty($barItem->itemDescription) and $OROSOFT_DOCTYPE eq 'SWD'}
                                         {assign var="storageCharge" value=$storageCharge+round($total,2)}
                                         {continue}
                                     {else}
@@ -317,17 +322,28 @@
                                     {* ROW DISPLAY *}
                                     <tr>
                                         <td style="vertical-align: top">{number_format($barItem->quantity,0)}</td>
-                                        <td style="border-bottom:none;vertical-align: top">{$barItem->longDesc}</td>
-                                        <td style="text-align:right;vertical-align: top">{number_format($barItem->pureOz,3)}
+
+                                        <td style="border-bottom:none;vertical-align: top">{$barItem->itemDescription}</td>
+
+                                        <td style="text-align:right;vertical-align: top">
+                                            {number_format($barItem->totalFineOz,3)}
                                         </td>
 
-                                        {if $barItem->pureOz > 0 && $metalPrice > 0}
+                                        {if $barItem->premium > 0 && $metalPrice > 0}
                                             <td style="text-align:right;vertical-align: top">
-                                                {abs(number_format(($barItem->otherCharge/($barItem->pureOz*$metalPrice))*100,2))} %
+                                                {number_format($barItem->premium,3)} %
                                             </td>
                                         {else}
                                             <td style="text-align:right;vertical-align: top">0 %</td>
                                         {/if}
+
+                                        {* {if $barItem->premium > 0 && $metalPrice > 0}
+                                            <td style="text-align:right;vertical-align: top">
+                                                {abs(number_format(($barItem->otherCharge/($barItem->totalFineOz*$metalPrice))*100,2))} %
+                                            </td>
+                                        {else}
+                                            <td style="text-align:right;vertical-align: top">0 %</td>
+                                        {/if} *}
 
                                         <td style="text-align:right;vertical-align: top">{number_format($total,2)}</td>
                                     </tr>
@@ -337,8 +353,8 @@
                                 {if $PAGES eq $page}
                                     <tr>
                                         <th style="width:75%;" colspan="4">TOTAL TRADE AMOUNT:</th>
-                                        <td style="text-align:right"><strong>US$
-                                                {number_format(($ERP_DOCUMENT->totalusdVal-$storageCharge),2)} </strong>
+                                        <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
+                                                {number_format(($ERP_DOCUMENT->grandTotal),2)} </strong>
                                         </td>
                                     </tr>
                                 {/if}

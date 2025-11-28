@@ -9,15 +9,15 @@ include_once 'dbo_db/HoldingsDB.php';
 class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
 {
 
+    protected $record = null;
+
     public function preProcess(Vtiger_Request $request, $display = false)
     {
         $recordId = $request->get('record');
         $moduleName = $request->getModule();
 
         // Getting model to reuse it in parent
-        if (!$this->record) {
-            $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
-        }
+        if (!$this->record) $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
     }
 
     public function process(Vtiger_Request $request)
@@ -37,30 +37,6 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
         // echo 'Activity Data: ';
         // var_dump($erpData);
         // echo '</pre>';
-
-        // OROSOFT DOCUMENT (CUSTOM OBJECT)
-        // $erpData = [
-        //     'documentDate' => '2025-01-20',
-        //     'deliveryDate' => '2025-01-21',
-        //     'barItems' => [
-        //         [
-        //             'quantity' => 2,
-        //             'longDesc' => 'Gold Bar 100g',
-        //             'serials' => ['G100-44521', 'G100-44522'],
-        //             'pureOz' => 3.215,
-        //             'price' => 2100,
-        //             'location' => 'DUBAI'
-        //         ],
-        //         [
-        //             'quantity' => 1,
-        //             'longDesc' => 'Gold Bar 50g',
-        //             'serials' => ['G50-78451'],
-        //             'pureOz' => 1.607,
-        //             'price' => 1050,
-        //             'location' => 'DUBAI'
-        //         ]
-        //     ]
-        // ];
 
 
         $viewer = $this->getViewer($request);

@@ -253,7 +253,7 @@
                 {/if}
                 <tr>
                     <td style="text-align: right;font-size: 9pt">
-                        All amounts in US Dollars
+                        All amounts in {$ERP_DOCUMENT->currency} Dollars
                     </td>
                 </tr>
                 <tr>
@@ -268,13 +268,13 @@
                                 <td colspan="2" style="text-align: center;">{$ERP_DOCUMENT['docno']}</td>
                                 <td style="text-align: center;">{$ERP_DOCUMENT['docDate']}</td>
                                 <td style="width:25%;text-align: center;">{$ERP_DOCUMENT['metal']}</td>
-                                <td style="width:25%;text-align: center;">US$ {$ERP_DOCUMENT['metalOz']} / Oz.</td>
+                                <td style="width:25%;text-align: center;">{$ERP_DOCUMENT->currency} {$ERP_DOCUMENT['metalOz']} / Oz.</td>
                             </tr>
                         </table>
                         <table class="activity-tbl">
                             <tr>
                                 <th style="width:75%;">DESCRIPTION</th>
-                                <th style="width:25%;text-align: center">TOTAL US$</th>
+                                <th style="width:25%;text-align: center">TOTAL {$ERP_DOCUMENT->currency}</th>
                             </tr>
                             <tr>
                                 <td style="height:50mm;border-bottom:none;vertical-align: top;line-height: 2">Storage
@@ -293,28 +293,28 @@
                             {if $ERP_DOCUMENT['GST']}
                                 <tr>
                                     <td style="width:75%;">SUBTOTAL:</td>
-                                    <td style="text-align:right"><strong>US$
+                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
                                             {number_format($ERP_DOCUMENT['priceDate']['subtotal'],2)}</strong></td>
                                 </tr>
                                 <tr>
                                     <td style="width:75%;">{$ERP_DOCUMENT['priceDate']['GST']['label']}</td>
-                                    <td style="text-align:right"><strong>US$
+                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
                                             {number_format($ERP_DOCUMENT['priceDate']['GST']['amount'],2)}</strong></td>
                                 </tr>
                             {/if}
                             {if !empty($COMPANY->get('company_gst_no')) && empty($ERP_DOCUMENT['GST'])}
                                 <tr>
                                     <td style="width:75%;">SUBTOTAL:</td>
-                                    <td style="text-align:right"><strong>US$ {$ERP_DOCUMENT['amount']}</strong></td>
+                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency} {$ERP_DOCUMENT['amount']}</strong></td>
                                 </tr>
                                 <tr>
                                     <td style="width:75%;">GST on Storage charge (0%)</td>
-                                    <td style="text-align:right"><strong>US$ {number_format(0,2)}</strong></td>
+                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency} {number_format(0,2)}</strong></td>
                                 </tr>
                             {/if}
                             <tr>
                                 <th style="width:75%;">TOTAL STORAGE FEE:</th>
-                                <td style="text-align:right"><strong>US$ {$ERP_DOCUMENT['amount']}</strong></td>
+                                <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency} {$ERP_DOCUMENT['amount']}</strong></td>
                             </tr>
                         </table>
 

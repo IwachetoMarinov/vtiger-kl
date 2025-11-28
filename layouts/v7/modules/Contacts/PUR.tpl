@@ -252,7 +252,7 @@
                     </tr>
                     <tr>
                         <td style="text-align: right;font-size: 9pt">
-                            All amounts in US Dollars
+                            All amounts in {$ERP_DOCUMENT->currency} Dollars
                         </td>
                     </tr>
                     <tr>
@@ -275,9 +275,9 @@
                                 <tr>
                                     <th style="width:10%;">QTY</th>
                                     <th style="width:40%;">DESCRIPTION</th>
-                                    <th style="width:13%;text-align:center">US$/UNIT</th>
+                                    <th style="width:13%;text-align:center">{$ERP_DOCUMENT->currency}/UNIT</th>
                                     <th style="width:12%;text-align:center">FINE OZ.</th>
-                                    <th style="width:30%;text-align:center">TOTAL US$</th>
+                                    <th style="width:30%;text-align:center">TOTAL {$ERP_DOCUMENT->currency}</th>
                                 </tr>
                                 {assign var="metalPrice" value=($ERP_DOCUMENT->xauPrice)+($ERP_DOCUMENT->mbtcPrice)+($ERP_DOCUMENT->xagPrice)+($ERP_DOCUMENT->xptPrice)+($ERP_DOCUMENT->xpdPrice)}
                                 {assign var="balanceAmount" value=($ERP_DOCUMENT->grandTotal)+($ERP_DOCUMENT->totalusd_val)}
@@ -305,6 +305,7 @@
                                             {$barItem->description} <br><span
                                                 style="font-size: smaller;font-style: italic;">{$barItem->serials[0]}</span>
                                         </td>
+                                        
                                         <td style="text-align:right;vertical-align: top">
                                             {$barItem->unitPrice}
                                         </td>
@@ -321,7 +322,7 @@
                                 {if $PAGES eq $page}
                                     <tr>
                                         <th style="width:75%;" colspan="4">TOTAL INVOICE AMOUNT:</th>
-                                        <td style="text-align:right"><strong>US$
+                                        <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
                                                 {CurrencyField::convertToUserFormat($ERP_DOCUMENT->grandTotal)}</strong>
                                         </td>
                                     </tr>

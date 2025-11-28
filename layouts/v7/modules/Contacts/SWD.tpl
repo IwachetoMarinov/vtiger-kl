@@ -273,9 +273,9 @@
                             <tr>
                                 <th style="width:10%;">QTY</th>
                                 <th style="width:40%;">DESCRIPTION</th>
-                                <th style="width:13%;text-align:center">US$/UNIT</th>
+                                <th style="width:13%;text-align:center">{$ERP_DOCUMENT->currency}/UNIT</th>
                                 <th style="width:12%;text-align:center">FINE OZ.</th>
-                                <th style="width:30%;text-align:center">TOTAL US$</th>
+                                <th style="width:30%;text-align:center">TOTAL {$ERP_DOCUMENT->currency}</th>
                             </tr>
                             {assign var="metalPrice" value=($ERP_DOCUMENT->xauPrice)+($ERP_DOCUMENT->mbtcPrice)+($ERP_DOCUMENT->xagPrice)+($ERP_DOCUMENT->xptPrice)+($ERP_DOCUMENT->xpdPrice)}
                             {assign var="balanceAmount" value=($balanceAmount)+($TRANSACTION->usdVal)}
@@ -330,27 +330,27 @@
                             {if $GST_ITEM}
                                 <tr>
                                     <td style="width:75%;" colspan="4">SUBTOTAL:</td>
-                                    <td style="text-align:right"><strong>US$ {number_format($SUB_TOTAL,2)}</strong></td>
+                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency} {number_format($SUB_TOTAL,2)}</strong></td>
                                 </tr>
                                 <tr>
                                     <td style="width:75%;" colspan="4">GST on Storage charge in Singapore (7%)</td>
-                                    <td style="text-align:right"><strong>US$
+                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
                                             {number_format($GST_ITEM->otherCharge,2)}</strong></td>
                                 </tr>
                             {/if}
                             {if !empty($COMPANY->get('company_gst_no')) && empty($GST_ITEM)}
                                 <tr>
                                     <td style="width:75%;" colspan="4">SUBTOTAL:</td>
-                                    <td style="text-align:right"><strong>US$ {number_format($SUB_TOTAL,2)}</strong></td>
+                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency} {number_format($SUB_TOTAL,2)}</strong></td>
                                 </tr>
                                 <tr>
                                     <td style="width:75%;" colspan="4">GST on Storage charge (0%)</td>
-                                    <td style="text-align:right"><strong>US$ {number_format(0,2)}</strong></td>
+                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency} {number_format(0,2)}</strong></td>
                                 </tr>
                             {/if}
                             <tr>
                                 <th style="width:75%;" colspan="4">TOTAL INVOICE AMOUNT:</th>
-                                <td style="text-align:right"><strong>US$ {number_format($calcTotal,2)}</strong></td>
+                                <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency} {number_format($calcTotal,2)}</strong></td>
                             </tr>
                             {if $INTENT}
                                 <tr>
