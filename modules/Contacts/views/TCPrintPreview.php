@@ -1,7 +1,7 @@
 <?php
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
@@ -17,9 +17,7 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         $moduleName = $request->getModule();
 
         // Getting model to reuse it in parent
-        if (!$this->record) {
-            $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
-        }
+        if (!$this->record)  $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
     }
 
     public function process(Vtiger_Request $request)
@@ -42,60 +40,61 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         }
 
         $activity = new dbo_db\ActivitySummary();
-        $activity_data = $activity->getTCPrintPreviewData($docNo, $tableName);
+        $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);
+        // $activity_data = $activity->getTCPrintPreviewData($docNo, $tableName);
 
-        echo '<pre>';
-        var_dump('ACTIVITY DATA: ');
-        var_dump($activity_data);
-        echo '</pre>';
+        // echo '<pre>';
+        // var_dump('ACTIVITY DATA: ');
+        // var_dump($activity_data);
+        // echo '</pre>';
 
         // ------------------------------------------------------
         // GET DATA FROM new ERP HOLDINGSDB CLASS
         // ------------------------------------------------------
-        $erpDoc = (object) [
-            'docNo' => $docNo,
-            'docType' => $docType,
-            'documentDate' => $activity_data['document_date'] ?? '',
-            'postingDate' => $activity_data['posting_date'] ?? '',
-            'voucherType' => $activity_data['voucher_type'] ?? 'Sales Invoice',
-            'companyName' => $organizationName,
-            'currency' => $activity_data['currency'] ?? 'USD',
-            'grandTotal' => $activity_data['grand_total'] ?? 0.00,
-            'totalusdVal' => $activity_data['totalusd_val'] ?? 0.00,
+        // $erpDoc = (object) [
+        //     'docNo' => $docNo,
+        //     'docType' => $docType,
+        //     'documentDate' => $activity_data['document_date'] ?? '',
+        //     'postingDate' => $activity_data['posting_date'] ?? '',
+        //     'voucherType' => $activity_data['voucher_type'] ?? 'Sales Invoice',
+        //     'companyName' => $organizationName,
+        //     'currency' => $activity_data['currency'] ?? 'USD',
+        //     'grandTotal' => $activity_data['grand_total'] ?? 0.00,
+        //     'totalusdVal' => $activity_data['totalusd_val'] ?? 0.00,
 
-            // REQUIRED BY TEMPLATE (missing in your version)
-            // HARDCODED TEST DATA
-            'balanceAmount' => 0,
-            'value' => 0,
+        //     // REQUIRED BY TEMPLATE (missing in your version)
+        //     // HARDCODED TEST DATA
+        //     'balanceAmount' => 0,
+        //     'value' => 0,
 
-            // THIS IS CRITICAL: template iterates beyond length
-            // so we add 30 items (enough for page count)
-            // HARDCODED TEST DATA
-            'barItems' => []
-        ];
+        //     // THIS IS CRITICAL: template iterates beyond length
+        //     // so we add 30 items (enough for page count)
+        //     // HARDCODED TEST DATA
+        //     'barItems' => []
+        // ];
 
-        // ------------------------------------------
-        // Populate barItems with 30 fully valid items
-        // ------------------------------------------
-        for ($i = 1; $i <= 10; $i++) {
-            $erpDoc->barItems[] = (object)[
-                'quantity' => ($i % 3) + 1,
-                'serials' => ["SERIAL-$i-A", "SERIAL-$i-B"],
-                'itemCode' => 'GOLD999',
-                'longDesc' => "Gold Bar $i (999.9 Fine)",
-                'weight' => 1000,
-                'pureOz' => 32.151,
-                'price' => 2020.25,
-                'otherCharge' => 500.00,
-                'unitPrice' => 62000.00,
-                'amount' => 62000.00,
-                'usdVal' => 62000.00,
-                'barNumber' => "B$i-GPM",
-                'purity' => '999.9',
-                'voucherType' => 'SAL',
-                'value' => 62000.00,
-            ];
-        }
+        // // ------------------------------------------
+        // // Populate barItems with 30 fully valid items
+        // // ------------------------------------------
+        // for ($i = 1; $i <= 10; $i++) {
+        //     $erpDoc->barItems[] = (object)[
+        //         'quantity' => ($i % 3) + 1,
+        //         'serials' => ["SERIAL-$i-A", "SERIAL-$i-B"],
+        //         'itemCode' => 'GOLD999',
+        //         'longDesc' => "Gold Bar $i (999.9 Fine)",
+        //         'weight' => 1000,
+        //         'pureOz' => 32.151,
+        //         'price' => 2020.25,
+        //         'otherCharge' => 500.00,
+        //         'unitPrice' => 62000.00,
+        //         'amount' => 62000.00,
+        //         'usdVal' => 62000.00,
+        //         'barNumber' => "B$i-GPM",
+        //         'purity' => '999.9',
+        //         'voucherType' => 'SAL',
+        //         'value' => 62000.00,
+        //     ];
+        // }
 
         $erpDoc = (object) $activity_data;
 

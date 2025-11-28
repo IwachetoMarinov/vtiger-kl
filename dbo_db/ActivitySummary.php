@@ -151,8 +151,9 @@ class ActivitySummary
 
             // HARDCODED for testing PUR
             // $doc_no = 'PUR/2025/000008';
+            
             // HARDCODED for testing SAL
-            $doc_no = 'SAL/2025/000019';
+            // $doc_no = 'SAL/2025/000019';
 
             $params = [];
             $where  = '';
@@ -246,10 +247,6 @@ class ActivitySummary
         $items = [];
 
         foreach ($summary as $item) {
-            // echo '<pre>';
-            // echo 'Mapping item: ';
-            // print_r($item);
-            // echo '</pre>';
             $items[] = (object) [
                 'quantity'          => isset($item['Qty']) ? (int)$item['Qty'] : 1,
                 'transactionType'   => $item['Tax_Type'] ?? '',
@@ -293,7 +290,6 @@ class ActivitySummary
                 'weight' => max((float)($item['Weight'] ?? 0), 1), // ??? check
                 'barNumber'         => $item['Bar_No'] ?? '', // ??? check
                 'pureOz'            => isset($item['GrossOz']) ? (float)$item['GrossOz'] : 0.00, // ??? check
-                // 'pureOz'            => isset($item['Pure_Oz']) ? (float)$item['Pure_Oz'] : 0.00, // ??? check
                 'otherCharge'       => isset($item['Other_Charge']) ? (float)$item['Other_Charge'] : 0.00, // ??? check
                 'narration'         => $item['Narration'] ?? '', // ??? check
                 'longDesc'          => $item['Long_Desc'] ?? '', // ??? check

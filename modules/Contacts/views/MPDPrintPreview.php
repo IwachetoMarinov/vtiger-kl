@@ -1,7 +1,7 @@
 <?php
 
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
@@ -9,15 +9,15 @@ include_once 'dbo_db/HoldingsDB.php';
 class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
 {
 
+    protected $record = null;
+
     public function preProcess(Vtiger_Request $request, $display = false)
     {
         $recordId = $request->get('record');
         $moduleName = $request->getModule();
 
         // Getting model to reuse it in parent
-        if (!$this->record) {
-            $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
-        }
+        if (!$this->record) $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
     }
 
     public function process(Vtiger_Request $request)
@@ -33,10 +33,10 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
         $activity = new dbo_db\ActivitySummary();
         $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
-        // echo '<pre>';
-        // echo 'Activity Data: ';
-        // var_dump($erpData);
-        // echo '</pre>';
+        echo '<pre>';
+        echo 'Activity Data: ';
+        var_dump($erpData);
+        echo '</pre>';
 
         // OROSOFT DOCUMENT (CUSTOM OBJECT)
         // $erpData = [
