@@ -27,11 +27,6 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
         // Get all transactions for the client
         $transactions = $activity->getActivitySummary($clientID);
 
-        // echo '<pre>';
-        // echo 'Transactions Data: ';
-        // var_dump($transactions);
-        // echo '</pre>';
-
         $recordModel = $this->record->getRecord();
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
