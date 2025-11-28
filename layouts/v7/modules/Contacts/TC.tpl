@@ -171,14 +171,6 @@
 </head>
 
 <body>
-    {* Dump data here *}
-
-    {* <pre> *}
-    {* {$ERP_DOCUMENT|@var_dump} *}
-    {* {$METALS_DATA|@var_dump} *}
-    {* </pre> *}
-
-
 
     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
         <script type="text/javascript" src="layouts/v7/lib/jquery/jquery.min.js"></script>
@@ -282,7 +274,7 @@
                                     <td colspan="2" style='text-align:center;'>{$smarty.request.docNo}</td>
                                     <td style='text-align:center;'>{$ERP_DOCUMENT->documentDate}</td>
                                     <td style='text-align:center;'>{number_format($metalPrice,3)}</td>
-                                    <td style='text-align:center;'>{vtranslate($OROSOFT_DOCTYPE,'Contacts')}</td>
+                                    <td style='text-align:center;'>{$ERP_DOCUMENT->description}</td>
                                 </tr>
                             </table>
                             <table class="activity-tbl">

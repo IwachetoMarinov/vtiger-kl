@@ -83,7 +83,6 @@
                                 <th></th>
                                 <th></th>
                                 <th></th>
-                                <th></th>
                                 <th>DATE</th>
                                 <th>DESCRIPTION</th>
                                 <th>DEPOSIT</th>
@@ -133,7 +132,7 @@
                                     {/if}
 
                                     {*  New MPD button *}
-                                    {if in_array($TX.voucher_type, ['SAL','PUR', 'SWD', 'MPD'])}
+                                    {if in_array($TX.voucher_type, ['SAL', 'MPD'])}
                                         <td>
                                             <a href="index.php?module=Contacts&view=MPDPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">
@@ -153,6 +152,7 @@
 
                                     <!-- Type -->
                                     <td nowrap>
+                                        {$TX.description} -
                                         {$TX.table_name} -
                                         {$TX.voucher_type}
                                     </td>

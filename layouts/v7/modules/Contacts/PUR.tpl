@@ -305,24 +305,24 @@
                                             {$barItem->description} <br><span
                                                 style="font-size: smaller;font-style: italic;">{$barItem->serials[0]}</span>
                                         </td>
-                                        {if $barItem->metal eq 'mBTC'}
-                                            <td style="text-align:right;vertical-align: top">
-                                                {CurrencyField::convertToUserFormat({$barItem->price})}</td>
-                                        {else}
-                                            <td style="text-align:right;vertical-align: top">
-                                                {CurrencyField::convertToUserFormat($total/$barItem->quantity)}</td>
-                                        {/if}
-                                        <td style="text-align:right;vertical-align: top">{number_format($barItem->pureOz,3)}
-                                        </td>
                                         <td style="text-align:right;vertical-align: top">
-                                            {CurrencyField::convertToUserFormat($total)}</td>
+                                            {$barItem->unitPrice}
+                                        </td>
+
+                                        <td style="text-align:right;vertical-align: top">
+                                            {number_format($barItem->totalFineOz,3)}
+                                        </td>
+
+                                        <td style="text-align:right;vertical-align: top">
+                                            {number_format($barItem->totalItemAmount,3)}
+                                        </td>
                                     </tr>
                                 {/for}
                                 {if $PAGES eq $page}
                                     <tr>
                                         <th style="width:75%;" colspan="4">TOTAL INVOICE AMOUNT:</th>
                                         <td style="text-align:right"><strong>US$
-                                                {CurrencyField::convertToUserFormat($ERP_DOCUMENT->totalusdVal)}</strong>
+                                                {CurrencyField::convertToUserFormat($ERP_DOCUMENT->grandTotal)}</strong>
                                         </td>
                                     </tr>
                                     {if $INTENT}
