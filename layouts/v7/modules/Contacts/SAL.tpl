@@ -326,19 +326,21 @@
                                         <tr>
                                             <td style="vertical-align: top">{$barItem->quantity}</td>
                                             <td style="border-bottom:none;vertical-align: top">
-                                                {$barItem->longDesc} <br><span
+                                                {$barItem->itemDescription} <br><span
                                                     style="font-size: smaller;font-style: italic;">{$barItem->serials[0]}</span>
                                             </td>
-                                            {if $barItem->metal eq 'mBTC'}
-                                                <td style="text-align:right;vertical-align: top">
-                                                    {CurrencyField::convertToUserFormat({$barItem->price})}</td>
-                                            {else}
-                                                <td style="text-align:right;vertical-align: top">
-                                                    {number_format($total/$barItem->quantity,2)}</td>
-                                            {/if}
-                                            <td style="text-align:right;vertical-align: top">{number_format($barItem->pureOz,3)}
+
+                                            <td style="text-align:right;vertical-align: top">
+                                                {$barItem->unitPrice}
                                             </td>
-                                            <td style="text-align:right;vertical-align: top">{number_format($total,2)}</td>
+
+                                            <td style="text-align:right;vertical-align: top">
+                                                {number_format($barItem->totalFineOz,3)}
+                                            </td>
+
+                                            <td style="text-align:right;vertical-align: top">
+                                                {number_format($barItem->totalItemAmount,3)}
+                                            </td>
                                         </tr>
                                     {/if}
                                 {/for}
@@ -366,7 +368,8 @@
                                     {/if}
                                     <tr>
                                         <th style="width:75%;" colspan="4">TOTAL INVOICE AMOUNT:</th>
-                                        <td style="text-align:right"><strong>US$ {number_format($calcTotal,2)}</strong></td>
+                                        {* <td style="text-align:right"><strong>US$ {number_format($calcTotal,2)}</strong></td> *}
+                                        <td style="text-align:right"><strong>US$ {number_format($ERP_DOCUMENT->grandTotal ,2)}</strong></td>
                                     </tr>
                                     {if $INTENT}
                                         <tr>
