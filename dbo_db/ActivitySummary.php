@@ -107,10 +107,10 @@ class ActivitySummary
 
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
-            echo '<pre>';
-            echo 'DATA from Vick DB: ';
-            var_dump($summary);
-            echo '</pre>';
+            // echo '<pre>';
+            // echo 'DATA from Vick DB: ';
+            // var_dump($summary);
+            // echo '</pre>';
 
             $items = $this->mapTransactionItems($summary, $transaction);
 
@@ -149,8 +149,10 @@ class ActivitySummary
 
             $transaction = $this->getSingleTransaction($doc_no);
 
-            // HARDCODED for testing
-            $doc_no = 'PUR/2025/000008';
+            // HARDCODED for testing PUR
+            // $doc_no = 'PUR/2025/000008';
+            // HARDCODED for testing SAL
+            $doc_no = 'SAL/2025/000019';
 
             $params = [];
             $where  = '';
@@ -168,12 +170,12 @@ class ActivitySummary
 
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
-            echo '<pre>';
+            // echo '<pre>';
+            // echo 'transaction: ';
+            // var_dump($transaction);
             // echo 'getDocumentPrintPreviewData: ';
-            echo 'transaction: ';
-            var_dump($transaction);
             // var_dump($summary);
-            echo '</pre>';
+            // echo '</pre>';
             $items = $this->mapTransactionItems($summary, $transaction);
 
 

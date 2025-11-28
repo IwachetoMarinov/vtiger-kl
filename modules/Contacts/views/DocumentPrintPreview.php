@@ -17,9 +17,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $moduleName = $request->getModule();
 
         // Getting model to reuse it in parent
-        if (!$this->record) {
-            $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
-        }
+        if (!$this->record) $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
     }
 
 
@@ -34,63 +32,13 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $activity = new dbo_db\ActivitySummary();
         $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
-        echo '<pre>';
-        echo 'Activity Data: ';
-        var_dump($activity_data);
-        echo '</pre>';
+        // echo '<pre>';
+        // echo 'Activity Data: ';
+        // var_dump($activity_data);
+        // echo '</pre>';
 
         $docType = $activity_data['voucherType'] ?? "";
-
-        $exchange_rates = MASForex_Record_Model::getExchangeRate($activity_data['documentDate'] ?? '', 'usd_sgd');
-
-        // $erpDoc = (object) [
-        //     'docNo' => $docNo,
-        //     'documentDate' => $activity_data['document_date'] ?? '',
-        //     'postingDate' => $activity_data['posting_date'] ?? '',
-        //     'voucherType' => $activity_data['voucher_type'] ?? 'Sales Invoice',
-        //     'GST' => true,
-        //     'exchange_rates' => $exchange_rates ?? 0.00,
-        //     'currency' => $activity_data['currency'] ?? 'USD',
-        //     'grandTotal' => $activity_data['grand_total'] ?? 0.00,
-        //     'totalusdVal' => $activity_data['totalusd_val'] ?? 0.00,
-
-
-        //     'barItems' => [
-        //         (object)[
-        //             'quantity' => 1,
-        //             'serials' => ['ABC123-XYZ789'],
-        //             'itemCode' => 'GOLD999',
-        //             'description' => '999.9 Gold Bar',
-        //             'weight' => 1000,
-        //             'unitPrice' => 60.00,
-        //             'amount' => 60000.00,
-        //             'barNumber' => 'B0001',
-        //             'purity' => '999.9',
-        //             'voucherType' => 'SAL',
-        //             "pureOz" => 32.1507,
-        //             "otherCharge" => 5.00,
-        //             'narration' => 'Sale of Gold Bar',
-        //             'longDesc' => 'Sale of Gold Bar',
-        //         ],
-        //         (object)[
-        //             'quantity' => 2,
-        //             'serials' => ['SER0001', 'SER0002'],
-        //             'itemCode' => 'SLV995',
-        //             'description' => 'Silver Bar',
-        //             'weight' => 500,
-        //             'unitPrice' => 20.00,
-        //             'amount' => 20000.00,
-        //             'barNumber' => 'B0002',
-        //             'purity' => '995',
-        //             'voucherType' => 'SAL',
-        //             "pureOz" => 32.1507,
-        //             "otherCharge" => 5.00,
-        //             'narration' => 'Purchase of Silver Bars',
-        //             'longDesc' => 'Purchase of Silver Bars',
-        //         ]
-        //     ]
-        // ];
-
+        // $exchange_rates = MASForex_Record_Model::getExchangeRate($activity_data['documentDate'] ?? '', 'usd_sgd');
         $erpDoc = (object) $activity_data;
 
         $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($comId);
@@ -119,10 +67,6 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             'swiftCode' => 'GBLBB22',
             'bankAddress' => '123 Global St, Metropolis, Country'
         ];
-
-        // echo '<pre>';
-        // var_dump($erpDoc);
-        // echo '</pre>';
 
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
