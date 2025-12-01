@@ -37,10 +37,12 @@
                             <!-- Currency -->
                             <label style="margin: 0; font-size: 13px;">Currency</label>
                             <select id="currencySelect" class="inputElement select2" style="width: 110px;">
-                                <option value="">Select</option>
+                                <option value="" {if $ASCURRENCY eq ''}selected{/if}>Select</option>
+
                                 {foreach item=CURRENCY from=$CLIENT_CURRENCY}
-                                    <option value="{$CURRENCY}" {if $CURRENCY eq $ASCURRENCY}selected{/if}>{$CURRENCY}</option>
+                                    <option value="{$CURRENCY}" {if $ASCURRENCY eq $CURRENCY}selected{/if}>{$CURRENCY}</option>
                                 {/foreach}
+
                             </select>
 
                             <!-- Year -->

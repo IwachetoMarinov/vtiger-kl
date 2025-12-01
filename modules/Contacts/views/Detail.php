@@ -9,8 +9,8 @@
  * All Rights Reserved.
  * *********************************************************************************** */
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
@@ -44,6 +44,9 @@ class Contacts_Detail_View extends Accounts_Detail_View
 	public function showModuleSummaryView($request)
 	{
 		$recordId = $request->get('record');
+		$selected_currency = $request->get('ActivtySummeryCurrency');
+		// if (!$selected_currency) $selected_currency = '';
+
 		$moduleName = $request->getModule();
 
 		if (!$this->record) $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
@@ -77,17 +80,31 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		// -------------------------------------------
 		// 🔥 REAL ACTIVITY SUMMARY DATA
 		// -------------------------------------------
-		$fieldModel = Vtiger_Field_Model::getInstance('package_currency', Vtiger_Module_Model::getInstance('GPMIntent'));
-		$values = $fieldModel->getPicklistValues();
-		$currency_list = array_keys($values);
+		// $fieldModel = Vtiger_Field_Model::getInstance('package_currency', Vtiger_Module_Model::getInstance('GPMIntent'));
+		// $values = $fieldModel->getPicklistValues();
+		// $currency_list = array_keys($values);
 
 		$activity = new dbo_db\ActivitySummary();
 		$activity_data = $activity->getActivitySummary($clientID);
+
+		var_dump('Activity Data: ', count($activity_data));
 
 		$holdings = new dbo_db\HoldingsDB();
 		$holdings_data = $holdings->getHoldingsData($clientID);
 
 		$certificate_id = $this->getCertificateId($recordId);
+
+		// Build dynamic currency list based on Activity Summary data
+		$currency_list = $this->getCurrenciesFromActivitySummary($activity_data);
+
+		// Check if selected currency is valid and filter $activity_data
+		if ($selected_currency && in_array($selected_currency, $currency_list)) {
+			$activity_data = array_filter($activity_data, function ($item) use ($selected_currency) {
+				return ($item['currency'] ?? '') === $selected_currency;
+			});
+
+			$activity_data = array_values($activity_data);
+		}
 
 		$years = [];
 		for ($i = 0; $i <= 5; $i++) {
@@ -95,56 +112,22 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		}
 
 		// echo '<pre>';
-		// echo "\n Data fetched from ActivitySummary: " . date('Y-m-d H:i:s') . PHP_EOL;
+		// echo "\n Data fetched from holdings: " . date('Y-m-d H:i:s') . PHP_EOL;
+		// // echo "\n Data fetched from ActivitySummary: " . date('Y-m-d H:i:s') . PHP_EOL;
 		// var_dump($activity_data);
 		// echo '</pre>';
-
-		// -------------------------------------------
-		// 🔥 HARDCODED ACTIVITY SUMMARY DATA
-		// -------------------------------------------
-		$activityData = [
-			'CURRENCY_SELECTED' => 'USD',
-
-			'TRANSACTIONS' => $activity_data,
-			// 'TRANSACTIONS' => [
-			// 	[
-			// 		'voucher_no' => 'SAL/2025/001',
-			// 		'voucher_type' => 'Sales Invoice',
-			// 		'doctype' => 'Sales Invoice',
-			// 		'posting_date' => '2025-01-10',
-			// 		'amount_in_account_currency' => 25000.00
-			// 	],
-			// 	[
-			// 		'voucher_no' => 'PUR/2025/002',
-			// 		'voucher_type' => 'Purchase Invoice',
-			// 		'doctype' => 'Purchase Invoice',
-			// 		'posting_date' => '2025-01-15',
-			// 		'amount_in_account_currency' => -12000.00
-			// 	],
-			// 	[
-			// 		'voucher_no' => 'DEP/2025/003',
-			// 		'voucher_type' => 'Deposit',
-			// 		'doctype' => '',
-			// 		'posting_date' => '2025-02-01',
-			// 		'amount_in_account_currency' => 5000.00
-			// 	]
-			// ]
-		];
 
 		$viewer = $this->getViewer($request);
 
 		// Assign safely to TPL
 		$viewer->assign('CLIENT_CURRENCY', $currency_list);
-		$viewer->assign('ACTIVITY_SUMMERY_CURRENCY', $activityData['CURRENCY_SELECTED']);
-		$viewer->assign('OROSOFT_TRANSACTION', $activityData['TRANSACTIONS']);
+		$viewer->assign('ACTIVITY_SUMMERY_CURRENCY', $selected_currency);
+		$viewer->assign('OROSOFT_TRANSACTION', $activity_data);
 		$viewer->assign('CERTIFICATE_HOLDING', $certificate_id);
-		$viewer->assign('CURRENCY', $activityData['CURRENCY_SELECTED']);
+		$viewer->assign('CURRENCY', $selected_currency);
 		$viewer->assign('BALANCES', $erpData['BALANCES']);
 		$viewer->assign('HOLDINGS', $holdings_data);
 		$viewer->assign('YEARS', $years);
-
-		// RENDER NEW CUSTOM BLOCK HERE
-		// $viewer->view('HoldingsWalletSummary.tpl', $moduleName);
 
 		// Continue normal summary
 		return parent::showModuleSummaryView($request);
@@ -158,5 +141,17 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$result = $db->pquery($sql, array($recordId));
 
 		return $db->query_result($result, 0, 'notes_id');
+	}
+
+	protected function getCurrenciesFromActivitySummary($activity_data)
+	{
+		$currency_list = [];
+		foreach ($activity_data as $item) {
+			$currency = $item['currency'] ?? '';
+			if ($currency && !in_array($currency, $currency_list)) {
+				$currency_list[] = $currency;
+			}
+		}
+		return $currency_list;
 	}
 }

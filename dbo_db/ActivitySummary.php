@@ -55,7 +55,8 @@ class ActivitySummary
                 'description' => $item['Description'] ?? '',
                 'table_name' => $item['TableName'] ?? '',
                 'usd_val' => $item['Matched_Amt'] ? floatval($item['Matched_Amt']) : 0.00,
-                'doctype' => $item['Description'] ?? 'Sales Invoice',
+                'doctype' => $item['Description'] ?? '',
+                'currency' => $item['Curr_Code'] ?? '',
                 'document_date' => $item['Tx_Date'] instanceof \DateTime ? $item['Tx_Date']->format('Y-m-d') : $item['Tx_Date'],
                 'posting_date' => $item['Appr_Date'] instanceof \DateTime ? $item['Appr_Date']->format('Y-m-d') : $item['Appr_Date'],
                 'мatched_аmt' => isset($item['Matched_Amt']) ? floatval($item['Matched_Amt']) : 0.00,
@@ -165,18 +166,21 @@ class ActivitySummary
             $sql = "
                 SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[$table_name] $where";
 
-            // var_dump($sql, $params, $table_name);
+            // Query to list table names
+            // $sql = "SELECT TOP 20 TABLE_NAME  FROM HFS_SQLEXPRESS.GPM.INFORMATION_SCHEMA.TABLES";
+
+            // var_dump($sql, $params);
 
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
             // echo '<pre>';
-            // echo 'transaction: ';
-            // var_dump($transaction);
-            // echo 'getDocumentPrintPreviewData: ';
+            // // echo 'transaction: ';
+            // // var_dump($transaction);
+            // // echo 'getDocumentPrintPreviewData: ';
             // var_dump($summary);
             // echo '</pre>';
-            $items = $this->mapTransactionItems($summary, $transaction);
 
+            $items = $this->mapTransactionItems($summary, $transaction);
 
             $transaction['barItems'] = $items;
             return $transaction;

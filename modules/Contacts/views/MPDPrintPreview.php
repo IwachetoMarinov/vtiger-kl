@@ -33,12 +33,6 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
         $activity = new dbo_db\ActivitySummary();
         $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
-        // echo '<pre>';
-        // echo 'Activity Data: ';
-        // var_dump($erpData);
-        // echo '</pre>';
-
-
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', 1);

@@ -16,15 +16,6 @@ class MetalPrice_Record_Model extends Vtiger_Record_Model
      * Function to get the Display Name for the record
      * @return <String> - Entity Display Name for the record
      */
-    // static function getLatestPriceByName($metal)
-    // {
-    //     $adb = PearDatabase::getInstance();
-
-    //     $sql = "select metalpriceid from vtiger_metalprice where type_of_metal = ? order by price_date desc limit 1";
-    //     $sqlResult = $adb->pquery($sql, array($metal));
-    //     $recordId = $adb->query_result($sqlResult, 0, 'metalpriceid');
-    //     Vtiger_Record_Model::getInstanceById($recordId, 'MetalPrice');
-    // }
 
     static function getLatestPriceByName($metal, $currency)
     {
