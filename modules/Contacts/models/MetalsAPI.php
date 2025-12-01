@@ -35,7 +35,6 @@ class MetalsAPI
 
     public function getMetals()
     {
-        // check db_username and db_password
         if (!$this->connection) die(print_r(sqlsrv_errors(), true));
 
         $metals = $this->fetchMetals();

@@ -25,19 +25,13 @@ class MetalPrice_GetMetalPrice_Action extends Vtiger_Action_Controller
         $currency = $request->get('currency');
 
         $metalAPI = new MetalsAPI();
-        $record2 = $metalAPI->getLatestPriceByName($metal, $currency);
+        $record = $metalAPI->getLatestPriceByName($metal, $currency);
 
-        if ($record2) {
-            echo json_encode(array('price' => $record2['SpotPriceCurr']));
+        if ($record) {
+            echo json_encode(array('price' => $record['SpotPriceCurr']));
             return;
         } else {
             echo json_encode(array('price' => null));
         }
-        // $record = MetalPrice_Record_Model::getLatestPriceByName($metal, $currency);
-        // if ($record) {
-        //     echo json_encode(array('price' => $record->get('pm_rate')));
-        // } else {
-        //     echo json_encode(array('price' => null));
-        // }
     }
 }

@@ -21,7 +21,6 @@ class ActivitySummary
     {
         $this->connection = DBConnection::getConnection();
     }
-
     public function getActivitySummary($customer_id = null)
     {
         if (!$customer_id) return [];
@@ -39,7 +38,6 @@ class ActivitySummary
             $params[] = $customer_id;
         }
 
-        // $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_ActivitySumm] $where";
         $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_TxHx] $where";
 
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
