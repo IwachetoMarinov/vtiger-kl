@@ -1,7 +1,7 @@
 <?php
 
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
@@ -28,6 +28,8 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
         $comId = $recordModel->get('related_entity');
+
+        // $accountId = $recordModel->get('account_id');
 
         $activity = new dbo_db\ActivitySummary();
         $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);

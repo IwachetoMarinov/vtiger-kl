@@ -41,33 +41,27 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
         $metalsAPI = new MetalsAPI();
         $metals_data = $metalsAPI->getMetals();
 
-        // Holdings formatting
-        $holdings = [];
-        foreach ($holdings_data as $data) {
-            $holdings[] = [
-                // HARDCODED SHOULD BE REPLACED WITH REAL METAL FROM ERP
-                'metal' => "XAU",
-                // 'metal' => $data['brand'],
-                'location' => $data['location'],
-                'pureOz' => $data['fine_oz'],
-                // HARDCODED SHOULD BE REPLACED WITH REAL SERIALS FROM ERP
-                'serials' => ['G1001', 'G1002', 'G1003']
-            ];
-        }
-
         $grouped = [];
-        foreach ($holdings as $item) {
+        foreach ($holdings_data as $item) {
             $location = $item['location'];
+            $serials = isset($item['serial_numbers']) && is_array($item['serial_numbers']) ? $item['serial_numbers'] : [];
+            $Serial_string = isset($item['serial_numbers']) && is_array($item['serial_numbers']) ? implode(", ", $item['serial_numbers']) : '';
 
             $grouped[$location][] = (object) [
-                'metal' => $item['metal'],
+                // 'metal' => $item['metal'],
+                'metal' => $item['description'],
                 'location' => $item['location'],
-                'pureOz' => (float) $item['pureOz'],
-                'quantity' => count($item['serials']),
-                'modiefiedSerials' => $item['serials'],
-                'longDesc' => $item['metal'] . " - " . implode(", ", $item['serials'])
+                'pureOz' => isset($item['fine_oz']) ? (float) $item['fine_oz'] : 0.00,
+                'quantity' => isset($item['quantity']) ? (int) $item['quantity'] : 0,
+                'modiefiedSerials' =>  $serials,
+                'longDesc' => $item['description'] . " - " . $Serial_string
             ];
         }
+
+        // echo '<pre>';
+        // echo 'Grouped Data: ';
+        // var_dump($grouped);
+        // echo '</pre>';
 
         // Metals data formatting
         $metals = [];
@@ -97,7 +91,7 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('LBMA_DATE', date('d-M-y', strtotime($erpData['MetalPrice']['XAU']['price_date'])));
         $viewer->assign('ERP_HOLDINGS', $grouped);
         $viewer->assign('ERP_METALPRICE', $erpData['MetalPrice']);
-        $viewer->assign('ERP_HOLDINGMETALS', array_unique(array_column($holdings, 'metal')));
+        $viewer->assign('ERP_HOLDINGMETALS', array_unique(array_column($holdings_data, 'brand')));
         $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($recordModel->get('related_entity')));
 
         if ($request->get('PDFDownload')) {

@@ -165,18 +165,21 @@ class ActivitySummary
             $sql = "
                 SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[$table_name] $where";
 
-            // var_dump($sql, $params, $table_name);
+            // Query to list table names
+            // $sql = "SELECT TOP 20 TABLE_NAME  FROM HFS_SQLEXPRESS.GPM.INFORMATION_SCHEMA.TABLES";
+
+            // var_dump($sql, $params);
 
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
             // echo '<pre>';
-            // echo 'transaction: ';
-            // var_dump($transaction);
-            // echo 'getDocumentPrintPreviewData: ';
+            // // echo 'transaction: ';
+            // // var_dump($transaction);
+            // // echo 'getDocumentPrintPreviewData: ';
             // var_dump($summary);
             // echo '</pre>';
-            $items = $this->mapTransactionItems($summary, $transaction);
 
+            $items = $this->mapTransactionItems($summary, $transaction);
 
             $transaction['barItems'] = $items;
             return $transaction;
