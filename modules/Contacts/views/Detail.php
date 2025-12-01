@@ -45,9 +45,9 @@ class Contacts_Detail_View extends Accounts_Detail_View
 	{
 		$recordId = $request->get('record');
 		$selected_currency = $request->get('ActivtySummeryCurrency');
-		if (!$selected_currency) $selected_currency = 'USD';
-		$moduleName = $request->getModule();
+		// if (!$selected_currency) $selected_currency = '';
 
+		$moduleName = $request->getModule();
 
 		if (!$this->record) $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
 
@@ -80,17 +80,31 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		// -------------------------------------------
 		// 🔥 REAL ACTIVITY SUMMARY DATA
 		// -------------------------------------------
-		$fieldModel = Vtiger_Field_Model::getInstance('package_currency', Vtiger_Module_Model::getInstance('GPMIntent'));
-		$values = $fieldModel->getPicklistValues();
-		$currency_list = array_keys($values);
+		// $fieldModel = Vtiger_Field_Model::getInstance('package_currency', Vtiger_Module_Model::getInstance('GPMIntent'));
+		// $values = $fieldModel->getPicklistValues();
+		// $currency_list = array_keys($values);
 
 		$activity = new dbo_db\ActivitySummary();
 		$activity_data = $activity->getActivitySummary($clientID);
+
+		var_dump('Activity Data: ', count($activity_data));
 
 		$holdings = new dbo_db\HoldingsDB();
 		$holdings_data = $holdings->getHoldingsData($clientID);
 
 		$certificate_id = $this->getCertificateId($recordId);
+
+		// Build dynamic currency list based on Activity Summary data
+		$currency_list = $this->getCurrenciesFromActivitySummary($activity_data);
+
+		// Check if selected currency is valid and filter $activity_data
+		if ($selected_currency && in_array($selected_currency, $currency_list)) {
+			$activity_data = array_filter($activity_data, function ($item) use ($selected_currency) {
+				return ($item['currency'] ?? '') === $selected_currency;
+			});
+
+			$activity_data = array_values($activity_data);
+		}
 
 		$years = [];
 		for ($i = 0; $i <= 5; $i++) {
@@ -127,5 +141,17 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$result = $db->pquery($sql, array($recordId));
 
 		return $db->query_result($result, 0, 'notes_id');
+	}
+
+	protected function getCurrenciesFromActivitySummary($activity_data)
+	{
+		$currency_list = [];
+		foreach ($activity_data as $item) {
+			$currency = $item['currency'] ?? '';
+			if ($currency && !in_array($currency, $currency_list)) {
+				$currency_list[] = $currency;
+			}
+		}
+		return $currency_list;
 	}
 }

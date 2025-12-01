@@ -19,6 +19,7 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
     public function process(Vtiger_Request $request)
     {
         $moduleName = $request->getModule();
+        $selected_currency = $request->get('ActivtySummeryCurrency');
 
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
@@ -26,6 +27,17 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
         $activity = new dbo_db\ActivitySummary();
         // Get all transactions for the client
         $transactions = $activity->getActivitySummary($clientID);
+
+        $selected_currency = trim($selected_currency);
+
+        if (!empty($selected_currency)) {
+            $transactions = array_filter($transactions, function ($txn) use ($selected_currency) {
+                return isset($txn['currency']) && trim($txn['currency']) === $selected_currency;
+            });
+
+            // VERY IMPORTANT
+            $transactions = array_values($transactions);
+        }
 
         $recordModel = $this->record->getRecord();
         $viewer = $this->getViewer($request);
