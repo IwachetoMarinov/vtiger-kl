@@ -4,8 +4,6 @@ include_once 'dbo_db/HoldingsDB.php';
 include_once 'include/Webservices/Create.php';
 include_once 'modules/HoldingCertificate/phpqrcode/qrlib.php';
 
-
-
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
 
@@ -138,7 +136,6 @@ class GPM_CertificateHandler
         // $absFileName = $root_directory . "$fileName.pdf";
         $absFileName = $root_directory . "modules/HoldingCertificate/tmp/$fileName.pdf";
 
-
         $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
 
         $file = array(
@@ -148,7 +145,6 @@ class GPM_CertificateHandler
             'size' => filesize($absFileName),
             'error' => 0
         );
-
 
 
         $_FILES['file'] = $file;
@@ -179,8 +175,6 @@ class GPM_CertificateHandler
         if (!shell_exec("which wkhtmltopdf"))  return false;
 
         global $root_directory;
-        // echo "Trying to write html to: " . $root_directory . $fileName . '.html';
-        // exit;
 
         // $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
         $tmpDir = $root_directory . 'modules/HoldingCertificate/tmp/';
