@@ -17,9 +17,7 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
         $moduleName = $request->getModule();
 
         // Getting model to reuse it in parent
-        if (!$this->record) {
-            $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
-        }
+        if (!$this->record) $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
     }
 
     public function process(Vtiger_Request $request)
@@ -44,8 +42,8 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
         $grouped = [];
         foreach ($holdings_data as $item) {
             $location = $item['location'];
-            $serials = isset($item['serial_numbers']) && is_array($item['serial_numbers']) ? $item['serial_numbers'] : [];
-            $Serial_string = isset($item['serial_numbers']) && is_array($item['serial_numbers']) ? implode(", ", $item['serial_numbers']) : '';
+            // $serials = isset($item['serial_numbers']) && is_array($item['serial_numbers']) ? $item['serial_numbers'] : [];
+            // $Serial_string = isset($item['serial_numbers']) && is_array($item['serial_numbers']) ? implode(", ", $item['serial_numbers']) : '';
 
             $grouped[$location][] = (object) [
                 // 'metal' => $item['metal'],
@@ -53,15 +51,11 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
                 'location' => $item['location'],
                 'pureOz' => isset($item['fine_oz']) ? (float) $item['fine_oz'] : 0.00,
                 'quantity' => isset($item['quantity']) ? (int) $item['quantity'] : 0,
-                'modiefiedSerials' =>  $serials,
-                'longDesc' => $item['description'] . " - " . $Serial_string
+                // 'modiefiedSerials' =>  $serials,
+                'longDesc' => $item['description'],
+                // 'longDesc' => $item['description'] . " - " . $Serial_string
             ];
         }
-
-        // echo '<pre>';
-        // echo 'Grouped Data: ';
-        // var_dump($grouped);
-        // echo '</pre>';
 
         // Metals data formatting
         $metals = [];
@@ -79,11 +73,6 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
             'Holdings' => $grouped,
             'MetalPrice' => $metals
         ];
-
-        // echo '<pre>';
-        // echo 'Formatted Holdings Data: ';
-        // var_dump($metals);
-        // echo '</pre>';
 
         $recordModel = $this->record->getRecord();
         $viewer = $this->getViewer($request);
@@ -104,25 +93,25 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
         }
     }
 
-    function processHoldingData($datas)
-    {
-        $newData = [];
-        foreach ($datas as $data) {
-            $modifiedSerials = $this->sumSerials($data->serials);
-            $data->modiefiedSerials = $modifiedSerials;
-            if (in_array($data->location, array('Brinks Singapore', 'Fineart', 'Malca-Amit Singapore'))) {
-                $data->location = 'LFPSG';
-            }
-            if (in_array($data->location, array('Brinks Hong Kong', 'Malca-Amit Hong Kong'))) {
-                $data->location = 'Brinks Hong Kong';
-            }
-            if (strtolower($data->metal) == 'mbtc') {
-                $data->pureOz = number_format($data->pureOz / 100000, 8);;
-            }
-            $newData[$data->location][] = $data;
-        }
-        return $newData;
-    }
+    // function processHoldingData($datas)
+    // {
+    //     $newData = [];
+    //     foreach ($datas as $data) {
+    //         $modifiedSerials = $this->sumSerials($data->serials);
+    //         $data->modiefiedSerials = $modifiedSerials;
+    //         if (in_array($data->location, array('Brinks Singapore', 'Fineart', 'Malca-Amit Singapore'))) {
+    //             $data->location = 'LFPSG';
+    //         }
+    //         if (in_array($data->location, array('Brinks Hong Kong', 'Malca-Amit Hong Kong'))) {
+    //             $data->location = 'Brinks Hong Kong';
+    //         }
+    //         if (strtolower($data->metal) == 'mbtc') {
+    //             $data->pureOz = number_format($data->pureOz / 100000, 8);;
+    //         }
+    //         $newData[$data->location][] = $data;
+    //     }
+    //     return $newData;
+    // }
 
     function splitAndOrder($values)
     {
@@ -176,6 +165,7 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
     }
 
     public function postProcess(Vtiger_Request $request) {}
+
     function downloadPDF($html)
     {
         global $root_directory;

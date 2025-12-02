@@ -89,8 +89,10 @@ Vtiger_Detail_Js(
                 };
 
                 app.request.post({ data: params }).then(function (err, data) {
-                  console.log(data);
+                  console.log("registerCertificateClick", data);
                   docuemtntId = data.notes_id.split("x");
+                  console.log("docuemtntId: ", docuemtntId);
+
                   jQuery("#generateHoldingCertificate").data(
                     "certificateid",
                     docuemtntId[1]
@@ -102,7 +104,11 @@ Vtiger_Detail_Js(
                     view: "FilePreview",
                     record: certificateId,
                   };
+
+                  console.log('Params for FilePreview: ', params);
+                  
                   app.request.post({ data: params }).then(function (err, data) {
+                    console.log('FilePreview data: ', data);
                     app.helper.showModal(data);
                   });
                 });
