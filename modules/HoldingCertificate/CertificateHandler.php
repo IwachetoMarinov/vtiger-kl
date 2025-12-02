@@ -178,6 +178,9 @@ class GPM_CertificateHandler
             return false;
         }
         global $root_directory;
+        echo "Trying to write html to: " . $root_directory . $fileName . '.html';
+        exit;
+
         $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
         fwrite($handle, $html);
         fclose($handle);
