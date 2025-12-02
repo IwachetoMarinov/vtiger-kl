@@ -14,7 +14,7 @@
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
-// include_once 'modules/HoldingCertificate/CertificateHandler.php';
+include_once 'modules/HoldingCertificate/CertificateHandler.php';
 
 class Contacts_Detail_View extends Accounts_Detail_View
 {
@@ -57,15 +57,13 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$clientID = $recordModel->get('cf_898');
 
 		// $certificateHandler = new GPM_CertificateHandler();
-		// $result = $certificateHandler->generateCertificate(13);
+		// $result = $certificateHandler->generateCertificate(78);
 
 		// echo '<pre>';
 		// var_dump($result);
 		// echo '</pre>';
-		// $recordModelData = $recordModel->getData();
 
 		// echo "<pre>";
-		// // var_dump($recordModelData);
 		// var_dump($clientID);
 		// echo "</pre>";
 
@@ -86,8 +84,6 @@ class Contacts_Detail_View extends Accounts_Detail_View
 
 		$activity = new dbo_db\ActivitySummary();
 		$activity_data = $activity->getActivitySummary($clientID);
-
-		var_dump('Activity Data: ', count($activity_data));
 
 		$holdings = new dbo_db\HoldingsDB();
 		$holdings_data = $holdings->getHoldingsData($clientID);

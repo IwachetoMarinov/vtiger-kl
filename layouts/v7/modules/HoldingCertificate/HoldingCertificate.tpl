@@ -107,13 +107,13 @@
                                     This certificate attests that {$RECORD_MODEL->get('salutationtype')}
                                     {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')} is the rightful
                                     owner of the following metals:<br><br>
-                                    {foreach item=HOLDINGS key=location from=$HOLDINGS}
+                                    {foreach item=HOLDINGS key=location from=$ERP_HOLDINGS}
                                         {foreach item=HOLDING from=$HOLDINGS}
                                             <span style="display:inline-block; width: 20px;"></span>-<span
                                                 style="display:inline-block; width: 20px;"></span>
                                             {number_format($HOLDING->quantity,0)} {$HOLDING->longDesc}
-                                            {if !empty($HOLDING->modiefiedSerials)}- Serial
-                                            {implode(", ",$HOLDING->modiefiedSerials)}{/if}<br>
+                                            {* {if !empty($HOLDING->modiefiedSerials)}- Serial
+                                            {implode(", ",$HOLDING->modiefiedSerials)}{/if}<br> *}
                                         {/foreach}
                                     {/foreach}
                                     <br>
