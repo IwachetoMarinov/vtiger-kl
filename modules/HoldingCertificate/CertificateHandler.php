@@ -182,9 +182,11 @@ class GPM_CertificateHandler
 
         fwrite($handle, $html);
         fclose($handle);
-        unlink($root_directory . "$fileName.pdf");
-        exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $root_directory . "$fileName.html " . $root_directory . "$fileName.pdf");
-        unlink($root_directory . $fileName . '.html');
+        // unlink($root_directory . "$fileName.pdf");
+        unlink($tmpDir . "$fileName.pdf");
+        exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $tmpDir . "$fileName.html " . $tmpDir . "$fileName.pdf");
+        // exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $root_directory . "$fileName.html " . $root_directory . "$fileName.pdf");
+        unlink($tmpDir . $fileName . '.html');
     }
 
     function processHoldingData($datas)
