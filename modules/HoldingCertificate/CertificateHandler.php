@@ -4,6 +4,8 @@ include_once 'dbo_db/HoldingsDB.php';
 include_once 'include/Webservices/Create.php';
 include_once 'modules/HoldingCertificate/phpqrcode/qrlib.php';
 
+
+
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
 
@@ -11,6 +13,7 @@ class GPM_CertificateHandler
 {
 
     public $holdings = null;
+    protected $base_url = 'http://34.170.106.104/id/';
 
     function generateCertificate($contactID)
     {
@@ -33,7 +36,8 @@ class GPM_CertificateHandler
             'assigned_user_id' => vtws_getWebserviceEntityId('Users', $current_user->id),
             'notes_id' => $meta[0],
             'certificate_hash' => $meta[1],
-            'verify_url' => 'https://certificates.global-precious-metals.com/id/' . $guid,
+            // 'verify_url' => 'https://certificates.global-precious-metals.com/id/' . $guid,
+            'verify_url' => $this->base_url . $guid,
             'description' => json_encode($this->holdings),
         );
 
@@ -89,7 +93,8 @@ class GPM_CertificateHandler
     {
         global $root_directory;
 
-        $text = 'https://certificates.global-precious-metals.com/id/' . $guid;
+        // $text = 'https://certificates.global-precious-metals.com/id/' . $guid;
+        $text = $this->base_url . $guid;
         $qrPath = $root_directory . '/modules/HoldingCertificate/' . $guid . '.png';
 
         QRcode::png($text, $qrPath, QR_ECLEVEL_H, 10);
