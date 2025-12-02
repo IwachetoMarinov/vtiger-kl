@@ -135,7 +135,9 @@ class GPM_CertificateHandler
     function createDocument($fileName, $documentName, $recordModel, $note = '')
     {
         global $root_directory, $current_user;
-        $absFileName = $root_directory . "$fileName.pdf";
+        // $absFileName = $root_directory . "$fileName.pdf";
+        $absFileName = $root_directory . "modules/HoldingCertificate/tmp/$fileName.pdf";
+
 
         $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
 
@@ -173,15 +175,17 @@ class GPM_CertificateHandler
 
     function createPDF($fileName, $html)
     {
-        if (!shell_exec("which wkhtmltopdf")) {
-            // wkhtmltopdf missing → skip PDF generation locally
-            return false;
-        }
-        global $root_directory;
-        echo "Trying to write html to: " . $root_directory . $fileName . '.html';
-        exit;
+        // Check if wkhtmltopdf is installed
+        if (!shell_exec("which wkhtmltopdf"))  return false;
 
-        $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
+        global $root_directory;
+        // echo "Trying to write html to: " . $root_directory . $fileName . '.html';
+        // exit;
+
+        // $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
+        $tmpDir = $root_directory . 'modules/HoldingCertificate/tmp/';
+        $handle = fopen($tmpDir . $fileName . '.html', 'a') or die('Cannot open file:  ');
+
         fwrite($handle, $html);
         fclose($handle);
         unlink($root_directory . "$fileName.pdf");
