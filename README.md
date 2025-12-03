@@ -122,6 +122,15 @@ Deploy in github with export/import database
 18. Check cron job permissions `ls -l /var/www/html/vtiger_metals_cron.sh`
 
 19. Make it executable any cron job `sudo chmod +x /var/www/html/vtiger_metals_cron.sh` and `sudo chown iwacheto:iwacheto /var/www/html/vtiger_metals_cron.sh`
+
+20. When create Holding certificate do not forget to check and give permissions for these folder '/modules/HoldingCertificate/tmp' and '/var/www/html/test/templates_c/v7/' with these commands: 
+     `sudo chown -R iwacheto:www-data /var/www/html/modules/HoldingCertificate/tmp/`
+     `sudo chmod -R 775 /var/www/html/modules/HoldingCertificate/tmp/`
+
+    `sudo chown -R iwacheto:www-data /var/www/html/test/templates_c/`
+    `sudo chmod -R 775 /var/www/html/test/templates_c/`
+
+21. delete ALL QR codes?  `find /var/www/html/modules/HoldingCertificate -maxdepth 1 -name "*.png" -delete`   
      
 
    

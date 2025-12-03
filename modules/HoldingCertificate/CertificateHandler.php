@@ -15,13 +15,14 @@ class GPM_CertificateHandler
 
     function generateCertificate($contactID)
     {
-
         global $current_user, $root_directory;
         $contactRecordModel = Contacts_Record_Model::getInstanceById($contactID, 'Contacts');
         $contactWsID = vtws_getWebserviceEntityId('Contacts', $contactID);
         $guid = $this->guidv4(openssl_random_pseudo_bytes(16));
 
         $this->createQRCode($guid);
+
+        return;
 
         $meta = $this->createHoldingCertificate($contactRecordModel, $guid);
 

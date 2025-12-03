@@ -46,6 +46,16 @@
 					<span class="span11 margin0px">
 						<div class="row-fluid">
 							<h4 class="display-inline-block">Holdings</h4>
+							{* SHOULD be removed after tests *}
+							<span class="pull-right">
+								<a href="index.php?module=Contacts&view=HoldingCertificate&record={$RECORD->getId()}"
+									target="_blank">
+									<button class="btn btn-default vteWidgetCreateButton" type="button">
+										<span class="fa fa-download"></span>
+										&nbsp;HoldingCertificate
+									</button>
+								</a>
+							</span>
 							<span class="pull-right">
 								<a href="index.php?module=Contacts&view=HoldingPrintPreview&record={$RECORD->getId()}"
 									target="_blank">
