@@ -78,9 +78,6 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		// -------------------------------------------
 		// 🔥 REAL ACTIVITY SUMMARY DATA
 		// -------------------------------------------
-		// $fieldModel = Vtiger_Field_Model::getInstance('package_currency', Vtiger_Module_Model::getInstance('GPMIntent'));
-		// $values = $fieldModel->getPicklistValues();
-		// $currency_list = array_keys($values);
 
 		$activity = new dbo_db\ActivitySummary();
 		$activity_data = $activity->getActivitySummary($clientID);
