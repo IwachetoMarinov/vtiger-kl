@@ -131,6 +131,8 @@ Deploy in github with export/import database
     `sudo chmod -R 775 /var/www/html/test/templates_c/`
 
 21. delete ALL QR codes?  `find /var/www/html/modules/HoldingCertificate -maxdepth 1 -name "*.png" -delete`   
+
+22. add git configs `git config user.name "IwachetoMarinov"`  and `git config user.email "ivailo.marinov@webrika.bg"`
      
 
    
