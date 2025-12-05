@@ -15,5 +15,6 @@ api/api_debug.log
 
 # === Local logs ===
 db_backups/deploy.log
+test-db.php
 
 .env
