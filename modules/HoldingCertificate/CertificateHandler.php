@@ -32,8 +32,7 @@ class GPM_CertificateHandler
 
         $meta = $this->createHoldingCertificate($contactRecordModel, $guid);
 
-        // SHOULD uncomment this after tests
-        // unlink($root_directory . '/modules/HoldingCertificate/' . $guid . '.png');
+        unlink($root_directory . '/modules/HoldingCertificate/' . $guid . '.png');
 
         $certficate = array(
             'guid' => $guid,
@@ -42,7 +41,6 @@ class GPM_CertificateHandler
             'assigned_user_id' => vtws_getWebserviceEntityId('Users', $current_user->id),
             'notes_id' => $meta[0],
             'certificate_hash' => $meta[1],
-            // 'verify_url' => 'https://certificates.global-precious-metals.com/id/' . $guid,
             'verify_url' => $this->base_url . $guid,
             'description' => json_encode($this->holdings),
         );
@@ -65,7 +63,6 @@ class GPM_CertificateHandler
     {
         global $root_directory;
 
-        // $text = 'https://certificates.global-precious-metals.com/id/' . $guid;
         $text = $this->base_url . $guid;
         $qrPath = $root_directory . '/modules/HoldingCertificate/' . $guid . '.png';
 
@@ -75,7 +72,6 @@ class GPM_CertificateHandler
     protected function createHoldingCertificate(Contacts_Record_Model $recordModel, $guid)
     {
         $clientID = $recordModel->get('cf_898');
-        // $comId = $recordModel->get('related_entity');
 
         $holdings = new dbo_db\HoldingsDB();
         $holdings_data = $holdings->getHoldingsData($clientID);
@@ -172,8 +168,8 @@ class GPM_CertificateHandler
         // ----------------------------------------------------------------------
         // 7️⃣ Cleanup — COMMENTED OUT during debugging
         // ----------------------------------------------------------------------
-        // unlink($absFileName);  // generated PDF in HoldingCertificate/tmp
-        // unlink($tmpFile);      // real PHP temporary file
+        unlink($absFileName);  // generated PDF in HoldingCertificate/tmp
+        unlink($tmpFile);      // real PHP temporary file
 
         return [$ent['id'], $hash];
     }
@@ -187,16 +183,14 @@ class GPM_CertificateHandler
 
         global $root_directory;
 
-        // $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
         $tmpDir = $root_directory . 'modules/HoldingCertificate/tmp/';
         $handle = fopen($tmpDir . $fileName . '.html', 'a') or die('Cannot open file:  ');
 
         fwrite($handle, $html);
         fclose($handle);
-        // unlink($root_directory . "$fileName.pdf");
         unlink($tmpDir . "$fileName.pdf");
         exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $tmpDir . "$fileName.html " . $tmpDir . "$fileName.pdf");
-        // exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $root_directory . "$fileName.html " . $root_directory . "$fileName.pdf");
+        
         unlink($tmpDir . $fileName . '.html');
     }
 
