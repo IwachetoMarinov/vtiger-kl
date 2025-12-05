@@ -140,7 +140,7 @@
                             <div id='signature'>
                                 {* <img src="layouts/v7/modules/HoldingCertificate/nico_sig.png"
                                     alt="Please scan to verify" style='height:80px;margin-top: 40px;display: block; '> *}
-                                <img src="{$SITE_URL}layouts/v7/modules/HoldingCertificate/nico_sig.png"
+                                <img src="http://34.170.106.104/layouts/v7/modules/HoldingCertificate/nico_sig.png"
                                     alt="Please scan to verify" style='height:80px;margin-top: 40px;display: block; '>
                                 <p style="color:black;">Nicolas Mathier<br>
                                     CEO</p>
@@ -164,7 +164,7 @@
                     <td>
                         <div id='logo' style='float: right;'>
                             {* <img src='layouts/v7/modules/HoldingCertificate/gpm_logo.png' style='width: 72px;'> *}
-                            <img src="{$SITE_URL}layouts/v7/modules/HoldingCertificate/gpm_logo.png"
+                            <img src="http://34.170.106.104/layouts/v7/modules/HoldingCertificate/gpm_logo.png"
                                 style='width: 72px;'>
 
                         </div>
