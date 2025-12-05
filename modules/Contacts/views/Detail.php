@@ -14,7 +14,6 @@
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
-include_once 'modules/HoldingCertificate/CertificateHandler.php';
 
 class Contacts_Detail_View extends Accounts_Detail_View
 {
@@ -45,7 +44,6 @@ class Contacts_Detail_View extends Accounts_Detail_View
 	{
 		$recordId = $request->get('record');
 		$selected_currency = $request->get('ActivtySummeryCurrency');
-		// if (!$selected_currency) $selected_currency = '';
 
 		$moduleName = $request->getModule();
 
@@ -56,17 +54,6 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		// REAL CUSTOMER ID FROM RECORD
 		$clientID = $recordModel->get('cf_898');
 
-		// $certificateHandler = new GPM_CertificateHandler();
-		// $result = $certificateHandler->generateCertificate(78);
-
-		// HARDCODED DATA FOR NOW
-		$erpData = [
-			'BALANCES' => [
-				'available' => 12500.55,
-				'pending'   => 300.00,
-			],
-		];
-
 		// -------------------------------------------
 		// 🔥 REAL ACTIVITY SUMMARY DATA
 		// -------------------------------------------
@@ -75,8 +62,9 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$activity_data = $activity->getActivitySummary($clientID);
 
 		$holdings = new dbo_db\HoldingsDB();
-		// $holdings_data = $holdings->getHoldingsData($clientID);
 		$holdings_data = $holdings->getHoldings($clientID);
+
+		$wallets = $holdings->getWalletBalances($clientID);
 
 		$certificate_id = $this->getCertificateId($recordId);
 
@@ -97,12 +85,6 @@ class Contacts_Detail_View extends Accounts_Detail_View
 			$years[] = date('Y', strtotime("-$i year"));
 		}
 
-		// echo '<pre>';
-		// echo "\n Data fetched from holdings: " . date('Y-m-d H:i:s') . PHP_EOL;
-		// // echo "\n Data fetched from ActivitySummary: " . date('Y-m-d H:i:s') . PHP_EOL;
-		// var_dump($holdings_data);
-		// echo '</pre>';
-
 		$viewer = $this->getViewer($request);
 
 		// Assign safely to TPL
@@ -111,7 +93,7 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$viewer->assign('OROSOFT_TRANSACTION', $activity_data);
 		$viewer->assign('CERTIFICATE_HOLDING', $certificate_id);
 		$viewer->assign('CURRENCY', $selected_currency);
-		$viewer->assign('BALANCES', $erpData['BALANCES']);
+		$viewer->assign('BALANCES', $wallets);
 		$viewer->assign('HOLDINGS', $holdings_data);
 		$viewer->assign('YEARS', $years);
 

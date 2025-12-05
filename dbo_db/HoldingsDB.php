@@ -26,8 +26,7 @@ class HoldingsDB
 
         $params[] = $customer_id;
 
-        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_DocHoldings]";
-        // $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_DocHoldings] WHERE [Party_Code] = ?";
+        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_DocHoldings] WHERE [Party_Code] = ?";
 
         $stmt = sqlsrv_query($this->connection, $sql, $params);
 
@@ -54,6 +53,30 @@ class HoldingsDB
             ];
         }
         return $results;
+    }
+
+    public function getWalletBalances($customer_id = null)
+    {
+        if (!$customer_id) return [];
+
+        if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+
+        $params[] = $customer_id;
+
+        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_DocWalletBal] WHERE [Party_Code] = ?";
+
+        $stmt = sqlsrv_query($this->connection, $sql, $params);
+
+        if ($stmt === false) die(print_r(sqlsrv_errors(), true));
+
+        $summary = [];
+        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+            $summary[] = $row;
+        }
+
+        sqlsrv_free_stmt($stmt);
+
+        return $summary;
     }
 
     public function getHoldingsData($customer_id = null)

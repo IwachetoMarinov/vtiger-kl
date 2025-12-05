@@ -4,9 +4,10 @@
         <h4 class="display-inline-block">Balance By Wallet</h4>
     </div>
 
-    <div class="widget_contents" style="padding:15px;">
-        <div style="display:flex;align-items:center;">
-            <div style="
+    <div class="widget_contents" style="display:flex;flex-wrap:wrap;">
+        {foreach item=BALANCE from=$BALANCES}
+            <div style="display:flex;align-items:center;">
+                <div style="
                 width:120px;
                 height:120px;
                 background:#f1f1f1;
@@ -19,21 +20,26 @@
                 color:#444;
                 margin-right:30px;
             ">
-                <b>{$CURRENCY}</b>
-                <div style="margin-top:10px;font-size:20px;">
-                    {$BALANCES.available}
+                    {if isset($BALANCE.Curr_Code)}
+                        <b>{$BALANCE.Curr_Code}</b>
+                    {/if}
+
+                    {if isset($BALANCE.Balance)}
+                        <div style="margin-top:10px;font-size:17px;">
+                            {$BALANCE.Balance}
+                        </div>
+                    {/if}
                 </div>
             </div>
+        {/foreach}
+    </div>
 
-            <div style="font-size:14px;color:#444;">
-                <b>Pending:</b> {$BALANCES.pending}
-            </div>
-        </div>
-
-        <div style="margin-top:20px;">
+    {* Check if Holdings is Array *}
+    {if is_array($HOLDINGS) && count($HOLDINGS) > 0}
+        <div style="margin-top:20px;text-align:center;">
             <a href="#" class="btn btn-primary">
                 <i class="fa fa-download"></i> Download All
             </a>
         </div>
-    </div>
+    {/if}
 </div>
