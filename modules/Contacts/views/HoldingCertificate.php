@@ -31,7 +31,7 @@ class Contacts_HoldingCertificate_View extends Vtiger_Index_View
         $guid = $this->guidv4(openssl_random_pseudo_bytes(16));
         $clientID = $recordModel->get('cf_898');
 
-        // var_dump("Contact Record ID: " . $contactID);
+        var_dump("Contact Record ID: " . $clientID);
 
         $holdings = new dbo_db\HoldingsDB();
         $holdings_data = $holdings->getHoldingsData($clientID);

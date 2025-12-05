@@ -98,54 +98,41 @@ class GPM_CertificateHandler
     function createDocument($fileName, $documentName, $recordModel, $note = '')
     {
         global $root_directory, $current_user;
-
+        // $absFileName = $root_directory . "$fileName.pdf";
         $absFileName = $root_directory . "modules/HoldingCertificate/tmp/$fileName.pdf";
 
-        // 1️⃣ MAKE A REAL PHP TEMP FILE COPY FOR vtws_create
-        $tmp = tempnam(sys_get_temp_dir(), 'vtiger_pdf_');
-        copy($absFileName, $tmp);
+        $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
 
-        // 2️⃣ PREPARE $_FILES DATA PROPERLY
-        $_FILES['file'] = array(
-            'name' => basename($absFileName),
-            'type' => 'application/pdf',
-            'tmp_name' => $tmp,
-            'error' => 0,
+        $file = array(
+            'tmp_name' => $absFileName,
+            'name' => end(explode('/', $absFileName)),
+            'type' => finfo_file($fileInfo, $absFileName),
             'size' => filesize($absFileName),
+            'error' => 0
         );
 
-        // 3️⃣ DOCUMENT FIELDS
-        $params = array(
-            'notes_title' => $documentName,
-            'filelocationtype' => 'I',
-            'filestatus' => '1',
-            'filename' => basename($absFileName),
-            'filetype' => 'application/pdf',
-            'filesize' => filesize($absFileName),
-            'notecontent' => $note,
-            'assigned_user_id' => vtws_getWebserviceEntityId('Users', $current_user->id),
-        );
 
-        // 4️⃣ NOW IT WILL WORK — vtws_create CAN READ THE TEMP FILE
+        $_FILES['file'] = $file;
+        $params = array();
+        $params['notes_title'] = $documentName;
+        $params['filelocationtype'] = 'I'; // location type is internal
+        $params['filestatus'] = '1'; //status always active
+        $params['filename'] = $file['name'];
+        $params['filetype'] = $file['type'];
+        $params['filesize'] = $file['size'];
+        $params['notecontent'] = $note;
+        $params['assigned_user_id'] = vtws_getWebserviceEntityId('Users', $current_user->id);
         $ent = vtws_create('Documents', $params, $current_user);
 
-        // 5️⃣ RELATE DOCUMENT TO CONTACT
         $id = explode('x', $ent['id']);
         $recordId = $id[1];
-
         $contact = new Contacts();
         $contact->save_related_module('Contacts', $recordModel->getId(), 'Documents', array($recordId));
-
-        // 6️⃣ HASH THE ORIGINAL FILE
         $hash = hash_file('sha256', $absFileName);
-
-        // 7️⃣ CLEANUP
-        unlink($absFileName); // remove your tmp file
-        unlink($tmp);         // remove PHP temp file
+        unlink($absFileName);
 
         return [$ent['id'], $hash];
     }
-
 
     protected function createPDF($fileName, $html)
     {
