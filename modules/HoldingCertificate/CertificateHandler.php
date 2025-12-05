@@ -11,7 +11,15 @@ class GPM_CertificateHandler
 {
 
     public $holdings = null;
-    protected $base_url = 'http://34.170.106.104/id/';
+    protected $site_URL;
+    protected $base_url;
+
+    function __construct()
+    {
+        global $site_URL;
+        $this->site_URL = $site_URL;
+        $this->base_url = $site_URL . 'id/';
+    }
 
     function generateCertificate($contactID)
     {
@@ -24,7 +32,8 @@ class GPM_CertificateHandler
 
         $meta = $this->createHoldingCertificate($contactRecordModel, $guid);
 
-        unlink($root_directory . '/modules/HoldingCertificate/' . $guid . '.png');
+        // SHOULD uncomment this after tests
+        // unlink($root_directory . '/modules/HoldingCertificate/' . $guid . '.png');
 
         $certficate = array(
             'guid' => $guid,
@@ -77,6 +86,7 @@ class GPM_CertificateHandler
 
             $viewer = new Vtiger_Viewer();
             $viewer->assign('RECORD_MODEL', $recordModel);
+            $viewer->assign('site_URL', $this->site_URL);
             $viewer->assign('ERP_HOLDINGS', $this->processHoldingData($holdings_data));
             $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($recordModel->get('related_entity')));
             $viewer->assign('GUID', $guid);
