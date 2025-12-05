@@ -18,6 +18,44 @@ class HoldingsDB
         $this->connection = DBConnection::getConnection();
     }
 
+    public function getHoldings($customer_id = null)
+    {
+        if (!$customer_id) return [];
+
+        if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+
+        $params[] = $customer_id;
+
+        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_DocHoldings]";
+        // $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_DocHoldings] WHERE [Party_Code] = ?";
+
+        $stmt = sqlsrv_query($this->connection, $sql, $params);
+
+        if ($stmt === false) die(print_r(sqlsrv_errors(), true));
+
+        $summary = [];
+        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+            $summary[] = $row;
+        }
+
+        sqlsrv_free_stmt($stmt);
+
+        $results = [];
+        foreach ($summary as $item) {
+            $results[] = [
+                'spot_date' => $item['Spot_Date'] instanceof \DateTime ? $item['Spot_Date']->format('Y-m-d') : $item['Spot_Date'],
+                'spot_price' => $item['Spot_Price'] ?? '',
+                'location' => $item['WH_Code'] ?? '',
+                'description' => $item['Item_Desc'] ?? '',
+                'quantity' => $item['Qty'] ?? 0,
+                'serial_no' => $item['Ser_No_List'] ?? '',
+                'fine_oz' => $item['FineOz'] ?? 0,
+                'total' => $item['Total'] ?? 0,
+            ];
+        }
+        return $results;
+    }
+
     public function getHoldingsData($customer_id = null)
     {
         if (!$customer_id) return [];
@@ -44,7 +82,7 @@ class HoldingsDB
         }
 
         sqlsrv_free_stmt($stmt);
-        
+
         $results = [];
         foreach ($summary as $item) {
             $results[] = [

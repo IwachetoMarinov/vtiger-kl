@@ -59,14 +59,6 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		// $certificateHandler = new GPM_CertificateHandler();
 		// $result = $certificateHandler->generateCertificate(78);
 
-		// echo '<pre>';
-		// var_dump($result);
-		// echo '</pre>';
-
-		// echo "<pre>";
-		// var_dump($clientID);
-		// echo "</pre>";
-
 		// HARDCODED DATA FOR NOW
 		$erpData = [
 			'BALANCES' => [
@@ -83,7 +75,8 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$activity_data = $activity->getActivitySummary($clientID);
 
 		$holdings = new dbo_db\HoldingsDB();
-		$holdings_data = $holdings->getHoldingsData($clientID);
+		// $holdings_data = $holdings->getHoldingsData($clientID);
+		$holdings_data = $holdings->getHoldings($clientID);
 
 		$certificate_id = $this->getCertificateId($recordId);
 
@@ -107,7 +100,7 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		// echo '<pre>';
 		// echo "\n Data fetched from holdings: " . date('Y-m-d H:i:s') . PHP_EOL;
 		// // echo "\n Data fetched from ActivitySummary: " . date('Y-m-d H:i:s') . PHP_EOL;
-		// var_dump($activity_data);
+		// var_dump($holdings_data);
 		// echo '</pre>';
 
 		$viewer = $this->getViewer($request);

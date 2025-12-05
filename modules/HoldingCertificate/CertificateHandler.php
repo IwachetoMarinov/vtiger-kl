@@ -4,9 +4,6 @@ include_once 'dbo_db/HoldingsDB.php';
 include_once 'include/Webservices/Create.php';
 include_once 'modules/HoldingCertificate/phpqrcode/qrlib.php';
 
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
-
 class GPM_CertificateHandler
 {
 
@@ -190,7 +187,7 @@ class GPM_CertificateHandler
         fclose($handle);
         unlink($tmpDir . "$fileName.pdf");
         exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $tmpDir . "$fileName.html " . $tmpDir . "$fileName.pdf");
-        
+
         unlink($tmpDir . $fileName . '.html');
     }
 

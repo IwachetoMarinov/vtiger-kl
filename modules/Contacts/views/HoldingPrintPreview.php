@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 include_once 'dbo_db/HoldingsDB.php';
-include_once 'modules/Contacts/models/MetalsAPI.php';
+// include_once 'modules/Contacts/models/MetalsAPI.php';
 
 class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
 {
@@ -29,58 +29,60 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
         $clientID = $recordModel->get('cf_898');
 
         $holdings = new dbo_db\HoldingsDB();
-        $holdings_data = $holdings->getHoldingsData($clientID);
+        $holdings_data = $holdings->getHoldings($clientID);
+        $total = $this->calculateSpotTotal($holdings_data);
 
         // echo '<pre>';
         // echo 'Holdings Data: ';
         // var_dump($holdings_data);
         // echo '</pre>';
 
-        $metalsAPI = new MetalsAPI();
-        $metals_data = $metalsAPI->getMetals();
+        // $metalsAPI = new MetalsAPI();
+        // $metals_data = $metalsAPI->getMetals();
+
+        $LBMA_DATE = isset($holdings_data[0]['spot_date']) && is_array($holdings_data) ? date('d-M-y', strtotime($holdings_data[0]['spot_date'])) : '';
 
         $grouped = [];
         foreach ($holdings_data as $item) {
             $location = $item['location'];
-            // $serials = isset($item['serial_numbers']) && is_array($item['serial_numbers']) ? $item['serial_numbers'] : [];
-            // $Serial_string = isset($item['serial_numbers']) && is_array($item['serial_numbers']) ? implode(", ", $item['serial_numbers']) : '';
 
             $grouped[$location][] = (object) [
                 // 'metal' => $item['metal'],
-                'metal' => $item['description'],
-                'location' => $item['location'],
+                'metal' => $item['description'] ?? '',
+                'location' => $item['location'] ?? '',
+                'serials' => $item['serial_no'] ?? '',
                 'pureOz' => isset($item['fine_oz']) ? (float) $item['fine_oz'] : 0.00,
+                'total' => isset($item['total']) ? (float) $item['total'] : 0.00,
                 'quantity' => isset($item['quantity']) ? (int) $item['quantity'] : 0,
-                // 'modiefiedSerials' =>  $serials,
+                'spot_price' => isset($item['spot_price']) ? (int) $item['spot_price'] : 0,
                 'longDesc' => $item['description'],
-                // 'longDesc' => $item['description'] . " - " . $Serial_string
             ];
         }
 
         // Metals data formatting
-        $metals = [];
-        foreach ($metals_data as $data) {
-            $item = [
-                $data['MT_Code'] => [
-                    'price_date' => $data['Date'],
-                    'price' => $data['SpotPriceCurr'] ?? 0.00
-                ]
-            ];
-            $metals = array_merge($metals, $item);
-        }
+        // $metals = [];
+        // foreach ($metals_data as $data) {
+        //     $item = [
+        //         $data['MT_Code'] => [
+        //             'price_date' => $data['Date'],
+        //             'price' => $data['SpotPriceCurr'] ?? 0.00
+        //         ]
+        //     ];
+        //     $metals = array_merge($metals, $item);
+        // }
 
-        $erpData = [
-            'Holdings' => $grouped,
-            'MetalPrice' => $metals
-        ];
+        // $erpData = [
+        //     'Holdings' => $grouped,
+        //     'MetalPrice' => $metals
+        // ];
 
         $recordModel = $this->record->getRecord();
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
-        $viewer->assign('LBMA_DATE', date('d-M-y', strtotime($erpData['MetalPrice']['XAU']['price_date'])));
+        $viewer->assign('LBMA_DATE', $LBMA_DATE);
+        $viewer->assign('TOTAL', $total);
         $viewer->assign('ERP_HOLDINGS', $grouped);
-        $viewer->assign('ERP_METALPRICE', $erpData['MetalPrice']);
-        $viewer->assign('ERP_HOLDINGMETALS', array_unique(array_column($holdings_data, 'brand')));
+        $viewer->assign('ERP_HOLDINGMETALS', $holdings_data);
         $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($recordModel->get('related_entity')));
 
         if ($request->get('PDFDownload')) {
@@ -93,75 +95,13 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
         }
     }
 
-    // function processHoldingData($datas)
-    // {
-    //     $newData = [];
-    //     foreach ($datas as $data) {
-    //         $modifiedSerials = $this->sumSerials($data->serials);
-    //         $data->modiefiedSerials = $modifiedSerials;
-    //         if (in_array($data->location, array('Brinks Singapore', 'Fineart', 'Malca-Amit Singapore'))) {
-    //             $data->location = 'LFPSG';
-    //         }
-    //         if (in_array($data->location, array('Brinks Hong Kong', 'Malca-Amit Hong Kong'))) {
-    //             $data->location = 'Brinks Hong Kong';
-    //         }
-    //         if (strtolower($data->metal) == 'mbtc') {
-    //             $data->pureOz = number_format($data->pureOz / 100000, 8);;
-    //         }
-    //         $newData[$data->location][] = $data;
-    //     }
-    //     return $newData;
-    // }
-
-    function splitAndOrder($values)
+    protected function calculateSpotTotal($holdings_data)
     {
-        $b = [];
-        $subList = [];
-        $prev_n = -1;
-        foreach ($values as $n) {
-            if ($prev_n + 1 != $n && !empty($subList)) {
-                $b[] = $subList;
-                $subList = [];
-            }
-            $subList[] = $n;
-            $prev_n = $n;
+        $total = 0.00;
+        foreach ($holdings_data as $item) {
+            $total += isset($item['total']) ? (float) $item['total'] : 0.00;
         }
-        $b[] = $subList;
-        return $b;
-    }
-
-    function genSerialSequance($prefix, $serialsSequance)
-    {
-        $serialStringrray = [];
-        foreach ($serialsSequance as $serials) {
-            if (count($serials) > 1) {
-                $serialGroup = $prefix . $serials[0] . '-' . $prefix . end($serials);
-            } else {
-                $serialGroup = $prefix . $serials[0];
-            }
-
-            $serialStringrray[] = str_replace('single', '', $serialGroup);
-        }
-        return $serialStringrray;
-    }
-
-    function sumSerials($serials)
-    {
-        $splitList = array();
-        foreach ($serials as $serial) {
-            $part = preg_split('/(?<=\D)(?=\d)/', $serial);
-            if (count($part) > 1) {
-                $splitList[$part[0]][] = $part[1];
-            } else {
-                $splitList['single'][] = $part[0];
-            }
-        }
-        $lsitOfSerials = [];
-        foreach ($splitList as $key => $value) {
-            sort($value);
-            $lsitOfSerials = array_merge($lsitOfSerials, $this->genSerialSequance($key, $this->splitAndOrder($value)));
-        }
-        return $lsitOfSerials;
+        return $total;
     }
 
     public function postProcess(Vtiger_Request $request) {}
