@@ -245,12 +245,10 @@
                                 <td style="text-align:center">{$LBMA_DATE}</td>
                             </tr>
                             {foreach from=$ERP_HOLDINGMETALS item=metal}
-                                {if strtoupper($metal) eq 'MBTC'}
-                                    {continue}
-                                {/if}
                                 <tr>
-                                    <th>{vtranslate($metal,'MetalPrice')}</th>
-                                    {assign var="rate" value=$ERP_METALPRICE[strtoupper($metal)].price|default:0}
+                                    <th>Gold</th>
+                                    {* <th>{vtranslate($metal,'MetalPrice')}</th> *}
+                                    {assign var="rate" value=$metal.spot_price|default:0}
                                     <td style="text-align:center">US$ {number_format($rate, 3, '.', ',')} / Oz..</td>
                                 </tr>
                             {/foreach}
@@ -271,7 +269,6 @@
                                 <th style="width:20%;text-align:center">FINE WEIGHT(OZ.)</th>
                                 <th style="width:20%;text-align:center">TOTAL</th>
                             </tr>
-                            {assign var="grandTotal" value=0}
                             {foreach item=HOLDINGS key=location from=$ERP_HOLDINGS}
                                 <tr class="no-border">
                                     <td></td>
@@ -280,34 +277,36 @@
                                     <td style='text-align:right'></td>
                                 </tr>
                                 {foreach item=HOLDING from=$HOLDINGS}
-                                    {assign var="totalPrice" value=$HOLDING->pureOz * $ERP_METALPRICE[strtoupper($HOLDING->metal)]['price']|default:0}
-
-
-                                    {assign var="grandTotal" value=($grandTotal)+($totalPrice)}
                                     <tr class="no-border">
                                         <td style="vertical-align: top;">{number_format($HOLDING->quantity,0)}</td>
+
                                         <td>
-                                            {$HOLDING->longDesc} <br> <span style="font-size: smaller;font-style: italic;">
-                                                {* {implode(", ",$HOLDING->modiefiedSerials)} *}
+                                            {$HOLDING->longDesc} <br>
+                                            <span style="font-size: smaller;font-style: italic;">
+                                                {$HOLDING->serials}
                                             </span>
                                         </td>
-                                        {assign var=CRYPTO value=['MBTC','ETH']}
+
+                                        <td style='vertical-align: top;text-align:right'>
+                                            {number_format($HOLDING->pureOz,3)}
+                                        </td>
+                                        {* {assign var=CRYPTO value=['MBTC','ETH']}
                                         {if in_array(strtoupper($HOLDING->metal),$CRYPTO) }
                                             <td style='vertical-align: top;text-align:right'>{number_format($HOLDING->pureOz,8)}
                                             </td>
                                         {else}
                                             <td style='vertical-align: top;text-align:right'>{number_format($HOLDING->pureOz,3)}
                                             </td>
-                                        {/if}
+                                        {/if} *}
                                         <td style='vertical-align: top;text-align:right'>
-                                            {CurrencyField::convertToUserFormat($totalPrice)}</td>
+                                            {CurrencyField::convertToUserFormat($HOLDING->total)}</td>
                                     </tr>
                                 {/foreach}
                             {/foreach}
                             <tr>
                                 <th colspan="3">TOTAL MARKET VALUE</th>
                                 <td style='text-align:right'><strong>US$
-                                        {CurrencyField::convertToUserFormat($grandTotal)}</strong></td>
+                                        {CurrencyField::convertToUserFormat($TOTAL)}</strong></td>
                             </tr>
                         </table>
                     </td>
