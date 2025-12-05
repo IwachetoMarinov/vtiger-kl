@@ -79,12 +79,11 @@
 <body style="margin: 0px;">
     <div class="printAreaContainer">
         <div class="full-width">
-            {assign var="SITE_URL" value="http://34.170.106.104/"}
             <table class="print-tbl">
                 <tr>
                     <td colspan="2">
                         <div id="QRCode" style="width: 100%">
-                            <img src="{$SITE_URL}modules/HoldingCertificate/{$GUID}.png" alt="Please scan to verify"
+                            <img src="{$site_URL}modules/HoldingCertificate/{$GUID}.png" alt="Please scan to verify"
                                 style='margin: auto;display: block;'>
                             <p style="text-align: center;"><a
                                     style="text-decoration: none;color: black;text-align: center" target="_blank"
