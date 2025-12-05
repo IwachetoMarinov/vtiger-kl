@@ -24,8 +24,7 @@ class GPM_CertificateHandler
 
         $meta = $this->createHoldingCertificate($contactRecordModel, $guid);
 
-        // SHOULD be uncommented in production
-        // unlink($root_directory . '/modules/HoldingCertificate/' . $guid . '.png');
+        unlink($root_directory . '/modules/HoldingCertificate/' . $guid . '.png');
 
         $certficate = array(
             'guid' => $guid,
@@ -100,53 +99,71 @@ class GPM_CertificateHandler
     {
         global $root_directory, $current_user;
 
-        // PDF created earlier
+        // Full path to PDF generated earlier
         $absFileName = $root_directory . "modules/HoldingCertificate/tmp/$fileName.pdf";
 
-        // 1️⃣ Create a REAL PHP temp file
+        // ----------------------------------------------------------------------
+        // 1️⃣ Create a REAL PHP temp file that vtiger will accept as upload
+        // ----------------------------------------------------------------------
         $tmpFile = tempnam(sys_get_temp_dir(), 'vtiger_upload_');
 
-        // Copy our PDF to the PHP tmp file
+        // Copy our certificate PDF into this real temp file
         copy($absFileName, $tmpFile);
 
-        // 2️⃣ Build proper $_FILES array
-        $_FILES['file'] = array(
+        // ----------------------------------------------------------------------
+        // 2️⃣ Build valid $_FILES structure for vtws_create()
+        // ----------------------------------------------------------------------
+        $_FILES['file'] = [
             'name' => $fileName . '.pdf',
             'type' => 'application/pdf',
             'tmp_name' => $tmpFile,
             'error' => 0,
             'size' => filesize($absFileName),
-        );
+        ];
 
-        // 3️⃣ Prepare document metadata
-        $params = array(
-            'notes_title' => $documentName,
-            'assigned_user_id' => vtws_getWebserviceEntityId('Users', $current_user->id),
-            'filelocationtype' => 'I',
-            'filestatus' => 1,
-            'filename' => $fileName . '.pdf',
-            'filetype' => 'application/pdf',
-            'filesize' => filesize($absFileName),
-            'notecontent' => $note
-        );
+        // ----------------------------------------------------------------------
+        // 3️⃣ Prepare vtiger Documents fields
+        // ----------------------------------------------------------------------
+        $params = [
+            'notes_title'        => $documentName,
+            'assigned_user_id'   => vtws_getWebserviceEntityId('Users', $current_user->id),
+            'filelocationtype'   => 'I',
+            'filestatus'         => 1,
+            'filename'           => $fileName . '.pdf',
+            'filetype'           => 'application/pdf',
+            'filesize'           => filesize($absFileName),
+            'notecontent'        => $note
+        ];
 
-        // 4️⃣ Create the document (vtiger will copy tmp file to storage/)
+        // ----------------------------------------------------------------------
+        // 4️⃣ Create the Document record (this copies file to storage/YYYY/MM/)
+        // ----------------------------------------------------------------------
         $ent = vtws_create('Documents', $params, $current_user);
 
-        // 5️⃣ Related record
-        $id = explode('x', $ent['id']);
-        $recordId = $id[1];
+        // ----------------------------------------------------------------------
+        // 5️⃣ Relate the new Document to the Contact
+        // ----------------------------------------------------------------------
+        $idParts = explode('x', $ent['id']);
+        $documentId = $idParts[1];
 
         $contact = new Contacts();
-        $contact->save_related_module('Contacts', $recordModel->getId(), 'Documents', [$recordId]);
+        $contact->save_related_module(
+            'Contacts',
+            $recordModel->getId(),
+            'Documents',
+            [$documentId]
+        );
 
-        // 6️⃣ Get hash BEFORE deleting original PDF
+        // ----------------------------------------------------------------------
+        // 6️⃣ Compute SHA-256 hash BEFORE deleting anything
+        // ----------------------------------------------------------------------
         $hash = hash_file('sha256', $absFileName);
 
-        // Cleanup
-        // SHOULD be uncommented in production
-        // unlink($absFileName);  // your tmp pdf
-        // unlink($tmpFile);      // the php tmp file
+        // ----------------------------------------------------------------------
+        // 7️⃣ Cleanup — COMMENTED OUT during debugging
+        // ----------------------------------------------------------------------
+        // unlink($absFileName);  // generated PDF in HoldingCertificate/tmp
+        // unlink($tmpFile);      // real PHP temporary file
 
         return [$ent['id'], $hash];
     }
@@ -167,13 +184,10 @@ class GPM_CertificateHandler
         fwrite($handle, $html);
         fclose($handle);
         // unlink($root_directory . "$fileName.pdf");
-        // SHOULD be uncommented in production
-        // unlink($tmpDir . "$fileName.pdf");
+        unlink($tmpDir . "$fileName.pdf");
         exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $tmpDir . "$fileName.html " . $tmpDir . "$fileName.pdf");
         // exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $root_directory . "$fileName.html " . $root_directory . "$fileName.pdf");
-
-        // SHOULD be uncommented in production
-        // unlink($tmpDir . $fileName . '.html');
+        unlink($tmpDir . $fileName . '.html');
     }
 
     protected function processHoldingData($datas)
