@@ -83,7 +83,7 @@
                 <tr>
                     <td colspan="2">
                         <div id="QRCode" style="width: 100%">
-                            <img src="modules/HoldingCertificate/{$GUID}.png" alt="Please scan to verify"
+                            <img src="{$SITE_URL}modules/HoldingCertificate/{$GUID}.png" alt="Please scan to verify"
                                 style='margin: auto;display: block;'>
                             <p style="text-align: center;"><a
                                     style="text-decoration: none;color: black;text-align: center" target="_blank"
