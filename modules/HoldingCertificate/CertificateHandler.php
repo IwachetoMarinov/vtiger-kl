@@ -24,7 +24,8 @@ class GPM_CertificateHandler
 
         $meta = $this->createHoldingCertificate($contactRecordModel, $guid);
 
-        unlink($root_directory . '/modules/HoldingCertificate/' . $guid . '.png');
+        // SHOULD be uncommented in production
+        // unlink($root_directory . '/modules/HoldingCertificate/' . $guid . '.png');
 
         $certficate = array(
             'guid' => $guid,
@@ -143,8 +144,9 @@ class GPM_CertificateHandler
         $hash = hash_file('sha256', $absFileName);
 
         // Cleanup
-        unlink($absFileName);  // your tmp pdf
-        unlink($tmpFile);      // the php tmp file
+        // SHOULD be uncommented in production
+        // unlink($absFileName);  // your tmp pdf
+        // unlink($tmpFile);      // the php tmp file
 
         return [$ent['id'], $hash];
     }
@@ -165,10 +167,13 @@ class GPM_CertificateHandler
         fwrite($handle, $html);
         fclose($handle);
         // unlink($root_directory . "$fileName.pdf");
-        unlink($tmpDir . "$fileName.pdf");
+        // SHOULD be uncommented in production
+        // unlink($tmpDir . "$fileName.pdf");
         exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $tmpDir . "$fileName.html " . $tmpDir . "$fileName.pdf");
         // exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $root_directory . "$fileName.html " . $root_directory . "$fileName.pdf");
-        unlink($tmpDir . $fileName . '.html');
+
+        // SHOULD be uncommented in production
+        // unlink($tmpDir . $fileName . '.html');
     }
 
     protected function processHoldingData($datas)
