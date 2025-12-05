@@ -99,52 +99,56 @@ class GPM_CertificateHandler
     {
         global $root_directory, $current_user;
 
+        // PDF created earlier
         $absFileName = $root_directory . "modules/HoldingCertificate/tmp/$fileName.pdf";
 
-        // 1️⃣ MAKE A REAL PHP TEMP FILE COPY FOR vtws_create
-        $tmp = tempnam(sys_get_temp_dir(), 'vtiger_pdf_');
-        copy($absFileName, $tmp);
+        // 1️⃣ Create a REAL PHP temp file
+        $tmpFile = tempnam(sys_get_temp_dir(), 'vtiger_upload_');
 
-        // 2️⃣ PREPARE $_FILES DATA PROPERLY
+        // Copy our PDF to the PHP tmp file
+        copy($absFileName, $tmpFile);
+
+        // 2️⃣ Build proper $_FILES array
         $_FILES['file'] = array(
-            'name' => basename($absFileName),
+            'name' => $fileName . '.pdf',
             'type' => 'application/pdf',
-            'tmp_name' => $tmp,
+            'tmp_name' => $tmpFile,
             'error' => 0,
             'size' => filesize($absFileName),
         );
 
-        // 3️⃣ DOCUMENT FIELDS
+        // 3️⃣ Prepare document metadata
         $params = array(
             'notes_title' => $documentName,
+            'assigned_user_id' => vtws_getWebserviceEntityId('Users', $current_user->id),
             'filelocationtype' => 'I',
-            'filestatus' => '1',
-            'filename' => basename($absFileName),
+            'filestatus' => 1,
+            'filename' => $fileName . '.pdf',
             'filetype' => 'application/pdf',
             'filesize' => filesize($absFileName),
-            'notecontent' => $note,
-            'assigned_user_id' => vtws_getWebserviceEntityId('Users', $current_user->id),
+            'notecontent' => $note
         );
 
-        // 4️⃣ NOW IT WILL WORK — vtws_create CAN READ THE TEMP FILE
+        // 4️⃣ Create the document (vtiger will copy tmp file to storage/)
         $ent = vtws_create('Documents', $params, $current_user);
 
-        // 5️⃣ RELATE DOCUMENT TO CONTACT
+        // 5️⃣ Related record
         $id = explode('x', $ent['id']);
         $recordId = $id[1];
 
         $contact = new Contacts();
-        $contact->save_related_module('Contacts', $recordModel->getId(), 'Documents', array($recordId));
+        $contact->save_related_module('Contacts', $recordModel->getId(), 'Documents', [$recordId]);
 
-        // 6️⃣ HASH THE ORIGINAL FILE
+        // 6️⃣ Get hash BEFORE deleting original PDF
         $hash = hash_file('sha256', $absFileName);
 
-        // 7️⃣ CLEANUP
-        unlink($absFileName); // remove your tmp file
-        unlink($tmp);         // remove PHP temp file
+        // Cleanup
+        unlink($absFileName);  // your tmp pdf
+        unlink($tmpFile);      // the php tmp file
 
         return [$ent['id'], $hash];
     }
+
 
 
     protected function createPDF($fileName, $html)
