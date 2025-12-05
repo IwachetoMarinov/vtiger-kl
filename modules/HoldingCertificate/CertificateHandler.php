@@ -22,8 +22,6 @@ class GPM_CertificateHandler
 
         $this->createQRCode($guid);
 
-        return;
-
         $meta = $this->createHoldingCertificate($contactRecordModel, $guid);
 
         unlink($root_directory . '/modules/HoldingCertificate/' . $guid . '.png');
@@ -170,7 +168,7 @@ class GPM_CertificateHandler
         return [$ent['id'], $hash];
     }
 
-    function createPDF($fileName, $html)
+    protected function createPDF($fileName, $html)
     {
         // Check if wkhtmltopdf is installed
         if (!shell_exec("which wkhtmltopdf"))  return false;
@@ -190,7 +188,7 @@ class GPM_CertificateHandler
         unlink($tmpDir . $fileName . '.html');
     }
 
-    function processHoldingData($datas)
+    protected function processHoldingData($datas)
     {
         $newData = [];
 
