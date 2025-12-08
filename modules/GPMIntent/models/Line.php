@@ -31,9 +31,10 @@ class GPMIntent_Line_Model extends Vtiger_Base_Model
     public function getMetalName()
     {
         global $adb;
-        $sql = 'select product_name from vtiger_gpmmetal where gpmmetalid = ? ';
+        $sql = 'select assetname from vtiger_assets where assetsid = ? ';
+        // $sql = 'select product_name from vtiger_gpmmetal where gpmmetalid = ? ';
         $result =  $adb->pquery($sql, array( $this->get('gpmmetalid')));
-        return  $adb->query_result($result, 0, 'product_name');
+        return  $adb->query_result($result, 0, 'assetname');
     }
 
     public static function getInstanceByIntent($intentId)
@@ -42,6 +43,7 @@ class GPMIntent_Line_Model extends Vtiger_Base_Model
         $sql = 'select * from vtiger_gpmintent_line where gpmintentid = ?';
         $result = $adb->pquery($sql, array($intentId));
         $num_rows = $adb->num_rows($result);
+
         $lines = array();
 
         for ($i = 0; $i < $num_rows; $i++) {
