@@ -9,11 +9,10 @@
  * All Rights Reserved.
  * *********************************************************************************** */
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 class GPMIntent_Detail_View extends Vtiger_Detail_View
 {
+
+
 
 	public function showModuleDetailView(Vtiger_Request $request)
 	{
@@ -24,7 +23,7 @@ class GPMIntent_Detail_View extends Vtiger_Detail_View
 		$viewer->assign('RELATED_PRODUCTS', $products);
 		return parent::showModuleDetailView($request);
 	}
-
+	
 	public function showModuleBasicView(Vtiger_Request $request)
 	{
 		$recordId = $request->get('record');
