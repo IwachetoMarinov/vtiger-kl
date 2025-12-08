@@ -3,8 +3,8 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-include_once 'dbo_db/ActivitySummary.php';
-include_once 'dbo_db/HoldingsDB.php';
+// include_once 'dbo_db/ActivitySummary.php';
+// include_once 'dbo_db/HoldingsDB.php';
 
 class Contacts_HoldingCertificate_View extends Vtiger_Index_View
 {
