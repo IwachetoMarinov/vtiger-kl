@@ -54,12 +54,11 @@
                                 <li
                                     id="{$MODULE_NAME}_detailView_moreAction_{Vtiger_Util_Helper::replaceSpaceWithUnderScores($DETAIL_VIEW_LINK->getLabel())}">
                                     {if $DETAIL_VIEW_LINK->getUrl()|strstr:"javascript"}
-                                        <a href='{$DETAIL_VIEW_LINK->getUrl()}' {if $DETAIL_VIEW_LINK->linktarget neq ''}
-                                            target="{$DETAIL_VIEW_LINK->linktarget}" {/if}>
+                                        <a href='{$DETAIL_VIEW_LINK->getUrl()}' {if $DETAIL_VIEW_LINK->get('linktarget') neq ''} target="{$DETAIL_VIEW_LINK->get('linktarget')}" {/if}>
                                             {vtranslate($DETAIL_VIEW_LINK->getLabel(), $MODULE_NAME)}</a>
                                     {else}
                                         <a href='{$DETAIL_VIEW_LINK->getUrl()}&app={$SELECTED_MENU_CATEGORY}'
-                                            {if $DETAIL_VIEW_LINK->linktarget neq ''} target="{$DETAIL_VIEW_LINK->linktarget}"
+                                            {if $DETAIL_VIEW_LINK->get('linktarget') neq ''} target="{$DETAIL_VIEW_LINK->get('linktarget')}"
                                             {/if}>{vtranslate($DETAIL_VIEW_LINK->getLabel(), $MODULE_NAME)}</a>
                                     {/if}
                                 </li>
