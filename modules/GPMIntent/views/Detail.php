@@ -9,25 +9,26 @@
  * All Rights Reserved.
  * *********************************************************************************** */
 
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 class GPMIntent_Detail_View extends Vtiger_Detail_View
 {
-
-
 
 	public function showModuleDetailView(Vtiger_Request $request)
 	{
 		$recordId = $request->get('record');
-		$moduleName = $request->getModule();
+		// $moduleName = $request->getModule();
 		$products = GPMIntent_Line_Model::getInstanceByIntent($recordId);
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RELATED_PRODUCTS', $products);
 		return parent::showModuleDetailView($request);
 	}
-	
+
 	public function showModuleBasicView(Vtiger_Request $request)
 	{
 		$recordId = $request->get('record');
-		$moduleName = $request->getModule();
+		// $moduleName = $request->getModule();
 		$products = GPMIntent_Line_Model::getInstanceByIntent($recordId);
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RELATED_PRODUCTS', $products);
