@@ -32,7 +32,8 @@ class GPMIntent_DetailView_Model extends Vtiger_DetailView_Model
 				'linktype' => 'DETAILVIEWBASIC',
 				'linklabel' => 'View Quotation',
 				'linkurl' => 'index.php?module=' . $moduleName . '&view=ViewQuotation&record=' . $recordId . '&type=full',
-				'linkicon' => ''
+				'linkicon' => '',
+				'linktarget' => '_blank',   //  ← add this
 			);
 			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
 		}
@@ -42,7 +43,8 @@ class GPMIntent_DetailView_Model extends Vtiger_DetailView_Model
 				'linktype' => 'DETAILVIEWBASIC',
 				'linklabel' => 'View Proforma Invoice',
 				'linkurl' => 'index.php?module=' . $moduleName . '&view=ViewProformaInvoice&record=' . $recordId,
-				'linkicon' => ''
+				'linkicon' => '',
+				'linktarget' => '_blank',   //  ← add this
 			);
 			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
 		}
