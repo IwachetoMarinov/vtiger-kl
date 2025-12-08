@@ -35,11 +35,11 @@
     </div>
 
     {* Check if Holdings is Array *}
-    {if is_array($HOLDINGS) && count($HOLDINGS) > 0}
+    {* {if is_array($HOLDINGS) && count($HOLDINGS) > 0} *}
         <div style="margin-top:20px;text-align:center;">
             <a href="#" class="btn btn-primary">
                 <i class="fa fa-download"></i> Download All
             </a>
         </div>
-    {/if}
+    {* {/if} *}
 </div>
