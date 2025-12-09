@@ -111,20 +111,21 @@
                                 <th style="width:20%;text-align:center">TOTAL</th>
                             </tr>
                             {foreach item=PRODUCT key=cnt from=$RELATED_PRODUCTS}
-                                {assign var=METAL value=Vtiger_Record_Model::getInstanceById($PRODUCT->get('gpmmetalid'), 'GPMMetal')}
+                                {assign var=METAL value=Vtiger_Record_Model::getInstanceById($PRODUCT->get('gpmmetalid'), 'Assets')}
+
                                 <tr class="no-border">
                                     <td style="vertical-align: top;">
-                                        {if $METAL->get('product_name') != 'Storage Charges'}{number_format($PRODUCT->get('qty'),0)}{/if}
+                                        {if $METAL->get('assetname') != 'Storage Charges'}{number_format($PRODUCT->get('qty'),0)}{/if}
                                     </td>
                                     <td style='vertical-align: top;'>
-                                        {$METAL->get('product_name')}
+                                        {$METAL->get('assetname')}
                                     </td>
                                     <td style='vertical-align:top;text-align:center'>
-                                        {if $METAL->get('product_name') != 'Storage Charges'}
+                                        {if $METAL->get('assetname') != 'Storage Charges'}
                                         {$PRODUCT->get('premium_or_discount')}%{/if}
                                     </td>
                                     <td style='vertical-align:top;text-align:center'>
-                                        {if $METAL->get('product_name') != 'Storage Charges'}
+                                        {if $METAL->get('assetname') != 'Storage Charges'}
                                         {number_format($PRODUCT->get('value_usd')/$PRODUCT->get('qty'),2)}{/if}
                                     </td>
                                     {if $METAL->get('gpm_metal_type') eq 'CRYPTO'}
@@ -133,7 +134,7 @@
                                         </td>
                                     {else}
                                         <td style='vertical-align: top;text-align:center'>
-                                            {if $METAL->get('product_name') != 'Storage Charges'}
+                                            {if $METAL->get('assetname') != 'Storage Charges'}
                                             {number_format($PRODUCT->get('fine_oz'),3)}{/if}
                                         </td>
                                     {/if}
