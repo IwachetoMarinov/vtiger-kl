@@ -182,7 +182,7 @@
                 padding: 14px 16px;
                 text-decoration: none;
                 background-color: #bea364;"
-                    href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo}">Download</a>
+                    href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&tableName={$smarty.request.tableName}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo}">Download</a>
             </li>
         </ul>
     {/if}

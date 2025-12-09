@@ -1,7 +1,6 @@
 <?php
 
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
+// ini_set('display_errors', 1); error_reporting(E_ALL);
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
@@ -69,8 +68,6 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             'swiftCode' => 'GBLBB22',
             'bankAddress' => '123 Global St, Metropolis, Country'
         ];
-
-        var_dump($docType);
 
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
