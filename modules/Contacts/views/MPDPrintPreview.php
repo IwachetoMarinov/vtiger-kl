@@ -1,7 +1,6 @@
 <?php
 
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
+// ini_set('display_errors', 1); error_reporting(E_ALL);    
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
@@ -45,12 +44,21 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));
         $viewer->assign('hideCustomerInfo', $request->get('hideCustomerInfo'));
 
+        if ($tableName === 'DW_DocMPD') {
+            $doctype = 'MPD';
+        } else if ($tableName === 'DW_DocMRD') {
+            $doctype = 'MRD';
+        } else {
+            $doctype = 'CS';
+        }
 
         if ($request->get('PDFDownload')) {
-            $html = $viewer->view("MPD.tpl", $moduleName, true);
+            // $html = $viewer->view("MPD.tpl", $moduleName, true);
+            $html = $viewer->view("$doctype.tpl", $moduleName, true);
             $this->downloadPDF($html, $request);
         } else {
-            $viewer->view("MPD.tpl", $moduleName);
+            $viewer->view("$doctype.tpl", $moduleName);
+            // $viewer->view("MPD.tpl", $moduleName);
         }
     }
 

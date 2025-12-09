@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>METAL RECEIPT DELIVERY FROM GPM </title>
+    <title>COLLECTION ACKNOWLEDGEMENT FROM GPM </title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -32,6 +32,15 @@
             margin: auto;
             padding: 15mm 15mm;
             position: relative;
+        }
+
+        .bottom-container {
+            display: flex;
+            gap: 10mm;
+        }
+
+        .bottom-container-item {
+            flex: 1;
         }
 
         .printAreaContainer * {
@@ -197,69 +206,64 @@
                     <tr>
                         <td style="height: 28mm;">
                             <img src='layouts/v7/modules/Contacts/resources/gpm-new-logo.png'
-                                style="max-height: 100%; float:right;width: 154px;">
-                            <div style="font-size: 11pt;margin-top: 14px;margin-bottom: 32px">
-                                {$RECORD_MODEL->get('cf_898')}<br>
-                                {if !$HIDE_BP_INFO}
-                                    {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
-                                    {if !empty($RECORD_MODEL->get('cf_968'))} {$RECORD_MODEL->get('cf_968')}<br>{/if}
-                                    {if !empty($RECORD_MODEL->get('mailingstreet'))}
-                                    {$RECORD_MODEL->get('mailingstreet')}<br>{/if}
-                                    {if !empty($RECORD_MODEL->get('cf_970'))} {$RECORD_MODEL->get('cf_970')}<br>{/if}
-                                    {if empty($RECORD_MODEL->get('mailingpobox'))}
-                                        {if !empty($RECORD_MODEL->get('mailingcity')) && !empty($RECORD_MODEL->get('mailingzip')) }
-                                            {$RECORD_MODEL->get('mailingcity')} {$RECORD_MODEL->get('mailingzip')}<br>
-                                        {else if !empty($RECORD_MODEL->get('mailingcity'))}
-                                            {$RECORD_MODEL->get('mailingcity')}<br>
-                                        {else}
-                                            {$RECORD_MODEL->get('mailingzip')}<br>
-                                        {/if}
-                                        {$RECORD_MODEL->get('mailingcountry')}
-                                    {else}
-                                        {if !empty($RECORD_MODEL->get('mailingcity'))}
-                                            P.O. Box {$RECORD_MODEL->get('mailingpobox')}, {$RECORD_MODEL->get('mailingcity')}<br>
-                                        {else}
-                                            P.O. Box {$RECORD_MODEL->get('mailingpobox')}<br>
-                                        {/if}
-                                        {if !empty($RECORD_MODEL->get('mailingstate'))}
-                                            {$RECORD_MODEL->get('mailingstate')}, {$RECORD_MODEL->get('mailingcountry')}
-                                        {else}
-                                            {$RECORD_MODEL->get('mailingcountry')}
-                                        {/if}
-                                    {/if}
-                                {/if}
+                                style="max-height: 100%; float:left;width: 154px;">
+                            <div style="font-size: 11pt;margin-top: 14px;margin-bottom: 32px;float:right;">
+                                <span>From: {$RECORD_MODEL->get('cf_898')}</span>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td style="height: 20mm; text-decoration: underline;text-align: center">
-                            <strong>METAL RECEIPT DELIVERY</strong>
+                        <td style="height: 20mm;text-align: left">
+                            <div style="margin-top: 5mm;">To:</div>
+                            <div style="font-weight: 700;">Global Precious Metals Pte. Ltd.</div>
+                            <div>143 Cecil Street</div>
+                            <div>#07-01 GB Building</div>
+                            <div style="margin-bottom: 5mm;">Singapore 069542</div>
                         </td>
                     </tr>
                     <tr>
-                        {assign var="metalPrice" value=$ERP_DOCUMENT.barItems[0]->price}
-                        {assign var="location" value=$ERP_DOCUMENT.barItems[0]->warehouse}
-                        <td style="font-size: 9pt; height: 168mm; vertical-align: top;">
-                            <table class="activity-tbl" style="margin-bottom:5mm">
+                        <td style="height: 20mm; text-decoration: underline;text-align: right">
+                            <strong>COLLECTION ACKNOWLEDGEMENT</strong>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" style="padding:0; margin:0;">
+                            <table class="activity-tbl"
+                                style="width:50%; border-collapse:collapse; table-layout:fixed; margin-left:0;">
                                 <tr>
-                                    <th colspan="2" style="width:25%;text-align:center">DOCUMENT NO</th>
-                                    <th style="width:25%;text-align:center">DOCUMENT DATE</th>
-                                    <th style="width:25%;text-align:center">DELIVERY DATE</th>
-                                    <th style="width:25%;text-align:center">LOCATION</th>
+                                    <th style="width:50%; text-align:center;">REFERENCE</th>
+                                    <th style="width:50%; text-align:center;">CUSTOMER</th>
                                 </tr>
-
                                 <tr>
-                                    <td colspan="2" style="text-align:center;">{$smarty.request.docNo}</td>
-                                    <td style="text-align:center;">{$ERP_DOCUMENT['documentDate']}</td>
-                                    <td style="text-align:center;">{$ERP_DOCUMENT['postingDate']}</td>
-
-                                    <td style="text-align:center;">{$location}</td>
+                                    <td style="height:18px;">{$smarty.request.docNo}</td>
+                                    <td style="height:18px;">{$RECORD_MODEL->get('cf_898')}</td>
                                 </tr>
                             </table>
+                        </td>
+                    </tr>
+                </table>
+
+
+                {assign var="location" value=$ERP_DOCUMENT.barItems[0]->warehouse}
+
+                <div style="margin-top: 5mm;">I/We hereby confirm that I/we have duly collected the Stored Metal detailed
+                    below at the following
+                    location:
+
+                    <p>{$location}</p>
+                </div>
+
+                <table class="print-tbl" style="margin-top:5mm;">
+                    <tr>
+                        {assign var="metalPrice" value=$ERP_DOCUMENT.barItems[0]->price}
+                        <td style="font-size: 9pt; vertical-align: top;">
+
                             <table class="activity-tbl">
                                 <tr>
                                     <th style="width:10%;">QTY</th>
                                     <th style="width:40%;">DESCRIPTION</th>
+                                    <th style="width:40%;">SERIAL NUMBERS</th>
                                     <th style="width:12.5%;text-align:center">FINE OZ.</th>
                                 </tr>
                                 {{assign var="total_value" value=0}}
@@ -272,17 +276,12 @@
                                     <tr>
                                         <td>{number_format($barItem->quantity,0)}</td>
 
-                                        <td>
-                                            {$barItem->itemDescription}
-                                            <br>
-                                            <span style="font-size:smaller;font-style:italic;">
-                                                {implode(", ", $barItem->serials)}
-                                            </span>
-                                        </td>
+                                        <td>{$barItem->itemDescription}</td>
 
-                                        <td style="text-align:right;">
-                                            {number_format($barItem->totalFineOz,3)}
-                                        </td>
+                                        <td><span style="font-size:smaller;font-style:italic;">
+                                                {implode(", ", $barItem->serials)}</span></td>
+
+                                        <td style="text-align:right;"> {number_format($barItem->totalFineOz,3)}</td>
                                     </tr>
 
                                 {/foreach}
@@ -290,7 +289,8 @@
                                 {if $PAGES eq $page}
                                     <tr>
                                         <th style="width:75%;" colspan="2">TOTAL QUANTITY:</th>
-                                        <td style="text-align:right"><strong>{number_format($calcTotal,3)}</strong></td>
+                                        <td style="text-align:right" colspan="2"><strong>{number_format($calcTotal,3)}</strong>
+                                        </td>
                                     </tr>
                                 {/if}
                             </table>
@@ -311,6 +311,37 @@
                         </td>
                     </tr>
                 </table>
+
+                <div style="margin-top: 6mm;">This Collection Acknowledgement is subject to and governed by the terms and
+                    conditions of the Customer
+                    Metal Agreement. The liability of GPM in respect to the Stored Metal to be collected from the Storage
+                    Facility
+                    shall cease when the Customer or its authorised representative has acknowledged receipt of the goods by
+                    signing this Collection Acknowledgement receipt.</div>
+
+                <div style="margin-top: 6mm;">
+                    <span>Date: {$ERP_DOCUMENT['documentDate']}</span>
+                </div>
+
+                <div style="margin-top: 5mm;" class="bottom-container">
+                    <div class="bottom-container-item">
+                        <span>Signed by:</span>
+                        <span></span>
+                    </div>
+                    <div class="bottom-container-item">
+                        <span>Signed by:</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 5mm;" class="bottom-container">
+                    <div class="bottom-container-item">
+                        <span>On behalf of::</span>
+                        <span></span>
+                    </div>
+                    <div class="bottom-container-item">
+                        <span>On behalf of::</span>
+                    </div>
+                </div>
             </div>
         </div>
     {/for}

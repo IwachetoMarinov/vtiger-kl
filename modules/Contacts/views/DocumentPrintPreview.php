@@ -70,6 +70,8 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             'bankAddress' => '123 Global St, Metropolis, Country'
         ];
 
+        var_dump($docType);
+
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);

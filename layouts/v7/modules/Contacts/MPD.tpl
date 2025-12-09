@@ -169,7 +169,6 @@
 
                 <tr>
                     {assign var="metalPrice" value=$ERP_DOCUMENT.barItems[0]->price}
-
                     <td style="font-size:9pt;height:168mm;vertical-align:top;">
 
                         <table class="activity-tbl" style="margin-bottom:5mm">
@@ -184,11 +183,10 @@
 
                             <tr>
                                 <td colspan="2" style="text-align:center;">{$smarty.request.docNo}</td>
-                                <td style="text-align:center;">{$ERP_DOCUMENT.documentDate}</td>
-                                <td style="text-align:center;">{$ERP_DOCUMENT.postingDate}</td>
+                                <td style="text-align:center;">{$ERP_DOCUMENT['documentDate']}</td>
+                                <td style="text-align:center;">{$ERP_DOCUMENT['postingDate']}</td>
 
                                 <td style="text-align:center;">
-                                    {* {vtranslate($ERP_DOCUMENT->barItems[0].location, 'MetalPrice')} *}
                                     {$location}
                                 </td>
                             </tr>
@@ -200,8 +198,13 @@
                                 <th style="width:40%;">DESCRIPTION</th>
                                 <th style="width:12.5%;text-align:center">FINE OZ.</th>
                             </tr>
+                            {{assign var="total_value" value=0}}
+
 
                             {foreach item=barItem from=$ERP_DOCUMENT.barItems}
+
+                                {* add to total_value *}
+                                {assign var="total_value" value=$total_value+$barItem->totalFineOz}
 
                                 <tr>
                                     <td>{number_format($barItem->quantity,0)}</td>
@@ -224,7 +227,7 @@
                             <tr>
                                 <th colspan="2">TOTAL QUANTITY:</th>
                                 <td style="text-align:right">
-                                    <strong>{number_format($ERP_DOCUMENT.grandTotal,3)}</strong>
+                                    <strong>{number_format($total_value,3)}</strong>
                                 </td>
                             </tr>
 
