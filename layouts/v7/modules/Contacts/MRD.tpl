@@ -171,21 +171,17 @@
 
 <body>
     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-        <ul style="list-style-type: none;
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-                background-color: #333;">
-            <li style="float:right"><a style="display: block;
-                color: white;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: none;
-                background-color: #bea364;"
-                    href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo}">Download</a>
+        <ul style="list-style-type:none;margin:0;padding:0;overflow:hidden;background-color:#333;">
+            <li style="float:right">
+                <a style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
+                    href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true
+        &hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
+                    Download
+                </a>
             </li>
         </ul>
     {/if}
+
     {assign var="start" value=0}
     {assign var="end" value=1}
     {assign var="calcTotal" value=0}
@@ -241,7 +237,8 @@
                         </td>
                     </tr>
                     <tr>
-                        {assign var="metalPrice" value=($ERP_DOCUMENT->barItems[0]->price)}
+                        {assign var="metalPrice" value=$ERP_DOCUMENT.barItems[0]->price}
+                        {assign var="location" value=$ERP_DOCUMENT.barItems[0]->warehouse}
                         <td style="font-size: 9pt; height: 168mm; vertical-align: top;">
                             <table class="activity-tbl" style="margin-bottom:5mm">
                                 <tr>
@@ -250,13 +247,13 @@
                                     <th style="width:25%;text-align:center">DELIVERY DATE</th>
                                     <th style="width:25%;text-align:center">LOCATION</th>
                                 </tr>
+
                                 <tr>
-                                    <td colspan="2" style='text-align:center;'>{$smarty.request.docNo}</td>
-                                    <td style='text-align:center;'>{$ERP_DOCUMENT->documentDate}</td>
-                                    <td style='text-align:center;'>{$ERP_DOCUMENT->deliveryDate}</td>
-                                    <td style='text-align:center;'>
-                                        {vtranslate($ERP_DOCUMENT->barItems[0]->location,'MetalPrice')}</td>
-                                    <!-- td style='text-align:center;'>{$ERP_DOCUMENT->barItems[0]->location}</td -->
+                                    <td colspan="2" style="text-align:center;">{$smarty.request.docNo}</td>
+                                    <td style="text-align:center;">{$ERP_DOCUMENT['documentDate']}</td>
+                                    <td style="text-align:center;">{$ERP_DOCUMENT['postingDate']}</td>
+
+                                    <td style="text-align:center;">{$location}</td>
                                 </tr>
                             </table>
                             <table class="activity-tbl">
@@ -265,28 +262,42 @@
                                     <th style="width:40%;">DESCRIPTION</th>
                                     <th style="width:12.5%;text-align:center">FINE OZ.</th>
                                 </tr>
-                                {for $loopStart=$start to $end}
-                                    {assign var="barItem" value=$ERP_DOCUMENT->barItems[$loopStart]}
-                                    {assign var="start" value=($loopStart+1)}
-                                    {assign var="calcTotal" value=$calcTotal+$barItem->pureOz}
-                                    {if $loopStart eq count($ERP_DOCUMENT->barItems)}
-                                        {break}
-                                    {/if}
+                                {{assign var="total_value" value=0}}
+
+                                {foreach item=barItem from=$ERP_DOCUMENT.barItems}
+
+                                    {* add to total_value *}
+                                    {assign var="total_value" value=$total_value+$barItem->totalFineOz}
+
                                     <tr>
-                                        <td style="vertical-align: top">{number_format($barItem->quantity,0)}</td>
+                                        <td>{number_format($barItem->quantity,0)}</td>
+
                                         <td>
-                                            {$barItem->longDesc} <br> <span
-                                                style="font-size: smaller;font-style: italic;">{implode(", ",$barItem->serials)}</span>
+                                            {$barItem->itemDescription}
+                                            <br>
+                                            <span style="font-size:smaller;font-style:italic;">
+                                                {implode(", ", $barItem->serials)}
+                                            </span>
                                         </td>
-                                        <td style="text-align:right;vertical-align: top">{number_format($barItem->pureOz,3)}
+
+                                        <td style="text-align:right;">
+                                            {number_format($barItem->totalFineOz,3)}
                                         </td>
                                     </tr>
-                                {/for}
+
+                                {/foreach}
+
                                 {if $PAGES eq $page}
                                     <tr>
                                         <th style="width:75%;" colspan="2">TOTAL QUANTITY:</th>
-                                        <td style="text-align:right"><strong>{number_format($calcTotal,3)} </strong></td>
+                                        <td style="text-align:right"><strong>
+
+
+                                                {number_format($calcTotal,3)} </strong></td>
                                     </tr>
+
+
+
                                 {/if}
                             </table>
                         </td>
