@@ -184,11 +184,7 @@
         <ul style="list-style-type:none;margin:0;padding:0;overflow:hidden;background-color:#333;">
             <li style="float:right">
                 <a style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
-                    href="index.php?module=Contacts
-                &view=DocumentPrintPreview
-                &record={$RECORD_MODEL->getId()}
-                &docNo={$smarty.request.docNo}
-                &PDFDownload=true
+                    href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&PDFDownload=true
                 {$FROM_INTENT}
                 {$HCI}">
                     Download
@@ -305,7 +301,7 @@
                                             {$barItem->description} <br><span
                                                 style="font-size: smaller;font-style: italic;">{$barItem->serials[0]}</span>
                                         </td>
-                                        
+
                                         <td style="text-align:right;vertical-align: top">
                                             {$barItem->unitPrice}
                                         </td>
