@@ -183,7 +183,7 @@
         <ul style="list-style-type:none;margin:0;padding:0;overflow:hidden;background-color:#333;">
             <li style="float:right">
                 <a style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
-                    href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&tableName={$smarty.request.tableName}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
+                    href="index.php?module=Contacts&view=MPDPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&tableName={$smarty.request.tableName}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
                     Download
                 </a>
             </li>
@@ -249,7 +249,6 @@
                 <div style="margin-top: 5mm;">I/We hereby confirm that I/we have duly collected the Stored Metal detailed
                     below at the following
                     location:
-
                     <p>{$location}</p>
                 </div>
 
@@ -295,20 +294,7 @@
                             </table>
                         </td>
                     </tr>
-                    <tr>
-                        <td style='font-size: 8pt;font-weight: bold;position: absolute;bottom: 14px;width: 85%'>
-                            <div>
-                                <div style="float:left">
-                                    {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg.
-                                    No. {$COMPANY->get('company_reg_no')}){/if}<br>
-                                    {$COMPANY->get('company_address')}<br>
-                                    T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                                    {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
-                                </div>
-                                <div style="float:right;"><br><br>Page {$page} | {$PAGES}</div>
-                            </div>
-                        </td>
-                    </tr>
+
                 </table>
 
                 <div style="margin-top: 6mm;">This Collection Acknowledgement is subject to and governed by the terms and
@@ -318,27 +304,44 @@
                     shall cease when the Customer or its authorised representative has acknowledged receipt of the goods by
                     signing this Collection Acknowledgement receipt.</div>
 
-                <div style="margin-top: 6mm;">
+                <div style="margin-top: 8mm;">
                     <span>Date: {$ERP_DOCUMENT['documentDate']}</span>
                 </div>
 
                 <div style="margin-top: 5mm;" class="bottom-container">
                     <div class="bottom-container-item">
                         <span>Signed by:</span>
-                        <span></span>
+                        <span>...........................</span>
                     </div>
                     <div class="bottom-container-item">
                         <span>Signed by:</span>
+                        <span>...........................</span>
                     </div>
                 </div>
 
                 <div style="margin-top: 5mm;" class="bottom-container">
                     <div class="bottom-container-item">
-                        <span>On behalf of::</span>
+                        <span>On behalf of:</span>
                         <span></span>
                     </div>
                     <div class="bottom-container-item">
-                        <span>On behalf of::</span>
+                        <span>On behalf of:</span>
+                        <span style="font-weight: 700;">Global Precious Metals Pte Ltd</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 5mm;" class="bottom-container">
+                    <div class="bottom-container-item">
+                        <div
+                            style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 100px;background-color:#dce6f9;">
+                        </div>
+                        <p>Signature</p>
+                    </div>
+                    <div class="bottom-container-item">
+                        <div
+                            style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 100px;background-color:#dce6f9;">
+                        </div>
+                        <p>Signature</p>
                     </div>
                 </div>
             </div>
