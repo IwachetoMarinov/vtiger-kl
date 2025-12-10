@@ -27,18 +27,12 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         $docType = substr($docNo, 0, 3);
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
+        $companyId = $recordModel->get('company_id');
 
-        $comId = $recordModel->get('related_entity');
-        // $companyRecord = GPMCompany_Record_Model::getInstanceByCode($comId);
-        // $accountId = $recordModel->get('account_id');
+        $companyRecord = null;
 
-
-        // $organizationName = '';
-
-        // if (!empty($accountId)) {
-        //     $accountRecord = Vtiger_Record_Model::getInstanceById($accountId, 'Accounts');
-        //     $organizationName = $accountRecord->get('accountname');
-        // }
+        if (!empty($companyId))
+            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
 
         // ------------------------------------------------------
         // GET DATA FROM new ERP HOLDINGSDB CLASS
@@ -54,7 +48,8 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('ERP_DOCUMENT', $erpDoc);
         $viewer->assign('OROSOFT_DOCTYPE', $docType);
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
-        $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($comId));
+        // $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($comId));
+        $viewer->assign('COMPANY', $companyRecord);
         $viewer->assign('PAGES', $this->makeDataPage($erpDoc->barItems, $docType));
         if ($request->get('PDFDownload')) {
             $html = $viewer->view("TC.tpl", $moduleName, true);

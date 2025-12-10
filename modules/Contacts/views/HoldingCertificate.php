@@ -3,15 +3,12 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// include_once 'dbo_db/ActivitySummary.php';
-// include_once 'dbo_db/HoldingsDB.php';
+// include_once 'dbo_db/ActivitySummary.php'; include_once 'dbo_db/HoldingsDB.php';
 
 class Contacts_HoldingCertificate_View extends Vtiger_Index_View
 {
 
     protected $record = null;
-
-
 
     public function preProcess(Vtiger_Request $request, $display = false)
     {
@@ -27,24 +24,22 @@ class Contacts_HoldingCertificate_View extends Vtiger_Index_View
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
 
-        $contactID = 78; // $recordModel->getId();
         $guid = $this->guidv4(openssl_random_pseudo_bytes(16));
         $clientID = $recordModel->get('cf_898');
+        $companyId = $recordModel->get('company_id');
 
-        var_dump("Contact Record ID: " . $clientID);
+        $companyRecord = null;
+
+        if (!empty($companyId))
+            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
 
         $holdings = new dbo_db\HoldingsDB();
         $holdings_data = $holdings->getHoldingsData($clientID);
 
-        // var_dump("Holdings Data: ");
-        // echo '<pre>';
-        // var_dump($holdings_data);
-        // echo '</pre>';
-
         $viewer = new Vtiger_Viewer();
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('ERP_HOLDINGS', $this->processHoldingData($holdings_data));
-        $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($recordModel->get('related_entity')));
+        $viewer->assign('COMPANY', $companyRecord);
         $viewer->assign('GUID', $guid);
 
         $viewer->view("HoldingCertificate.tpl", $moduleName);

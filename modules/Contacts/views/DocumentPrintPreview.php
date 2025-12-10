@@ -27,6 +27,12 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
         $comId = $recordModel->get('related_entity');
+        $companyId = $recordModel->get('company_id');
+
+        $companyRecord = null;
+
+        if (!empty($companyId))
+            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
 
         // $accountId = $recordModel->get('account_id');
 
@@ -76,7 +82,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('ERP_DOCUMENT', $this->processDoc($erpDoc));
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('INTENT', $intent);
-        $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($comId));
+        $viewer->assign('COMPANY', $companyRecord);
         $viewer->assign('PAGES', $this->makeDataPage($erpDoc->barItems, $docType));
         if ($request->get('PDFDownload')) {
             $html = $viewer->view("$docType.tpl", $moduleName, true);

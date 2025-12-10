@@ -1,10 +1,8 @@
 <?php
 
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
+// ini_set('display_errors', 1); error_reporting(E_ALL);
 
 include_once 'dbo_db/HoldingsDB.php';
-// include_once 'modules/Contacts/models/MetalsAPI.php';
 
 class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
 {
@@ -24,6 +22,12 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
     {
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
+        $companyId = $recordModel->get('company_id');
+
+        $companyRecord = null;
+
+        if (!empty($companyId))
+            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
 
         // REAL CUSTOMER ID FROM RECORD
         $clientID = $recordModel->get('cf_898');
@@ -32,14 +36,6 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
         $holdings_data = $holdings->getHoldings($clientID);
         $total = $this->calculateSpotTotal($holdings_data);
 
-        // echo '<pre>';
-        // echo 'Holdings Data: ';
-        // var_dump($holdings_data);
-        // echo '</pre>';
-
-        // $metalsAPI = new MetalsAPI();
-        // $metals_data = $metalsAPI->getMetals();
-
         $LBMA_DATE = isset($holdings_data[0]['spot_date']) && is_array($holdings_data) ? date('d-M-y', strtotime($holdings_data[0]['spot_date'])) : '';
 
         $grouped = [];
@@ -47,7 +43,6 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
             $location = $item['location'];
 
             $grouped[$location][] = (object) [
-                // 'metal' => $item['metal'],
                 'metal' => $item['description'] ?? '',
                 'location' => $item['location'] ?? '',
                 'serials' => $item['serial_no'] ?? '',
@@ -59,23 +54,6 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
             ];
         }
 
-        // Metals data formatting
-        // $metals = [];
-        // foreach ($metals_data as $data) {
-        //     $item = [
-        //         $data['MT_Code'] => [
-        //             'price_date' => $data['Date'],
-        //             'price' => $data['SpotPriceCurr'] ?? 0.00
-        //         ]
-        //     ];
-        //     $metals = array_merge($metals, $item);
-        // }
-
-        // $erpData = [
-        //     'Holdings' => $grouped,
-        //     'MetalPrice' => $metals
-        // ];
-
         $recordModel = $this->record->getRecord();
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
@@ -83,7 +61,7 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('TOTAL', $total);
         $viewer->assign('ERP_HOLDINGS', $grouped);
         $viewer->assign('ERP_HOLDINGMETALS', $holdings_data);
-        $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($recordModel->get('related_entity')));
+        $viewer->assign('COMPANY', $companyRecord);
 
         if ($request->get('PDFDownload')) {
             $viewer->assign('ENABLE_DOWNLOAD_BUTTON', false);

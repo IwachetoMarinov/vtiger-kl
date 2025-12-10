@@ -37,6 +37,13 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 		}
 
 		$recordModel = Vtiger_Record_Model::getInstanceById($contactId, 'Contacts');
+        $companyId = $recordModel->get('company_id');
+
+        $companyRecord = null;
+
+        if (!empty($companyId))
+            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
+
 		if (!$recordModel) {
 			throw new AppException("Contact not found for ID: $contactId");
 		}
@@ -83,13 +90,6 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 			$selectedBank->set('swift_code', '');
 		}
 
-
-		// ✅ Company info (safe)
-		$companyModel = null;
-		if (!empty($comId)) {
-			$companyModel = GPMCompany_Record_Model::getInstanceByCode($comId);
-		}
-
 		// ✅ Prepare viewer
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RECORD_MODEL', $recordModel);
@@ -98,7 +98,7 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 		$viewer->assign('DOWNLOAD_LINK', $downloadLink);
 		$viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);
 		$viewer->assign('SELECTED_BANK', $selectedBank);
-		$viewer->assign('COMPANY', $companyModel);
+		$viewer->assign('COMPANY', $companyRecord);
 
 		// ✅ Render / download
 		if ($request->get('PDFDownload')) {
