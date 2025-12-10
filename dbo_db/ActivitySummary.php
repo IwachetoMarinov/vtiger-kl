@@ -42,11 +42,6 @@ class ActivitySummary
 
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
-        // echo '<pre>';
-        // echo 'getActivitySummary items: ';
-        // var_dump($summary);
-        // echo '</pre>';
-
         $results  = [];
         foreach ($summary as $item) {
             $results[] = [
@@ -76,9 +71,6 @@ class ActivitySummary
             return [];
         }
 
-        // HARDCODED docNo
-        // $doc_no = 'DO/2025/000012';
-
         if (!preg_match('/^[A-Za-z0-9_]+$/', $table_name)) return [];
 
         try {
@@ -90,26 +82,17 @@ class ActivitySummary
             $where  = '';
 
             if ($doc_no) {
-                // $where = "WHERE [CN_No] = ?";
                 $where = "WHERE [Tx_No] = ?";
                 $params[] = $doc_no;
             }
 
-            // $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_DocDo] $where";
             $sql = "
                 SELECT *
-                FROM [HFS_SQLEXPRESS].[GPM].[dbo].[$table_name]
-                $where
-            ";
+                FROM [HFS_SQLEXPRESS].[GPM].[dbo].[$table_name] $where";
 
             var_dump($sql, $params);
 
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
-
-            // echo '<pre>';
-            // echo 'DATA from Vick DB: ';
-            // var_dump($summary);
-            // echo '</pre>';
 
             $items = $this->mapTransactionItems($summary, $transaction);
 
@@ -135,24 +118,12 @@ class ActivitySummary
             return [];
         }
 
-        // Table DW_DocSaI
-        // $doc_no = 'SAL/2025/000019';
-
-        // Table DW_DocSaI
-        // $doc_no = 'PUR/2025/000008';
-
         if (!preg_match('/^[A-Za-z0-9_]+$/', $table_name)) return [];
 
         try {
             if (!$this->connection) die(print_r(sqlsrv_errors(), true));
 
             $transaction = $this->getSingleTransaction($doc_no);
-
-            // HARDCODED for testing PUR
-            // $doc_no = 'PUR/2025/000008';
-
-            // HARDCODED for testing SAL
-            // $doc_no = 'SAL/2025/000019';
 
             $params = [];
             $where  = '';
@@ -166,19 +137,7 @@ class ActivitySummary
             $sql = "
                 SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[$table_name] $where";
 
-            // Query to list table names
-            // $sql = "SELECT TOP 20 TABLE_NAME  FROM HFS_SQLEXPRESS.GPM.INFORMATION_SCHEMA.TABLES";
-
-            // var_dump($sql, $params);
-
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
-
-            // echo '<pre>';
-            // // echo 'transaction: ';
-            // // var_dump($transaction);
-            // // echo 'getDocumentPrintPreviewData: ';
-            // var_dump($summary);
-            // echo '</pre>';
 
             $items = $this->mapTransactionItems($summary, $transaction);
 
@@ -198,9 +157,6 @@ class ActivitySummary
             return [];
         }
 
-        // HARDCODED docNo
-        // $doc_no = 'PUR/2025/000012';
-
         $params = [];
         $where  = '';
 
@@ -217,11 +173,6 @@ class ActivitySummary
         }
 
         $row = $summary[0];
-
-        // echo '<pre>';
-        // echo 'getSingleTransaction row: ';
-        // print_r($row);
-        // echo '</pre>';
 
         return [
             'docNo'        => $row['Tx_No'] ?? '',
@@ -289,12 +240,12 @@ class ActivitySummary
                 'voucherType'       => $transaction['voucherType'] ?? '',
                 'docNo'             => $item['Tx_No'] ?? '',
 
-                'weight' => max((float)($item['Weight'] ?? 0), 1), // ??? check
-                'barNumber'         => $item['Bar_No'] ?? '', // ??? check
-                'pureOz'            => isset($item['GrossOz']) ? (float)$item['GrossOz'] : 0.00, // ??? check
-                'otherCharge'       => isset($item['Other_Charge']) ? (float)$item['Other_Charge'] : 0.00, // ??? check
-                'narration'         => $item['Narration'] ?? '', // ??? check
-                'longDesc'          => $item['Long_Desc'] ?? '', // ??? check
+                'weight' => max((float)($item['Weight'] ?? 0), 1),
+                'barNumber'         => $item['Bar_No'] ?? '',
+                'pureOz'            => isset($item['GrossOz']) ? (float)$item['GrossOz'] : 0.00, 
+                'otherCharge'       => isset($item['Other_Charge']) ? (float)$item['Other_Charge'] : 0.00, 
+                'narration'         => $item['Narration'] ?? '',
+                'longDesc'          => $item['Long_Desc'] ?? '',
             ];
         }
 

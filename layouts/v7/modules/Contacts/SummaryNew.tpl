@@ -120,6 +120,12 @@
                                                     <span class="fa fa-download"></span>&nbsp;CA
                                                 </button>
                                             </a>
+                                            <a href="index.php?module=Contacts&view=ViewCR&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
+                                                target="_blank">
+                                                <button type="button" class="btn btn-default module-buttons">
+                                                    <span class="fa fa-download"></span>&nbsp;CR
+                                                </button>
+                                            </a>
                                         </td>
                                     {else}
                                         <td></td>

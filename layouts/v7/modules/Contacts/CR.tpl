@@ -160,7 +160,6 @@
 
     {assign var="start" value=0}
     {assign var="end" value=1}
-    {assign var="calcTotal" value=0}
     {for $page=1 to $PAGES}
         {if $page eq 1}
             {assign var="end" value=14}
@@ -255,7 +254,7 @@
                                 {if $PAGES eq $page}
                                     <tr>
                                         <th style="width:75%;" colspan="2">TOTAL QUANTITY:</th>
-                                        <td style="text-align:right" colspan="2"><strong>{number_format($calcTotal,3)}</strong>
+                                        <td style="text-align:right" colspan="2"><strong>{number_format($total_value,3)}</strong>
                                         </td>
                                     </tr>
                                 {/if}
@@ -270,14 +269,15 @@
                 </div>
 
                 <div style="margin-top: 4mm;">
-                    <input type="checkbox" style="transform: scale(1.2); margin-right: 2mm;" />
+                    <span style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
                     <span>I/We will personally collect the Stored Metal at the Storage Facility and will be holding
                         ID/Passport number</span>
                     <span> .......................</span>
                 </div>
 
                 <div style="margin-top: 4mm;">
-                    <input type="checkbox" style="transform: scale(1.2); margin-right: 2mm;" />
+                    <span style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+
                     <span>I/We hereby authorise Mr/Mrs/Representatives of the company </span>
                     <span> .......................</span>
                     (<span>holding ID/Passport number</span>
