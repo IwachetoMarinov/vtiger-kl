@@ -26,12 +26,17 @@ class GPMIntent_ViewQuotation_View extends GPMIntent_DocView_View
 
 		$recordModel = (empty($intent->get('contact_id'))) ? Vtiger_Record_Model::getInstanceById($intent->get('lead_id'), 'Leads') : Vtiger_Record_Model::getInstanceById($intent->get('contact_id'), 'Contacts');
 		$recordModelModule = (empty($intent->get('contact_id'))) ? 'Leads' :'Contacts';
+
+        $companyId = $recordModel->get('company_id');
+
+        $companyRecord = null;
+
+        if (!empty($companyId))
+            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
 		
 		if(!Users_Privileges_Model::isPermitted($recordModelModule, 'DetailView', $recordModel->getId())) {
 			throw new AppException('You are not permitted to view the Lead or the Contact information associated with this Intent!');
 		}
-
-		$comId = $recordModel->get('related_entity');
 
 		$docType =  ($request->get('type') == 'full') ? 'QuoteFull' : 'QuoteSimple';
 
@@ -45,7 +50,7 @@ class GPMIntent_ViewQuotation_View extends GPMIntent_DocView_View
 		$viewer->assign('INTENT', $intent);
 		$viewer->assign('RELATED_PRODUCTS', $products);
 		$viewer->assign('DOWNLOAD_LINK', $downloadLink);
-		$viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($comId));
+		$viewer->assign('COMPANY', $companyRecord);
 		if ($request->get('PDFDownload')) {
 			$html = $viewer->view("$docType.tpl", $moduleName, true);
 			$this->downloadPDF($html, $request);

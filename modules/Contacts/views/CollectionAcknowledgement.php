@@ -27,6 +27,12 @@ class Contacts_CollectionAcknowledgement_View extends Vtiger_Index_View
         $recordModel = $this->record->getRecord();
         $comId = $recordModel->get('related_entity');
         $tableName = $request->get('tableName');
+        $companyId = $recordModel->get('company_id');
+
+        $companyRecord = null;
+
+        if (!empty($companyId))
+            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
 
         // $accountId = $recordModel->get('account_id');
         $activity = new dbo_db\ActivitySummary();
@@ -36,7 +42,7 @@ class Contacts_CollectionAcknowledgement_View extends Vtiger_Index_View
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', 1);
         $viewer->assign('HIDE_BP_INFO', false);
-        $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($comId));
+        $viewer->assign('COMPANY', $companyRecord);
         $viewer->assign('ERP_DOCUMENT', $erpData);
 
         // REQUEST VALUES PASSED BY CONTROLLER

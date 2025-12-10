@@ -66,7 +66,12 @@ class GPM_CertificateHandler
     protected function createHoldingCertificate(Contacts_Record_Model $recordModel, $guid)
     {
         $clientID = $recordModel->get('cf_898');
-        // $comId = $recordModel->get('related_entity');
+        $companyId = $recordModel->get('company_id');
+
+        $companyRecord = null;
+
+        if (!empty($companyId))
+            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
 
         $holdings = new dbo_db\HoldingsDB();
         $holdings_data = $holdings->getHoldingsData($clientID);
@@ -78,7 +83,7 @@ class GPM_CertificateHandler
             $viewer = new Vtiger_Viewer();
             $viewer->assign('RECORD_MODEL', $recordModel);
             $viewer->assign('ERP_HOLDINGS', $this->processHoldingData($holdings_data));
-            $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($recordModel->get('related_entity')));
+            $viewer->assign('COMPANY', $companyRecord);
             $viewer->assign('GUID', $guid);
             $html = $viewer->view('HoldingCertificate.tpl', 'HoldingCertificate', true);
             $filename = $clientID . "_CERTIFICATE-OF-OWNERSHIP_" . date('d-M-Y');

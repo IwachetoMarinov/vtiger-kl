@@ -23,6 +23,12 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
 
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
+        $companyId = $recordModel->get('company_id');
+
+        $companyRecord = null;
+
+        if (!empty($companyId))
+            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
 
         $activity = new dbo_db\ActivitySummary();
         // Get all transactions for the client
@@ -44,7 +50,7 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', $this->makeDataPage($transactions));
         $viewer->assign('TRANSACTIONS', $transactions);
-        $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($recordModel->get('related_entity')));
+        $viewer->assign('COMPANY', $companyRecord);
         if ($request->get('PDFDownload')) {
             $viewer->assign('ENABLE_DOWNLOAD_BUTTON', false);
             $html = $viewer->view('ActivtySummeryPrintPreview.tpl', $moduleName, true);
