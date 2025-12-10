@@ -5,7 +5,7 @@
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
 
-class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
+class Contacts_CollectionAcknowledgement_View extends Vtiger_Index_View
 {
 
     protected $record = null;
@@ -43,17 +43,12 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('DOCNO', $request->get('docNo'));
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));
         $viewer->assign('hideCustomerInfo', $request->get('hideCustomerInfo'));
-        $doctype = 'MPD';
-
-        if ($tableName === 'DW_DocMRD') $doctype = 'MRD';
 
         if ($request->get('PDFDownload')) {
-            // $html = $viewer->view("MPD.tpl", $moduleName, true);
-            $html = $viewer->view("$doctype.tpl", $moduleName, true);
+            $html = $viewer->view("CA.tpl", $moduleName, true);
             $this->downloadPDF($html, $request);
         } else {
-            $viewer->view("$doctype.tpl", $moduleName);
-            // $viewer->view("MPD.tpl", $moduleName);
+            $viewer->view("CA.tpl", $moduleName);
         }
     }
 

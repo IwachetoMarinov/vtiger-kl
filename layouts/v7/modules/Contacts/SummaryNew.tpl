@@ -27,12 +27,7 @@
                         </h4>
 
                         <!-- NEW CLEAN FLEX CONTAINER -->
-                        <div style="
-                        float: right;
-                        display: flex;
-                        align-items: center;
-                        gap: 12px;
-                    ">
+                        <div style="float: right;display: flex;align-items: center;gap: 12px;">
 
                             <!-- Currency -->
                             <label style="margin: 0; font-size: 13px;">Currency</label>
@@ -52,11 +47,6 @@
                                 {foreach from=$YEARS item=YEAR}
                                     <option value="{$YEAR}">{$YEAR}</option>
                                 {/foreach}
-                                {* <option value="{date('Y',strtotime('-1 year'))}">{date('Y',strtotime('-1 year'))}</option>
-                                <option value="{date('Y',strtotime('-2 year'))}">{date('Y',strtotime('-2 year'))}</option>
-                                <option value="{date('Y',strtotime('-3 year'))}">{date('Y',strtotime('-3 year'))}</option>
-                                <option value="{date('Y',strtotime('-4 year'))}">{date('Y',strtotime('-4 year'))}</option>
-                                <option value="{date('Y',strtotime('-5 year'))}">{date('Y',strtotime('-5 year'))}</option> *}
                             </select>
 
                             <!-- Download button -->
@@ -100,12 +90,19 @@
                                 <tr class="listViewEntries1">
                                     <!-- Document number -->
                                     <td style="width: 140px;">
-                                        {$TX.voucher_no}
+                                        {if $TX.voucher_type == 'SAL'}
+                                            <a href="index.php?module=Contacts&view=CollectionAcknowledgement&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
+                                                target="_blank">
+                                                <button type="button" class="btn btn-default module-buttons">
+                                                     {$TX.voucher_no}
+                                                </button>
+                                            </a>
+                                        {else}
+                                            {$TX.voucher_no}
+                                        {/if}
                                     </td>
 
-
                                     <!-- INV button (only for Sales/Purchase Invoice) -->
-
                                     {if in_array($TX.voucher_type, ['SAL','PUR', 'SWD', 'PWD'])}
                                         <td>
                                             <a href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
