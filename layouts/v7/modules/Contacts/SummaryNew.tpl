@@ -112,6 +112,15 @@
                                                 </button>
                                             </a>
                                         </td>
+                                    {else if in_array($TX.voucher_type, ['MPD'])}
+                                        <td>
+                                            <a href="index.php?module=Contacts&view=CollectionAcknowledgement&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
+                                                target="_blank">
+                                                <button type="button" class="btn btn-default module-buttons">
+                                                    <span class="fa fa-download"></span>&nbsp;CA
+                                                </button>
+                                            </a>
+                                        </td>
                                     {else}
                                         <td></td>
                                     {/if}
@@ -131,7 +140,7 @@
                                     {/if}
 
                                     {*  New MPD button *}
-                                    {if in_array($TX.voucher_type, ['SAL', 'MRD', 'MPD'])}
+                                    {if in_array($TX.voucher_type, ['MRD', 'MPD'])}
                                         <td>
                                             <a href="index.php?module=Contacts&view=MPDPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">

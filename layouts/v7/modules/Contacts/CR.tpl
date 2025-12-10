@@ -143,10 +143,17 @@
     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
         <ul style="list-style-type:none;margin:0;padding:0;overflow:hidden;background-color:#333;">
             <li style="float:right">
-                <a style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
-                    href="index.php?module=Contacts&view=CollectionAcknowledgement&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&tableName={$smarty.request.tableName}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
-                    Download
-                </a>
+                {if isset($smarty.request.tableName) && $smarty.request.tableName neq ''}
+                    <a style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
+                        href="index.php?module=Contacts&view=ViewCR&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&tableName={$smarty.request.tableName}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
+                        Download
+                    </a>
+                {else}
+                    <a style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
+                        href="index.php?module=Contacts&view=ViewCR&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
+                        Download
+                    </a>
+                {/if}
             </li>
         </ul>
     {/if}
@@ -178,26 +185,28 @@
                             <div style="font-weight: 700;">Global Precious Metals Pte. Ltd.</div>
                             <div>143 Cecil Street</div>
                             <div>#07-01 GB Building</div>
-                            <div style="margin-bottom: 5mm;">Singapore 069542</div>
+                            <div style="margin-bottom: 1mm;">Singapore 069542</div>
                         </td>
                     </tr>
                     <tr>
-                        <td style="height: 20mm; text-decoration: underline;text-align: right">
-                            <strong>COLLECTION ACKNOWLEDGEMENT</strong>
+                        <td style="height: 30mm; text-decoration: underline;text-align: right;">
+                            <strong>COLLECTION REQUEST</strong>
                         </td>
                     </tr>
 
                     <tr>
                         <td colspan="2" style="padding:0; margin:0;">
                             <table class="activity-tbl"
-                                style="width:50%; border-collapse:collapse; table-layout:fixed; margin-left:0;">
+                                style="width:75%; border-collapse:collapse; table-layout:fixed; margin-left:0;">
                                 <tr>
-                                    <th style="width:50%; text-align:center;">REFERENCE</th>
-                                    <th style="width:50%; text-align:center;">CUSTOMER</th>
+                                    <th style="width:33.33%; text-align:center;">REFERENCE</th>
+                                    <th style="width:33.33%; text-align:center;">CUSTOMER</th>
+                                    <th style="width:33.33%; text-align:center;">ORDER</th>
                                 </tr>
                                 <tr>
                                     <td style="height:18px;">{$smarty.request.docNo}</td>
                                     <td style="height:18px;">{$RECORD_MODEL->get('cf_898')}</td>
+                                    <td style="height:18px;">COLLECTION</td>
                                 </tr>
                             </table>
                         </td>
@@ -207,8 +216,8 @@
 
                 {assign var="location" value=$ERP_DOCUMENT.barItems[0]->warehouse}
 
-                <div style="margin-top: 5mm;">I/We hereby confirm that I/we have duly collected the Stored Metal detailed
-                    below at the following location:
+                <div style="margin-top: 5mm;">I/We hereby wish to collect the Stored Metal detailed below at the following
+                    location:
                     <p>{$location}</p>
                 </div>
 
@@ -256,32 +265,54 @@
 
                 </table>
 
-                <div style="margin-top: 6mm;">This Collection Acknowledgement is subject to and governed by the terms and
-                    conditions of the Customer
-                    Metal Agreement. The liability of GPM in respect to the Stored Metal to be collected from the Storage
-                    Facility
-                    shall cease when the Customer or its authorised representative has acknowledged receipt of the goods by
-                    signing this Collection Acknowledgement receipt.</div>
+                <div style="margin-top: 6mm;">I/We would like the Collection to take place on:
+                    <span>...................</span>
+                </div>
 
-                <div style="margin-top: 8mm;">
-                    <span>Date: {$ERP_DOCUMENT['documentDate']}</span>
+                <div style="margin-top: 4mm;">
+                    <input type="checkbox" style="transform: scale(1.2); margin-right: 2mm;" />
+                    <span>I/We will personally collect the Stored Metal at the Storage Facility and will be holding
+                        ID/Passport number</span>
+                    <span> .......................</span>
+                </div>
+
+                <div style="margin-top: 4mm;">
+                    <input type="checkbox" style="transform: scale(1.2); margin-right: 2mm;" />
+                    <span>I/We hereby authorise Mr/Mrs/Representatives of the company </span>
+                    <span> .......................</span>
+                    (<span>holding ID/Passport number</span>
+                    <span> .......................</span>)
+                    <span> to collect the Stored Metal on my/our behalf. This
+                        authorisation is only valid for the collection of the Stored Metal specified above and shall not be
+                        extended
+                        to any other services covered under the Customer Metal Agreement.</span>
+                </div>
+
+
+                <p style="margin-top: 4mm;font-style: italic;font-weight: bold;">I/We hereby enclose a photocopy of the
+                    passport of the person(s) who will collect the Stored Metal. The
+                    original passport(s) will need to be presented prior to Collection at the Storage Facility</p>
+
+                <div style="margin-top: 5mm;">This Collection Order is subject to and governed by the terms and conditions
+                    of the Customer Metal Agreement
+                    executed and entered into by and between me/us and Global Precious Metals Pte. Ltd.</div>
+
+                <div style="margin-top: 5mm;" class="bottom-container">
+                    <div class="bottom-container-item">
+                        <span>Place: </span>
+                        <span>................................</span>
+                    </div>
+                    <div class="bottom-container-item">
+                        <span>Date: </span>
+                        <span>{$smarty.now|date_format:"%d-%m-%Y"}</span>
+                    </div>
                 </div>
 
                 <div style="margin-top: 5mm;" class="bottom-container">
                     <div class="bottom-container-item">
                         <span>Signed by: </span>
-                        <span>................................</span>
-                    </div>
-                    <div class="bottom-container-item">
-                        <span>Signed by: </span>
-                        <span>................................</span>
-                    </div>
-                </div>
-
-                <div style="margin-top: 5mm;" class="bottom-container">
-                    <div class="bottom-container-item">
-                        <span>On behalf of: </span>
-                        <span>...........................</span>
+                        <span style="font-style: italic;font-weight: bold;">{$RECORD_MODEL->get('firstname')}
+                            {$RECORD_MODEL->get('lastname')}</span>
                     </div>
                     <div class="bottom-container-item">
                         <span>On behalf of:</span>
@@ -296,12 +327,7 @@
                         </div>
                         <p>Signature</p>
                     </div>
-                    <div class="bottom-container-item">
-                        <div
-                            style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 100px;background-color:#dce6f9;">
-                        </div>
-                        <p>Signature</p>
-                    </div>
+                    <div class="bottom-container-item"></div>
                 </div>
             </div>
         </div>
