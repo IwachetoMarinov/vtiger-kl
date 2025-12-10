@@ -1,7 +1,6 @@
 <?php
 
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
+// ini_set('display_errors', 1);error_reporting(E_ALL);
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
@@ -28,16 +27,18 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         $docType = substr($docNo, 0, 3);
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
+
         $comId = $recordModel->get('related_entity');
+        // $companyRecord = GPMCompany_Record_Model::getInstanceByCode($comId);
+        // $accountId = $recordModel->get('account_id');
 
-        $accountId = $recordModel->get('account_id');
 
-        $organizationName = '';
+        // $organizationName = '';
 
-        if (!empty($accountId)) {
-            $accountRecord = Vtiger_Record_Model::getInstanceById($accountId, 'Accounts');
-            $organizationName = $accountRecord->get('accountname');
-        }
+        // if (!empty($accountId)) {
+        //     $accountRecord = Vtiger_Record_Model::getInstanceById($accountId, 'Accounts');
+        //     $organizationName = $accountRecord->get('accountname');
+        // }
 
         // ------------------------------------------------------
         // GET DATA FROM new ERP HOLDINGSDB CLASS
@@ -45,12 +46,6 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
 
         $activity = new dbo_db\ActivitySummary();
         $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);
-        // $activity_data = $activity->getTCPrintPreviewData($docNo, $tableName);
-
-        // echo '<pre>';
-        // var_dump('ACTIVITY DATA: ');
-        // var_dump($activity_data);
-        // echo '</pre>';
 
         $erpDoc = (object) $activity_data;
 

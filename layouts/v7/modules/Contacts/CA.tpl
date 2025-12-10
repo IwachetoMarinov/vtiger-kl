@@ -153,7 +153,6 @@
 
     {assign var="start" value=0}
     {assign var="end" value=1}
-    {assign var="calcTotal" value=0}
     {for $page=1 to $PAGES}
         {if $page eq 1}
             {assign var="end" value=14}
@@ -209,7 +208,7 @@
 
                 <div style="margin-top: 5mm;">I/We hereby confirm that I/we have duly collected the Stored Metal detailed
                     below at the following location:
-                    <p>{$location}</p>
+                    <span style="font-style: italic;font-weight: 600;"> {$location}</span>.
                 </div>
 
                 <table class="print-tbl" style="margin-top:5mm;">
@@ -246,7 +245,7 @@
                                 {if $PAGES eq $page}
                                     <tr>
                                         <th style="width:75%;" colspan="2">TOTAL QUANTITY:</th>
-                                        <td style="text-align:right" colspan="2"><strong>{number_format($calcTotal,3)}</strong>
+                                        <td style="text-align:right" colspan="2"><strong>{number_format($total_value,3)}</strong>
                                         </td>
                                     </tr>
                                 {/if}
