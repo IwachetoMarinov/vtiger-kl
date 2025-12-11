@@ -277,22 +277,29 @@
                     <div style="min-height: 24mm;"></div>
                 </div>
                 <div class="number-container" style="padding-bottom: 6mm;">Customer number:
-                    <span>..............................................................</span></div>
+                    <span>..............................................................</span>
+                </div>
             </div>
             <div class="company-data-item company-data-item-to">
                 <div class="place-container"><strong>To:</strong></div>
                 <div>
                     <div style="padding:2mm;min-height:27mm;">
                         <div>
-                            {$COMPANY->get('company_name')}
+                            {if isset($COMPANY)}
+                                {$COMPANY->get('company_name')}
+                            {/if}
                         </div>
                         <div style="margin-top: 1.5mm;">
-                            {$COMPANY->get('company_address')}
+                            {if isset($COMPANY)}
+                                {$COMPANY->get('company_address')}
+                            {/if}
                         </div>
                     </div>
                     <div class="number-container">
-                        {if !empty($COMPANY->get('company_fax'))} <p>Fax no:{$COMPANY->get('company_fax')}</p> {/if}
-                        <p>Email: {$COMPANY->get('company_website')}</p>
+                        {if isset($COMPANY)}
+                            {if !empty($COMPANY->get('company_fax'))} <p>Fax no:{$COMPANY->get('company_fax')}</p> {/if}
+                            <p>Email: {$COMPANY->get('company_website')}</p>
+                        {/if}
                     </div>
                 </div>
             </div>

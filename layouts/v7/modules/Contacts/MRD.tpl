@@ -298,13 +298,18 @@
                     <tr>
                         <td style='font-size: 8pt;font-weight: bold;position: absolute;bottom: 14px;width: 85%'>
                             <div>
-                                <div style="float:left">
-                                    {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg.
-                                    No. {$COMPANY->get('company_reg_no')}){/if}<br>
-                                    {$COMPANY->get('company_address')}<br>
-                                    T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                                    {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
-                                </div>
+                                {if isset($COMPANY)}
+                                    <div style="float:left">
+                                        {$COMPANY->get('company_name')}
+                                        {if $COMPANY->get('company_reg_no')} (Co. Reg. No. {$COMPANY->get('company_reg_no')})
+                                        {/if}<br>
+                                        {$COMPANY->get('company_address')}<br>
+                                        T: {$COMPANY->get('company_phone')}
+                                        {if $COMPANY->get('company_fax')} | Fax: {$COMPANY->get('company_fax')} {/if}
+                                        | {$COMPANY->get('company_website')}<br>
+                                    </div>
+                                {/if}
+
                                 <div style="float:right;"><br><br>Page {$page} | {$PAGES}</div>
                             </div>
                         </td>

@@ -176,14 +176,19 @@
                             <div style="max-width:50%">
                                 <div style="margin-top: 5mm;">To:</div>
                                 <div style="font-weight: 700;">
-                                    {$COMPANY->get('company_name')}
+                                    {if isset($COMPANY)}
+                                        {$COMPANY->get('company_name')}
+                                    {/if}
                                 </div>
                                 <div>
-                                    {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
-                                    {$COMPANY->get('company_reg_no')})<br>{/if}
-                                    {$COMPANY->get('company_address')}<br>
-                                    T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                                    {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br></div>
+                                    {if isset($COMPANY)}
+                                        {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
+                                        {$COMPANY->get('company_reg_no')})<br>{/if}
+                                        {$COMPANY->get('company_address')}<br>
+                                        T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
+                                        {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                                    {/if}
+                                </div>
                             </div>
                         </td>
                     </tr>
