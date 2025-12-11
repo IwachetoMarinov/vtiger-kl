@@ -173,11 +173,18 @@
                     </tr>
                     <tr>
                         <td style="height: 20mm;text-align: left">
-                            <div style="margin-top: 5mm;">To:</div>
-                            <div style="font-weight: 700;">Global Precious Metals Pte. Ltd.</div>
-                            <div>143 Cecil Street</div>
-                            <div>#07-01 GB Building</div>
-                            <div style="margin-bottom: 5mm;">Singapore 069542</div>
+                            <div style="max-width:50%">
+                                <div style="margin-top: 5mm;">To:</div>
+                                <div style="font-weight: 700;">
+                                    {$COMPANY->get('company_name')}
+                                </div>
+                                <div>
+                                    {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
+                                    {$COMPANY->get('company_reg_no')})<br>{/if}
+                                    {$COMPANY->get('company_address')}<br>
+                                    T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
+                                    {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br></div>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -245,7 +252,8 @@
                                 {if $PAGES eq $page}
                                     <tr>
                                         <th style="width:75%;" colspan="2">TOTAL QUANTITY:</th>
-                                        <td style="text-align:right" colspan="2"><strong>{number_format($total_value,3)}</strong>
+                                        <td style="text-align:right" colspan="2">
+                                            <strong>{number_format($total_value,3)}</strong>
                                         </td>
                                     </tr>
                                 {/if}
