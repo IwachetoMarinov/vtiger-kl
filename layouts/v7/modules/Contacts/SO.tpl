@@ -237,6 +237,16 @@
 </head>
 
 <body>
+    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+        <ul style="list-style-type:none;margin:0;padding:0;overflow:hidden;background-color:#333;">
+            <li style="float:right">
+                <a style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
+                    href="index.php?module=Contacts&view=SaleOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
+                    Download
+                </a>
+            </li>
+        </ul>
+    {/if}
 
     <div class="printAreaContainer">
 
@@ -266,12 +276,13 @@
                     <div><strong>From:</strong></div>
                     <div style="min-height: 24mm;"></div>
                 </div>
-                <div class="number-container">Customer number: <span>..............................................................</span></div>
+                <div class="number-container" style="padding-bottom: 6mm;">Customer number:
+                    <span>..............................................................</span></div>
             </div>
             <div class="company-data-item company-data-item-to">
                 <div class="place-container"><strong>To:</strong></div>
                 <div>
-                    <div style="padding:2mm;">
+                    <div style="padding:2mm;min-height:27mm;">
                         <div>
                             {$COMPANY->get('company_name')}
                         </div>
