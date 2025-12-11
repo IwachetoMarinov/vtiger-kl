@@ -5,7 +5,7 @@
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
 
-class Contacts_ViewCR_View extends Vtiger_Index_View
+class Contacts_SaleOrderView_View extends Vtiger_Index_View
 {
 
     protected $record = null;
@@ -39,6 +39,10 @@ class Contacts_ViewCR_View extends Vtiger_Index_View
             $erpData = [];
         }
 
+        echo '<pre>';
+        print_r($erpData);
+        echo '</pre>';
+
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', 1);
@@ -52,10 +56,10 @@ class Contacts_ViewCR_View extends Vtiger_Index_View
         $viewer->assign('hideCustomerInfo', $request->get('hideCustomerInfo'));
 
         if ($request->get('PDFDownload')) {
-            $html = $viewer->view("CR.tpl", $moduleName, true);
+            $html = $viewer->view("SO.tpl", $moduleName, true);
             $this->downloadPDF($html, $request);
         } else {
-            $viewer->view("CR.tpl", $moduleName);
+            $viewer->view("SO.tpl", $moduleName);
         }
     }
 

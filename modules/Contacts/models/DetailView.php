@@ -27,11 +27,11 @@ class Contacts_DetailView_Model extends Accounts_DetailView_Model
 
         $linkModelList = parent::getDetailViewLinks($linkParams);
 
-        if (Users_Privileges_Model::isPermitted($moduleName, 'ViewSO', $recordId)) {
+        if (Users_Privileges_Model::isPermitted($moduleName, 'SaleOrderView', $recordId)) {
             $basicActionLink = array(
                 'linktype' => 'DETAILVIEWBASIC',
                 'linklabel' => 'Create SO',
-                'linkurl' => 'index.php?module=' . $moduleName . '&view=ViewSO&record=' . $recordId,
+                'linkurl' => 'index.php?module=' . $moduleName . '&view=SaleOrderView&record=' . $recordId,
                 'linkicon' => '',
                 'linktarget' => '_blank',
             );
