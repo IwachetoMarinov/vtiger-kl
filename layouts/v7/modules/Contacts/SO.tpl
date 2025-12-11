@@ -109,7 +109,7 @@
             width: 100%;
             border-collapse: collapse;
             border: 1px solid #000;
-            font-size: 7pt;
+            font-size: 8.5pt;
             margin-bottom: 2mm;
         }
 
@@ -215,6 +215,10 @@
             width: 25%;
         }
 
+        .company-container {
+            width: 75%;
+        }
+
         .number-container {
             padding: 2mm;
             border-top: 1px solid #000;
@@ -282,7 +286,7 @@
             </div>
             <div class="company-data-item company-data-item-to">
                 <div class="place-container"><strong>To:</strong></div>
-                <div>
+                <div class="company-container">
                     <div style="padding:2mm;min-height:27mm;">
                         <div>
                             {if isset($COMPANY)}
@@ -353,7 +357,7 @@
                     <tr>
                         <td class="metal-row-label">{$m}</td>
                         {foreach from=$weights item=w}
-                            <td>NA</td>
+                            <td></td>
                         {/foreach}
                     </tr>
                 {/foreach}
