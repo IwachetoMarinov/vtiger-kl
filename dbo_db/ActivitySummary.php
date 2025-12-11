@@ -38,7 +38,7 @@ class ActivitySummary
             $params[] = $customer_id;
         }
 
-        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_TxHx] $where";
+        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_TxHx] $where order by [Tx_Date] DESC";
 
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
