@@ -241,21 +241,11 @@
                         <div>
 
                             <div style="float:left">
-
-                                {$COMPANY->get('company_name')}
-                                {if !empty($COMPANY->get('company_reg_no'))}
-                                    (Co. Reg. No. {$COMPANY->get('company_reg_no')})
-                                {/if}
-                                <br>
-
-                                {$COMPANY->get('company_address')}<br>
-
-                                T: {$COMPANY->get('company_phone')}
-                                {if !empty($COMPANY->get('company_fax'))}
-                                    | Fax: {$COMPANY->get('company_fax')}
-                                {/if}
-                                | {$COMPANY->get('company_website')}<br>
-
+                                {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg.
+                                    No. {$COMPANY->get('company_reg_no')}){/if}<br>
+                                    {$COMPANY->get('company_address')}<br>
+                                    T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
+                                    {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
                             </div>
 
                             <div style="float:right;">

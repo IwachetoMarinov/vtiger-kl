@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>COLLECTION ACKNOWLEDGEMENT FROM GPM </title>
+    <title>COLLECTION REQUEST FROM GPM </title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -180,11 +180,18 @@
                     </tr>
                     <tr>
                         <td style="height: 20mm;text-align: left">
-                            <div style="margin-top: 5mm;">To:</div>
-                            <div style="font-weight: 700;">Global Precious Metals Pte. Ltd.</div>
-                            <div>143 Cecil Street</div>
-                            <div>#07-01 GB Building</div>
-                            <div style="margin-bottom: 1mm;">Singapore 069542</div>
+                            <div style="max-width:50%">
+                                <div style="margin-top: 5mm;">To:</div>
+                                <div style="font-weight: 700;">
+                                    {$COMPANY->get('company_name')}
+                                </div>
+                                <div>
+                                    {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
+                                    {$COMPANY->get('company_reg_no')})<br>{/if}
+                                    {$COMPANY->get('company_address')}<br>
+                                    T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
+                                    {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br></div>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -254,7 +261,8 @@
                                 {if $PAGES eq $page}
                                     <tr>
                                         <th style="width:75%;" colspan="2">TOTAL QUANTITY:</th>
-                                        <td style="text-align:right" colspan="2"><strong>{number_format($total_value,3)}</strong>
+                                        <td style="text-align:right" colspan="2">
+                                            <strong>{number_format($total_value,3)}</strong>
                                         </td>
                                     </tr>
                                 {/if}
@@ -269,14 +277,16 @@
                 </div>
 
                 <div style="margin-top: 4mm;">
-                    <span style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                    <span
+                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
                     <span>I/We will personally collect the Stored Metal at the Storage Facility and will be holding
                         ID/Passport number</span>
                     <span> .......................</span>
                 </div>
 
                 <div style="margin-top: 4mm;">
-                    <span style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                    <span
+                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
 
                     <span>I/We hereby authorise Mr/Mrs/Representatives of the company </span>
                     <span> .......................</span>
@@ -300,7 +310,7 @@
                 <div style="margin-top: 5mm;" class="bottom-container">
                     <div class="bottom-container-item">
                         <span>Place: </span>
-                        <span>................................</span>
+                        <span>{$COMPANY->get('company_address')}</span>
                     </div>
                     <div class="bottom-container-item">
                         <span>Date: </span>
