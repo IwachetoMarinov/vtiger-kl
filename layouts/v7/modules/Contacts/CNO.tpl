@@ -284,11 +284,13 @@
                 </tr>
                 <tr>
                     <td style='font-size: 8pt;font-weight: bold;position: absolute;bottom: 14px;'>
-                        {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
-                        {$COMPANY->get('company_reg_no')}){/if}<br>
-                        {$COMPANY->get('company_address')}<br>
-                        T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                        {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                        {if isset($COMPANY)}
+                            {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
+                            {$COMPANY->get('company_reg_no')}){/if}<br>
+                            {$COMPANY->get('company_address')}<br>
+                            T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
+                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                        {/if}
                     </td>
                 </tr>
             </table>

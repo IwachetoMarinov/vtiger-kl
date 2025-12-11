@@ -187,7 +187,7 @@
                         href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&tableName={$smarty.request.tableName}&PDFDownload=true&bank={$SELECTED_BANK->getId()}&hideCustomerInfo={$smarty.request.hideCustomerInfo}">Download</a>
                 </li>
             {/if}
-            
+
             <li id='printConf' style="float:right">
                 <span style="float: right;margin-right: 1px;color: white;background-color: #bea364;text-decoration: none;
                 display: block;
@@ -268,7 +268,8 @@
                                 <td colspan="2" style="text-align: center;">{$ERP_DOCUMENT['docno']}</td>
                                 <td style="text-align: center;">{$ERP_DOCUMENT['docDate']}</td>
                                 <td style="width:25%;text-align: center;">{$ERP_DOCUMENT['metal']}</td>
-                                <td style="width:25%;text-align: center;">{$ERP_DOCUMENT->currency} {$ERP_DOCUMENT['metalOz']} / Oz.</td>
+                                <td style="width:25%;text-align: center;">{$ERP_DOCUMENT->currency}
+                                    {$ERP_DOCUMENT['metalOz']} / Oz.</td>
                             </tr>
                         </table>
                         <table class="activity-tbl">
@@ -305,16 +306,19 @@
                             {if !empty($COMPANY->get('company_gst_no')) && empty($ERP_DOCUMENT['GST'])}
                                 <tr>
                                     <td style="width:75%;">SUBTOTAL:</td>
-                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency} {$ERP_DOCUMENT['amount']}</strong></td>
+                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
+                                            {$ERP_DOCUMENT['amount']}</strong></td>
                                 </tr>
                                 <tr>
                                     <td style="width:75%;">GST on Storage charge (0%)</td>
-                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency} {number_format(0,2)}</strong></td>
+                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
+                                            {number_format(0,2)}</strong></td>
                                 </tr>
                             {/if}
                             <tr>
                                 <th style="width:75%;">TOTAL STORAGE FEE:</th>
-                                <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency} {$ERP_DOCUMENT['amount']}</strong></td>
+                                <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
+                                        {$ERP_DOCUMENT['amount']}</strong></td>
                             </tr>
                         </table>
 
@@ -356,11 +360,13 @@
                 </tr>
                 <tr>
                     <td style='font-size: 8pt;font-weight: bold;position: absolute;bottom: 14px;'>
-                        {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
-                        {$COMPANY->get('company_reg_no')}){/if}<br>
-                        {$COMPANY->get('company_address')}<br>
-                        T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                        {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                        {if isset($COMPANY)}
+                            {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
+                            {$COMPANY->get('company_reg_no')}){/if}<br>
+                            {$COMPANY->get('company_address')}<br>
+                            T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
+                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                        {/if}
                     </td>
                 </tr>
             </table>

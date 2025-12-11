@@ -282,20 +282,24 @@
                             </tr>
                         </table>
                         <br>
-                        <div>
-                            If you have any questions concerning these transactions, please contact
-                            {$COMPANY->get('company_name')} at <br>Tel: {$COMPANY->get('company_phone')} or by email:
-                            relationship@global-precious-metals.com.
-                        </div>
+                        {if isset($COMPANY)}
+                            <div>
+                                If you have any questions concerning these transactions, please contact
+                                {$COMPANY->get('company_name')} at <br>Tel: {$COMPANY->get('company_phone')} or by email:
+                                relationship@global-precious-metals.com.
+                            </div>
+                        {/if}
                     </td>
                 </tr>
                 <tr>
                     <td style='font-size: 8pt;font-weight: bold;position: absolute;bottom: 14px;'>
-                        {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
-                        {$COMPANY->get('company_reg_no')}){/if}<br>
-                        {$COMPANY->get('company_address')}<br>
-                        T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                        {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                        {if isset($COMPANY)}
+                            {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
+                            {$COMPANY->get('company_reg_no')}){/if}<br>
+                            {$COMPANY->get('company_address')}<br>
+                            T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
+                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                        {/if}
                     </td>
                 </tr>
             </table>
