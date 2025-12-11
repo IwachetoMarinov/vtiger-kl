@@ -39,9 +39,9 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
             $erpData = [];
         }
 
-        echo '<pre>';
-        print_r($erpData);
-        echo '</pre>';
+        // echo '<pre>';
+        // print_r($erpData);
+        // echo '</pre>';
 
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
