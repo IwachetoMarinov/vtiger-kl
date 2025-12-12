@@ -17,44 +17,38 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 		$recordId   = $request->get('record');
 
 		// ✅ Ensure record model is loaded even if preProcess() didn't run
-		if (empty($this->record)) {
-			$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
-		}
+		if (empty($this->record)) $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
 
-		if (!$this->record) {
-			throw new AppException("Intent record not found for ID: $recordId");
-		}
+		if (!$this->record) throw new AppException("Intent record not found for ID: $recordId");
 
 		$intent = $this->record->getRecord();
-		if (!$intent) {
-			throw new AppException("Unable to get Record Model for Intent ID: $recordId");
-		}
+		if (!$intent) throw new AppException("Unable to get Record Model for Intent ID: $recordId");
 
 		// ✅ Get Contact related to Intent
 		$contactId = $intent->get('contact_id');
 		if (empty($contactId)) throw new AppException("Intent has no related Contact ID.");
 
 		$recordModel = Vtiger_Record_Model::getInstanceById($contactId, 'Contacts');
+
+		if (!$recordModel) throw new AppException("Contact not found for ID: $contactId");
+
 		$companyId = $recordModel->get('company_id');
+
 		$companyRecord = null;
-
-		if (!empty($companyId))
-			$companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
-
-		if (!$recordModel) {
-			throw new AppException("Contact not found for ID: $contactId");
-		}
-
-		$comId = $recordModel->get('related_entity');
+		$allBankAccounts = [];
 
 		// ✅ Permission check
 		if (!Users_Privileges_Model::isPermitted('Contacts', 'DetailView', $contactId)) {
 			throw new AppException('You are not permitted to view the Lead or the Contact information associated with this Intent!');
 		}
 
-		// ✅ Bank accounts
-		$allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($comId);
-		$bankAccountId   = $request->get('bank');
+		if (!empty($companyId)) {
+			// ✅ Company record
+			$companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
+			// ✅ Bank accounts
+			$allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($companyId);
+			$bankAccountId   = $request->get('bank');
+		}
 
 		if (empty($bankAccountId) && !empty($allBankAccounts)) {
 			$firstAccount  = reset($allBankAccounts);
@@ -82,11 +76,6 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 			$selectedBank->set('bank_address', '');
 			$selectedBank->set('swift_code', '');
 		}
-
-		echo '<pre>';
-		echo 'Selected Bank Account: ';
-		var_dump($selectedBank);
-		echo '</pre>';
 
 		// ✅ Prepare viewer
 		$viewer = $this->getViewer($request);
