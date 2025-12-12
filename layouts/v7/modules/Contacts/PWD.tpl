@@ -231,7 +231,7 @@
                 </tr>
                 <tr>
                     <td style="text-align: right;font-size: 9pt">
-                        All amounts in {$ERP_DOCUMENT->currency} Dollars
+                        All amounts in {$ERP_DOCUMENT->currency}
                     </td>
                 </tr>
                 <tr>
@@ -258,8 +258,6 @@
                                 <th style="width:12%;text-align:center">FINE OZ.</th>
                                 <th style="width:30%;text-align:center">TOTAL {$ERP_DOCUMENT->currency}</th>
                             </tr>
-                            {*assign var="metalPrice" value=($ERP_DOCUMENT->xauPrice)+($ERP_DOCUMENT->mbtcPrice)+($ERP_DOCUMENT->xagPrice)+($ERP_DOCUMENT->xptPrice)+($ERP_DOCUMENT->xpdPrice)*}
-
 
                             {assign var="balanceAmount" value=($balanceAmount)+($TRANSACTION->usdVal)}
                             {assign var="serials" value=""}

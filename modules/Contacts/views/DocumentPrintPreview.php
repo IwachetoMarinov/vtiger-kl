@@ -26,59 +26,59 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $tableName = $request->get('tableName');
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
-        $comId = $recordModel->get('related_entity');
         $companyId = $recordModel->get('company_id');
 
         $companyRecord = null;
+        $allBankAccounts = [];
 
-        if (!empty($companyId))
+        if (!empty($companyId)) {
+            // ✅ Company record
             $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
+            // ✅ Bank accounts
+            $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($companyId);
+            $bankAccountId   = $request->get('bank');
+        }
 
-        // $accountId = $recordModel->get('account_id');
 
         $activity = new dbo_db\ActivitySummary();
         $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
-        // echo '<pre>';
-        // echo 'Activity Data: ';
-        // var_dump($activity_data);
-        // echo '</pre>';
-
         $docType = $activity_data['voucherType'] ?? "";
-        // $exchange_rates = MASForex_Record_Model::getExchangeRate($activity_data['documentDate'] ?? '', 'usd_sgd');
         $erpDoc = (object) $activity_data;
 
-        $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($comId);
         $bankAccountId = $request->get('bank');
-        if (empty($bankAccountId)) {
-            // SHOULD HAVE DEFAULT BANK ACCOUNT SETUP IN COMPANY SETTINGS
-            // $bankAccountId = $allBankAccounts[0]->getId();
+        if (empty($bankAccountId) && !empty($allBankAccounts)) {
+            $firstAccount  = reset($allBankAccounts);
+            $bankAccountId = $firstAccount->getId();
+        }
 
-            // HARDCODED TEST DATA
-            $bankAccountId = 1;
+        // ✅ Handle no bank accounts gracefully
+        if (empty($bankAccountId)) $bankAccountId = null;
+
+        $selectedBank = null;
+        if (!empty($bankAccountId)) $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
+
+        if (empty($selectedBank)) {
+            // fallback dummy object to prevent template fatal
+            $selectedBank = new Vtiger_Record_Model();
+            $selectedBank->set('beneficiary_name', '');
+            $selectedBank->set('account_no', '');
+            $selectedBank->set('account_currency', '');
+            $selectedBank->set('iban_no', '');
+            $selectedBank->set('bank_name', '');
+            $selectedBank->set('bank_address', '');
+            $selectedBank->set('swift_code', '');
         }
 
         $intent = false;
         if (!empty($request->get('fromIntent'))) {
             $intent = Vtiger_Record_Model::getInstanceById($request->get('fromIntent'), 'GPMIntent');
         }
-        // SHOULD get real data for the Bank
-        // $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
-        // HARDCODED TEST DATA
-        $selectedBank = (object) [
-            'id' => "123",
-            'accountNumber' => '123-456-789',
-            'accountName' => 'GPM Main Account',
-            'bankName' => 'Global Bank',
-            'branchCode' => '001',
-            'swiftCode' => 'GBLBB22',
-            'bankAddress' => '123 Global St, Metropolis, Country'
-        ];
 
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);
-        $viewer->assign('SELECTED_BANK', $selectedBank);
+        $viewer->assign('SELECTED_BANK', $selectedBank ?? null);
         $viewer->assign('ERP_DOCUMENT', $this->processDoc($erpDoc));
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('INTENT', $intent);

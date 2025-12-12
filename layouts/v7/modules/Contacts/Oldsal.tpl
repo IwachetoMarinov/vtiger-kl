@@ -251,11 +251,10 @@
                     </tr>
                     <tr>
                         <td style="height: 10mm; text-decoration: underline;text-align: center">
-                        
-                            <strong>{if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))}TAX INVOICE{else}SALES INVOICE{/if}</strong>
+                            <strong>{if !empty($COMPANY->get('company_gst_no'))}TAX INVOICE{else}SALES INVOICE{/if}</strong>
                         </td>
                     </tr>
-                    {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))}
+                    {if !empty($COMPANY->get('company_gst_no'))}
                         <tr style="font-weight: bold;font-size: 9pt">
                             <td>GST Reg No.: {$COMPANY->get('company_gst_no')}</td>
                         </tr>
@@ -358,7 +357,7 @@
                                                     {number_format($GST_ITEM->otherCharge,2)}</strong></td>
                                         </tr>
                                     {/if}
-                                    {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no')) && empty($GST_ITEM)}
+                                    {if !empty($COMPANY->get('company_gst_no')) && empty($GST_ITEM)}
                                         <tr>
                                             <td style="width:75%;" colspan="4">SUBTOTAL:</td>
                                             <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
@@ -372,6 +371,7 @@
                                     {/if}
                                     <tr>
                                         <th style="width:75%;" colspan="4">TOTAL INVOICE AMOUNT:</th>
+                                        {* <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency} {number_format($calcTotal,2)}</strong></td> *}
                                         <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
                                                 {number_format($ERP_DOCUMENT->grandTotal ,2)}</strong></td>
                                     </tr>
@@ -391,7 +391,7 @@
                             </table>
                             <br>
                             <br>
-                            {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))}
+                            {if !empty($COMPANY->get('company_gst_no'))}
                                 <div>
                                     {if $INTENT && $INTENT->get('package_currency') eq 'SGD'}
                                         *Remarks: USD/SGD exchange rate at SGD {$INTENT->get('fx_spot_price')} / USD
