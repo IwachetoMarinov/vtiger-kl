@@ -43,12 +43,16 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
 
         $erpDoc = (object) $activity_data;
 
+        // echo '<pre>';
+        // echo 'ERP Document Data: ';
+        // var_dump($erpDoc);
+        // echo '</pre>';
+
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('ERP_DOCUMENT', $erpDoc);
         $viewer->assign('OROSOFT_DOCTYPE', $docType);
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
-        // $viewer->assign('COMPANY', GPMCompany_Record_Model::getInstanceByCode($comId));
         $viewer->assign('COMPANY', $companyRecord);
         $viewer->assign('PAGES', $this->makeDataPage($erpDoc->barItems, $docType));
         if ($request->get('PDFDownload')) {

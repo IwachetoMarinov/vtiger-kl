@@ -84,9 +84,6 @@
                         <tbody>
                             {foreach item=TX from=$OROSOFT_TRANSACTION}
 
-                                {* {var_dump('TX ITEM:', $TX.doctype);} *}
-                                {* {var_dump('TX ITEM:', $TX.voucher_type);} *}
-
                                 <tr class="listViewEntries1">
                                     <!-- Document number -->
                                     <td style="width: 140px;">
@@ -94,7 +91,7 @@
                                             <a href="index.php?module=Contacts&view=CollectionAcknowledgement&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">
                                                 <button type="button" class="btn btn-default module-buttons">
-                                                     {$TX.voucher_no}
+                                                    {$TX.voucher_no}
                                                 </button>
                                             </a>
                                         {else}
@@ -160,16 +157,10 @@
                                     {/if}
 
                                     <!-- Date -->
-                                    <td nowrap>
-                                        {$TX.posting_date}
-                                    </td>
+                                    <td nowrap> {$TX.posting_date}</td>
 
                                     <!-- Type -->
-                                    <td nowrap>
-                                        {$TX.description} -
-                                        {$TX.table_name} -
-                                        {$TX.voucher_type}
-                                    </td>
+                                    <td nowrap> {$TX.description}</td>
 
                                     <!-- Amount -->
                                     <td nowrap>

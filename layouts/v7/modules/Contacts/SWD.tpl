@@ -250,7 +250,7 @@
                 {/if}
                 <tr>
                     <td style="text-align: right;font-size: 9pt">
-                        All amounts in US Dollars
+                        All amounts in currency
                     </td>
                 </tr>
                 <tr>

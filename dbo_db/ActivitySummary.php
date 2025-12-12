@@ -1,8 +1,7 @@
 <?php
 /* dbo_db/ActivitySummary.php */
 
-// ini_set('display_errors', 1);
-// error_reporting(E_ALL);
+// ini_set('display_errors', 1); error_reporting(E_ALL);
 
 namespace dbo_db;
 
@@ -21,6 +20,7 @@ class ActivitySummary
     {
         $this->connection = DBConnection::getConnection();
     }
+
     public function getActivitySummary($customer_id = null)
     {
         if (!$customer_id) return [];
@@ -242,8 +242,8 @@ class ActivitySummary
 
                 'weight' => max((float)($item['Weight'] ?? 0), 1),
                 'barNumber'         => $item['Bar_No'] ?? '',
-                'pureOz'            => isset($item['GrossOz']) ? (float)$item['GrossOz'] : 0.00, 
-                'otherCharge'       => isset($item['Other_Charge']) ? (float)$item['Other_Charge'] : 0.00, 
+                'pureOz'            => isset($item['GrossOz']) ? (float)$item['GrossOz'] : 0.00,
+                'otherCharge'       => isset($item['Other_Charge']) ? (float)$item['Other_Charge'] : 0.00,
                 'narration'         => $item['Narration'] ?? '',
                 'longDesc'          => $item['Long_Desc'] ?? '',
             ];

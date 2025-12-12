@@ -223,7 +223,7 @@
                     </tr>
                     <tr>
                         <td  style="text-align: right;font-size: 9pt">
-                            All amounts in {$ERP_DOCUMENT->currency} Dollars
+                            All amounts in {$ERP_DOCUMENT->currency}
                         </td>
                     </tr>
                     <tr>
@@ -238,13 +238,13 @@
                                     <td colspan="2" style="text-align: center;">{$ERP_DOCUMENT['docno']}</td>
                                     <td style="text-align: center;">{$ERP_DOCUMENT['docDate']}</td>
                                     <td style="width:25%;text-align: center;" >{$ERP_DOCUMENT['metal']}</td>
-                                    <td style="width:25%;text-align: center;">US$ {$ERP_DOCUMENT['metalOz']} / Oz.</td>
+                                    <td style="width:25%;text-align: center;">{$ERP_DOCUMENT->currency} {$ERP_DOCUMENT['metalOz']} / Oz.</td>
                                 </tr>
                             </table>
                             <table class="activity-tbl">
                                 <tr>
                                     <th style="width:75%;">DESCRIPTION</th>
-                                    <th style="width:25%;text-align: center">TOTAL US$</th>
+                                    <th style="width:25%;text-align: center">TOTAL {$ERP_DOCUMENT->currency}</th>
                                 </tr>
                                 <tr>
                                     <td style="height:70mm;border-bottom:none;vertical-align: top">Storage charge for the period from {$ERP_DOCUMENT['fromDate']} to {$ERP_DOCUMENT['toDate']}:<br>
@@ -252,7 +252,7 @@
                                     <td style="text-align:right;vertical-align: top"><br>{$ERP_DOCUMENT['amount']}</td>
                                 <tr>
                                     <th style="width:75%;">TOTAL STORAGE FEE:</th>
-                                    <td style="text-align:right"><strong>US$ {$ERP_DOCUMENT['amount']}</strong></td>
+                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency} {$ERP_DOCUMENT['amount']}</strong></td>
                                 </tr>
                             </table> 
                             <br>

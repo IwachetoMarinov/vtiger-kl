@@ -239,7 +239,6 @@
                     <td style="font-size:8pt;font-weight:bold;position:absolute;bottom:14px;width:85%;">
 
                         <div>
-
                             {if isset($COMPANY)}
                                 <div style="float:left">
                                     {$COMPANY->get('company_name')}

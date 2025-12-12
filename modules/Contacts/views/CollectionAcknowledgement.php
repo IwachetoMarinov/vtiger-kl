@@ -66,7 +66,7 @@ class Contacts_CollectionAcknowledgement_View extends Vtiger_Index_View
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
 
-        $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . "-TC";
+        $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . "-CA";
         $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
         fwrite($handle, $html);
         fclose($handle);
