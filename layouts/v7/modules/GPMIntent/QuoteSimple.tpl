@@ -74,7 +74,7 @@
                 </tr>
                 <tr>
                     <td style="text-align: right;font-size: 9pt">
-                        All amounts in US Dollars
+                        All amounts in currency
                     </td>
                 </tr>
                 <tr>
@@ -130,16 +130,16 @@
                                         {number_format($INTENT->get('total_amount'),2)}</strong></td>
                             </tr>
                             {if $INTENT->get('package_currency') neq 'USD'}
-                            <tr>
-                                <th style="width:75%;" colspan="4">TOTAL INVOICE AMOUNT IN
-                                    {$INTENT->get('package_currency')}: {if $INTENT->get('package_currency') eq 'EUR'}
-                                    (EUR/USD{else}(USD/{$INTENT->get('package_currency')}
-                                    {/if} RATE
-                                    {if $INTENT->get('fx_spot_price') eq 0 }{$INTENT->get('indicative_fx_spot')}{else}{$INTENT->get('fx_spot_price')}{/if}
-                                    )</th>
-                                <td style="text-align:right"><strong>{$INTENT->get('package_currency')}
-                                        {number_format($INTENT->get('total_foreign_amount'),2)}</strong></td>
-                            </tr>
+                                <tr>
+                                    <th style="width:75%;" colspan="4">TOTAL INVOICE AMOUNT IN
+                                        {$INTENT->get('package_currency')}: {if $INTENT->get('package_currency') eq 'EUR'}
+                                        (EUR/USD{else}(USD/{$INTENT->get('package_currency')}
+                                        {/if} RATE
+                                        {if $INTENT->get('fx_spot_price') eq 0 }{$INTENT->get('indicative_fx_spot')}{else}{$INTENT->get('fx_spot_price')}{/if}
+                                        )</th>
+                                    <td style="text-align:right"><strong>{$INTENT->get('package_currency')}
+                                            {number_format($INTENT->get('total_foreign_amount'),2)}</strong></td>
+                                </tr>
                             {/if}
                         </table>
                         <br>
@@ -153,11 +153,13 @@
                 </tr>
                 <tr>
                     <td style='font-size: 8pt;font-weight: bold;position: absolute;bottom: 14px;'>
-                        {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
-                        {$COMPANY->get('company_reg_no')}){/if}<br>
-                        {$COMPANY->get('company_address')}<br>
-                        T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                        {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                        {if isset($COMPANY)}
+                            {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
+                            {$COMPANY->get('company_reg_no')}){/if}<br>
+                            {$COMPANY->get('company_address')}<br>
+                            T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
+                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                        {/if}
                     </td>
                 </tr>
             </table>

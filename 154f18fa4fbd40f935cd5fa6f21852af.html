@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>GPM PROFORMA SALE INVOICE</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: 400;
+            src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+        }
+
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: 700;
+            src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0px;
+        }
+
+        .printAreaContainer {
+            height: 297mm;
+            width: 210mm;
+            border: 1px solid #fff;
+            margin: auto;
+            padding: 15mm 15mm;
+            position: relative;
+        }
+
+        .printAreaContainer * {
+            box-sizing: border-box;
+            font-family: 'Open Sans';
+            color: #666;
+
+        }
+
+        .printAreaContainer .full-width {
+            width: 100%;
+        }
+
+        .printAreaContainer .header-logo {
+            width: 50%;
+            height: 11mm;
+        }
+
+        .printAreaContainer .header-text {
+            width: 50%;
+            height: 11mm;
+            color: #fff;
+            background: #008ECA;
+            font-weight: bold;
+            font-size: 10pt;
+        }
+
+        .printAreaContainer .header-text span {
+            font-weight: normal;
+            color: #fff;
+        }
+
+        .printAreaContainer .print-tbl {
+            border-collapse: collapse;
+            width: 100%;
+            border: none;
+        }
+
+        .print-txt-center {
+            text-align: center;
+        }
+
+        .print-txt-left {
+            text-align: left;
+        }
+
+        .print-txt-right {
+            text-align: right;
+        }
+
+        .print-footer {
+            height: 20mm;
+            background: #008ECA;
+        }
+
+        .big-label {
+            color: #cd3330;
+            font-weight: bold;
+            font-size: 20pt;
+        }
+
+        .hidden {
+            /*display: none;*/
+        }
+
+        table.content-table th {
+            border: 1px dotted #666666;
+            font-size: 10pt;
+            background: #ECECEC;
+            font-weight: bold;
+            padding: 4px
+        }
+
+        table.content-table tr.footer th {
+            color: #008ECA;
+        }
+
+        table.content-table td {
+            border: none;
+            font-size: 10pt;
+            font-weight: normal;
+            padding: 4px
+        }
+
+        table.graph-table td {
+            width: 50%;
+            font-size: 10pt;
+            padding: 4px 0px;
+        }
+
+        .graph-bar {
+            height: 1.5mm
+        }
+
+        .graph-bar.blue {
+            background: #008ECA;
+        }
+
+        .graph-bar.green {
+            background: #BACE10;
+        }
+
+        .doted-bg {
+            background: url(graph_bg.jpg);
+            background-size: 338px auto;
+        }
+
+        table.activity-tbl {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #333;
+        }
+
+        table.activity-tbl td,
+        table.activity-tbl th {
+            border: 1px solid #000;
+            padding: 1mm 2mm;
+            text-align: left;
+        }
+
+        table.activity-tbl th {
+            background: #bca263;
+        }
+
+        table.activity-tbl tr.no-border td {
+            border-bottom: none;
+            border-top: none;
+        }
+
+        .logo-bg-bottom {
+            background: url(layouts/v7/modules/Contacts/resources/Gold_Logo_Higher_Res.png) no-repeat;
+            background-size: 244mm;
+            height: 70mm;
+            width: 82mm;
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+            opacity: .4;
+        }
+    </style>
+    </head>
+
+<body>
+    
+    <div class="printAreaContainer">
+        <div class="full-width">
+            <table class="print-tbl">
+
+                <!-- Customer header -->
+                <tr>
+                    <td style="height: 28mm;">
+                        <img src='layouts/v7/modules/Contacts/resources/gpm-new-logo.png'
+                            style="max-height:100%;float:right;width:154px;">
+                                                    <div style="font-size:11pt;margin-top:14px;margin-bottom:32px">
+                                M2002<br>
+                                Gosho Donkov<br>
+                                                                                                                                                                                                            <br>
+                                                                        
+                                                            </div>
+                                            </td>
+                </tr>
+
+                <!-- Invoice header -->
+                <tr>
+                    <td style="height:10mm;text-decoration:underline;text-align:center"><strong>PROFORMA SALE
+                            INVOICE</strong></td>
+                </tr>
+
+                
+                <!-- Invoice meta -->
+                <tr>
+                    <td style="text-align:right;font-size:9pt">
+                        <table class="activity-tbl" style="margin-bottom:5mm;margin-top:5mm">
+                            <tr>
+                                <th>INVOICE NO</th>
+                                <th>INVOICE DATE</th>
+                                <th>DELIVERY DATE</th>
+                                <th>ORDER</th>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center">PI/2025/INT3</td>
+                                <td style="text-align:center">9 Dec 2025
+                                </td>
+                                <td style="text-align:center">9 Dec 2025
+                                </td>
+                                <td style="text-align:center">Purchase & Delivery</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="text-align:right;font-size:9pt">All amounts in currency</td>
+                </tr>
+
+                <!-- Product table -->
+                <tr>
+                    <td style="font-size:9pt;height:168mm;vertical-align:top;">
+                        <table class="activity-tbl" style="margin-bottom:5mm">
+                            <tr>
+                                <th>QTY</th>
+                                <th>DESCRIPTION</th>
+                                <th>US$ / UNIT</th>
+                                <th>FINE OZ.</th>
+                                <th>TOTAL US</th>
+                            </tr>
+
+                                                                                            <tr class="no-border">
+                                    <td>1                                    </td>
+                                    <td>0.5oz 99.99% Gold Coin</td>
+                                    <td style="text-align:center">
+                                                                                    2,121.50
+                                                                            </td>
+                                                                            <td style="text-align:center">
+                                                                                            0.500
+                                                                                    </td>
+                                                                        <td style="text-align:right">2,121.50</td>
+                                </tr>
+                                                                                            <tr class="no-border">
+                                    <td>2                                    </td>
+                                    <td>1oz 99.99% Gold Coin</td>
+                                    <td style="text-align:center">
+                                                                                    4,243.00
+                                                                            </td>
+                                                                            <td style="text-align:center">
+                                                                                            2.000
+                                                                                    </td>
+                                                                        <td style="text-align:right">8,486.00</td>
+                                </tr>
+                            
+                            <tr>
+                                <th colspan="4">TOTAL INVOICE AMOUNT</th>
+                                <td style="text-align:right"><strong>US$
+                                        10,607.50</strong></td>
+                            </tr>
+
+                                                    </table>
+
+                        <!-- Remarks -->
+                        
+                        <!-- Bank info -->
+                                                                                                    <div>
+                            Please transfer the payment net of charges to our bank account:<br><br>
+                            Beneficiary: <br>
+                            Account No: 
+                            <br>
+                                                            Routing No: <br>
+                                                        Bank: <br>
+                            Bank Address: <br>
+                            Swift Code: <br>
+                        </div>
+
+                    </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                    <td style="font-size:8pt;font-weight:bold;position:absolute;bottom:14px;">
+                                            </td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

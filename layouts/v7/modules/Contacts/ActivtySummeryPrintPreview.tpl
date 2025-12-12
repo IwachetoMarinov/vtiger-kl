@@ -249,7 +249,7 @@
                     {/if}
                     <tr>
                         <td style="text-align: right;font-size: 9pt">
-                            All amounts in US Dollars
+                            All amounts in currency
                         </td>
                     </tr>
                     <tr>
@@ -367,7 +367,7 @@
                                                 {/if}
                                             {else}
                                                 ({number_format($grandTotal*-1,2, '.', ',')})
-                                                
+
                                             {/if}
                                         </th>
                                     </tr>
@@ -385,11 +385,13 @@
                         <td style='font-size: 8pt;font-weight: bold;'>
                             <div>
                                 <div style="float:left">
-                                    {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg.
-                                    No. {$COMPANY->get('company_reg_no')}){/if}<br>
-                                    {$COMPANY->get('company_address')}<br>
-                                    T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                                    {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                                    {if isset($COMPANY)}
+                                        {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg.
+                                        No. {$COMPANY->get('company_reg_no')}){/if}<br>
+                                        {$COMPANY->get('company_address')}<br>
+                                        T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
+                                        {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                                    {/if}
                                 </div>
                                 <div style="float:right;"><br><br>Page {$page} | {$PAGES}</div>
                             </div>

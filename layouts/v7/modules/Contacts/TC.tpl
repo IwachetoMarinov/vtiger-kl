@@ -255,9 +255,10 @@
                                 {/if} GPM</strong>
                         </td>
                     </tr>
+                                
                     <tr>
                         <td style="text-align: right;font-size: 9pt">
-                            All amounts in {$ERP_DOCUMENT->currency} Dollars
+                            All amounts in {$ERP_DOCUMENT->currency}
                         </td>
                     </tr>
                     <tr>

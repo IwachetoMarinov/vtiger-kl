@@ -90,7 +90,7 @@
                 </tr>
 
                 <tr>
-                    <td style="text-align:right;font-size:9pt">All amounts in US Dollars</td>
+                    <td style="text-align:right;font-size:9pt">All amounts in currency</td>
                 </tr>
 
                 <!-- Product table -->

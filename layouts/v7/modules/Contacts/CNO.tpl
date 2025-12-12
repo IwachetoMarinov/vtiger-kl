@@ -250,7 +250,7 @@
                 </tr>
                 <tr>
                     <td style="text-align: right;font-size: 9pt">
-                        All amounts in {$ERP_DOCUMENT->currency} Dollars
+                        All amounts in {$ERP_DOCUMENT->currency}
                     </td>
                 </tr>
                 <tr>
@@ -258,7 +258,7 @@
                         <table class="activity-tbl">
                             <tr>
                                 <th style="width:70%;">DESCRIPTION</th>
-                                <th style="width:30%;text-align:center">TOTAL US$</th>
+                                <th style="width:30%;text-align:center">TOTAL {$ERP_DOCUMENT->currency}</th>
                             </tr>
                             <tr>
                                 <td style="border-bottom:none;vertical-align: top;height: 30mm">
@@ -269,7 +269,7 @@
                             </tr>
                             <tr>
                                 <th>TOTAL CREDIT AMOUNT:</th>
-                                <td style="text-align:right"><strong>US$
+                                <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
                                         {CurrencyField::convertToUserFormat($ERP_DOCUMENT->totalusdVal)}</strong>
                                 </td>
                             </tr>

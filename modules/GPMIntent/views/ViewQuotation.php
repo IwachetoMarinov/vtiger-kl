@@ -11,7 +11,6 @@
 
 // ini_set('display_errors', 1); error_reporting(E_ALL);
 
-
 class GPMIntent_ViewQuotation_View extends GPMIntent_DocView_View
 {
 

@@ -40,6 +40,8 @@ class DBConnection
         } catch (\Exception $e) {
             // Handle exception if .env file is missing or cannot be loaded
             die("Error loading .env file or connecting to database: " . $e->getMessage());
+
+            return null;
         }
 
         return self::$connection;

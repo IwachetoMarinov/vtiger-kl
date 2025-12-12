@@ -62,7 +62,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         if (!empty($request->get('fromIntent'))) {
             $intent = Vtiger_Record_Model::getInstanceById($request->get('fromIntent'), 'GPMIntent');
         }
-        // SHOULD HANDLE SWD/PWD AS SI/PI
+        // SHOULD get real data for the Bank
         // $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
         // HARDCODED TEST DATA
         $selectedBank = (object) [

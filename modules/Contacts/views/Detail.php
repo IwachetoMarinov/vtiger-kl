@@ -84,6 +84,11 @@ class Contacts_Detail_View extends Accounts_Detail_View
 			$years[] = date('Y', strtotime("-$i year"));
 		}
 
+		// echo '<pre>';
+		// echo 'Activity Summary Data: ';
+		// var_dump($activity_data);
+		// echo '</pre>';
+
 		$viewer = $this->getViewer($request);
 
 		// Assign safely to TPL

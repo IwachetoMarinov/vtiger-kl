@@ -27,6 +27,10 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $tableName = $request->get('tableName');
         $companyId = $recordModel->get('company_id');
 
+        // Get all assets 
+        // $assets = $this->getAssets();
+        // $assets_data = $this->processAssetsData($assets);
+
         $companyRecord = null;
 
         if (!empty($companyId))
@@ -39,16 +43,13 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
             $erpData = [];
         }
 
-        // echo '<pre>';
-        // print_r($erpData);
-        // echo '</pre>';
-
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', 1);
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
         $viewer->assign('ERP_DOCUMENT', $erpData);
+        // $viewer->assign('ERP_DOCUMENT', $erpData);
 
         // REQUEST VALUES PASSED BY CONTROLLER
         $viewer->assign('DOCNO', $request->get('docNo'));
@@ -71,7 +72,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
 
-        $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . "-TC";
+        $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . "-SO";
         $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
         fwrite($handle, $html);
         fclose($handle);
@@ -88,5 +89,59 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         readfile($root_directory . "$fileName.pdf");
         unlink($root_directory . "$fileName.pdf");
         exit;
+    }
+
+    protected function getAssets()
+    {
+        $moduleName = 'Assets';
+        $currentUser = Users_Record_Model::getCurrentUserModel();
+
+        // Load module and fields
+        $moduleModel = Vtiger_Module_Model::getInstance($moduleName);
+        $fields = $moduleModel->getFields();
+
+        // Build list of all fieldnames dynamically
+        $fieldNames = [];
+        foreach ($fields as $fieldModel) {
+            $fieldName = $fieldModel->getName();
+            $fieldNames[] = $fieldName;
+        }
+
+        // QueryGenerator to fetch ALL these fields
+        $queryGenerator = new QueryGenerator($moduleName, $currentUser);
+        $queryGenerator->setFields($fieldNames);
+
+        $query = $queryGenerator->getQuery();
+
+        $db = PearDatabase::getInstance();
+        $result = $db->pquery($query, []);
+
+        $assets = [];
+        while ($row = $db->fetchByAssoc($result)) {
+            $assets[] = $row;
+        }
+
+        return $assets;
+    }
+
+    protected function processAssetsData($assets)
+    {
+        $data = [];
+
+        foreach ($assets as $asset) {
+            $metal_type = $asset['cf_873'];
+
+            // Remove CRYPTO from metal type
+            // if ($metal_type === 'CRYPTO') continue;
+
+            if (isset($data[$metal_type])) {
+                // Append to existing metal type
+                $data[$metal_type][] = $asset;
+            } else {
+                $data[$metal_type] = [$asset];
+            }
+        }
+
+        return $data;
     }
 }

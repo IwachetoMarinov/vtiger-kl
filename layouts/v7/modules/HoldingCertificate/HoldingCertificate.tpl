@@ -151,22 +151,22 @@
                 <tr>
                     <td style='width:75%;'>
                         <div id='companyInfo' style="font-size: 8pt; float:left;">
-                            <p style="font-size: 10pt;font-weight: bold;margin-bottom: 0px; margin-top: 0px">
-                                {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg.
-                                    No.
-                                {$COMPANY->get('company_reg_no')}){/if}</p>
-                            <p style='margin-top: 0px; color: #9e9d9d;'>{$COMPANY->get('company_address')}<br>
-                                T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                                {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
-                            </p>
+                            {if isset($COMPANY)}
+                                <p style="font-size: 10pt;font-weight: bold;margin-bottom: 0px; margin-top: 0px">
+                                    {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg.
+                                        No.
+                                    {$COMPANY->get('company_reg_no')}){/if}</p>
+                                <p style='margin-top: 0px; color: #9e9d9d;'>{$COMPANY->get('company_address')}<br>
+                                    T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
+                                    {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                                </p>
+                            {/if}
                         </div>
                     </td>
                     <td>
                         <div id='logo' style='float: right;'>
-                            {* <img src='layouts/v7/modules/HoldingCertificate/gpm_logo.png' style='width: 72px;'> *}
                             <img src="{$site_URL}layouts/v7/modules/HoldingCertificate/gpm_logo.png"
-                                style='width: 72px;'>
-
+                                style='width: 72px;' />
                         </div>
                     </td>
                 </tr>
