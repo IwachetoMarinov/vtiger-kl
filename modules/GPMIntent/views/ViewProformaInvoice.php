@@ -32,17 +32,14 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 
 		// ✅ Get Contact related to Intent
 		$contactId = $intent->get('contact_id');
-		if (empty($contactId)) {
-			throw new AppException("Intent has no related Contact ID.");
-		}
+		if (empty($contactId)) throw new AppException("Intent has no related Contact ID.");
 
 		$recordModel = Vtiger_Record_Model::getInstanceById($contactId, 'Contacts');
-        $companyId = $recordModel->get('company_id');
+		$companyId = $recordModel->get('company_id');
+		$companyRecord = null;
 
-        $companyRecord = null;
-
-        if (!empty($companyId))
-            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
+		if (!empty($companyId))
+			$companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
 
 		if (!$recordModel) {
 			throw new AppException("Contact not found for ID: $contactId");
@@ -65,18 +62,14 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 		}
 
 		// ✅ Handle no bank accounts gracefully
-		if (empty($bankAccountId)) {
-			$bankAccountId = null;
-		}
+		if (empty($bankAccountId)) $bankAccountId = null;
 
 		$downloadLink = "index.php?module=GPMIntent&view=ViewProformaInvoice&record=$recordId&PDFDownload=true&bank=$bankAccountId";
 
 		// ✅ Products
 		$products     = GPMIntent_Line_Model::getInstanceByIntent($recordId);
 		$selectedBank = null;
-		if (!empty($bankAccountId)) {
-			$selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
-		}
+		if (!empty($bankAccountId)) $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
 
 		if (empty($selectedBank)) {
 			// fallback dummy object to prevent template fatal
@@ -89,6 +82,11 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 			$selectedBank->set('bank_address', '');
 			$selectedBank->set('swift_code', '');
 		}
+
+		echo '<pre>';
+		echo 'Selected Bank Account: ';
+		var_dump($selectedBank);
+		echo '</pre>';
 
 		// ✅ Prepare viewer
 		$viewer = $this->getViewer($request);

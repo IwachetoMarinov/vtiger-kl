@@ -42,7 +42,7 @@ class GPMIntent_ViewQuotation_View extends GPMIntent_DocView_View
 		$downloadLink = "index.php?module=GPMIntent&view=ViewQuotation&record=$recordId&type=" . (($docType == 'QuoteFull') ? 'full' : 'simple') . '&PDFDownload=true';
 
 		$products = GPMIntent_Line_Model::getInstanceByIntent($recordId);
-		//print_r($products);exit;
+		
 		$viewer = $this->getViewer($request);
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RECORD_MODEL', $recordModel);
