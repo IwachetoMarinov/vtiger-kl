@@ -10,10 +10,8 @@ class DBConnection
 
     public static function getConnection()
     {
-        // If already connected, return the same connection (singleton)
-        if (self::$connection !== null)  return self::$connection;
+        if (self::$connection !== null) return self::$connection;
 
-        // Load .env only once
         try {
             $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
             $dotenv->safeLoad();
@@ -21,7 +19,9 @@ class DBConnection
             $db_username = $_ENV['DB_USERNAME'] ?? getenv('DB_USERNAME') ?: '';
             $db_password = $_ENV['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?: '';
 
-            if (empty($db_username) || empty($db_password)) throw new \Exception("Database credentials are missing in .env");
+            if (!$db_username || !$db_password) {
+                return null;
+            }
 
             $serverName = "qcpitech.ddns.net";
             $connectionOptions = [
@@ -29,21 +29,19 @@ class DBConnection
                 "Uid" => $db_username,
                 "PWD" => $db_password,
                 "TrustServerCertificate" => true,
-                "Encrypt" => false
+                "Encrypt" => false,
+                "LoginTimeout" => 5
             ];
 
-            $conn = sqlsrv_connect($serverName, $connectionOptions);
+            // suppress PHP output
+            $conn = @sqlsrv_connect($serverName, $connectionOptions);
 
-            if ($conn === false) throw new \Exception("SQL Connection failed: " . print_r(sqlsrv_errors(), true));
-
+            if ($conn === false) return null;
+            
             self::$connection = $conn;
-        } catch (\Exception $e) {
-            // Handle exception if .env file is missing or cannot be loaded
-            die("Error loading .env file or connecting to database: " . $e->getMessage());
-
+            return self::$connection;
+        } catch (\Throwable $e) {
             return null;
         }
-
-        return self::$connection;
     }
 }

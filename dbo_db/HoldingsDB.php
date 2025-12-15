@@ -22,7 +22,7 @@ class HoldingsDB
     {
         if (!$customer_id) return [];
 
-        if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+        if (!$this->connection) return [];
 
         $params[] = $customer_id;
 
@@ -59,7 +59,7 @@ class HoldingsDB
     {
         if (!$customer_id) return [];
 
-        if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+        if (!$this->connection) return [];
 
         $params[] = $customer_id;
 
@@ -83,7 +83,7 @@ class HoldingsDB
     {
         if (!$customer_id) return [];
 
-        if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+        if (!$this->connection) return [];
 
         $where = '';
         $params = [];

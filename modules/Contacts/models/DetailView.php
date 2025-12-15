@@ -42,7 +42,7 @@ class Contacts_DetailView_Model extends Accounts_DetailView_Model
             $basicActionLink = array(
                 'linktype' => 'DETAILVIEWBASIC',
                 'linklabel' => 'Create PO',
-                'linkurl' => 'index.php?module=' . $moduleName . '&view=ViewPO&record=' . $recordId,
+                'linkurl' => 'index.php?module=' . $moduleName . '&view=PurchaseOrderView&record=' . $recordId,
                 'linkicon' => '',
                 'linktarget' => '_blank',
             );
@@ -53,7 +53,7 @@ class Contacts_DetailView_Model extends Accounts_DetailView_Model
             $basicActionLink = array(
                 'linktype' => 'DETAILVIEWBASIC',
                 'linklabel' => 'Create STO',
-                'linkurl' => 'index.php?module=' . $moduleName . '&view=ViewSTO&record=' . $recordId,
+                'linkurl' => 'index.php?module=' . $moduleName . '&view=StockTransferOrderView&record=' . $recordId,
                 'linkicon' => '',
                 'linktarget' => '_blank',
             );
