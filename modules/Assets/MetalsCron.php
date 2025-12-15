@@ -111,7 +111,7 @@ class MetalsCron
 
     protected function fetchMetals($date = null)
     {
-        if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+        if (!$this->connection) return [];
 
         $params = [];
         $where  = '';
@@ -164,10 +164,7 @@ class MetalsCron
             // Check if this metal already exists
             $result = $adb->pquery("SELECT metalsid FROM vtiger_metals WHERE metal_type = ?", [$metal_type]);
 
-            if (!$this->connection) {
-                echo "[MetalsCron] No SQL Server connection.\n";
-                return;
-            }
+            if (!$this->connection) return;
 
             if ($adb->num_rows($result) > 0) {
                 // ✅ Update existing record

@@ -25,10 +25,7 @@ class ActivitySummary
     {
         if (!$customer_id) return [];
 
-        if (!$this->connection) {
-            die(print_r(sqlsrv_errors(), true));
-            return [];
-        }
+        if (!$this->connection || !is_resource($this->connection)) return [];
 
         $params = [];
         $where  = '';
@@ -66,16 +63,11 @@ class ActivitySummary
 
     public function getTCPrintPreviewData($doc_no = null, $table_name = null)
     {
-        if (!$doc_no || !$table_name || !$this->connection) {
-            die(print_r(sqlsrv_errors(), true));
-            return [];
-        }
+        if (!$doc_no || !$table_name || !$this->connection)  return [];
 
         if (!preg_match('/^[A-Za-z0-9_]+$/', $table_name)) return [];
 
         try {
-            if (!$this->connection) die(print_r(sqlsrv_errors(), true));
-
             $transaction  = $this->getSingleTransaction($doc_no);
 
             $params = [];
@@ -113,16 +105,11 @@ class ActivitySummary
 
     public function getDocumentPrintPreviewData($doc_no = null, $table_name = null)
     {
-        if (!$doc_no || !$table_name || !$this->connection) {
-            die(print_r(sqlsrv_errors(), true));
-            return [];
-        }
+        if (!$doc_no || !$table_name || !$this->connection) return [];
 
         if (!preg_match('/^[A-Za-z0-9_]+$/', $table_name)) return [];
 
         try {
-            if (!$this->connection) die(print_r(sqlsrv_errors(), true));
-
             $transaction = $this->getSingleTransaction($doc_no);
 
             $params = [];

@@ -20,7 +20,7 @@ class MetalsAPI
     {
         // check db_username and db_password
         // if (empty($this->db_username) || empty($this->db_password)) return null;
-        if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+        if (!$this->connection) return null;
 
         $metals = $this->fetchMetals();
 
@@ -35,7 +35,7 @@ class MetalsAPI
 
     public function getMetals()
     {
-        if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+        if (!$this->connection) return [];
 
         $metals = $this->fetchMetals();
         $unique_metals = $this->getUniqueMetals($metals, "USD");
@@ -45,7 +45,7 @@ class MetalsAPI
 
     protected function fetchMetals($date = null)
     {
-        if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+        if (!$this->connection) return [];
 
         $params = [];
         $where  = '';
@@ -81,7 +81,7 @@ class MetalsAPI
     {
         if (!$date) return [];
 
-        if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+        if (!$this->connection) return [];
 
         $params = [];
         $where  = '';
@@ -95,9 +95,7 @@ class MetalsAPI
 
         $stmt = sqlsrv_query($this->connection, $sql, $params);
 
-        if ($stmt === false) {
-            die(print_r(sqlsrv_errors(), true));
-        }
+        if ($stmt === false) return [];
 
         $data = [];
         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
