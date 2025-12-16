@@ -54,7 +54,6 @@ class ActivitySummary
                 'мatched_аmt' => isset($item['Matched_Amt']) ? floatval($item['Matched_Amt']) : 0.00,
                 'amount_in_account_currency' =>
                 isset($item['TxAmt']) ? (float) $item['TxAmt'] : (isset($item['Tx_Amt']) ? (float) $item['Tx_Amt'] : 0.00),
-
             ];
         }
 

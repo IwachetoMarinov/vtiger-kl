@@ -160,7 +160,9 @@
                                     <td nowrap> {$TX.posting_date}</td>
 
                                     <!-- Type -->
-                                    <td nowrap> {$TX.description}</td>
+                                    <td nowrap>
+                                        {$TX.description} - {$TX.voucher_type} - {$TX.table_name}
+                                    </td>
 
                                     <!-- Amount -->
                                     <td nowrap>

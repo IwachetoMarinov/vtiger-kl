@@ -39,7 +39,6 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             $bankAccountId   = $request->get('bank');
         }
 
-
         $activity = new dbo_db\ActivitySummary();
         $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
