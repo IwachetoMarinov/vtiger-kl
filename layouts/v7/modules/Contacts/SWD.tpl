@@ -291,13 +291,14 @@
                                     {assign var="serials" value=$serials|cat:$barItem->serials|cat:', '}
                                 {/if}
                                 {* (metalPrice x pureOz) + othercharge *}
-                                {assign var="total" value=((($barItem->price)*($barItem->pureOz))+$barItem->otherCharge)}
+                                {assign var="total" value=$barItem->totalItemAmount}
                                 {assign var="calcTotal" value=$calcTotal+round($total,2)}
+                                {assign var="SUB_TOTAL" value=$SUB_TOTAL+round($total,2)}
+
                                 {if empty($barItem->quantity) and empty($barItem->longDesc)}
                                     {if strpos($barItem->narration,'GST') === 0 ||strpos($barItem->narration,'GST') > 0 }
                                         {assign var="GST_ITEM" value=$barItem}
                                     {else}
-                                        {assign var="SUB_TOTAL" value=$SUB_TOTAL+round($total,2)}
                                         <tr>
                                             <td style="vertical-align: top"></td>
                                             <td style="border-bottom:none;vertical-align: top">Storage Charge</td>
@@ -307,7 +308,6 @@
                                         </tr>
                                     {/if}
                                 {else}
-                                    {assign var="SUB_TOTAL" value=$SUB_TOTAL+round($total,2)}
                                     <tr>
                                         <td style="vertical-align: top">{$barItem->quantity}</td>
                                         <td style="border-bottom:none;vertical-align: top">

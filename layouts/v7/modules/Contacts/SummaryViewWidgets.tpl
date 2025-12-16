@@ -181,12 +181,8 @@
 
 		{assign var="ASYEAR" value=$smarty.request.ActivtySummeryDate|default:""}
 
-		{if $ASYEAR neq "" && $ASYEAR < 2023}
-			{include file='SummaryOld.tpl'|@vtemplate_path:$MODULE_NAME}
-		{else}
-			{include file='SummaryNew.tpl'|@vtemplate_path:$MODULE_NAME}
-		{/if}
-
+		{include file='SummaryNew.tpl'|@vtemplate_path:$MODULE_NAME}
+		
 		{* Summary View Related Activities Widget*}
 		<div id="relatedActivities">
 			{$RELATED_ACTIVITIES}

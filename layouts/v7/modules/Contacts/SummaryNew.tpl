@@ -12,7 +12,7 @@
 {strip}
 
     {assign var="ASYEAR" value=$smarty.request.ActivtySummeryDate|default:""}
-    {assign var="ASCURRENCY" value=$ACTIVITY_SUMMERY_CURRENCY|default:"USD"}
+    {assign var="ASCURRENCY" value=$ACTIVITY_SUMMERY_CURRENCY|default:""}
     {assign var="RECID" value=$RECORD->getId()|default:0}
 
     <div class="summaryWidgetContainer">
@@ -45,7 +45,7 @@
                             <select id="ActivtySummeryDate" class="inputElement select2" style="width: 110px;">
                                 <option value="">Current Year</option>
                                 {foreach from=$YEARS item=YEAR}
-                                    <option value="{$YEAR}">{$YEAR}</option>
+                                    <option value="{$YEAR}" {if $ASYEAR eq $YEAR}selected{/if}>{$YEAR}</option>
                                 {/foreach}
                             </select>
 
