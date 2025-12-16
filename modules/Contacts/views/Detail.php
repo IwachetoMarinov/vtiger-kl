@@ -43,6 +43,7 @@ class Contacts_Detail_View extends Accounts_Detail_View
 	{
 		$recordId = $request->get('record');
 		$selected_currency = $request->get('ActivtySummeryCurrency');
+		$selected_year = $request->get('ActivtySummeryDate');
 
 		$moduleName = $request->getModule();
 
@@ -71,13 +72,33 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$currency_list = $this->getCurrenciesFromActivitySummary($activity_data);
 
 		// Check if selected currency is valid and filter $activity_data
-		if ($selected_currency && in_array($selected_currency, $currency_list)) {
-			$activity_data = array_filter($activity_data, function ($item) use ($selected_currency) {
-				return ($item['currency'] ?? '') === $selected_currency;
+		if (
+			($selected_currency && in_array($selected_currency, $currency_list)) ||
+			!empty($selected_year)
+		) {
+			$activity_data = array_filter($activity_data, function ($item) use (
+				$selected_currency,
+				$currency_list,
+				$selected_year
+			) {
+				// Currency filter
+				if ($selected_currency && in_array($selected_currency, $currency_list)) {
+					if (($item['currency'] ?? '') !== $selected_currency) return false;
+				}
+
+				// Year filter
+				if (!empty($selected_year) && !empty($item['document_date'])) {
+					$itemYear = substr($item['document_date'], 0, 4);
+
+					if ($itemYear !== (string) $selected_year) return false;
+				}
+
+				return true;
 			});
 
 			$activity_data = array_values($activity_data);
 		}
+
 
 		$years = [];
 		for ($i = 0; $i <= 5; $i++) {
@@ -97,6 +118,7 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$viewer->assign('OROSOFT_TRANSACTION', $activity_data);
 		$viewer->assign('CERTIFICATE_HOLDING', $certificate_id);
 		$viewer->assign('CURRENCY', $selected_currency);
+		$viewer->assign('SELECTED_YEAR', $selected_year);
 		$viewer->assign('BALANCES', $wallets);
 		$viewer->assign('HOLDINGS', $holdings_data);
 		$viewer->assign('YEARS', $years);

@@ -251,8 +251,10 @@
                     </tr>
                     <tr>
                         <td style="height: 10mm; text-decoration: underline;text-align: center">
-                        
-                            <strong>{if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))}TAX INVOICE{else}SALES INVOICE{/if}</strong>
+
+                            <strong>{if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))}TAX INVOICE
+                                {else}SALES
+                                INVOICE{/if}</strong>
                         </td>
                     </tr>
                     {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))}
@@ -294,6 +296,7 @@
                                 {assign var="serials" value=""}
                                 {assign var="GST_ITEM" value=false}
                                 {for $loopStart=$start to $end}
+
                                     {assign var="barItem" value=$ERP_DOCUMENT->barItems[$loopStart]}
                                     {assign var="start" value=($loopStart+1)}
 
@@ -304,8 +307,9 @@
                                         {assign var="serials" value=$serials|cat:$barItem->serials|cat:', '}
                                     {/if}
                                     {* (metalPrice x pureOz) + othercharge *}
-                                    {assign var="total" value=((($barItem->price)*($barItem->pureOz))+$barItem->otherCharge)}
+                                    {assign var="total" value=$barItem->totalItemAmount}
                                     {assign var="calcTotal" value=$calcTotal+round($total,2)}
+                                    {assign var="SUB_TOTAL" value=$SUB_TOTAL+round($total,2)}
                                     {if $loopStart eq count($ERP_DOCUMENT->barItems)}
                                         {break}
                                     {/if}
@@ -313,7 +317,6 @@
                                         {if strpos($barItem->narration,'GST') === 0 ||strpos($barItem->narration,'GST') > 0 }
                                             {assign var="GST_ITEM" value=$barItem}
                                         {else}
-                                            {assign var="SUB_TOTAL" value=$SUB_TOTAL+round($total,2)}
                                             <tr>
                                                 <td style="vertical-align: top"></td>
                                                 <td style="border-bottom:none;vertical-align: top">Storage Charge</td>
@@ -323,7 +326,6 @@
                                             </tr>
                                         {/if}
                                     {else}
-                                        {assign var="SUB_TOTAL" value=$SUB_TOTAL+round($total,2)}
                                         <tr>
                                             <td style="vertical-align: top">{$barItem->quantity}</td>
                                             <td style="border-bottom:none;vertical-align: top">
@@ -345,6 +347,7 @@
                                         </tr>
                                     {/if}
                                 {/for}
+
                                 {if $PAGES eq $page}
                                     {if $GST_ITEM}
                                         <tr>

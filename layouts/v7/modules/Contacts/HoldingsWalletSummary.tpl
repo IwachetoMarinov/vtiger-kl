@@ -26,7 +26,7 @@
 
                     {if isset($BALANCE.Balance)}
                         <div style="margin-top:10px;font-size:17px;">
-                            {$BALANCE.Balance}
+                            {number_format($BALANCE.Balance,2)}
                         </div>
                     {/if}
                 </div>
