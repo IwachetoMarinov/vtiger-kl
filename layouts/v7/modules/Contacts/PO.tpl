@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>PURCHASE ORDER</title>
+    <title>PURCHASE & STORAGE ORDER</title>
     <meta charset="UTF-8">
 
     <style>
@@ -133,9 +133,9 @@
 
         /* Serials Box */
         .serials-box {
-            min-height: 15mm;
+            /* min-height: 15mm; */
             padding: 2mm;
-            margin-bottom: 2mm;
+            /* margin-bottom: 1mm; */
         }
 
         /* Additional Sections */
@@ -231,6 +231,32 @@
         .details-container {
             padding: 0 4mm;
         }
+
+        .from-container-wrapper {
+            display: flex;
+        }
+
+        .signature-section-item {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4mm;
+        }
+
+        .signature-section-left {
+            width: 40%;
+        }
+
+        .signature-section-right {
+            width: 57%;
+        }
+
+        input[type="checkbox"] {
+            width: 5mm;
+            height: 5mm;
+            vertical-align: middle;
+            margin-right: 2mm;
+            accent-color: #000;
+        }
     </style>
 </head>
 
@@ -262,22 +288,66 @@
         <table class="header-table">
             <tr>
                 <td class="logo"></td>
-                <td class="title" style="text-decoration: underline;">PURCHASE ORDER</td>
+                <td class="title" style="text-decoration: underline;">PURCHASE & STORAGE ORDER</td>
                 <td style="width:25mm;"></td>
             </tr>
         </table>
 
         <!-- FROM / TO SECTION -->
         <div class="company-data">
+            {* Left Column *}
             <div class="company-data-item company-data-item-from">
-                <div class="place-container from-container">
-                    <div><strong>From:</strong></div>
-                    <div style="min-height: 24mm;"></div>
+                <div class="from-container-wrapper">
+                    <div class="place-container from-container">
+                        <div><strong>From:</strong></div>
+                    </div>
+                    <div class="company-container" style="min-height: 24mm; padding:2mm;">
+                        <div>
+                            {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
+                        </div>
+
+                        <div>
+                            {if !empty($RECORD_MODEL->get('mailingstreet'))}
+                                {$RECORD_MODEL->get('mailingstreet')}<br>
+                            {/if}
+
+                            {if empty($RECORD_MODEL->get('mailingpobox'))}
+
+                                {if !empty($RECORD_MODEL->get('mailingcity')) && !empty($RECORD_MODEL->get('mailingzip'))}
+                                    {$RECORD_MODEL->get('mailingcity')} {$RECORD_MODEL->get('mailingzip')}<br>
+                                {elseif !empty($RECORD_MODEL->get('mailingcity'))}
+                                    {$RECORD_MODEL->get('mailingcity')}<br>
+                                {else}
+                                    {$RECORD_MODEL->get('mailingzip')}<br>
+                                {/if}
+
+                                {$RECORD_MODEL->get('mailingcountry')}
+
+                            {else}
+
+                                {if !empty($RECORD_MODEL->get('mailingcity'))}
+                                    P.O. Box {$RECORD_MODEL->get('mailingpobox')}, {$RECORD_MODEL->get('mailingcity')}<br>
+                                {else}
+                                    P.O. Box {$RECORD_MODEL->get('mailingpobox')}<br>
+                                {/if}
+
+                                {if !empty($RECORD_MODEL->get('mailingstate'))}
+                                    {$RECORD_MODEL->get('mailingstate')}, {$RECORD_MODEL->get('mailingcountry')}
+                                {else}
+                                    {$RECORD_MODEL->get('mailingcountry')}
+                                {/if}
+
+                            {/if}
+                        </div>
+                    </div>
                 </div>
                 <div class="number-container" style="padding-bottom: 6mm;">Customer number:
-                    <span>..............................................................</span>
+                    <span style="font-weight: 600;"> {$RECORD_MODEL->get('cf_898')}</span>
                 </div>
             </div>
+
+
+            {* Right column *}
             <div class="company-data-item company-data-item-to">
                 <div class="place-container"><strong>To:</strong></div>
                 <div class="company-container">
@@ -306,14 +376,15 @@
         <!-- SECTION 1 -->
         <section class="main-table">
             <div class="additional-section bolder-element">
-                <strong>1.</strong> This Sale Order is subject to and governed by the terms and conditions of the
-                Customer Metal Agreement (CMA) executed and delivered by the undersigned.
+                <strong>1.</strong> I/We hereby instruct GPM:
             </div>
 
             <!-- SECTION 2 -->
-            <div class="section-title bolder-element">
-                <strong>2.</strong> I/We hereby wish to sell to Global Precious Metals Pte. Ltd. (GPM) the following
-                precious metals:
+            <div class="section-title ">
+                (a) <span class="bolder-element"> to purchase</span> in its name and on my/our behalf the following
+                physical precious
+                metals (Please indicate the quantity and type
+                of bars required):
             </div>
 
             <!-- METALS TABLE -->
@@ -333,7 +404,7 @@
             ["label" => "10oz", "grams" => "311g"],
             ["label" => "3.22oz", "grams" => "100g"],
             ["label" => "1oz", "grams" => "31g"],
-            ["label" => "Other", "grams" => ""]
+            ["label" => "Other", "grams" => "(pls specify)"]
         ]}
 
             <table class="metals-table">
@@ -359,91 +430,116 @@
 
             <!-- SERIALS BOX -->
             <div class="serials-box">
-                If applicable, please specify the serial numbers of the items to be sold:
-                <div style="margin-top: 2mm;">
-                    .............................................................................................................................................................................
-                </div>
+                (b) <span class="bolder-element"> for the sum of
+                    {if isset($SELECTED_BANK)}
+                        {$SELECTED_BANK->get('account_currency')}
+                    {/if}
+                </span>
+                <span>
+                    .................................................................................
+                    <span style="font-style: italic;"> (the “Purchase Amount”)</span>
+                </span>
             </div>
 
-            <!-- SECTION 3 -->
-            <div class="additional-section">
-                If the metal to be sold is not currently in storage with GPM, please specify the
-                exact pack up location and the details of the person authorised to release the metal to GPM (if
-                applicable, IC/Passport number):
-                <div style="margin-top:2mm;">
-                    Pick-up lication:
-                    <span>................................................................................................................................</span>
+            <div class="serials-box">(c) <span class="bolder-element">and thereafter to</span></div>
+
+            <div style="margin-left: 5mm;">
+                <div style="margin-top: 2mm;padding-left: 2mm;">
+                    <span
+                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                    <span>deliver & store the above metal in a facility located in:</span>
+                    <span> ...........................</span>
+                    <span style="font-style: italic;">(Please specify country)</span>
                 </div>
 
-                <div style="margin-top:2mm;">
-                    <span>Authorized person: Full name:</span>
-                    <span>..................................................................... </span>
-                    <span> IC/Passport No:</span>
-                    <span>..............</span>
+                <div style="margin-top: 2mm;padding-left: 2mm;">
+                    <span
+                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                    <span>deliver the above metal to:</span>
+                    <span> ....................................................................</span>
+                    <span style="font-style: italic;">(Please specify full address)</span>
                 </div>
             </div>
 
             <!-- SECTION 4 -->
-            <div class="additional-section bolder-element">
-                <strong>3.</strong> I/We acknowledge that:
-                <div class="indent">
-                    - GPM shall quote a sale price, which is to be agreed and confirmed in writing (e.g. email, telafax)
-                    to GPM.
-                </div>
-                <div class="indent">
-                    - In the absence of the above written confirmation within 10 Business Days from the date hereof,
-                    this Sale Order shall be null and void.
+            <div class="additional-section ">
+                <strong>2.</strong><span class="bolder-element"> I/We make the payment of the above Purchase Amount:
+                </span>
+                <div style="padding-left: 5mm;margin-top:1.5mm">
+                    <div>(a) <span class="bolder-element">from the following jurisdiction:</span></div>
+
+                    <div style="padding-left: 5mm;">Country:
+                        <span>..............................................................................................................................................</span>
+                    </div>
+
+
+                    <div style="margin:1.5mm 0;">(b) <span class="bolder-element">to GPM’s bank account </span>as
+                        follows:</div>
+
+                    <div style="padding-left: 5mm;">BANK DETAILS HERE>.........................</div>
                 </div>
             </div>
 
             <!-- SECTION 5 -->
-            <div class="additional-section bolder-element">
-                <strong>4.</strong> The sales proceeds agreed upon shall be transferred to my/our bank account:
-            </div>
+            <div class="additional-section">
+                <span class="bolder-element">
+                    3. I/We hereby elect the following Pricing Option (Please select one option):
+                </span>
 
-            <!-- BANK DETAILS -->
-            <div class="details-container">
-                <div class="bank-details">
-                    <div class="bank-row">
-                        Bank Name: <span
-                            class="long-line">...........................................................................................................................................</span>
-                    </div>
-                    <div class="bank-row">
-                        Bank Address: <span
-                            class="long-line">........................................................................................................................................</span>
-                    </div>
-                    <div class="bank-row">
-                        Swift Code: <span
-                            class="line">.....................................................................</span>
-                        &nbsp;&nbsp;&nbsp;
-                        Swift Code: <span class="line">...............................................</span>
-                    </div>
-                    <div class="bank-row">
-                        Account No: <span
-                            class="line">...................................................................</span>
-                        &nbsp;&nbsp;&nbsp;
-                        Account Currency: <span class="line">...................................</span>
-                    </div>
+                <div style="margin-left: 5mm;">
+
+                    <label style="display:block; margin-top:2mm; font-size:3.5mm;">
+                        <input type="checkbox" name="pricing_option_1" checked>
+                        Pricing Option 1 (as defined in Clause 3.3.1 of the Customer Metal Agreement)
+                    </label>
+
+                    <label style="display:block; margin-top:2mm; font-size:3.5mm;">
+                        <input type="checkbox" name="pricing_option_2">
+                        Pricing Option 2 (as defined in Clause 3.3.2 of the Customer Metal Agreement)
+                    </label>
+
                 </div>
 
-                <!-- SIGNATURE SECTION -->
-                <div class="signature-section">
-                    Place: <span
-                        class="line">..............................................................................</span>
-                    &nbsp;&nbsp;&nbsp;
-                    Date: ......../......../20.......
-                    <br><br>
-                    Signed by: <span
-                        class="long-line">.......................................................................</span>
-                    &nbsp;&nbsp;&nbsp;
-                    On behalf of: <span class="line">................................</span>
-
-                    <div style="margin-top:10mm;">
-                        <div class="signature-line">...............................................</div><br>
-                        Signature
-                    </div>
+                <div class="additional-section" style="margin-top:4mm;">
+                    <span class="bolder-element">4. This Purchase & Storage Order and any agreement with GPM resulting
+                        therefrom shall be subject to and governed by
+                        the terms and conditions of the Customer Metal Agreement executed and entered into by and
+                        between
+                        me/us and
+                        Global Precious Metals Pte. Ltd.:</span>
                 </div>
-            </div>
+
+                <!-- BANK DETAILS -->
+                <div class="details-container">
+
+                    <!-- SIGNATURE SECTION -->
+                    <div class="signature-section">
+                        <div class="signature-section-item">
+                            <div class="signature-section-left">Place: <span class="line"
+                                    style="font-style: italic;">{$RECORD_MODEL->get('mailingcountry')}</span></div>
+                            <div class="signature-section-right">
+                                Date: {$smarty.now|date_format:"%m/%d/%Y"}
+                            </div>
+                        </div>
+
+                        <div class="signature-section-item">
+                            <div class="signature-section-left">
+                                Signed by: <span class="long-line" style="font-style: italic;">
+                                    {$RECORD_MODEL->get('firstname')}
+                                    {$RECORD_MODEL->get('lastname')}</span>
+                            </div>
+                            <div class="signature-section-right">
+                                On behalf of: <span class="line">................................</span>
+                            </div>
+
+                        </div>
+
+                        <div style="margin-top:10mm;">
+                            <div class="signature-line">...............................................</div><br>
+                            Signature
+                        </div>
+
+                    </div>
 
         </section>
     </div>

@@ -1,6 +1,7 @@
 <?php
 
-ini_set('display_errors', 1); error_reporting(E_ALL);    
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
@@ -21,11 +22,13 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
     public function process(Vtiger_Request $request)
     {
 
-        $docNo = $request->get('docNo');
+        // $docNo = $request->get('docNo');
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
-        $tableName = $request->get('tableName');
+        // $tableName = $request->get('tableName');
         $companyId = $recordModel->get('company_id');
+
+        $allBankAccounts = [];
 
         // Get all assets 
         // $assets = $this->getAssets();
@@ -33,22 +36,45 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
 
         $companyRecord = null;
 
-        if (!empty($companyId))
+        if (!empty($companyId)) {
+            // ✅ Company record
             $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
-
-        if ($tableName !== null && $tableName !== '') {
-            $activity = new dbo_db\ActivitySummary();
-            $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);
-        } else {
-            $erpData = [];
+            // ✅ Bank accounts
+            $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($companyId);
+            $bankAccountId   = $request->get('bank');
         }
+
+        $bankAccountId = $request->get('bank');
+        if (empty($bankAccountId) && !empty($allBankAccounts)) {
+            $firstAccount  = reset($allBankAccounts);
+            $bankAccountId = $firstAccount->getId();
+        }
+
+        // ✅ Handle no bank accounts gracefully
+        if (empty($bankAccountId)) $bankAccountId = null;
+
+        $selectedBank = null;
+        if (!empty($bankAccountId)) $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
+
+
+        // if ($tableName !== null && $tableName !== '') {
+        //     $activity = new dbo_db\ActivitySummary();
+        //     $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);
+        // } else {
+        //     $erpData = [];
+        // }
+
+        // echo '<pre>';
+        // echo 'Selected Bank Account: ';
+        // var_dump($recordModel);
+        // echo '</pre>';
 
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', 1);
+        $viewer->assign('SELECTED_BANK', $selectedBank ?? null);
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
-        $viewer->assign('ERP_DOCUMENT', $erpData);
         // $viewer->assign('ERP_DOCUMENT', $erpData);
 
         // REQUEST VALUES PASSED BY CONTROLLER

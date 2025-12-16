@@ -99,11 +99,8 @@ class Contacts_Detail_View extends Accounts_Detail_View
 			$activity_data = array_values($activity_data);
 		}
 
-
-		$years = [];
-		for ($i = 0; $i <= 5; $i++) {
-			$years[] = date('Y', strtotime("-$i year"));
-		}
+		$years_array  = $this->createYearRange(2020, date('Y'));
+		$years = array_reverse($years_array);
 
 		// echo '<pre>';
 		// echo 'Activity Summary Data: ';
@@ -147,5 +144,14 @@ class Contacts_Detail_View extends Accounts_Detail_View
 			}
 		}
 		return $currency_list;
+	}
+
+	protected function createYearRange($startYear, $endYear)
+	{
+		$years = [];
+		for ($year = $startYear; $year <= $endYear; $year++) {
+			$years[] = $year;
+		}
+		return $years;
 	}
 }
