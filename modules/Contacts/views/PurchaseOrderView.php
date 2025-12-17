@@ -1,7 +1,6 @@
 <?php
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1); error_reporting(E_ALL);
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
@@ -27,6 +26,8 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $recordModel = $this->record->getRecord();
         // $tableName = $request->get('tableName');
         $companyId = $recordModel->get('company_id');
+
+        $pricingOption = $request->get('pricing_option');
 
         $allBankAccounts = [];
 
@@ -66,10 +67,11 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
 
         // echo '<pre>';
         // echo 'Selected Bank Account: ';
-        // var_dump($recordModel);
+        // var_dump($selectedBank);
         // echo '</pre>';
 
         $viewer = $this->getViewer($request);
+        $viewer->assign('PRICING_OPTION', $pricingOption);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', 1);
         $viewer->assign('SELECTED_BANK', $selectedBank ?? null);
