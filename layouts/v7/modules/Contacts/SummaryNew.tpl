@@ -100,7 +100,7 @@
                                     </td>
 
                                     <!-- INV button (only for Sales/Purchase Invoice) -->
-                                    {if in_array($TX.voucher_type, ['SAL','PUR', 'SWD', 'PWD'])}
+                                    {if in_array($TX.voucher_type, ['SAL','PUR', 'SWD', 'PWD', 'DN'])}
                                         <td>
                                             <a href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">

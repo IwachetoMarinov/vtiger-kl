@@ -81,23 +81,14 @@ class ActivitySummary
                 SELECT *
                 FROM [HFS_SQLEXPRESS].[GPM].[dbo].[$table_name] $where";
 
-            var_dump($sql, $params);
-
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
             $items = $this->mapTransactionItems($summary, $transaction);
-
-            echo '<pre>';
-            echo 'MAPPED items: ';
-            var_dump($items);
-            echo '</pre>';
 
             $transaction['barItems'] = $items;
 
             return $transaction;
         } catch (\Exception $e) {
-            // Handle exception or log error
-            var_dump('Error: ' . $e->getMessage());
             return [];
         }
     }
@@ -125,13 +116,16 @@ class ActivitySummary
 
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
+            // echo '<pre>';
+            // echo 'Transaction Summary: ';
+            // var_dump($summary);
+            // echo '</pre>';
+
             $items = $this->mapTransactionItems($summary, $transaction);
 
             $transaction['barItems'] = $items;
             return $transaction;
         } catch (\Exception $e) {
-            // Handle exception or log error
-            var_dump('Error: ' . $e->getMessage());
             return [];
         }
     }
@@ -154,9 +148,7 @@ class ActivitySummary
         $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_TxHx] $where";
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
-        if (count($summary) === 0) {
-            return [];
-        }
+        if (count($summary) === 0) return [];
 
         $row = $summary[0];
 
@@ -186,11 +178,21 @@ class ActivitySummary
         $items = [];
 
         foreach ($summary as $item) {
+            $totalItemAmount = 0.00;
+            if (isset($item['Total_Item_Amt'])) {
+                $totalItemAmount = (float)$item['Total_Item_Amt'];
+            } elseif (isset($item['DN_Det_Amt'])) {
+                $totalItemAmount = (float)$item['DN_Det_Amt'];
+            } elseif (isset($item['TxAmt'])) {
+                $totalItemAmount = (float)$item['TxAmt'];
+            }
+
             $items[] = (object) [
                 'quantity'          => isset($item['Qty']) ? (int)$item['Qty'] : 1,
                 'transactionType'   => $item['Tax_Type'] ?? '',
                 'currency'          => $item['Curr_Code'] ?? '',
                 'metal'             => $item['MT_Code'] ?? '',
+                'metal_name'        => $item['MT_Name'] ?? '',
                 'warehouse'         => $item['WH_Name'] ?? '',
                 'description'       => isset($item['Description']) ? $item['Description'] : (isset($item['Item_Desc']) ? $item['Item_Desc'] : ''),
 
@@ -217,7 +219,7 @@ class ActivitySummary
                 'unitPrice'         => isset($item['Unit_Price']) ? (float)$item['Unit_Price'] : 0.00,
                 'premium'          => isset($item['Premium_Perc']) ? (float)$item['Premium_Perc'] : 0.00,
                 'premiumFinal'      => isset($item['Premium_Final']) ? (float)$item['Premium_Final'] : 0.00,
-                'totalItemAmount'   => isset($item['Total_Item_Amt']) ? (float)$item['Total_Item_Amt'] : 0.00,
+                'totalItemAmount'   => $totalItemAmount,
                 'totalItemDcAmount' => isset($item['Total_Item_DC_Amt']) ? (float)$item['Total_Item_DC_Amt'] : 0.00,
 
                 'serialNumbers'     => $item['Ser_No'] ?? '',
@@ -229,6 +231,7 @@ class ActivitySummary
                 'weight' => max((float)($item['Weight'] ?? 0), 1),
                 'barNumber'         => $item['Bar_No'] ?? '',
                 'pureOz'            => isset($item['GrossOz']) ? (float)$item['GrossOz'] : 0.00,
+                'remarks'            => isset($item['Remarks']) ? $item['Remarks'] : "",
                 'otherCharge'       => isset($item['Other_Charge']) ? (float)$item['Other_Charge'] : 0.00,
                 'narration'         => $item['Narration'] ?? '',
                 'longDesc'          => $item['Long_Desc'] ?? '',

@@ -93,6 +93,8 @@ class MetalsAPI
 
         $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_ExcRateHistoric] $where ORDER BY [Exc_Date] DESC";
 
+        // var_dump($sql, $params);
+
         $stmt = sqlsrv_query($this->connection, $sql, $params);
 
         if ($stmt === false) return [];

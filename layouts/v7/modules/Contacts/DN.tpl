@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>DEBIT NOTE {$smarty.request.docNo}</title>
+    <title>TAX INVOICE</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -153,7 +153,7 @@
         }
 
         table.activity-tbl th {
-            background: #bca263;
+            background: #bca264;
         }
 
         .logo-bg-bottom {
@@ -180,40 +180,26 @@
                 padding: 0;
                 overflow: hidden;
                 background-color: #333;">
+            {if $SELECTED_BANK}
+                {if  isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
+                    <li style="float:right">
+                        <a style="display: block;color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
+                            href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&tableName={$smarty.request.tableName}&PDFDownload=true&bank={$SELECTED_BANK->getId()}&hideCustomerInfo={$smarty.request.hideCustomerInfo}">Download</a>
+                    </li>
+                {/if}
+            {/if}
 
-            {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
-                <li style="float:right">
-                    <a style="display: block;color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
-                        href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&tableName={$smarty.request.tableName}&PDFDownload=true&bank={$SELECTED_BANK->getId()}&hideCustomerInfo={$smarty.request.hideCustomerInfo}}">Download</a>
-                </li>
-            {{/if}}
-            <li style="float: right;margin-top: 5px;margin-right: 5px;width: 198px;">
-                <select class="inputElement select2" name="bank_accounts" id="bank_accounts">
-                    <option value="">Select Bank Account</option>
-                    {foreach item=account from=$ALL_BANK_ACCOUNTS}
-                        <option {if $smarty.request.bank  eq $account->getId() } selected {/if} value="{$account->getId()}">
-                            {$account->get('bank_alias_name')}</option>
-                    {/foreach}
-                </select>
+
+            <li id='printConf' style="float:right">
+                <span style="float: right;margin-right: 1px;color: white;background-color: #bea364;text-decoration: none;
+                display: block;
+                text-align: center;
+                padding: 14px;cursor: pointer;">Settings</span>
             </li>
         </ul>
-        {literal}
-            <style>
-                .select2-container .select2-choice>.select2-chosen {
-                    width: 171px;
-                }
-            </style>
-            <script>
-                $(document).ready(function() {
-                    $('.select2').select2();
-                });
-                jQuery("body").on('change', '#bank_accounts', function(e) {
-                    var element = jQuery(e.currentTarget);
-                    var bankId = Number(element.val());
-                    window.location.replace(window.location.href.split('&bank=')[0] + '&bank=' + bankId);
-                });
-            {/literal}
-        </script>
+        <script type="text/javascript" src="layouts/v7/modules/Contacts/resources/PrintConf.js"></script>
+        {include file='printConf.tpl'|vtemplate_path:'Contacts'}
+
     {/if}
     <div class="printAreaContainer">
         <div class="full-width">
@@ -222,105 +208,162 @@
                     <td style="height: 28mm;">
                         <img src='layouts/v7/modules/Contacts/resources/gpm-new-logo.png'
                             style="max-height: 100%; float:right;width: 154px;">
-                        <div style="font-size:11pt;margin-top: 14px;margin-bottom: 32px">
+                        <div style="font-size:11pt;margin-top: 14px;margin-bottom: 32px;">
                             {$RECORD_MODEL->get('cf_898')}<br>
-
-                            {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
-                            {if !empty($RECORD_MODEL->get('cf_968'))} {$RECORD_MODEL->get('cf_968')}<br>{/if}
-                            {if !empty($RECORD_MODEL->get('mailingstreet'))}
-                            {$RECORD_MODEL->get('mailingstreet')}<br>{/if}
-                            {if !empty($RECORD_MODEL->get('cf_970'))} {$RECORD_MODEL->get('cf_970')}<br>{/if}
-                            {if empty($RECORD_MODEL->get('mailingpobox'))}
-                                {if !empty($RECORD_MODEL->get('mailingcity')) && !empty($RECORD_MODEL->get('mailingzip')) }
-                                    {$RECORD_MODEL->get('mailingcity')} {$RECORD_MODEL->get('mailingzip')}<br>
-                                {else if !empty($RECORD_MODEL->get('mailingcity'))}
-                                    {$RECORD_MODEL->get('mailingcity')}<br>
-                                {else}
-                                    {$RECORD_MODEL->get('mailingzip')}<br>
-                                {/if}
-                                {$RECORD_MODEL->get('mailingcountry')}
-                            {else}
-                                {if !empty($RECORD_MODEL->get('mailingcity'))}
-                                    P.O. Box {$RECORD_MODEL->get('mailingpobox')}, {$RECORD_MODEL->get('mailingcity')}<br>
-                                {else}
-                                    P.O. Box {$RECORD_MODEL->get('mailingpobox')}<br>
-                                {/if}
-                                {if !empty($RECORD_MODEL->get('mailingstate'))}
-                                    {$RECORD_MODEL->get('mailingstate')}, {$RECORD_MODEL->get('mailingcountry')}
-                                {else}
+                            {if !$HIDE_BP_INFO}
+                                {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
+                                {if !empty($RECORD_MODEL->get('cf_968'))} {$RECORD_MODEL->get('cf_968')}<br>{/if}
+                                {if !empty($RECORD_MODEL->get('mailingstreet'))}
+                                {$RECORD_MODEL->get('mailingstreet')}<br>{/if}
+                                {if !empty($RECORD_MODEL->get('cf_970'))} {$RECORD_MODEL->get('cf_970')}<br>{/if}
+                                {if empty($RECORD_MODEL->get('mailingpobox'))}
+                                    {if !empty($RECORD_MODEL->get('mailingcity')) && !empty($RECORD_MODEL->get('mailingzip')) }
+                                        {$RECORD_MODEL->get('mailingcity')} {$RECORD_MODEL->get('mailingzip')}<br>
+                                    {else if !empty($RECORD_MODEL->get('mailingcity'))}
+                                        {$RECORD_MODEL->get('mailingcity')}<br>
+                                    {else}
+                                        {$RECORD_MODEL->get('mailingzip')}<br>
+                                    {/if}
                                     {$RECORD_MODEL->get('mailingcountry')}
+                                {else}
+                                    {if !empty($RECORD_MODEL->get('mailingcity'))}
+                                        P.O. Box {$RECORD_MODEL->get('mailingpobox')}, {$RECORD_MODEL->get('mailingcity')}<br>
+                                    {else}
+                                        P.O. Box {$RECORD_MODEL->get('mailingpobox')}<br>
+                                    {/if}
+                                    {if !empty($RECORD_MODEL->get('mailingstate'))}
+                                        {$RECORD_MODEL->get('mailingstate')}, {$RECORD_MODEL->get('mailingcountry')}
+                                    {else}
+                                        {$RECORD_MODEL->get('mailingcountry')}
+                                    {/if}
                                 {/if}
                             {/if}
-
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td style="height: 10mm; text-decoration: underline;text-align: center">
-                        <strong>DEBIT NOTE</strong>
+                        <strong>{if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))}TAX INVOICE
+                            {else}STORAGE
+                            INVOICE{/if}</strong>
                     </td>
                 </tr>
-                <tr>
-                    <td style="font-size: 9pt;vertical-align: top;">
-                        <table class="activity-tbl" style="margin-bottom:1mm;width:40%;margin-top:2mm;">
-                            <tr>
-                                <th style="text-align:center;width:50%;">DEBIT NOTE NO</th>
-                                <th style="text-align:center;width:50%;">DATE</th>
-                            </tr>
-                            <tr>
-                                <td style="text-align:center">{$smarty.request.docNo}</td>
-                                <td style="text-align:center">{$ERP_DOCUMENT->documentDate}</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
+                {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))}
+                    <tr style="font-weight: bold;font-size: 9pt">
+                        <td>GST Reg No.: {$COMPANY->get('company_gst_no')}</td>
+                    </tr>
+                {/if}
                 <tr>
                     <td style="text-align: right;font-size: 9pt">
                         All amounts in {$ERP_DOCUMENT->currency}
                     </td>
                 </tr>
+                {assign var="metal_name" value="{$ERP_DOCUMENT->barItems[0]->metal_name}"}
+
                 <tr>
-                    <td style="width:25%;font-size: 9pt; height: 138mm; vertical-align: top;">
-                        <table class="activity-tbl">
+                    <td style="font-size: 9pt; height: 168mm; vertical-align: top;">
+                        <table class="activity-tbl" style="margin-bottom:5mm">
                             <tr>
-                                <th style="width:70%;">DESCRIPTION</th>
-                                <th style="width:30%;text-align:center">TOTAL US$</th>
+                                <th colspan="2" style="width:25%;text-align: center;">INVOICE NO</th>
+                                <th style="width:25%;text-align: center;">DATE</th>
+                                <th colspan="2" style="width:50%;text-align: center;">AVERAGE LONDON FIX</th>
                             </tr>
                             <tr>
-                                <td style="height: 30mm;border-bottom:none;vertical-align: top">
-                                    {$ERP_DOCUMENT->barItems[0]->narration}
-                                </td>
-                                <td style="text-align:right;vertical-align: top">
-                                    {CurrencyField::convertToUserFormat($ERP_DOCUMENT->totalusdVal)}</td>
-                            </tr>
-                            <tr>
-                                <th>TOTAL DEBIT AMOUNT:</th>
-                                <td style="text-align:right"><strong>US$
-                                        {CurrencyField::convertToUserFormat($ERP_DOCUMENT->totalusdVal)}</strong>
-                                </td>
+                                <td colspan="2" style="text-align: center;">{$smarty.request.docNo}</td>
+                                <td style="text-align: center;">{$ERP_DOCUMENT->documentDate}</td>
+                                <td style="width:25%;text-align: center;">{$metal_name}</td>
+                                <td style="width:25%;text-align: center;">{$ERP_DOCUMENT->currency}
+                                    {$ERP_DOCUMENT->fineOz} / Oz.</td>
                             </tr>
                         </table>
+
+                        {assign var="calcTotal" value=0}
+                        {assign var="SUB_TOTAL" value=0}
+                        {assign var="TOTAL_FEE" value=0}
+                        {assign var="GST_RATE" value=0.07}
+                        <table class="activity-tbl">
+                            <tr>
+                                <th style="width:75%;">DESCRIPTION</th>
+                                <th style="width:25%;text-align: center">TOTAL {$ERP_DOCUMENT->currency}</th>
+                            </tr>
+                            <tr>
+                                <td style="height:50mm;border-bottom:none;vertical-align: top;line-height: 2">Storage
+                                    charge for {$ERP_DOCUMENT->metal} for the period from
+                                    {$ERP_DOCUMENT->documentDate} to {$ERP_DOCUMENT->postingDate}:<br>
+                                    {foreach from=$ERP_DOCUMENT->barItems item=charge}
+
+                                        {assign var="total" value=$charge->totalItemAmount}
+                                        {assign var="calcTotal" value=$calcTotal+round($total,2)}
+                                        {assign var="SUB_TOTAL" value=$SUB_TOTAL+round($total,2)}
+                                        &nbsp;&nbsp;&nbsp;&nbsp;- {$charge->remarks}<br>
+                                    {/foreach}
+                                </td>
+                                <td style="text-align:right;vertical-align: top;line-height: 2"><br>
+                                    {foreach from=$ERP_DOCUMENT->barItems item=charge}
+                                        {number_format($charge->totalItemAmount,2)}<br>
+                                    {/foreach}
+                                </td>
+                            </tr>
+
+                            {* Add 7 % to subtotal *}
+
+                            {assign var="GST_AMOUNT" value=$SUB_TOTAL * $GST_RATE}
+                            {assign var="TOTAL_WITH_GST" value=$SUB_TOTAL + $GST_AMOUNT}
+
+                            {if $ERP_DOCUMENT->GST}
+                                <tr>
+                                    <td style="width:75%;">SUBTOTAL:</td>
+                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
+                                            {number_format($SUB_TOTAL,2)}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="width:75%;">GST on Storage charge in Singapore (7%)</td>
+                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
+                                            {number_format($GST_AMOUNT,2)}</strong></td>
+                                </tr>
+                            {/if}
+                            {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no')) && empty($ERP_DOCUMENT->GST)}
+                                <tr>
+                                    <td style="width:75%;">SUBTOTAL:</td>
+                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
+                                            {$ERP_DOCUMENT->grandTotal}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="width:75%;">GST on Storage charge (0%)</td>
+                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
+                                            {number_format(0,2)}</strong></td>
+                                </tr>
+                            {/if}
+                            <tr>
+                                <th style="width:75%;">TOTAL STORAGE FEE:</th>
+                                <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
+                                        {number_format($TOTAL_WITH_GST,2)}</strong></td>
+                            </tr>
+                        </table>
+
                         <br>
                         <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'get')}
-                            {assign var=iban value=$SELECTED_BANK->get('iban_no')|lower|replace:' ':''}
-                            {assign var=bank_routing_no value=$SELECTED_BANK->get('bank_routing_no')|lower|replace:' ':''}
+                        {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))}
                             <div>
+                                *Remarks: USD/SGD exchange rate at SGD
+                                {MASForex_Record_Model::getExchangeRate($ERP_DOCUMENT->documentDate, 'usd_sgd')} / USD
+                            </div>
+                        {/if}
+                        <br>
+                        <br>
+                        <div>
+                            {if $SELECTED_BANK}
                                 Please transfer the payment net of charges to our bank account:<br>
                                 Beneficiary: {$SELECTED_BANK->get('beneficiary_name')}<br>
                                 Account No: {$SELECTED_BANK->get('account_no')}
                                 {$SELECTED_BANK->get('account_currency')}<br>
-                                {if $iban neq 'x'}
+                                {if trim(count_chars(strtolower($SELECTED_BANK->get('iban_no')),3)) != 'x'}
                                     IBAN: {$SELECTED_BANK->get('iban_no')}<br>
                                 {/if}
                                 Bank: {$SELECTED_BANK->get('bank_name')}<br>
                                 Bank Address: {$SELECTED_BANK->get('bank_address')}<br>
                                 Swift Code: {$SELECTED_BANK->get('swift_code')}<br>
-                                {if $bank_routing_no neq 'x'}
+                                {if trim(count_chars(strtolower($SELECTED_BANK->get('bank_routing_no')),3)) == 'x'}
                                     Bank Code: {$SELECTED_BANK->get('bank_code')}<br>
                                     Branch Code: {$SELECTED_BANK->get('branch_code')}<br>
                                 {else}
@@ -332,8 +375,8 @@
                                     Intermediary Bank: {$SELECTED_BANK->get('intermediary_bank')}<br>
                                     Swift Code: {$SELECTED_BANK->get('intermediary_swift_code')}<br>
                                 {/if}
-                            </div>
-                        {/if}
+                            {/if}
+                        </div>
                     </td>
                 </tr>
                 <tr>
