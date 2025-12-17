@@ -2,8 +2,6 @@
 
 // ini_set('display_errors', 1); error_reporting(E_ALL);
 
-include_once 'dbo_db/ActivitySummary.php';
-include_once 'dbo_db/HoldingsDB.php';
 
 class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
 {
@@ -20,20 +18,15 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
 
     public function process(Vtiger_Request $request)
     {
-
-        // $docNo = $request->get('docNo');
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
-        // $tableName = $request->get('tableName');
         $companyId = $recordModel->get('company_id');
+        // Client type
+        $client_type = $recordModel->get('cf_927');
 
         $pricingOption = $request->get('pricing_option');
 
         $allBankAccounts = [];
-
-        // Get all assets 
-        // $assets = $this->getAssets();
-        // $assets_data = $this->processAssetsData($assets);
 
         $companyRecord = null;
 
@@ -57,27 +50,19 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $selectedBank = null;
         if (!empty($bankAccountId)) $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
 
-
-        // if ($tableName !== null && $tableName !== '') {
-        //     $activity = new dbo_db\ActivitySummary();
-        //     $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);
-        // } else {
-        //     $erpData = [];
-        // }
-
         // echo '<pre>';
         // echo 'Selected Bank Account: ';
-        // var_dump($selectedBank);
+        // var_dump($client_type);
         // echo '</pre>';
 
         $viewer = $this->getViewer($request);
         $viewer->assign('PRICING_OPTION', $pricingOption);
+        $viewer->assign('CLIENT_TYPE', $client_type);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', 1);
         $viewer->assign('SELECTED_BANK', $selectedBank ?? null);
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
-        // $viewer->assign('ERP_DOCUMENT', $erpData);
 
         // REQUEST VALUES PASSED BY CONTROLLER
         $viewer->assign('DOCNO', $request->get('docNo'));

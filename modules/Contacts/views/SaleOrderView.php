@@ -2,9 +2,6 @@
 
 // ini_set('display_errors', 1); error_reporting(E_ALL);    
 
-include_once 'dbo_db/ActivitySummary.php';
-include_once 'dbo_db/HoldingsDB.php';
-
 class Contacts_SaleOrderView_View extends Vtiger_Index_View
 {
 
@@ -20,41 +17,30 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
 
     public function process(Vtiger_Request $request)
     {
-
-        $docNo = $request->get('docNo');
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
-        $tableName = $request->get('tableName');
         $companyId = $recordModel->get('company_id');
-
-        // Get all assets 
-        // $assets = $this->getAssets();
-        // $assets_data = $this->processAssetsData($assets);
+        // Client type
+        $client_type = $recordModel->get('cf_927');
 
         $companyRecord = null;
 
         if (!empty($companyId))
             $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
 
-        if ($tableName !== null && $tableName !== '') {
-            $activity = new dbo_db\ActivitySummary();
-            $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);
-        } else {
-            $erpData = [];
-        }
-
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', 1);
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
-        $viewer->assign('ERP_DOCUMENT', $erpData);
-        // $viewer->assign('ERP_DOCUMENT', $erpData);
+        $viewer->assign('CLIENT_TYPE', $client_type);
 
         // REQUEST VALUES PASSED BY CONTROLLER
         $viewer->assign('DOCNO', $request->get('docNo'));
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));
         $viewer->assign('CLIENT_NAME', $request->get('clientName') ?? '');
+        $viewer->assign('ID_OPTION', $request->get('idOption') ?? '');
+        $viewer->assign('COMPANY_OPTION', $request->get('companyOption') ?? '');
         $viewer->assign('hideCustomerInfo', $request->get('hideCustomerInfo'));
 
         if ($request->get('PDFDownload')) {
@@ -90,59 +76,5 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         readfile($root_directory . "$fileName.pdf");
         unlink($root_directory . "$fileName.pdf");
         exit;
-    }
-
-    protected function getAssets()
-    {
-        $moduleName = 'Assets';
-        $currentUser = Users_Record_Model::getCurrentUserModel();
-
-        // Load module and fields
-        $moduleModel = Vtiger_Module_Model::getInstance($moduleName);
-        $fields = $moduleModel->getFields();
-
-        // Build list of all fieldnames dynamically
-        $fieldNames = [];
-        foreach ($fields as $fieldModel) {
-            $fieldName = $fieldModel->getName();
-            $fieldNames[] = $fieldName;
-        }
-
-        // QueryGenerator to fetch ALL these fields
-        $queryGenerator = new QueryGenerator($moduleName, $currentUser);
-        $queryGenerator->setFields($fieldNames);
-
-        $query = $queryGenerator->getQuery();
-
-        $db = PearDatabase::getInstance();
-        $result = $db->pquery($query, []);
-
-        $assets = [];
-        while ($row = $db->fetchByAssoc($result)) {
-            $assets[] = $row;
-        }
-
-        return $assets;
-    }
-
-    protected function processAssetsData($assets)
-    {
-        $data = [];
-
-        foreach ($assets as $asset) {
-            $metal_type = $asset['cf_873'];
-
-            // Remove CRYPTO from metal type
-            // if ($metal_type === 'CRYPTO') continue;
-
-            if (isset($data[$metal_type])) {
-                // Append to existing metal type
-                $data[$metal_type][] = $asset;
-            } else {
-                $data[$metal_type] = [$asset];
-            }
-        }
-
-        return $data;
     }
 }
