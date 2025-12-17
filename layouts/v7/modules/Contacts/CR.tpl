@@ -136,6 +136,14 @@
         table.activity-tbl th {
             background: #bca263;
         }
+
+        input[type="checkbox"] {
+            width: 5mm;
+            height: 5mm;
+            vertical-align: middle;
+            margin-right: 1.5mm;
+            accent-color: #000;
+        }
     </style>
 </head>
 
@@ -282,16 +290,28 @@
                 </div>
 
                 <div style="margin-top: 4mm;">
-                    <span
-                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                        <input type="checkbox" name="id_option">
+                    {else}
+                        {if isset($ID_OPTION)}
+                            <span
+                                style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                        {/if}
+                    {/if}
                     <span>I/We will personally collect the Stored Metal at the Storage Facility and will be holding
                         ID/Passport number</span>
                     <span> .......................</span>
                 </div>
 
                 <div style="margin-top: 4mm;">
-                    <span
-                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                        <input type="checkbox" name="company_option">
+                    {else}
+                        {if isset($COMPANY_OPTION)}
+                            <span
+                                style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                        {/if}
+                    {/if}
 
                     <span>I/We hereby authorise Mr/Mrs/Representatives of the company </span>
                     <span> .......................</span>
@@ -349,6 +369,32 @@
             </div>
         </div>
     {/for}
+
+    <script>
+        document.getElementById('downloadBtn').addEventListener('click', function(e) {
+
+            const companyName = document.querySelector('input[name="company_option"]')?.value;
+            const idOption = document.querySelector('input[name="id_option"]')?.value;
+
+            const url = new URL(this.href);
+
+            if (companyName) {
+                url.searchParams.set('companyName', companyName);
+            } else {
+                url.searchParams.delete('companyName');
+            }
+
+            if (idOption) {
+                url.searchParams.set('idOption', idOption);
+            } else {
+                url.searchParams.delete('idOption');
+            }
+
+
+
+            this.href = url.toString();
+        });
+    </script>
 </body>
 
 </html>

@@ -649,18 +649,32 @@
                             <div class="signature-section-left">Place: <span class="line"
                                     style="font-style: italic;">{$RECORD_MODEL->get('mailingcountry')}</span></div>
                             <div class="signature-section-right">
-                                Date: <span style="font-style: italic;">{$smarty.now|date_format:"%m/%d/%Y"}</span>
+                                Date: <span class="line">................................</span>
                             </div>
                         </div>
+
+                        {assign var="ON_BEHALF_OF" value=""}
+                        {assign var="SIGNED_BY" value=""}
+
+                        {if isset($CLIENT_TYPE) }
+
+                            {if $CLIENT_TYPE == 'Corporate Entity' || $CLIENT_TYPE == 'Trust'  || $CLIENT_TYPE == 'Foundation' }
+                                {assign var="ON_BEHALF_OF" value="{$RECORD_MODEL->get('lastname')}"}
+
+                            {else if $CLIENT_TYPE == 'Individual' || $CLIENT_TYPE == 'Sole Proprietor' }
+                                {assign var="SIGNED_BY" value="{$RECORD_MODEL->get('firstname')}
+                        {$RECORD_MODEL->get('lastname')}"}
+                            {/if}
+
+                        {/if}
 
                         <div class="signature-section-item">
                             <div class="signature-section-left">
                                 Signed by: <span class="long-line" style="font-style: italic;">
-                                    {$RECORD_MODEL->get('firstname')}
-                                    {$RECORD_MODEL->get('lastname')}</span>
+                                    {$SIGNED_BY}</span>
                             </div>
                             <div class="signature-section-right">
-                                On behalf of: <span class="line">................................</span>
+                                On behalf of: <span class="line">{$ON_BEHALF_OF}</span>
                             </div>
                         </div>
 
