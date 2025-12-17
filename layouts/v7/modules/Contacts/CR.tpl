@@ -376,8 +376,6 @@
             const companyName = document.querySelector('input[name="company_option"]')?.value;
             const idOption = document.querySelector('input[name="id_option"]')?.value;
 
-            const 
-
             const url = new URL(this.href);
 
             if (companyName) {
