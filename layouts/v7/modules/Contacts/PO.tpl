@@ -701,6 +701,7 @@
 
             const url = new URL(this.href);
             if (checked) url.searchParams.set('pricing_option', checked.value);
+
             if (countryOption && countryOption.checked) {
                 url.searchParams.set('countryOption', '1');
             } else {
