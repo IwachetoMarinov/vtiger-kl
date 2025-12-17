@@ -154,14 +154,10 @@
 
         .line {
             display: inline-block;
-            /* border-bottom: 0.5pt solid #000; */
-            /* width: 40mm; */
         }
 
         .long-line {
             display: inline-block;
-            /* border-bottom: 0.5pt solid #000; */
-            /* width: 80mm; */
         }
 
         /* Bank Details Section */
@@ -178,10 +174,22 @@
             margin-top: 8mm;
         }
 
+        .signature-section-item {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4mm;
+        }
+
+        .signature-section-left {
+            width: 40%;
+        }
+
+        .signature-section-right {
+            width: 57%;
+        }
+
         .signature-line {
             display: inline-block;
-            /* border-top: 0.5pt solid #000; */
-            /* width: 50mm; */
             margin-top: 8mm;
         }
 
@@ -248,7 +256,8 @@
     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
         <ul style="list-style-type:none;margin:0;padding:0;overflow:hidden;background-color:#333;">
             <li style="float:right">
-                <a style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
+                <a id="downloadBtn"
+                    style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
                     href="index.php?module=Contacts&view=SaleOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
                     Download
                 </a>
@@ -348,8 +357,9 @@
                     </div>
                     <div class="number-container">
                         {if isset($COMPANY)}
-                            {if !empty($COMPANY->get('company_fax'))} <p>Fax no:{$COMPANY->get('company_fax')}</p> {/if}
-                            <p>Email: {$COMPANY->get('company_website')}</p>
+                            {if !empty($COMPANY->get('company_fax'))} <p>Fax no: <span
+                                    style="font-style: italic;">{$COMPANY->get('company_fax')}</span> or</p> {/if}
+                            <p>Email:<span style="font-style: italic;"> {$COMPANY->get('company_website')}</span></p>
                         {/if}
                     </div>
                 </div>
@@ -365,7 +375,14 @@
 
             <!-- SECTION 2 -->
             <div class="section-title bolder-element">
-                <strong>2.</strong> I/We hereby wish to sell to Global Precious Metals Pte. Ltd. (GPM) the following
+                <strong>2.</strong> I/We hereby wish to sell to
+                <span>
+                    {if isset($COMPANY)}
+                        {$COMPANY->get('company_name')}
+                    {else }.................................................
+                    {/if}
+                </span>
+                the following
                 precious metals:
             </div>
 
@@ -481,15 +498,34 @@
 
                 <!-- SIGNATURE SECTION -->
                 <div class="signature-section">
-                    Place: <span
-                        class="line">..............................................................................</span>
-                    &nbsp;&nbsp;&nbsp;
-                    Date: ......../......../20.......
-                    <br><br>
-                    Signed by: <span
-                        class="long-line">.......................................................................</span>
-                    &nbsp;&nbsp;&nbsp;
-                    On behalf of: <span class="line">................................</span>
+                    <div class="signature-section-item">
+                        <div class="signature-section-left">Place: <span class="line"
+                                style="font-style: italic;">{$RECORD_MODEL->get('mailingcountry')}</span></div>
+                        <div class="signature-section-right">
+                            Date: <span style="font-style: italic;">{$smarty.now|date_format:"%m/%d/%Y"}</span>
+                        </div>
+                    </div>
+
+                    <div class="signature-section-item">
+                        <div class="signature-section-left">
+                            Signed by: <span class="long-line" style="font-style: italic;">
+                                {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                                    <input type="text" style="border:none;width:40mm; padding:1mm;margin:0;"
+                                        class="input-name"
+                                        value="{$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}" />
+                                {else}
+                                    {if isset($CLIENT_NAME) && !empty($CLIENT_NAME) && $CLIENT_NAME neq ''}
+                                        {$CLIENT_NAME}
+                                    {else}
+                                        {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}
+                                    {/if}
+                                {/if}
+                            </span>
+                        </div>
+                        <div class="signature-section-right">
+                            On behalf of: <span class="line">................................</span>
+                        </div>
+                    </div>
 
                     <div style="margin-top:10mm;">
                         <div class="signature-line">...............................................</div><br>
@@ -501,6 +537,22 @@
         </section>
     </div>
 
+    <script>
+        document.getElementById('downloadBtn').addEventListener('click', function(e) {
+
+            const name = document.querySelector('.input-name')?.value;
+
+            const url = new URL(this.href);
+
+            if (name) {
+                url.searchParams.set('clientName', name);
+            } else {
+                url.searchParams.delete('clientName');
+            }
+
+            this.href = url.toString();
+        });
+    </script>
 
 </body>
 

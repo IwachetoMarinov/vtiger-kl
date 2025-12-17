@@ -54,6 +54,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         // REQUEST VALUES PASSED BY CONTROLLER
         $viewer->assign('DOCNO', $request->get('docNo'));
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));
+        $viewer->assign('CLIENT_NAME', $request->get('clientName') ?? '');
         $viewer->assign('hideCustomerInfo', $request->get('hideCustomerInfo'));
 
         if ($request->get('PDFDownload')) {
