@@ -469,16 +469,28 @@
 
             <div style="margin-left: 5mm;">
                 <div style="margin-top: 2mm;padding-left: 2mm;">
-                    <span
-                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                        <input type="checkbox" name="country_option">
+                    {else}
+                        {if isset($COUNTRY_OPTION)}
+                            <span
+                                style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                        {/if}
+                    {/if}
                     <span>deliver & store the above metal in a facility located in:</span>
                     <span> ...........................</span>
                     <span style="font-style: italic;">(Please specify country)</span>
                 </div>
 
                 <div style="margin-top: 2mm;padding-left: 2mm;">
-                    <span
-                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                        <input type="checkbox" name="address_option">
+                    {else}
+                        {if isset($ADDRESS_OPTION)}
+                            <span
+                                style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                        {/if}
+                    {/if}
                     <span>deliver the above metal to:</span>
                     <span> ....................................................................</span>
                     <span style="font-style: italic;">(Please specify full address)</span>
@@ -653,10 +665,25 @@
         document.getElementById('downloadBtn').addEventListener('click', function(e) {
 
             const checked = document.querySelector('input[name="pricing_option"]:checked');
-            if (!checked) return;
+
+            const countryOption = document.querySelector('input[name="country_option"]');
+            const addressOption = document.querySelector('input[name="address_option"]');
+
+            // if (!checked) return;
 
             const url = new URL(this.href);
-            url.searchParams.set('pricing_option', checked.value);
+            if (checked) url.searchParams.set('pricing_option', checked.value);
+            if (countryOption && countryOption.checked) {
+                url.searchParams.set('countryOption', '1');
+            } else {
+                url.searchParams.delete('countryOption');
+            }
+
+            if (addressOption && addressOption.checked) {
+                url.searchParams.set('addressOption', '1');
+            } else {
+                url.searchParams.delete('addressOption');
+            }
 
             this.href = url.toString();
         });
