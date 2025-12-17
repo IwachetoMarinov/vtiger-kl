@@ -152,12 +152,14 @@
         <ul style="list-style-type:none;margin:0;padding:0;overflow:hidden;background-color:#333;">
             <li style="float:right">
                 {if isset($smarty.request.tableName) && $smarty.request.tableName neq ''}
-                    <a style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
+                    <a id="downloadBtn"
+                        style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
                         href="index.php?module=Contacts&view=ViewCR&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&tableName={$smarty.request.tableName}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
                         Download
                     </a>
                 {else}
-                    <a style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
+                    <a id="downloadBtn"
+                        style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
                         href="index.php?module=Contacts&view=ViewCR&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
                         Download
                     </a>
@@ -372,25 +374,22 @@
 
     <script>
         document.getElementById('downloadBtn').addEventListener('click', function(e) {
-
-            const companyName = document.querySelector('input[name="company_option"]')?.value;
-            const idOption = document.querySelector('input[name="id_option"]')?.value;
+            const companyName = document.querySelector('input[name="company_option"]');
+            const idOption = document.querySelector('input[name="id_option"]');
 
             const url = new URL(this.href);
 
-            if (companyName) {
-                url.searchParams.set('companyName', companyName);
+            if (companyName && companyName.checked) {
+                url.searchParams.set('companyName', "1");
             } else {
                 url.searchParams.delete('companyName');
             }
 
-            if (idOption) {
-                url.searchParams.set('idOption', idOption);
+            if (idOption && idOption.checked) {
+                url.searchParams.set('idOption', "1");
             } else {
                 url.searchParams.delete('idOption');
             }
-
-
 
             this.href = url.toString();
         });
