@@ -257,14 +257,38 @@
             margin-right: 2mm;
             accent-color: #000;
         }
+
+        .bank-codes-container {
+            display: flex;
+            gap: 10mm;
+        }
+
+        .bank-details-container {
+            display: flex;
+        }
+
+        .bank-details-item {
+            width: 50%;
+        }
+
+        .bank-item {
+            margin-bottom: 1mm;
+        }
     </style>
+
+
 </head>
 
 <body>
     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
         <ul style="list-style-type:none;margin:0;padding:0;overflow:hidden;background-color:#333;">
             <li style="float:right">
-                <a style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
+                {* <a style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
+                    href="index.php?module=Contacts&view=PurchaseOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
+                    Download
+                </a> *}
+                <a id="downloadBtn"
+                    style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
                     href="index.php?module=Contacts&view=PurchaseOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
                     Download
                 </a>
@@ -461,7 +485,7 @@
                 </div>
             </div>
 
-            <!-- SECTION 4 -->
+            <!-- SECTION 2 -->
             <div class="additional-section ">
                 <strong>2.</strong><span class="bolder-element"> I/We make the payment of the above Purchase Amount:
                 </span>
@@ -476,28 +500,108 @@
                     <div style="margin:1.5mm 0;">(b) <span class="bolder-element">to GPM’s bank account </span>as
                         follows:</div>
 
-                    <div style="padding-left: 5mm;">BANK DETAILS HERE>.........................</div>
+                    <div style="padding-left: 5mm;">
+                        <p class="bank-item">Bank Name:
+                            <span style="font-style: italic;">
+                                {if isset($SELECTED_BANK)}
+                                    {$SELECTED_BANK->get('bank_name')}
+                                {/if}
+                            </span>
+                        </p>
+                        <p class="bank-item">Bank Address:
+                            <span style="font-style: italic;">
+                                {if isset($SELECTED_BANK)}
+                                    {$SELECTED_BANK->get('bank_address')}
+                                {/if}
+                            </span>
+                        </p>
+                        <div class="bank-codes-container bank-item">
+                            <p>Bank Code:
+                                <span style="font-style: italic;">
+                                    {if isset($SELECTED_BANK)}
+                                        {$SELECTED_BANK->get('bank_code')}
+                                    {/if}
+                                </span>
+                            </p>
+                            <p>(Branch Code:
+                                <span style="font-style: italic;">
+                                    {if isset($SELECTED_BANK)}
+                                        {$SELECTED_BANK->get('branch_code')}
+                                    {/if}
+                                </span>)
+                            </p>
+                            <p>Swift Code:
+                                <span style="font-style: italic;">
+                                    {if isset($SELECTED_BANK)}
+                                        {$SELECTED_BANK->get('swift_code')}
+                                    {/if}
+                                </span>
+                            </p>
+                        </div>
+
+                        <div class="bank-details-container bank-item">
+                            <div class="bank-details-item">
+                                <span>Account No:</span>
+                                <span style="font-style: italic;">
+                                    {if isset($SELECTED_BANK)}
+                                        {$SELECTED_BANK->get('account_no')}
+                                    {/if}
+                                </span>
+                            </div>
+                            <div class="bank-details-item">
+                                <span>Name of Account Holder:</span>
+                                <span style="font-style: italic;">
+                                    {if isset($SELECTED_BANK)}
+                                        {$SELECTED_BANK->get('beneficiary_name')}
+                                    {/if}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="bank-details-container bank-item">
+                            <div class="bank-details-item">
+                                <span>Intermediary Bank:</span>
+                                <span style="font-style: italic;">
+                                    {if isset($SELECTED_BANK)}
+                                        {$SELECTED_BANK->get('intermediary_bank')}
+                                    {/if}
+                                </span>
+                            </div>
+                            <div class="bank-details-item">
+                                <span>Swift Code:</span>
+                                <span style="font-style: italic;">
+                                    {if isset($SELECTED_BANK)}
+                                        {$SELECTED_BANK->get('intermediary_swift_code')}
+                                    {/if}
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
 
-            <!-- SECTION 5 -->
+            <!-- SECTION 3 -->
             <div class="additional-section">
                 <span class="bolder-element">
                     3. I/We hereby elect the following Pricing Option (Please select one option):
                 </span>
 
-                <div style="margin-left: 5mm;">
+                <div style="margin-left: 5mm; margin-top:2mm;">
 
-                    <label style="display:block; margin-top:2mm; font-size:3.5mm;">
-                        <input type="checkbox" name="pricing_option_1" checked>
-                        Pricing Option 1 (as defined in Clause 3.3.1 of the Customer Metal Agreement)
-                    </label>
+                    <div>
+                        <label>
+                            <input type="radio" name="pricing_option" value="1" {if $PRICING_OPTION eq '1'}checked{/if}>
+                            Pricing Option 1 (as defined in Clause 3.3.1)
+                        </label>
+                    </div>
 
-                    <label style="display:block; margin-top:2mm; font-size:3.5mm;">
-                        <input type="checkbox" name="pricing_option_2">
-                        Pricing Option 2 (as defined in Clause 3.3.2 of the Customer Metal Agreement)
-                    </label>
-
+                    <div>
+                        <label>
+                            <input type="radio" name="pricing_option" value="2" {if $PRICING_OPTION eq '2'}checked{/if}>
+                            Pricing Option 2 (as defined in Clause 3.3.2)
+                        </label>
+                    </div>
                 </div>
 
                 <div class="additional-section" style="margin-top:4mm;">
@@ -518,7 +622,7 @@
                             <div class="signature-section-left">Place: <span class="line"
                                     style="font-style: italic;">{$RECORD_MODEL->get('mailingcountry')}</span></div>
                             <div class="signature-section-right">
-                                Date: {$smarty.now|date_format:"%m/%d/%Y"}
+                                Date: <span style="font-style: italic;">{$smarty.now|date_format:"%m/%d/%Y"}</span>
                             </div>
                         </div>
 
@@ -545,6 +649,18 @@
     </div>
 
 
+    <script>
+        document.getElementById('downloadBtn').addEventListener('click', function(e) {
+
+            const checked = document.querySelector('input[name="pricing_option"]:checked');
+            if (!checked) return;
+
+            const url = new URL(this.href);
+            url.searchParams.set('pricing_option', checked.value);
+
+            this.href = url.toString();
+        });
+    </script>
 </body>
 
 </html>
