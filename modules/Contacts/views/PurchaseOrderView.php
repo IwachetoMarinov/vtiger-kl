@@ -83,6 +83,8 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $viewer->assign('DOCNO', $request->get('docNo'));
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));
         $viewer->assign('hideCustomerInfo', $request->get('hideCustomerInfo'));
+        $viewer->assign('COUNTRY_OPTION', $request->get('countryOption') ?? null);
+        $viewer->assign('ADDRESS_OPTION', $request->get('addressOption') ?? null);
 
         if ($request->get('PDFDownload')) {
             $html = $viewer->view("PO.tpl", $moduleName, true);
