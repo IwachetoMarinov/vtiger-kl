@@ -693,11 +693,8 @@
         document.getElementById('downloadBtn').addEventListener('click', function(e) {
 
             const checked = document.querySelector('input[name="pricing_option"]:checked');
-
             const countryOption = document.querySelector('input[name="country_option"]');
             const addressOption = document.querySelector('input[name="address_option"]');
-
-            // if (!checked) return;
 
             const url = new URL(this.href);
             if (checked) url.searchParams.set('pricing_option', checked.value);
