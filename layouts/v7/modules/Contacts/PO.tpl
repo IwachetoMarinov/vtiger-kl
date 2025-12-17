@@ -101,7 +101,7 @@
 
         /* Section 2 */
         .section-title {
-            margin: 2mm 0;
+            margin: 2mm 0 2mm 2mm;
         }
 
         /* Metals Table */
@@ -254,7 +254,7 @@
             width: 5mm;
             height: 5mm;
             vertical-align: middle;
-            margin-right: 2mm;
+            margin-right: 1.5mm;
             accent-color: #000;
         }
 
@@ -389,8 +389,9 @@
                     </div>
                     <div class="number-container">
                         {if isset($COMPANY)}
-                            {if !empty($COMPANY->get('company_fax'))} <p>Fax no:{$COMPANY->get('company_fax')}</p> {/if}
-                            <p>Email: {$COMPANY->get('company_website')}</p>
+                            {if !empty($COMPANY->get('company_fax'))} <p>Fax no: <span
+                                    style="font-style: italic;">{$COMPANY->get('company_fax')}</span> or</p> {/if}
+                            <p>Email:<span style="font-style: italic;"> {$COMPANY->get('company_website')}</span></p>
                         {/if}
                     </div>
                 </div>
@@ -603,14 +604,28 @@
 
                     <div>
                         <label>
-                            <input type="radio" name="pricing_option" value="1" {if $PRICING_OPTION eq '1'}checked{/if}>
+                            {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                                <input type="radio" name="pricing_option" value="1" {if $PRICING_OPTION eq '1'}checked{/if}>
+                            {else}
+                                {if $PRICING_OPTION eq '1'}
+                                    <span
+                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                                {/if}
+                            {/if}
                             Pricing Option 1 (as defined in Clause 3.3.1)
                         </label>
                     </div>
 
                     <div>
                         <label>
-                            <input type="radio" name="pricing_option" value="2" {if $PRICING_OPTION eq '2'}checked{/if}>
+                            {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                                <input type="radio" name="pricing_option" value="2" {if $PRICING_OPTION eq '1'}checked{/if}>
+                            {else}
+                                {if $PRICING_OPTION eq '1'}
+                                    <span
+                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                                {/if}
+                            {/if}
                             Pricing Option 2 (as defined in Clause 3.3.2)
                         </label>
                     </div>
@@ -647,7 +662,6 @@
                             <div class="signature-section-right">
                                 On behalf of: <span class="line">................................</span>
                             </div>
-
                         </div>
 
                         <div style="margin-top:10mm;">
