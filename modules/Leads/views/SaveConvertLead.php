@@ -88,7 +88,7 @@ class Leads_SaveConvertLead_View extends Vtiger_View_Controller
 			$contactIdComponents = vtws_getIdComponents($result['Contacts']);
 			$contactId = $contactIdComponents[1];
 		}
-		
+
 		if (!empty($contactId)) {
 			header("Location: index.php?view=Detail&module=Contacts&record=$contactId");
 		} elseif (!empty($accountId)) {
@@ -97,14 +97,6 @@ class Leads_SaveConvertLead_View extends Vtiger_View_Controller
 			$this->showError($request);
 			exit;
 		}
-		// if(!empty($accountId)) {
-		// 	header("Location: index.php?view=Detail&module=Accounts&record=$accountId");
-		// } elseif (!empty($contactId)) {
-		// 	header("Location: index.php?view=Detail&module=Contacts&record=$contactId");
-		// } else {
-		// 	$this->showError($request);
-		// 	exit;
-		// }
 	}
 
 	function showError($request, $exception = false)

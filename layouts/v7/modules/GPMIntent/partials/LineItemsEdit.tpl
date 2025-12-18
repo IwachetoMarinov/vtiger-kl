@@ -32,10 +32,10 @@
                         <label class='pre_disc'>Premium (%)</label>
                     </div>
                     <div class="col-md-1 col-sm-3 col-xs-2" style="padding: 0;padding-left: 15px;">
-                        <label class='pre_disc_usd'>Premium (USD)</label>
+                        <label class='pre_disc_usd'></label>
                     </div>
                     <div class="col-md-2 col-sm-3 col-xs-2">
-                        <label>Value (USD)</label>
+                        <label>Value</label>
                     </div>
                     <div class="col-md-1 col-sm-3 col-xs-2">
                     </div>
@@ -162,15 +162,7 @@
                     <div class="col-md-1">
                     </div>
                     
-                    <div class="col-md-7 col-sm-3 col-xs-12" style="text-align: end;">
-                        <h5>Total Amount (Foreign)</h5>
-                    </div>
-                    <div class="col-md-2 col-sm-3 col-xs-12">
-                    {if $MODE eq 'edit'}
-                        <input type="text" class="form-control" id="total_amount" name="total_foreign_amount" value="{$RECORD->get('total_foreign_amount')}" readonly required="">
-                    {else}
-                        <input type="text" class="form-control" id="total_amount" name="total_foreign_amount" value="" readonly required="">
-                    {/if}
+                    
                     </div>
                     <div class="col-md-1 col-sm-3 col-xs-12">
                         <label style="display: block;" for="usr">&nbsp;</label>

@@ -105,10 +105,10 @@ Vtiger_Detail_Js(
                     record: certificateId,
                   };
 
-                  console.log('Params for FilePreview: ', params);
-                  
+                  console.log("Params for FilePreview: ", params);
+
                   app.request.post({ data: params }).then(function (err, data) {
-                    console.log('FilePreview data: ', data);
+                    console.log("FilePreview data: ", data);
                     app.helper.showModal(data);
                   });
                 });
@@ -125,10 +125,18 @@ Vtiger_Detail_Js(
       jQuery("#currencySelect").on("change", function () {
         var selectedCurrency = jQuery(this).val();
 
+        const originalUrl = window.location.href;
+
         // Build new AJAX URL (keeps record/module params)
         var baseUrl = window.location.href.split("&ActivtySummeryCurrency=")[0];
 
         var url = baseUrl + "&ActivtySummeryCurrency=" + selectedCurrency;
+
+        // Check for existing date param ActivtySummeryDate
+        if (originalUrl.indexOf("ActivtySummeryDate") !== -1) {
+          var dateParam = jQuery("#ActivtySummeryDate").val();
+          url += "&ActivtySummeryDate=" + dateParam;
+        }
 
         // Trigger AJAX reload like native widgets
         // thisInstance.getDetailViewContents(url);
