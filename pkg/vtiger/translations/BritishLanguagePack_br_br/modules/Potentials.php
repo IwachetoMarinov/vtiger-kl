@@ -41,7 +41,7 @@ $languageStrings = array(
 	'LBL_EXPECTED_CLOSE_DATE_ON'   => 'Expected to close on'        , 
 	'LBL_RELATED_CONTACTS'         => 'Related Contacts'            , // TODO: Review
 	'LBL_RELATED_PRODUCTS'         => 'Related Products'            , // TODO: Review
-    'Related To'                   => 'Organization Name'           ,
+    'Related To'                   => 'Organisation Name'           ,
     'Type'                         => 'Type'                        , 
     
     //Convert Potentials

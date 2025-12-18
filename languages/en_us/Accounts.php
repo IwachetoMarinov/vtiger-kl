@@ -22,7 +22,7 @@ $languageStrings = array(
 
 	//Field Labels
 	'industry' => 'Industry',
-	'Account Name' => 'Organization Name',
+	'Account Name' => 'Organisation Name',
 	'Account No' => 'Organization Number',
 	'Website' => 'Website',
 	'Ticker Symbol' => 'Ticker Symbol',
