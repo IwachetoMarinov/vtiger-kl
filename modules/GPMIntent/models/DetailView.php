@@ -25,7 +25,22 @@ class GPMIntent_DetailView_Model extends Vtiger_DetailView_Model
 		$moduleName = $moduleModel->getName();
 		$recordId = $recordModel->getId();
 
+		// get default links
 		$linkModelList = parent::getDetailViewLinks($linkParams);
+
+		/* =========================================================
+         * 🔥 REMOVE SUMMARY TAB (KEEP DETAILS + UPDATES)
+         * ========================================================= */
+		if (isset($linkModelList['DETAILVIEWTAB']) && is_array($linkModelList['DETAILVIEWTAB'])) {
+			foreach ($linkModelList['DETAILVIEWTAB'] as $index => $linkModel) {
+				if (
+					$linkModel instanceof Vtiger_Link_Model &&
+					($linkModel->get('linklabel') === 'LBL_SUMMARY' || $linkModel->get('linklabel') === 'Summary')
+				) {
+					unset($linkModelList['DETAILVIEWTAB'][$index]);
+				}
+			}
+		}
 
 		if (Users_Privileges_Model::isPermitted($moduleName, 'ViewQuotation', $recordId)) {
 			$basicActionLink = array(
