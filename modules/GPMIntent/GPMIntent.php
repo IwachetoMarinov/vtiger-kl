@@ -39,7 +39,6 @@ class GPMIntent extends Vtiger_CRMEntity
 	 */
 	var $list_fields = array(
 		/* Format: Field Label => Array(tablename, columnname) */
-		// tablename should not have prefix 'vtiger_'
 		'Intent No' => array('gpmintent', 'intent_no'),
 		'Assigned To' => array('crmentity', 'smownerid')
 	);
@@ -55,7 +54,6 @@ class GPMIntent extends Vtiger_CRMEntity
 	// For Popup listview and UI type support
 	var $search_fields = array(
 		/* Format: Field Label => Array(tablename, columnname) */
-		// tablename should not have prefix 'vtiger_'
 		'Intent No' => array('gpmintent', 'intent_no'),
 		'Assigned To' => array('vtiger_crmentity', 'assigned_user_id'),
 	);
@@ -134,15 +132,6 @@ class GPMIntent extends Vtiger_CRMEntity
 		}
 	}
 
-	// function addClientIdFromERPNumber()
-	// {
-	// 	$db = PearDatabase::getInstance();
-	// 	$erpNumber = $this->column_fields['contact_erp_no'];
-	// 	if (empty($erpNumber)) return;
-	// 	$db->pquery("update vtiger_gpmintent set contact_id = (select contactid from vtiger_contactscf AS A LEFT JOIN vtiger_crmentity AS B ON (A.contactid = B.crmid)  where A.cf_898 = ? AND B.deleted = 0  limit 1) where gpmintentid = ? ", array($erpNumber, $this->id));
-	// }
-
-
 	protected function addClientIdFromERPNumber()
 	{
 		$db = PearDatabase::getInstance();
@@ -168,7 +157,6 @@ class GPMIntent extends Vtiger_CRMEntity
 			[$contactId, $this->id]
 		);
 	}
-
 
 
 	function addIntroducer()

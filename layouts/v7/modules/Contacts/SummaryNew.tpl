@@ -161,7 +161,8 @@
 
                                     <!-- Type -->
                                     <td nowrap>
-                                        {$TX.description} - {$TX.voucher_type} - {$TX.table_name}
+                                        {$TX.description} 
+                                        {* - {$TX.voucher_type} - {$TX.table_name} *}
                                     </td>
 
                                     <!-- Amount -->

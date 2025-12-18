@@ -88,7 +88,8 @@
                             </tr>
                             <tr>
                                 <th>{vtranslate($INTENT->get('gpm_metal_type'),'MetalPrice')}</th>
-                                <td style="text-align:center">US$
+                                <td style="text-align:center">
+                                    {$INTENT_CURRENCY}
                                     {number_format($INTENT->get('indicative_spot_price'),2, '.', ',')} / Oz.
                             </tr>
                         </table>
@@ -106,7 +107,7 @@
                                 <th style="width:10%;">QTY</th>
                                 <th style="width:40%;">DESCRIPTION</th>
                                 <th style="width:10%;">PREMIUM / (DISCOUNT)</th>
-                                <th style="width:12%;text-align:center"> US$ / UNIT</th>
+                                <th style="width:12%;text-align:center"> {$INTENT_CURRENCY} / UNIT</th>
                                 <th style="width:8%;text-align:center">FINE WEIGHT</th>
                                 <th style="width:20%;text-align:center">TOTAL</th>
                             </tr>
@@ -153,14 +154,15 @@
                             {/foreach}
                             <tr>
                                 <th colspan="5">TOTAL QUOTE VALUE</th>
-                                <td style='text-align:right'><strong>US$
+                                <td style='text-align:right'><strong>
+                                        {$INTENT_CURRENCY}
                                         {number_format($INTENT->get('total_amount'),2)}</strong></td>
                             </tr>
-                            {if $INTENT->get('package_currency') neq 'USD'}
+                            {if $INTENT_CURRENCY neq 'USD'}
                                 <tr>
                                     <th style="width:75%;" colspan="5">TOTAL QUOTE VALUE IN
-                                        {$INTENT->get('package_currency')}: {if $INTENT->get('package_currency') eq 'EUR'}
-                                        (EUR/USD{else}(USD/{$INTENT->get('package_currency')}
+                                        {$INTENT_CURRENCY}: {if $INTENT_CURRENCY eq 'EUR'}
+                                        (EUR/USD{else}(USD/{$INTENT_CURRENCY}
                                         {/if} RATE
                                         {if $INTENT->get('fx_spot_price') eq 0 }{$INTENT->get('indicative_fx_spot')}{else}{$INTENT->get('fx_spot_price')}{/if}
                                         )</th>

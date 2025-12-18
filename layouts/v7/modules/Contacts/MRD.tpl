@@ -288,7 +288,7 @@
 
                                 {if $PAGES eq $page}
                                     <tr>
-                                        <th style="width:75%;" colspan="2">TOTAL QUANTITY:</th>
+                                        <th style="width:75%;" colspan="2">TOTAL FINE OZ:</th>
                                         <td style="text-align:right"><strong>{number_format($calcTotal,3)}</strong></td>
                                     </tr>
                                 {/if}

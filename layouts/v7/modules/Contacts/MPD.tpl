@@ -224,7 +224,7 @@
                             {/foreach}
 
                             <tr>
-                                <th colspan="2">TOTAL QUANTITY:</th>
+                                <th colspan="2">TOTAL FINE OZ:</th>
                                 <td style="text-align:right">
                                     <strong>{number_format($total_value,3)}</strong>
                                 </td>

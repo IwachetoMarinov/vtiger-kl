@@ -14,6 +14,7 @@ $languageStrings = [
     'SINGLE_GPMIntent' => 'Intent',
     'GPMIntent ID' => 'Intent ID',
     'Indicative Spot (USD)' => 'Indicative Spot',
+    'Indicative Spot USD' => 'Indicative Spot',
     'LBL_CUSTOM_INFORMATION' => 'Custom Information',
     'LBL_MODULEBLOCK_INFORMATION' => 'ModuleBlock Information',
     'ModuleFieldLabel' => 'ModuleFieldLabel Text',
