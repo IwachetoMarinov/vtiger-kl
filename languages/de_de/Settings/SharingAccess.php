@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'Accounts'                     => 'Organizations & Contacts'    , 
+	'Accounts'                     => 'Organisations & Contacts'    , 
 	'LBL_ADD_CUSTOM_RULE'          => 'erstelle benutzerdefinierte Regel', 
 	'Read Only'                    => 'R'                           , 
 	'Read Write'                   => 'R+W'                         , 
