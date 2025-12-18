@@ -186,7 +186,7 @@ $languageStrings = array(
 	'LBL_EXTERNAL_COMMENT_TOOTLTIP' => 'Customers might see this comment via notifications or customer portal',
 
 	//Translation for all modules
-	'Accounts' => 'Organizations',
+	'Accounts' => 'Organisations',
 	'Assets' => 'Assets',
 	'Calendar' => 'Calendar',
 	'Campaigns' => 'Campaigns',
@@ -1881,7 +1881,7 @@ $jsLanguageStrings = array(
 	'JS_TAB_RENAMED' => 'Renamed',
 	'JS_TAB_REORDERED' =>'Reordered',
 	//Convert Lead
-	'JS_CONVERT_LEAD_ERROR' => 'You have to enable either Organizations or Contacts module to convert the Lead.',
+	'JS_CONVERT_LEAD_ERROR' => 'You have to enable either Organisations or Contacts module to convert the Lead.',
 
 	'JS_CHECK_START_AND_END_DATE'=>'End Date & Time should be greater than or equal to Start Date & Time',
 	'JS_CHECK_START_AND_END_DATE_SHOULD_BE_GREATER'=> 'End Date & Time should be greater than Start Date & Time',

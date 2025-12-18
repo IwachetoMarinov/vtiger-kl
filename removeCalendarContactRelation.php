@@ -35,10 +35,6 @@ if ($calendarModule) {
 }
 
 
-exit;
-
-
-
 /**
  * Ensure DB column exists
  */
