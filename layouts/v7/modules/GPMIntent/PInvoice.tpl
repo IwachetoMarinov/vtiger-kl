@@ -100,9 +100,9 @@
                             <tr>
                                 <th>QTY</th>
                                 <th>DESCRIPTION</th>
-                                <th>US$ / UNIT</th>
+                                <th>{$INTENT_CURRENCY} / UNIT</th>
                                 <th>FINE OZ.</th>
-                                <th>TOTAL US</th>
+                                <th>TOTAL {$INTENT_CURRENCY}</th>
                             </tr>
 
                             {foreach item=PRODUCT key=cnt from=$RELATED_PRODUCTS}
@@ -131,19 +131,19 @@
 
                             <tr>
                                 <th colspan="4">TOTAL INVOICE AMOUNT</th>
-                                <td style="text-align:right"><strong>US$
+                                <td style="text-align:right"><strong>{$INTENT_CURRENCY}
                                         {number_format($INTENT->get('total_amount'),2)}</strong></td>
                             </tr>
 
-                            {if $INTENT->get('package_currency') ne 'USD'}
+                            {if $INTENT_CURRENCY neq 'USD'}
                                 <tr>
                                     <th colspan="4">
-                                        TOTAL INVOICE AMOUNT IN {$INTENT->get('package_currency')}
-                                        ({if $INTENT->get('package_currency') eq 'EUR'}EUR/USD{else}USD/{$INTENT->get('package_currency')}{/if}
+                                        TOTAL INVOICE AMOUNT IN {$INTENT_CURRENCY}
+                                        ({if $INTENT_CURRENCY eq 'EUR'}EUR/USD{else}USD/{$INTENT_CURRENCY}{/if}
                                         RATE
                                         {if $INTENT->get('fx_spot_price') eq 0}{$INTENT->get('indicative_fx_spot')}{else}{$INTENT->get('fx_spot_price')}{/if})
                                     </th>
-                                    <td style="text-align:right"><strong>{$INTENT->get('package_currency')}
+                                    <td style="text-align:right"><strong>{$INTENT_CURRENCY}
                                             {number_format($INTENT->get('total_foreign_amount'),2)}</strong></td>
                                 </tr>
                             {/if}

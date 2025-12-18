@@ -26,6 +26,8 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 
 		// ✅ Get Contact related to Intent
 		$contactId = $intent->get('contact_id');
+		$intent_currency = $intent->get('cf_1132');
+
 		if (empty($contactId)) throw new AppException("Intent has no related Contact ID.");
 
 		$recordModel = Vtiger_Record_Model::getInstanceById($contactId, 'Contacts');
@@ -81,6 +83,7 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RECORD_MODEL', $recordModel);
 		$viewer->assign('INTENT', $intent);
+		$viewer->assign('INTENT_CURRENCY', $intent_currency ?? "");
 		$viewer->assign('RELATED_PRODUCTS', $products);
 		$viewer->assign('DOWNLOAD_LINK', $downloadLink);
 		$viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);

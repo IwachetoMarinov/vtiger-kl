@@ -288,7 +288,7 @@
                                     <th style="width:40%;">DESCRIPTION</th>
                                     <th style="width:12.5%;text-align:center">FINE OZ.</th>
                                     <th style="width:12.5%;text-align:center">
-                                        PREMIUM(%)
+                                        {if $ERP_DOCUMENT->voucherType eq 'PUR'}DISCOUNT{else}PREMIUM{/if}(%)
                                         {* {if $ERP_DOCUMENT->barItems[0]->otherCharge < 0}DISCOUNT{else}PREMIUM{/if}(%) *}
                                     </th>
                                     <th style="width:25%;text-align:center">TOTAL {$ERP_DOCUMENT->currency}</th>
@@ -364,7 +364,7 @@
                             <div>
                                 {if isset($COMPANY)}
                                     If you have any questions concerning these transactions, please contact
-                                    {$COMPANY->get('company_name')} at <br>Tel: {$COMPANY->get('company_phone')} or by email:
+                                    <span style="font-weight: 600;">{$COMPANY->get('company_name')}</span> at <br>Tel: {$COMPANY->get('company_phone')} or by email:
                                     relationship@global-precious-metals.com.
                                 {/if}
                             </div>

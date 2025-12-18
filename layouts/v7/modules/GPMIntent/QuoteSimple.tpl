@@ -83,7 +83,7 @@
                             <tr>
                                 <th style="width:10%;">QTY</th>
                                 <th style="width:40%;">DESCRIPTION</th>
-                                <th style="width:12%;"> US$ / UNIT</th>
+                                <th style="width:12%;"> {$INTENT_CURRENCY} / UNIT</th>
                                 <th style="width:8%;text-align:center">FINE WEIGHT</th>
                                 <th style="width:20%;text-align:center">TOTAL</th>
                             </tr>
@@ -126,14 +126,14 @@
 
                             <tr>
                                 <th colspan="4">TOTAL QUOTE VALUE</th>
-                                <td style='text-align:right'><strong>US$
+                                <td style='text-align:right'><strong>{$INTENT_CURRENCY}
                                         {number_format($INTENT->get('total_amount'),2)}</strong></td>
                             </tr>
-                            {if $INTENT->get('package_currency') neq 'USD'}
+                            {if $INTENT_CURRENCY neq 'USD'}
                                 <tr>
-                                    <th style="width:75%;" colspan="4">TOTAL INVOICE AMOUNT IN
-                                        {$INTENT->get('package_currency')}: {if $INTENT->get('package_currency') eq 'EUR'}
-                                        (EUR/USD{else}(USD/{$INTENT->get('package_currency')}
+                                    <th style="width:75%;" colspan="5">TOTAL QUOTE VALUE IN
+                                        {$INTENT_CURRENCY}: {if $INTENT_CURRENCY eq 'EUR'}
+                                        (EUR/USD{else}(USD/{$INTENT_CURRENCY}
                                         {/if} RATE
                                         {if $INTENT->get('fx_spot_price') eq 0 }{$INTENT->get('indicative_fx_spot')}{else}{$INTENT->get('fx_spot_price')}{/if}
                                         )</th>

@@ -133,6 +133,14 @@
             text-align: left;
         }
 
+        .signed-item {
+            width: 30%;
+        }
+
+        .behalf-item {
+           flex: 1;
+        }
+
         table.activity-tbl th {
             background: #bca263;
         }
@@ -225,9 +233,9 @@
                                     <th style="width:33.33%; text-align:center;">ORDER</th>
                                 </tr>
                                 <tr>
-                                    <td style="height:18px;">{$smarty.request.docNo}</td>
-                                    <td style="height:18px;">{$RECORD_MODEL->get('cf_898')}</td>
-                                    <td style="height:18px;">COLLECTION</td>
+                                    <td style="height:18px; text-align:center;">{$smarty.request.docNo}</td>
+                                    <td style="height:18px; text-align:center;">{$RECORD_MODEL->get('cf_898')}</td>
+                                    <td style="height:18px; text-align:center;">COLLECTION</td>
                                 </tr>
                             </table>
                         </td>
@@ -239,7 +247,7 @@
 
                 <div style="margin-top: 5mm;">I/We hereby wish to collect the Stored Metal detailed below at the following
                     location:
-                    <p>{$location}</p>
+                    <p style="font-style: italic;font-weight: 600;">{$location}</p>
                 </div>
 
                 <table class="print-tbl" style="margin-top:5mm;">
@@ -275,8 +283,9 @@
 
                                 {if $PAGES eq $page}
                                     <tr>
-                                        <th style="width:75%;" colspan="2">TOTAL QUANTITY:</th>
-                                        <td style="text-align:right" colspan="2">
+                                        <th style="width:75%;" colspan="2">TOTAL FINE OZ:</th>
+                                        <td></td>
+                                        <td style="text-align:right;">
                                             <strong>{number_format($total_value,3)}</strong>
                                         </td>
                                     </tr>
@@ -335,25 +344,20 @@
                     executed and entered into by and between me/us and Global Precious Metals Pte. Ltd.</div>
 
                 <div style="margin-top: 5mm;" class="bottom-container">
-                    <div class="bottom-container-item">
-                        <span>Place: </span>
-                        {if isset($COMPANY)}
-                            <span>{$COMPANY->get('company_address')}</span>
-                        {/if}
-                    </div>
-                    <div class="bottom-container-item">
+                    <div class="signed-item"></div>
+                    <div class="behalf-item">
                         <span>Date: </span>
-                        <span>{$smarty.now|date_format:"%d-%m-%Y"}</span>
+                       <span>................................</span>
                     </div>
                 </div>
 
                 <div style="margin-top: 5mm;" class="bottom-container">
-                    <div class="bottom-container-item">
+                    <div class="signed-item">
                         <span>Signed by: </span>
                         <span style="font-style: italic;font-weight: bold;">{$RECORD_MODEL->get('firstname')}
                             {$RECORD_MODEL->get('lastname')}</span>
                     </div>
-                    <div class="bottom-container-item">
+                    <div class="behalf-item">
                         <span>On behalf of:</span>
                         <span style="font-weight: 700;">Global Precious Metals Pte Ltd</span>
                     </div>

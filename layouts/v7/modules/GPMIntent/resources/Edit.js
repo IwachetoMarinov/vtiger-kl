@@ -241,6 +241,7 @@ Vtiger_Edit_Js(
         parseFloat(exactSpotPrice) > 0 ? exactSpotPrice : indicativeSpotPrice;
 
       item_pre_disc = line.find(".item_premium").val();
+
       item_pre_disc_usd = line.find(".item_premium_usd").val();
 
       prem_disc = 0;
@@ -250,15 +251,31 @@ Vtiger_Edit_Js(
         prem_disc = 1 + item_pre_disc / 100;
       }
 
-      if (item_pre_disc_usd != 0) {
-        itemUSD =
-          itemTotalOz * currentSpotPrice + parseFloat(item_pre_disc_usd);
-      } else {
-        itemUSD = itemTotalOz * currentSpotPrice * prem_disc;
-        line
-          .find(".item_premium_usd")
-          .val(itemUSD - itemTotalOz * currentSpotPrice);
-      }
+      // if (+item_pre_disc_usd !== 0) {
+      //   console.log("item_pre_disc_usd is not zero");
+
+      //   itemUSD =
+      //     itemTotalOz * currentSpotPrice + parseFloat(item_pre_disc_usd);
+      // } else {
+      //   itemUSD = itemTotalOz * currentSpotPrice * prem_disc;
+
+      //   line
+      //     .find(".item_premium_usd")
+      //     .val(itemUSD - itemTotalOz * currentSpotPrice);
+      // }
+
+      var premiumPercent = parseFloat(item_pre_disc) || 0;
+      var premiumUsdField = line.find(".item_premium_usd");
+      var premiumUsd = parseFloat(premiumUsdField.val()) || 0;
+
+      // ALWAYS recompute from %
+      // USD field is DERIVED, not a switch
+      itemUSD = itemTotalOz * currentSpotPrice * prem_disc;
+
+      var calculatedPremiumUsd = itemUSD - itemTotalOz * currentSpotPrice;
+
+      // update USD premium every time
+      premiumUsdField.val(calculatedPremiumUsd.toFixed(6));
 
       line.find(".item_value_usd").val(itemUSD.toFixed(2));
     },
@@ -283,6 +300,7 @@ Vtiger_Edit_Js(
         ".item_metal, .item_qty, .item_premium, .item_premium_usd",
         function (e) {
           line = jQuery(e.currentTarget).closest("div.item_infromation_input");
+
           thisInstance.calculateTheCurrentLineItem(line);
           thisInstance.calculateTotal();
           thisInstance.calculateForeignValue();
