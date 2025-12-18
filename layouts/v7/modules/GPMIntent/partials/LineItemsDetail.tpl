@@ -21,8 +21,8 @@
                     <th class="lineItemBlockHeader">Quantity</th>
                     <th class="lineItemBlockHeader">Fine Oz</th>
                     <th class="lineItemBlockHeader">Premium (%)</th>
-                    <th class="lineItemBlockHeader">Premium (USD)</th>
-                    <th class="lineItemBlockHeader">Value (USD)</th>
+                    <th class="lineItemBlockHeader">Premium</th>
+                    <th class="lineItemBlockHeader">Value</th>
                 </tr>
             </thead>
 
@@ -81,16 +81,7 @@
                         </td>
                     </tr>
 
-                    <tr>
-                        <td colspan="5" style="text-align:center;font-size:10pt;font-weight:bold;">
-                            Total Amount (Foreign)
-                        </td>
-
-                        <td style="font-size:10pt;font-weight:bold;">
-                            {$RECORD->get('package_currency')}
-                            {$RECORD->get('total_foreign_amount')|number_format:2}
-                        </td>
-                    </tr>
+                  
                 {else}
                     <tr>
                         <td colspan="6" style="text-align:center;padding:20px;">
