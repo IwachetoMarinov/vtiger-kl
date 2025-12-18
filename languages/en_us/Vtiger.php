@@ -541,7 +541,7 @@ $languageStrings = array(
 	'LBL_PICKLIST' => 'Picklists',
 
 	// Added Common Keys for all modules
-	'Account Name' => 'Organization Name',
+	'Account Name' => 'Organisation Name',
 	'Add Comment' => 'Add Comment',
 	'Adjustment' => 'Adjustment',
 	'Annual Revenue' => 'Annual Revenue',
@@ -735,7 +735,7 @@ $languageStrings = array(
 	'LBL_VTIGER_CRM_HONEST_OPEN_SOURCE' => 'vtiger CRM On Demand',
 
 	//Translations used in inventory modules for sopy address
-	'SINGLE_Accounts' => 'Organization',
+	'SINGLE_Accounts' => 'Organisation',
 	'SINGLE_Contacts' => 'Contact',
 
 	//Weekdays in 3 letters translations
@@ -765,7 +765,7 @@ $languageStrings = array(
 	'Reminder Interval' => 'Popup Reminder Interval',
 
 	//Translations used in inventory modules for address
-	'SINGLE_Accounts' => 'Organization',
+	'SINGLE_Accounts' => 'Organisation',
 	'SINGLE_Contacts' => 'Contact',
 	'HelpDesk' => 'Tickets',
 	'LBL_TAG_CLOUD' => 'Tag Cloud',
@@ -895,7 +895,7 @@ $languageStrings = array(
 	'LBL_FULLSCREEN' => 'Full Screen',
 	'LBL_SETUP_WEBFORMS' => 'Setup Webforms',
 	'LBL_MODULE_DISABLED' => ' Module is disabled',
-	'Organization Name' => 'Organization Name',
+	'Organisation Name' => 'Organisation Name',
 	'LBL_SOCIAL_TWITTER_WIDGET' => 'Twitter Activity',
 	'LBL_WEEK' => 'Week',
 	//Convert Lead and Potential
@@ -1055,7 +1055,7 @@ $languageStrings = array(
 	'LBL_DEFAULT_REPLY_TO_INFO' => 'This setting is applicable only for direct emails from CRM. It doesn\'t affect emails sent from workflows, email campaigns, etc.', 
 	'search_in_all_fields'=>'Search in All fields',
 	'search_in_name_field'=>'Search in Name field',
-	'LBL_LOOKUP_SEARCH_MODE_INFO'=>'Ex: In Contact creation form, when you enter text in the organization name box this setting will control what fields in Organization are to be searched',
+	'LBL_LOOKUP_SEARCH_MODE_INFO'=>'Ex: In Contact creation form, when you enter text in the Organisation name box this setting will control what fields in Organisation are to be searched',
 
 	'VAT' => 'VAT',
 	'Sales' => 'Sales',
@@ -1070,11 +1070,11 @@ $languageStrings = array(
 	//Singular Modulenames
 	'SINGLE_Potentials' => 'Opportunity',
 	'SINGLE_HelpDesk' => 'Ticket',
-	'SINGLE_Accounts' => 'Organization',
+	'SINGLE_Accounts' => 'Organisation',
 	'SINGLE_Contacts' => 'Contact',
 	'SINGLE_Project' => 'Project',
 	'LBL_ROLLUP_COMMENTS_INFO' => "If Roll up is set to 'On' comments on related records will be shown. 
-								 For example, if you are viewing comments on an Organization record, comments added to related Contacts, Opportunities, Tickets, ..etc would also be displayed.",
+								 For example, if you are viewing comments on an Organisation record, comments added to related Contacts, Opportunities, Tickets, ..etc would also be displayed.",
 	'LBL_ROLLUP_COMMENTS' => "Rollup Comments",
 
 	//others
@@ -1290,7 +1290,7 @@ $languageStrings = array(
 	'LBL_START_GUIDED_TOUR' => 'Start Guided Tour',
 	'LBL_MENU' => 'Menu',
 	'LBL_EMAIL_DOMAIN_HELPTEXT'=>'Email Domain field will be used to match Cases and Contacts created from Emails. '
-	. 'For example, if a new support email comes from john@company.com, it would be linked to Organization that has '
+	. 'For example, if a new support email comes from john@company.com, it would be linked to Organisation that has '
 	. 'company.com in the Email domain field. Multiple domains should be separated by commas',
 
 	'LBL_SHARED_LIST_NON_ADMIN_MESSAGE' => 'This is a Shared list. Please contact your CRM Administrator to configure columns for All list',
@@ -1430,7 +1430,7 @@ $jsLanguageStrings = array(
 
 	'OVERWRITE_EXISTING_MSG1' => 'Overwrite the existing address with the selected ',
 	'OVERWRITE_EXISTING_MSG2' => 'address details?',
-	'SINGLE_Accounts' => 'Organization',
+	'SINGLE_Accounts' => 'Organisation',
 	'SINGLE_Contacts' => 'Contact',
 	'SINGLE_Project' => 'Project',
 	'SINGLE_ProjectMilestone' => 'Project Milestone',
@@ -1442,7 +1442,7 @@ $jsLanguageStrings = array(
 	'LBL_MASS_DELETE_CONFIRMATION' => 'Are you sure you want to delete the selected Records?',
 	'JS_LBL_SAVE' => 'Save',
 	'JS_LBL_CANCEL' => 'Cancel',
-	'JS_DUPLICTAE_CREATION_CONFIRMATION' => 'Organization Name already Exists.Do you want to create a duplicate record?',
+	'JS_DUPLICTAE_CREATION_CONFIRMATION' => 'Organisation Name already Exists.Do you want to create a duplicate record?',
 
 	'SHOULD_BE_LESS_THAN_TODAY' => 'Must occur before today',
 	'JS_PLEASE_SELECT_ATLEAST_ONE_OPTION' => 'Please select at least one option',
@@ -1518,9 +1518,9 @@ $jsLanguageStrings = array(
 	'NONE_OF_THE_FIELD_VALUES_ARE_CHANGED_IN_MASS_EDIT' => 'None of the field values are changed in Mass Edit',
 
 	//Notification messages for inventory module
-	'JS_PLEASE_SELECT_AN_ACCOUNT_TO_COPY_ADDRESS' => 'Please select an Organization to copy address',
+	'JS_PLEASE_SELECT_AN_ACCOUNT_TO_COPY_ADDRESS' => 'Please select an Organisation to copy address',
 	'JS_PLEASE_SELECT_AN_CONTACT_TO_COPY_ADDRESS' => 'Please select a Contact to copy address',
-	'JS_SELECTED_ACCOUNT_DOES_NOT_HAVE_AN_ADDRESS' => 'Selected Organization does not contain address to copy',
+	'JS_SELECTED_ACCOUNT_DOES_NOT_HAVE_AN_ADDRESS' => 'Selected Organisation does not contain address to copy',
 	'JS_SELECTED_CONTACT_DOES_NOT_HAVE_AN_ADDRESS' => 'Selected Contact does not contain address to copy',
 	'JS_PLEASE_ENTER_PRIMARY_EMAIL_VALUE_TO_ENABLE_PORTAL_USER' => 'Please enter Primary email address to enable portal user',
 	'JS_PRIMARY_EMAIL_FIELD_DOES_NOT_EXISTS' => 'Primary email field does not exist to enable portal user',
@@ -1945,7 +1945,7 @@ $jsLanguageStrings = array(
 	'JS_WIDGET_RESIZING_WAIT_MSG' => 'Widget contents will load after resizing.',
         'JS_COPIED_SUCCESSFULLY' => 'Copied successfully',
         'JS_ATLEAST_SELECT_ONE_FIELD' => 'At least one field should be selected',
-        'JS_RELATED_ACCOUNT_IS_NOT_AVAILABLE' => 'Related Organization record is not available',
+        'JS_RELATED_ACCOUNT_IS_NOT_AVAILABLE' => 'Related Organisation record is not available',
         'JS_RELATED_CONTACT_IS_NOT_AVAILABLE' => 'Related Contact record is not available',
         'JS_REPEAT_DATE_SHOULD_BE_GREATER_THAN_START_DATE' => 'Repeat date should be greater than or equal to Start Date',
         'JS_PASSWORD_NOT_STRONG' => 'To keep your data safe, we suggest that you use a strong password &lt;br&gt; &lt;ul&gt; &lt;li&gt;Password should be at least 8 characters long &lt;/li&gt; &lt;li&gt;Include at least one number &lt;/li&gt; &lt;li&gt;Include at least one lowercase alphabet &lt;/li&gt; &lt;li&gt;Include at least one uppercase alphabet &lt;/li&gt; &lt;li&gt;Include at least one special character in the password &lt;/li&gt; &lt;/ul&gt;',
