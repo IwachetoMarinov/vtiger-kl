@@ -11,26 +11,43 @@
 
 class GPMIntent_Detail_View extends Vtiger_Detail_View
 {
+	public function getDetailViewLinks($linkParams)
+	{
+		$links = parent::getDetailViewLinks($linkParams);
 
+		if (isset($links['DETAILVIEWTAB']) && is_array($links['DETAILVIEWTAB'])) {
+			foreach ($links['DETAILVIEWTAB'] as $index => $linkModel) {
+				if (
+					$linkModel instanceof Vtiger_Link_Model &&
+					$linkModel->get('linklabel') === 'LBL_SUMMARY'
+				) {
+					unset($links['DETAILVIEWTAB'][$index]);
+				}
+			}
+		}
 
+		return $links;
+	}
 
 	public function showModuleDetailView(Vtiger_Request $request)
 	{
 		$recordId = $request->get('record');
-		// $moduleName = $request->getModule();
 		$products = GPMIntent_Line_Model::getInstanceByIntent($recordId);
+
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RELATED_PRODUCTS', $products);
+
 		return parent::showModuleDetailView($request);
 	}
-	
+
 	public function showModuleBasicView(Vtiger_Request $request)
 	{
 		$recordId = $request->get('record');
-		// $moduleName = $request->getModule();
 		$products = GPMIntent_Line_Model::getInstanceByIntent($recordId);
+
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RELATED_PRODUCTS', $products);
+
 		return parent::showModuleBasicView($request);
 	}
 }
