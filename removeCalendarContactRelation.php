@@ -7,6 +7,9 @@ include_once 'config.inc.php';
 
 global $adb;
 
+$calendarModule = Vtiger_Module::getInstance('Calendar');
+$contactsModule = Vtiger_Module::getInstance('Contacts');
+
 
 if ($calendarModule && $contactsModule) {
     $calendarModule->unsetRelatedList(
@@ -31,6 +34,8 @@ if ($calendarModule) {
     echo "❌ Calendar module not found.";
 }
 
+
+exit;
 
 
 
