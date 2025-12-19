@@ -54,7 +54,7 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('OROSOFT_DOCTYPE', $docType);
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('COMPANY', $companyRecord);
-        $viewer->assign('PAGES', $this->makeDataPage($erpDoc->barItems, $docType));
+        $viewer->assign('PAGES', $this->makeDataPage($erpDoc->barItems));
         if ($request->get('PDFDownload')) {
             $html = $viewer->view("TC.tpl", $moduleName, true);
             $this->downloadPDF($html, $request);
@@ -63,7 +63,7 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         }
     }
 
-    function makeDataPage($transaction, $docType)
+    function makeDataPage($transaction)
     {
         $totalPage = 1;
         $recordCount = 26;

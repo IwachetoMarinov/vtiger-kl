@@ -57,8 +57,9 @@
 
                 <!-- Invoice header -->
                 <tr>
-                    <td style="height:10mm;text-decoration:underline;text-align:center"><strong>PROFORMA SALE
-                            INVOICE</strong></td>
+                    <td style="height:10mm;text-decoration:underline;text-align:center"><strong>
+                            PROFORMA SALE INVOICE
+                        </strong></td>
                 </tr>
 
                 {if isset($COMPANY) && $COMPANY->get('company_gst_no')}
@@ -72,10 +73,10 @@
                     <td style="text-align:right;font-size:9pt">
                         <table class="activity-tbl" style="margin-bottom:5mm;margin-top:5mm">
                             <tr>
-                                <th>INVOICE NO</th>
-                                <th>INVOICE DATE</th>
-                                <th>DELIVERY DATE</th>
-                                <th>ORDER</th>
+                                <th style="text-align: center;">INVOICE NO</th>
+                                <th style="text-align: center;">INVOICE DATE</th>
+                                <th style="text-align: center;">DELIVERY DATE</th>
+                                <th style="text-align: center;">ORDER</th>
                             </tr>
                             <tr>
                                 <td style="text-align:center">PI/{date('Y')}/{$INTENT->get('intent_no')}</td>
@@ -151,7 +152,7 @@
 
                         <!-- Remarks -->
                         {if isset($COMPANY) && $COMPANY->get('company_gst_no')}
-                            <div>
+                            <div style="margin-bottom: 2mm;">
                                 {if $INTENT && $INTENT->get('package_currency') eq 'SGD'}
                                     *Remarks: USD/SGD exchange rate at SGD {$INTENT->get('fx_spot_price')} / USD
                                 {else}

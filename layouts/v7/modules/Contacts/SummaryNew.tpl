@@ -138,6 +138,19 @@
                                                 </button>
                                             </a>
                                         </td>
+                                    {else if in_array($TX.voucher_type, ['DN', 'CN'])}
+                                        {assign var="button_name" value='DN'}
+                                        {if $TX.voucher_type eq 'CN'}
+                                            {assign var="button_name" value='CN'}
+                                        {/if}
+                                        <td>
+                                            <a href="index.php?module=Contacts&view=NotePrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
+                                                target="_blank">
+                                                <button type="button" class="btn btn-default module-buttons">
+                                                    <span class="fa fa-download"></span>&nbsp; {$button_name}
+                                                </button>
+                                            </a>
+                                        </td>
                                     {else}
                                         <td></td>
                                     {/if}
@@ -161,7 +174,7 @@
 
                                     <!-- Type -->
                                     <td nowrap>
-                                        {$TX.description} 
+                                        {$TX.description}
                                         {* - {$TX.voucher_type} - {$TX.table_name} *}
                                     </td>
 

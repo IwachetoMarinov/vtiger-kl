@@ -1,0 +1,143 @@
+<?php
+
+// ini_set('display_errors', 1); error_reporting(E_ALL);
+
+include_once 'dbo_db/ActivitySummary.php';
+include_once 'dbo_db/HoldingsDB.php';
+
+class Contacts_NotePrintPreview_View extends Vtiger_Index_View
+{
+
+    protected $record = null;
+
+    public function preProcess(Vtiger_Request $request, $display = false)
+    {
+        $recordId = $request->get('record');
+        $moduleName = $request->getModule();
+
+        // Getting model to reuse it in parent
+        if (!$this->record) $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
+    }
+
+
+    public function process(Vtiger_Request $request)
+    {
+        $docNo = $request->get('docNo');
+        $tableName = $request->get('tableName');
+        $moduleName = $request->getModule();
+        $recordModel = $this->record->getRecord();
+        $companyId = $recordModel->get('company_id');
+
+        $companyRecord = null;
+        $allBankAccounts = [];
+
+        if (!empty($companyId)) {
+            // ✅ Company record
+            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
+            // ✅ Bank accounts
+            $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($companyId);
+            $bankAccountId   = $request->get('bank');
+        }
+
+        $activity = new dbo_db\ActivitySummary();
+        $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);
+
+        $docType = $activity_data['voucherType'] ?? "";
+        $erpDoc = (object) $activity_data;
+        $template_name  = $docType  === 'CN' ? 'CNO' : 'DNO';
+
+        $bankAccountId = $request->get('bank');
+        if (empty($bankAccountId) && !empty($allBankAccounts)) {
+            $firstAccount  = reset($allBankAccounts);
+            $bankAccountId = $firstAccount->getId();
+        }
+
+        // ✅ Handle no bank accounts gracefully
+        if (empty($bankAccountId)) $bankAccountId = null;
+
+        $selectedBank = null;
+        if (!empty($bankAccountId)) $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
+
+        if (empty($selectedBank)) {
+            // fallback dummy object to prevent template fatal
+            $selectedBank = new Vtiger_Record_Model();
+            $selectedBank->set('beneficiary_name', '');
+            $selectedBank->set('account_no', '');
+            $selectedBank->set('account_currency', '');
+            $selectedBank->set('iban_no', '');
+            $selectedBank->set('bank_name', '');
+            $selectedBank->set('bank_address', '');
+            $selectedBank->set('swift_code', '');
+        }
+
+        $intent = false;
+        if (!empty($request->get('fromIntent'))) {
+            $intent = Vtiger_Record_Model::getInstanceById($request->get('fromIntent'), 'GPMIntent');
+        }
+
+        $viewer = $this->getViewer($request);
+        $viewer->assign('RECORD_MODEL', $recordModel);
+        $viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);
+        $viewer->assign('SELECTED_BANK', $selectedBank ?? null);
+        $viewer->assign('ERP_DOCUMENT', $this->processDoc($erpDoc));
+        $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
+        $viewer->assign('INTENT', $intent);
+        $viewer->assign('COMPANY', $companyRecord);
+        $viewer->assign('PAGES', $this->makeDataPage($erpDoc->barItems, $docType));
+        if ($request->get('PDFDownload')) {
+            $html = $viewer->view("$template_name.tpl", $moduleName, true);
+            $this->downloadPDF($html, $request, $template_name);
+        } else {
+            $viewer->view("$template_name.tpl", $moduleName);
+        }
+    }
+
+    function makeDataPage($transaction, $docType)
+    {
+        $totalPage = 1;
+        $recordCount = ($docType == 'SAL') ? 6 : 14;
+        if (count($transaction) > $recordCount) {
+            $totaldataAfterFirstPage = count($transaction) - $recordCount;
+            $totalPage = ceil($totaldataAfterFirstPage / $recordCount) + 1;
+        }
+        return $totalPage;
+    }
+
+    function processDoc($datas)
+    {
+        foreach ($datas->barItems as $key => $item) {
+            if ($item->quantity == 1) {
+                $serials = explode('-', $item->serials[0]);
+                $datas->barItems[$key]->serials[0] = $serials[0];
+            }
+        }
+        return $datas;
+    }
+
+    public function postProcess(Vtiger_Request $request) {}
+
+    function downloadPDF($html, Vtiger_Request $request, string $template_name)
+    {
+        global $root_directory;
+        $recordModel = $this->record->getRecord();
+        $clientID = $recordModel->get('cf_898');
+
+        $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . '-' . $template_name;
+        $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
+        fwrite($handle, $html);
+        fclose($handle);
+
+        exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $root_directory . "$fileName.html " . $root_directory . "$fileName.pdf");
+        unlink($root_directory . $fileName . '.html');
+
+        header("Content-type: application/pdf");
+        header("Cache-Control: private");
+        header("Content-Disposition: attachment; filename=$fileName.pdf");
+        header("Content-Description: Global Precious Metals CRM Data");
+        ob_clean();
+        flush();
+        readfile($root_directory . "$fileName.pdf");
+        unlink($root_directory . "$fileName.pdf");
+        exit;
+    }
+}

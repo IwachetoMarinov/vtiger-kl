@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>CREDIT NOTE {$smarty.request.docNo}</title>
+    <title>DEBIT NOTE {$smarty.request.docNo}</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -170,7 +170,7 @@
 </head>
 
 <body>
-    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+    {if $smarty.request.PDFDownload neq true}
         <script type="text/javascript" src="layouts/v7/lib/jquery/jquery.min.js"></script>
         <link type='text/css' rel='stylesheet' href='layouts/v7/lib/jquery/select2/select2.css'>
         <link type='text/css' rel='stylesheet' href='layouts/v7/lib/select2-bootstrap/select2-bootstrap.css'>
@@ -180,14 +180,37 @@
                 padding: 0;
                 overflow: hidden;
                 background-color: #333;">
-
-            {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
-                <li style="float:right">
-                    <a style="display: block;color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
-                        href="index.php?module=Contacts&view=NotePrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&tableName={$smarty.request.tableName}&PDFDownload=true&bank={$SELECTED_BANK->getId()}&hideCustomerInfo={$smarty.request.hideCustomerInfo}">Download</a>
-                </li>
-            {/if}
+            <li style="float:right">
+                <a style="display: block;color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
+                    href="index.php?module=Contacts&view=NotePrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&tableName={$smarty.request.tableName}&PDFDownload=true&bank={$SELECTED_BANK->getId()}&hideCustomerInfo={$smarty.request.hideCustomerInfo}">Download</a>
+            </li>
+            <li style="float: right;margin-top: 5px;margin-right: 5px;width: 198px;">
+                <select class="inputElement select2" name="bank_accounts" id="bank_accounts">
+                    <option value="">Select Bank Account</option>
+                    {foreach item=account from=$ALL_BANK_ACCOUNTS}
+                        <option {if $smarty.request.bank  eq $account->getId() } selected {/if} value="{$account->getId()}">
+                            {$account->get('bank_alias_name')}</option>
+                    {/foreach}
+                </select>
+            </li>
         </ul>
+        {literal}
+            <style>
+                .select2-container .select2-choice>.select2-chosen {
+                    width: 171px;
+                }
+            </style>
+            <script>
+                $(document).ready(function() {
+                    $('.select2').select2();
+                });
+                jQuery("body").on('change', '#bank_accounts', function(e) {
+                    var element = jQuery(e.currentTarget);
+                    var bankId = Number(element.val());
+                    window.location.replace(window.location.href.split('&bank=')[0] + '&bank=' + bankId);
+                });
+            </script>
+        {/literal}
     {/if}
     <div class="printAreaContainer">
         <div class="full-width">
@@ -198,48 +221,48 @@
                             style="max-height: 100%; float:right;width: 154px;">
                         <div style="font-size:11pt;margin-top: 14px;margin-bottom: 32px">
                             {$RECORD_MODEL->get('cf_898')}<br>
-                            {if !$HIDE_BP_INFO}
-                                {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
-                                {if !empty($RECORD_MODEL->get('cf_968'))} {$RECORD_MODEL->get('cf_968')}<br>{/if}
-                                {if !empty($RECORD_MODEL->get('mailingstreet'))}
-                                {$RECORD_MODEL->get('mailingstreet')}<br>{/if}
-                                {if !empty($RECORD_MODEL->get('cf_970'))} {$RECORD_MODEL->get('cf_970')}<br>{/if}
-                                {if empty($RECORD_MODEL->get('mailingpobox'))}
-                                    {if !empty($RECORD_MODEL->get('mailingcity')) && !empty($RECORD_MODEL->get('mailingzip')) }
-                                        {$RECORD_MODEL->get('mailingcity')} {$RECORD_MODEL->get('mailingzip')}<br>
-                                    {else if !empty($RECORD_MODEL->get('mailingcity'))}
-                                        {$RECORD_MODEL->get('mailingcity')}<br>
-                                    {else}
-                                        {$RECORD_MODEL->get('mailingzip')}<br>
-                                    {/if}
-                                    {$RECORD_MODEL->get('mailingcountry')}
+
+                            {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
+                            {if !empty($RECORD_MODEL->get('cf_968'))} {$RECORD_MODEL->get('cf_968')}<br>{/if}
+                            {if !empty($RECORD_MODEL->get('mailingstreet'))}
+                            {$RECORD_MODEL->get('mailingstreet')}<br>{/if}
+                            {if !empty($RECORD_MODEL->get('cf_970'))} {$RECORD_MODEL->get('cf_970')}<br>{/if}
+                            {if empty($RECORD_MODEL->get('mailingpobox'))}
+                                {if !empty($RECORD_MODEL->get('mailingcity')) && !empty($RECORD_MODEL->get('mailingzip')) }
+                                    {$RECORD_MODEL->get('mailingcity')} {$RECORD_MODEL->get('mailingzip')}<br>
+                                {else if !empty($RECORD_MODEL->get('mailingcity'))}
+                                    {$RECORD_MODEL->get('mailingcity')}<br>
                                 {else}
-                                    {if !empty($RECORD_MODEL->get('mailingcity'))}
-                                        P.O. Box {$RECORD_MODEL->get('mailingpobox')}, {$RECORD_MODEL->get('mailingcity')}<br>
-                                    {else}
-                                        P.O. Box {$RECORD_MODEL->get('mailingpobox')}<br>
-                                    {/if}
-                                    {if !empty($RECORD_MODEL->get('mailingstate'))}
-                                        {$RECORD_MODEL->get('mailingstate')}, {$RECORD_MODEL->get('mailingcountry')}
-                                    {else}
-                                        {$RECORD_MODEL->get('mailingcountry')}
-                                    {/if}
+                                    {$RECORD_MODEL->get('mailingzip')}<br>
+                                {/if}
+                                {$RECORD_MODEL->get('mailingcountry')}
+                            {else}
+                                {if !empty($RECORD_MODEL->get('mailingcity'))}
+                                    P.O. Box {$RECORD_MODEL->get('mailingpobox')}, {$RECORD_MODEL->get('mailingcity')}<br>
+                                {else}
+                                    P.O. Box {$RECORD_MODEL->get('mailingpobox')}<br>
+                                {/if}
+                                {if !empty($RECORD_MODEL->get('mailingstate'))}
+                                    {$RECORD_MODEL->get('mailingstate')}, {$RECORD_MODEL->get('mailingcountry')}
+                                {else}
+                                    {$RECORD_MODEL->get('mailingcountry')}
                                 {/if}
                             {/if}
+
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td style="height: 10mm; text-decoration: underline;text-align: center">
-                        <strong>CREDIT NOTE</strong>
+                        <strong>DEBIT NOTE</strong>
                     </td>
                 </tr>
                 <tr>
                     <td style="font-size: 9pt;vertical-align: top;">
-                        <table class="activity-tbl" style="margin-bottom:2mm;width:40%;margin-top:2mm;">
+                        <table class="activity-tbl" style="margin-bottom:1mm;width:40%;margin-top:2mm;">
                             <tr>
-                                <th style="text-align:center;width:50%">CREDIT NOTE NO</th>
-                                <th style="text-align:center;width:50%">DATE</th>
+                                <th style="text-align:center;width:50%;">DEBIT NOTE NO</th>
+                                <th style="text-align:center;width:50%;">DATE</th>
                             </tr>
                             <tr>
                                 <td style="text-align:center">{$smarty.request.docNo}</td>
@@ -261,16 +284,18 @@
                                 <th style="width:30%;text-align:center">TOTAL {$ERP_DOCUMENT->currency}</th>
                             </tr>
                             <tr>
-                                <td style="border-bottom:none;vertical-align: top;height: 30mm">
+                                <td style="height: 30mm;border-bottom:none;vertical-align: top">
                                     {$ERP_DOCUMENT->description}
                                 </td>
                                 <td style="text-align:right;vertical-align: top">
-                                    {CurrencyField::convertToUserFormat($ERP_DOCUMENT->grandTotal)}</td>
+                                    {CurrencyField::convertToUserFormat($ERP_DOCUMENT->grandTotal)}
+                                </td>
                             </tr>
                             <tr>
-                                <th>TOTAL CREDIT AMOUNT:</th>
+                                <th>TOTAL DEBIT AMOUNT:</th>
                                 <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
-                                        {CurrencyField::convertToUserFormat($ERP_DOCUMENT->grandTotal)}</strong>
+                                        {$ERP_DOCUMENT->grandTotal}
+                                    </strong>
                                 </td>
                             </tr>
                         </table>
@@ -280,6 +305,32 @@
                         <br>
                         <br>
                         <br>
+                        {if $SELECTED_BANK}
+                            <div>
+                                Please transfer the payment net of charges to our bank account:<br>
+                                Beneficiary: {$SELECTED_BANK->get('beneficiary_name')}<br>
+                                Account No: {$SELECTED_BANK->get('account_no')}
+                                {$SELECTED_BANK->get('account_currency')}<br>
+                                {if trim(count_chars(strtolower($SELECTED_BANK->get('iban_no')),3)) != 'x'}
+                                    IBAN: {$SELECTED_BANK->get('iban_no')}<br>
+                                {/if}
+                                Bank: {$SELECTED_BANK->get('bank_name')}<br>
+                                Bank Address: {$SELECTED_BANK->get('bank_address')}<br>
+                                Swift Code: {$SELECTED_BANK->get('swift_code')}<br>
+                                {if trim(count_chars(strtolower($SELECTED_BANK->get('bank_routing_no')),3)) == 'x'}
+                                    Bank Code: {$SELECTED_BANK->get('bank_code')}<br>
+                                    Branch Code: {$SELECTED_BANK->get('branch_code')}<br>
+                                {else}
+                                    Routing No: {$SELECTED_BANK->get('bank_routing_no')}<br>
+                                {/if}
+                                <br>
+                                <br>
+                                {if !empty($SELECTED_BANK->get('intermediary_bank'))}
+                                    Intermediary Bank: {$SELECTED_BANK->get('intermediary_bank')}<br>
+                                    Swift Code: {$SELECTED_BANK->get('intermediary_swift_code')}<br>
+                                {/if}
+                            </div>
+                        {/if}
                     </td>
                 </tr>
                 <tr>

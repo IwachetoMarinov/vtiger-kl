@@ -355,7 +355,7 @@
                                     <tr>
                                         <th style="width:75%;" colspan="4">TOTAL TRADE AMOUNT:</th>
                                         <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
-                                                {number_format(($ERP_DOCUMENT->grandTotal),2)} </strong>
+                                                {number_format(($calcTotal),2)} </strong>
                                         </td>
                                     </tr>
                                 {/if}
