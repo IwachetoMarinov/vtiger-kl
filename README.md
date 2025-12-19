@@ -135,6 +135,8 @@ Deploy in github with export/import database
 22. add git configs `git config user.name "IwachetoMarinov"`  and `git config user.email "ivailo.marinov@webrika.bg"`
 
 23. Add permissions to write in templates_c directory: `sudo chown -R www-data:www-data /var/www/html/test/templates_c` and `sudo chmod -R 775 /var/www/html/test/templates_c`
-     
 
+24. Move Intent, Assets and MetalPrices to ASSETS menu `UPDATE vtiger_app2tab SET appname = 'SALES' WHERE tabid IN (SELECT tabid FROM vtiger_tab WHERE name IN ('Assets', 'MetalPrice', 'GPMIntent'));`
+     
+25. To change any main menu name go to `languages/en_us/Vtiger.php` and find menu name
    

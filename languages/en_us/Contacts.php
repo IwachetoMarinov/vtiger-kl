@@ -9,10 +9,10 @@
  *************************************************************************************/
 $languageStrings = array(
 	// Basic Strings
-	'Contacts' => 'Contacts',
-	'SINGLE_Contacts' => 'Contact',
-	'LBL_ADD_RECORD' => 'Add Contact',
-	'LBL_RECORDS_LIST' => 'Contacts List',
+	'Contacts' => 'Clients',
+	'SINGLE_Contacts' => 'Client',
+	'LBL_ADD_RECORD' => 'Add Client',
+	'LBL_RECORDS_LIST' => 'Clients List',
 
 	// Blocks
 	'LBL_CONTACT_INFORMATION' => 'Basic Information',
@@ -45,11 +45,11 @@ $languageStrings = array(
 	'Other Zip' => 'Other Zip',
 	'Other Country' => 'Other Country',
 	'Other Po Box' => 'Other P.O. Box',
-	'Contact Image' => 'Contact Image',
+	'Contact Image' => 'Client Image',
 	'Other Phone' => 'Secondary Phone',
 	'Email' => 'Primary Email',
 	'Secondary Email' => 'Secondary Email',
-	'Contact Id' => 'Contact Id',
+	'Contact Id' => 'Client Id',
     'Support Start Date' => 'Support Start Date',
     'Support End Date'   => 'Support End Date',
 	
