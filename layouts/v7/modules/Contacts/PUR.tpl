@@ -195,6 +195,7 @@
 
     {assign var="start" value=0}
     {assign var="end" value=1}
+    {assign var="calcTotal" value=0}
     {for $page=1 to $PAGES}
         {if $page eq 1}
             {assign var="end" value=14}
@@ -292,6 +293,7 @@
                                     {/if}
                                     {* (metalPrice x pureOz) + othercharge *}
                                     {assign var="total" value=((($barItem->price)*($barItem->pureOz))+$barItem->otherCharge)}
+                                    {assign var="calcTotal" value=($calcTotal)+($total)}
 
                                     {if $loopStart eq count($ERP_DOCUMENT->barItems)}
                                         {break}
@@ -320,7 +322,7 @@
                                     <tr>
                                         <th style="width:75%;" colspan="4">TOTAL INVOICE AMOUNT:</th>
                                         <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
-                                                {CurrencyField::convertToUserFormat($ERP_DOCUMENT->grandTotal)}</strong>
+                                                {CurrencyField::convertToUserFormat($calcTotal)}</strong>
                                         </td>
                                     </tr>
                                     {if $INTENT}
