@@ -20,12 +20,13 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
 
     public function process(Vtiger_Request $request)
     {
-
-        $docNo = $request->get('docNo');
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
-        $tableName = $request->get('tableName');
+        $country_type = $request->get('countryOption');
+        $custom_country = $request->get('customCountry');
         $companyId = $recordModel->get('company_id');
+        // Client type
+        $client_type = $recordModel->get('cf_927');
 
         // Get all assets 
         // $assets = $this->getAssets();
@@ -36,20 +37,14 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         if (!empty($companyId))
             $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
 
-        if ($tableName !== null && $tableName !== '') {
-            $activity = new dbo_db\ActivitySummary();
-            $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);
-        } else {
-            $erpData = [];
-        }
-
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', 1);
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
-        $viewer->assign('ERP_DOCUMENT', $erpData);
-        // $viewer->assign('ERP_DOCUMENT', $erpData);
+        $viewer->assign('COUNTRY_OPTION', $country_type ?? null);
+        $viewer->assign('CUSTOM_COUNTRY', $custom_country ?? "");
+        $viewer->assign('CLIENT_TYPE', $client_type);
 
         // REQUEST VALUES PASSED BY CONTROLLER
         $viewer->assign('DOCNO', $request->get('docNo'));

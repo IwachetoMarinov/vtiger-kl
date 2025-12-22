@@ -405,7 +405,7 @@
             </div>
 
             <!-- SECTION 2 -->
-            <div class="section-title ">
+            <div class="section-title">
                 (a) <span class="bolder-element"> to purchase</span> in its name and on my/our behalf the following
                 physical precious
                 metals (Please indicate the quantity and type
@@ -640,10 +640,8 @@
                         Global Precious Metals Pte. Ltd.:</span>
                 </div>
 
-                <!-- BANK DETAILS -->
+                <!-- SIGNATURE SECTION -->
                 <div class="details-container">
-
-                    <!-- SIGNATURE SECTION -->
                     <div class="signature-section">
                         <div class="signature-section-item">
                             <div class="signature-section-left">Place: <span class="line"
@@ -682,8 +680,10 @@
                             <div class="signature-line">...............................................</div><br>
                             Signature
                         </div>
-
                     </div>
+                </div>
+
+            </div>
 
         </section>
     </div>
