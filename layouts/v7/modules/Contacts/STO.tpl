@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>STOCK TRANSFER ORDER</title>
+    <title>SHIPMENT & STORAGE ORDER</title>
     <meta charset="UTF-8">
 
     <style>
@@ -101,7 +101,7 @@
 
         /* Section 2 */
         .section-title {
-            margin: 2mm 0;
+            margin: 2mm 0 2mm 2mm;
         }
 
         /* Metals Table */
@@ -140,8 +140,23 @@
 
         /* Additional Sections */
         .additional-section {
-            margin: 3mm 0;
+            margin: 4mm 0;
             line-height: 1.4;
+        }
+
+        .country-options {
+            display: flex;
+            gap: 5mm;
+            margin-top: 2mm;
+            align-items: center;
+        }
+
+        input[type="checkbox"] {
+            width: 5mm;
+            height: 5mm;
+            vertical-align: middle;
+            margin-right: 1.5mm;
+            accent-color: #000;
         }
 
         .additional-section strong {
@@ -171,7 +186,21 @@
 
         /* Signature Section */
         .signature-section {
-            margin-top: 8mm;
+            margin-top: 2mm;
+        }
+
+        .signature-section-item {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4mm;
+        }
+
+        .signature-section-left {
+            width: 40%;
+        }
+
+        .signature-section-right {
+            width: 57%;
         }
 
         .signature-line {
@@ -231,6 +260,29 @@
         .details-container {
             padding: 0 4mm;
         }
+
+        .from-container-wrapper {
+            display: flex;
+        }
+
+        .custom-country {
+            display: flex;
+            align-items: center;
+            margin-top: 2mm;
+            gap: 2mm;
+        }
+
+        .custom-country-input {
+            border: none;
+            possition: relative;
+            padding-bottom: 1mm;
+            border-bottom: 1px solid #000;
+        }
+
+        /* Remove focus outline from custom country input */
+        .custom-country-input:focus {
+            outline: none;
+        }
     </style>
 </head>
 
@@ -238,7 +290,8 @@
     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
         <ul style="list-style-type:none;margin:0;padding:0;overflow:hidden;background-color:#333;">
             <li style="float:right">
-                <a style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
+                <a id="downloadBtn"
+                    style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
                     href="index.php?module=Contacts&view=SaleOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
                     Download
                 </a>
@@ -262,22 +315,66 @@
         <table class="header-table">
             <tr>
                 <td class="logo"></td>
-                <td class="title" style="text-decoration: underline;">STOCK TRANSFER ORDER</td>
+                <td class="title" style="text-decoration: underline;">SHIPMENT & STORAGE ORDER</td>
                 <td style="width:25mm;"></td>
             </tr>
         </table>
 
         <!-- FROM / TO SECTION -->
         <div class="company-data">
+            {* Left Column *}
             <div class="company-data-item company-data-item-from">
-                <div class="place-container from-container">
-                    <div><strong>From:</strong></div>
-                    <div style="min-height: 24mm;"></div>
+                <div class="from-container-wrapper">
+                    <div class="place-container from-container">
+                        <div><strong>From:</strong></div>
+                    </div>
+                    <div class="company-container" style="min-height: 24mm; padding:2mm;">
+                        <div>
+                            {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
+                        </div>
+
+                        <div>
+                            {if !empty($RECORD_MODEL->get('mailingstreet'))}
+                                {$RECORD_MODEL->get('mailingstreet')}<br>
+                            {/if}
+
+                            {if empty($RECORD_MODEL->get('mailingpobox'))}
+
+                                {if !empty($RECORD_MODEL->get('mailingcity')) && !empty($RECORD_MODEL->get('mailingzip'))}
+                                    {$RECORD_MODEL->get('mailingcity')} {$RECORD_MODEL->get('mailingzip')}<br>
+                                {elseif !empty($RECORD_MODEL->get('mailingcity'))}
+                                    {$RECORD_MODEL->get('mailingcity')}<br>
+                                {else}
+                                    {$RECORD_MODEL->get('mailingzip')}<br>
+                                {/if}
+
+                                {$RECORD_MODEL->get('mailingcountry')}
+
+                            {else}
+
+                                {if !empty($RECORD_MODEL->get('mailingcity'))}
+                                    P.O. Box {$RECORD_MODEL->get('mailingpobox')}, {$RECORD_MODEL->get('mailingcity')}<br>
+                                {else}
+                                    P.O. Box {$RECORD_MODEL->get('mailingpobox')}<br>
+                                {/if}
+
+                                {if !empty($RECORD_MODEL->get('mailingstate'))}
+                                    {$RECORD_MODEL->get('mailingstate')}, {$RECORD_MODEL->get('mailingcountry')}
+                                {else}
+                                    {$RECORD_MODEL->get('mailingcountry')}
+                                {/if}
+
+                            {/if}
+                        </div>
+                    </div>
                 </div>
                 <div class="number-container" style="padding-bottom: 6mm;">Customer number:
-                    <span>..............................................................</span>
+                    <span style="font-weight: 600;"> {$RECORD_MODEL->get('cf_898')}</span>
                 </div>
             </div>
+
+
+            {* Right column *}
             <div class="company-data-item company-data-item-to">
                 <div class="place-container"><strong>To:</strong></div>
                 <div class="company-container">
@@ -295,8 +392,9 @@
                     </div>
                     <div class="number-container">
                         {if isset($COMPANY)}
-                            {if !empty($COMPANY->get('company_fax'))} <p>Fax no:{$COMPANY->get('company_fax')}</p> {/if}
-                            <p>Email: {$COMPANY->get('company_website')}</p>
+                            {if !empty($COMPANY->get('company_fax'))} <p>Fax no: <span
+                                    style="font-style: italic;">{$COMPANY->get('company_fax')}</span> or</p> {/if}
+                            <p>Email:<span style="font-style: italic;"> {$COMPANY->get('company_website')}</span></p>
                         {/if}
                     </div>
                 </div>
@@ -306,14 +404,14 @@
         <!-- SECTION 1 -->
         <section class="main-table">
             <div class="additional-section bolder-element">
-                <strong>1.</strong> This Sale Order is subject to and governed by the terms and conditions of the
-                Customer Metal Agreement (CMA) executed and delivered by the undersigned.
+                1. I/We hereby instruct GPM:
             </div>
 
-            <!-- SECTION 2 -->
-            <div class="section-title bolder-element">
-                <strong>2.</strong> I/We hereby wish to sell to Global Precious Metals Pte. Ltd. (GPM) the following
-                precious metals:
+
+            <div class="section-title">
+                (a) <span class="bolder-element"> to ship</span> in its name and on my/our behalf the following physical
+                precious metals (please indicate the quantity of bars in the
+                relevant box):
             </div>
 
             <!-- METALS TABLE -->
@@ -359,84 +457,187 @@
 
             <!-- SERIALS BOX -->
             <div class="serials-box">
-                If applicable, please specify the serial numbers of the items to be sold:
+                Description of the precious metals <span style="font-style: italic;">(Please specify type, refiner,
+                    serial numbers, fineness):</span>
                 <div style="margin-top: 2mm;">
                     .............................................................................................................................................................................
                 </div>
             </div>
 
             <!-- SECTION 3 -->
-            <div class="additional-section">
-                If the metal to be sold is not currently in storage with GPM, please specify the
-                exact pack up location and the details of the person authorised to release the metal to GPM (if
-                applicable, IC/Passport number):
+            <div class="additional-section" style="margin-left:2mm;">
                 <div style="margin-top:2mm;">
-                    Pick-up lication:
-                    <span>................................................................................................................................</span>
+                    From <span style="font-style: italic;">(Please specify pick-up location):</span>
+                    .........................................................................................................
+                    <span
+                        style="display: inline-block; margin-top:2mm;">.............................................................................................................................................................................</span>
                 </div>
 
                 <div style="margin-top:2mm;">
-                    <span>Authorized person: Full name:</span>
-                    <span>..................................................................... </span>
-                    <span> IC/Passport No:</span>
-                    <span>..............</span>
+                    To <span style="font-style: italic;">(Please specify delivery location):</span>
+                    .............................................................................................................
+                    <span
+                        style="display: inline-block; margin-top:2mm;">.............................................................................................................................................................................</span>
+                </div>
+
+                <div style="margin-top:2mm;">
+                    (b) <span class="bolder-element">and thereafter to store the above precious metal in a segregated
+                        storage in:</span>
+                    <div class="country-options">
+                        <div>
+                            {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                                <input class="country-checkbox" type="checkbox" name="1"> Singapore
+                            {else}
+                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 1}
+                                    <span
+                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                                {/if}
+                            {/if}
+                        </div>
+                        <div>
+                            {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                                <input class="country-checkbox" type="checkbox" name="2"> Switzerland
+                            {else}
+                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 2}
+                                    <span
+                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                                {/if}
+                            {/if}
+                        </div>
+                        <div>
+                            {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                                <input class="country-checkbox" type="checkbox" name="3"> Hong Kong
+                            {else}
+                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 3}
+                                    <span
+                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                                {/if}
+                            {/if}
+                        </div>
+                    </div>
+
+                    <div>
+                        <div>
+                            {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                                <div class="custom-country">
+                                    <input class="country-checkbox" type="checkbox" name="4">
+                                    <div>
+                                        Other country or precision (Please specify):
+                                        <input type="text" class="custom-country-input" value="{$CUSTOM_COUNTRY|default:''}"
+                                            style="width:60mm; margin-left:2mm;" />
+                                    </div>
+                                </div>
+                            {else}
+                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 4}
+                                    <span
+                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                                {/if}
+                            {/if}
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- SECTION 4 -->
-            <div class="additional-section bolder-element">
-                <strong>3.</strong> I/We acknowledge that:
-                <div class="indent">
-                    - GPM shall quote a sale price, which is to be agreed and confirmed in writing (e.g. email, telafax)
-                    to GPM.
-                </div>
-                <div class="indent">
-                    - In the absence of the above written confirmation within 10 Business Days from the date hereof,
-                    this Sale Order shall be null and void.
+            <!-- SECTION 2 -->
+            <div class="additional-section ">
+                <div style="margin-bottom:2mm;" class="bolder-element">
+                    2. I/We agree that: (1) the above shipment will be effected by GPM after the Shipment Fee has been
+                    agreed by and between me/us; and (2) GPM will serve me/us an invoice for the payment of the Storage
+                    Fees upon delivery of the above bullion at the elected storage location (if applicable).
                 </div>
             </div>
 
-            <!-- SECTION 5 -->
-            <div class="additional-section bolder-element">
-                <strong>4.</strong> The sales proceeds agreed upon shall be transferred to my/our bank account:
-            </div>
+            <!-- SECTION 3 -->
+            <div class="additional-section ">
+                <div style="margin-bottom:2mm;" class="bolder-element">
+                    3. I/We make the payment of the above Purchase Amount:
+                </div>
 
-            <!-- BANK DETAILS -->
-            <div class="details-container">
-                <div class="bank-details">
-                    <div class="bank-row">
-                        Bank Name: <span
-                            class="long-line">...........................................................................................................................................</span>
-                    </div>
-                    <div class="bank-row">
-                        Bank Address: <span
-                            class="long-line">........................................................................................................................................</span>
-                    </div>
-                    <div class="bank-row">
-                        Swift Code: <span
-                            class="line">.....................................................................</span>
-                        &nbsp;&nbsp;&nbsp;
-                        Swift Code: <span class="line">...............................................</span>
-                    </div>
-                    <div class="bank-row">
-                        Account No: <span
-                            class="line">...................................................................</span>
-                        &nbsp;&nbsp;&nbsp;
-                        Account Currency: <span class="line">...................................</span>
+                <div style="margin-left: 2mm;">
+                    <p class="bolder-element">(a) from the following jurisdiction:</p>
+                    <div style="margin-left: 5mm; margin-top:2mm; font-weight: normal;">
+                        Country:
+                        .........................................................................................................................................................
                     </div>
                 </div>
 
-                <!-- SIGNATURE SECTION -->
+                <div style="margin-left: 2mm; margin-top:2mm;">
+                    <p>(b) to <span class="bolder-element">GPM’s bank account</span> as follows:</p>
+                    <!-- BANK DETAILS -->
+                    <div class="details-container">
+                        <div class="bank-details">
+                            <div class="bank-row">
+                                Bank Name: <span
+                                    class="long-line">...........................................................................................................................................</span>
+                            </div>
+                            <div class="bank-row">
+                                Bank Address: <span
+                                    class="long-line">........................................................................................................................................</span>
+                            </div>
+                            <div class="bank-row">
+                                Swift Code: <span
+                                    class="line">.....................................................................</span>
+                                &nbsp;&nbsp;&nbsp;
+                                Swift Code: <span class="line">...............................................</span>
+                            </div>
+                            <div class="bank-row">
+                                Account No: <span
+                                    class="line">...................................................................</span>
+                                &nbsp;&nbsp;&nbsp;
+                                Account Currency: <span class="line">...................................</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- SECTION 2 -->
+            <div class="additional-section ">
+                <div style="margin-bottom:2mm;" class="bolder-element">
+                    4. This Shipment & Storage Order and any agreement with GPM resulting therefrom shall be subject to
+                    and governed by the terms and conditions of the Customer Metal Agreement executed and entered into
+                    by and between me/us and Global Precious Metals Pte. Ltd.
+                </div>
+            </div>
+
+            <!-- SIGNATURE SECTION -->
+            <div class="details-container" style="margin-left: 2mm;">
                 <div class="signature-section">
-                    Place: <span
-                        class="line">..............................................................................</span>
-                    &nbsp;&nbsp;&nbsp;
-                    Date: ......../......../20.......
-                    <br><br>
-                    Signed by: <span
-                        class="long-line">.......................................................................</span>
-                    &nbsp;&nbsp;&nbsp;
-                    On behalf of: <span class="line">................................</span>
+                    <div class="signature-section-item">
+                        <div class="signature-section-left">Place: <span class="line"
+                                style="font-style: italic;">{$RECORD_MODEL->get('mailingcountry')}</span></div>
+                        <div class="signature-section-right">
+                            {* Today date *}
+                            Date: <span class="line">{$smarty.now|date_format:"%m/%d/%Y"}
+                            </span>
+                        </div>
+                    </div>
+
+                    {assign var="ON_BEHALF_OF" value=""}
+                    {assign var="SIGNED_BY" value=""}
+
+                    {if isset($CLIENT_TYPE) }
+
+                        {if $CLIENT_TYPE == 'Corporate Entity' || $CLIENT_TYPE == 'Trust'  || $CLIENT_TYPE == 'Foundation' }
+                            {assign var="ON_BEHALF_OF" value="{$RECORD_MODEL->get('lastname')}"}
+
+                        {else if $CLIENT_TYPE == 'Individual' || $CLIENT_TYPE == 'Sole Proprietor' }
+                            {assign var="SIGNED_BY" value="{$RECORD_MODEL->get('firstname')}
+                    {$RECORD_MODEL->get('lastname')}"}
+                        {/if}
+
+                    {/if}
+
+                    <div class="signature-section-item">
+                        <div class="signature-section-left">
+                            Signed by: <span class="long-line" style="font-style: italic;">
+                                {$SIGNED_BY}</span>
+                        </div>
+                        <div class="signature-section-right">
+                            On behalf of: <span class="line">{$ON_BEHALF_OF}</span>
+                        </div>
+                    </div>
 
                     <div style="margin-top:10mm;">
                         <div class="signature-line">...............................................</div><br>
@@ -445,10 +646,56 @@
                 </div>
             </div>
 
+
         </section>
     </div>
 
+    <script>
+        const checkboxes = document.querySelectorAll('.country-checkbox');
 
+        if (checkboxes?.length) {
+            checkboxes.forEach(function(checkbox) {
+                checkbox.addEventListener('click', function(e) {
+                    const name = e.target?.getAttribute('name');
+
+                    const customInput = document.querySelector('.custom-country-input');
+
+                    if (name == '4') {
+                        if (customInput) customInput.focus();
+                    } else {
+                        if (customInput) customInput.value = '';
+                    }
+
+                    // Remove checked state from other checkboxes
+                    checkboxes.forEach(function(box) {
+                        if (box !== e.target) box.checked = false;
+                    });
+                });
+            });
+        }
+
+
+        document.getElementById('downloadBtn').addEventListener('click', function(e) {
+
+            const checked = document.querySelector('input.country-checkbox:checked');
+
+            const countryType = checked ? checked.getAttribute('name') : null;
+
+            const customInput = document.querySelector('.custom-country-input');
+
+            const url = new URL(this.href);
+
+            if (countryType) {
+                url.searchParams.set('countryOption', countryType);
+
+                if (countryType == '4' && customInput) {
+                    url.searchParams.set('customCountry', customInput.value || '');
+                }
+            }
+
+            this.href = url.toString();
+        });
+    </script>
 </body>
 
 </html>
