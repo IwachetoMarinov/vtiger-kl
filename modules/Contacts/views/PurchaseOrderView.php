@@ -50,11 +50,6 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $selectedBank = null;
         if (!empty($bankAccountId)) $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
 
-        // echo '<pre>';
-        // echo 'Selected Bank Account: ';
-        // var_dump($client_type);
-        // echo '</pre>';
-
         $viewer = $this->getViewer($request);
         $viewer->assign('PRICING_OPTION', $pricingOption);
         $viewer->assign('CLIENT_TYPE', $client_type);

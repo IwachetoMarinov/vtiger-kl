@@ -52,17 +52,9 @@ class MetalsCron
         // Run as admin
         $current_user = Users::getActiveAdminUser();
         $metals = $this->fetchMetals();
+
         // Fetch metals for a specific date
-        // $metals = $this->fetchMetals('2025-11-18');
-
         $unique_metals = $this->getUniqueMetals($metals, "USD");
-
-        echo "Fetched Metals: " . count($metals) . PHP_EOL;
-        // echo '<pre>';
-        // var_dump($metals);
-        // echo '</pre>';
-
-        // $this->updateOrInsertMetals($unique_metals, $current_user);
 
         $this->addMetalPrice($unique_metals, $current_user);
 
@@ -199,10 +191,6 @@ class MetalsCron
     protected function addExchangeRates(array $unique_metals, $current_user): void
     {
         global $adb;
-
-        echo '<pre>';
-        var_dump($unique_metals);
-        echo '</pre>';
 
         return;
 

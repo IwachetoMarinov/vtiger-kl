@@ -10,11 +10,6 @@ class MASForex_Record_Model extends Vtiger_Record_Model
         $metalsAPI = new MetalsAPI();
         $data = $metalsAPI->getLatestExchangeRate($date);
 
-        // echo '<pre>';
-        // echo 'Exchange Rate Data: ';
-        // var_dump($data);
-        // echo '</pre>';
-
         $result = [];
 
         foreach ($data as $row) {
