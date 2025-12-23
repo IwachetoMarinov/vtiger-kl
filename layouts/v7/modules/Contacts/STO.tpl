@@ -184,6 +184,11 @@
             margin-bottom: 1.5mm;
         }
 
+        .bank-row-flex {
+            display: flex;
+            justify-content: space-between;
+        }
+
         /* Signature Section */
         .signature-section {
             margin-top: 2mm;
@@ -279,6 +284,15 @@
             border-bottom: 1px solid #000;
         }
 
+        .bank-row-codes {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bank-half-item {
+            width: 48%;
+        }
+
         /* Remove focus outline from custom country input */
         .custom-country-input:focus {
             outline: none;
@@ -288,15 +302,55 @@
 
 <body>
     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+
+        {assign var=selected_bank value=""}
+
+        {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
+            {assign var=selected_bank value=$SELECTED_BANK->getId()}
+        {/if}
+
+        <script type="text/javascript" src="layouts/v7/lib/jquery/jquery.min.js"></script>
+        <link type='text/css' rel='stylesheet' href='layouts/v7/lib/jquery/select2/select2.css'>
+        <link type='text/css' rel='stylesheet' href='layouts/v7/lib/select2-bootstrap/select2-bootstrap.css'>
+        <script type="text/javascript" src="layouts/v7/lib/jquery/select2/select2.min.js"></script>
+
         <ul style="list-style-type:none;margin:0;padding:0;overflow:hidden;background-color:#333;">
             <li style="float:right">
                 <a id="downloadBtn"
                     style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
-                    href="index.php?module=Contacts&view=StockTransferOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
+                    href="index.php?module=Contacts&view=StockTransferOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&bank={$selected_bank}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
                     Download
                 </a>
             </li>
+
+            <li style="float: right;margin-top: 5px;margin-right: 5px;width: 198px;">
+                <select class="inputElement select2" name="bank_accounts" id="bank_accounts">
+                    <option value="">Select Bank Account</option>
+                    {foreach item=account from=$ALL_BANK_ACCOUNTS}
+                        <option {if $smarty.request.bank  eq $account->getId() } selected {/if} value="{$account->getId()}">
+                            {$account->get('bank_alias_name')}</option>
+                    {/foreach}
+                </select>
+            </li>
         </ul>
+
+        {literal}
+            <style>
+                .select2-container .select2-choice>.select2-chosen {
+                    width: 171px;
+                }
+            </style>
+            <script>
+                $(document).ready(function() {
+                    $('.select2').select2();
+                });
+                jQuery("body").on('change', '#bank_accounts', function(e) {
+                    var element = jQuery(e.currentTarget);
+                    var bankId = Number(element.val());
+                    window.location.replace(window.location.href.split('&bank=')[0] + '&bank=' + bankId);
+                });
+            </script>
+        {/literal}
     {/if}
 
     <div class="printAreaContainer">
@@ -485,6 +539,7 @@
                         storage in:</span>
                     <div class="country-options">
                         <div>
+
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="1"> Singapore
                             {else}
@@ -571,24 +626,67 @@
                     <div class="details-container">
                         <div class="bank-details">
                             <div class="bank-row">
-                                Bank Name: <span
-                                    class="long-line">...........................................................................................................................................</span>
+                                Bank Name: <span style="font-style: italic;">
+                                    {if isset($SELECTED_BANK)}
+                                        {$SELECTED_BANK->get('bank_name')}
+                                    {/if}
+                                </span>
                             </div>
                             <div class="bank-row">
-                                Bank Address: <span
-                                    class="long-line">........................................................................................................................................</span>
+                                Bank Address: <span style="font-style: italic;">
+                                    {if isset($SELECTED_BANK)}
+                                        {$SELECTED_BANK->get('bank_address')}
+                                    {/if}
+                                </span>
                             </div>
-                            <div class="bank-row">
-                                Swift Code: <span
-                                    class="line">.....................................................................</span>
-                                &nbsp;&nbsp;&nbsp;
-                                Swift Code: <span class="line">...............................................</span>
+                            <div class="bank-row bank-row-codes">
+                                <p>
+                                    Bank Code: <span style="font-style: italic;">
+                                        {if isset($SELECTED_BANK)}
+                                            {$SELECTED_BANK->get('bank_code')}
+                                        {/if}
+                                    </span></p>
+                                <p>
+                                    Branch Code: <span style="font-style: italic;">
+                                        {if isset($SELECTED_BANK)}
+                                            {$SELECTED_BANK->get('branch_code')}
+                                        {/if}
+                                    </span></p>
+                                <p> Swift Code: <span style="font-style: italic;"> {if isset($SELECTED_BANK)}
+                                            {$SELECTED_BANK->get('swift_code')}
+                                        {/if}
+                                    </span></p>
                             </div>
-                            <div class="bank-row">
-                                Account No: <span
-                                    class="line">...................................................................</span>
-                                &nbsp;&nbsp;&nbsp;
-                                Account Currency: <span class="line">...................................</span>
+
+                            <div class="bank-row bank-row-flex">
+                                <p class="bank-half-item">
+                                    Account No: <span style="font-style: italic;"> {if isset($SELECTED_BANK)}
+                                            {$SELECTED_BANK->get('account_no')}
+                                        {/if}
+                                    </span>
+                                </p>
+                                <p class="bank-half-item">
+                                    Name of Account Holder: <span style="font-style: italic;">
+                                        {if isset($SELECTED_BANK)}
+                                            {$SELECTED_BANK->get('account_holder_name')}
+                                        {/if}
+                                    </span>
+                                </p>
+                            </div>
+
+                            <div class="bank-row bank-row-flex">
+                                <p class="bank-half-item">
+                                    Intermediary Bank:: <span style="font-style: italic;"> {if isset($SELECTED_BANK)}
+                                            {$SELECTED_BANK->get('intermediary_bank')}
+                                        {/if}
+                                    </span>
+                                </p>
+                                <p class="bank-half-item">
+                                    Swift Code:: <span style="font-style: italic;"> {if isset($SELECTED_BANK)}
+                                            {$SELECTED_BANK->get('intermediary_swift_code')}
+                                        {/if}
+                                    </span>
+                                </p>
                             </div>
                         </div>
                     </div>

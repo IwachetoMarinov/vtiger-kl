@@ -27,6 +27,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         $companyId = $recordModel->get('company_id');
         // Client type
         $client_type = $recordModel->get('cf_927');
+        $allBankAccounts = [];
 
         // Get all assets 
         // $assets = $this->getAssets();
@@ -34,17 +35,49 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
 
         $companyRecord = null;
 
-        if (!empty($companyId))
+        if (!empty($companyId)) {
+            // ✅ Company record
             $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
+            // ✅ Bank accounts
+            $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($companyId);
+            $bankAccountId   = $request->get('bank');
+        }
+
+        $bankAccountId = $request->get('bank');
+        if (empty($bankAccountId) && !empty($allBankAccounts)) {
+            $firstAccount  = reset($allBankAccounts);
+            $bankAccountId = $firstAccount->getId();
+        }
+
+
+        // ✅ Handle no bank accounts gracefully
+        if (empty($bankAccountId)) $bankAccountId = null;
+
+        $selectedBank = null;
+        if (!empty($bankAccountId)) $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
+
+        if (empty($selectedBank)) {
+            // fallback dummy object to prevent template fatal
+            $selectedBank = new Vtiger_Record_Model();
+            $selectedBank->set('beneficiary_name', '');
+            $selectedBank->set('account_no', '');
+            $selectedBank->set('account_currency', '');
+            $selectedBank->set('iban_no', '');
+            $selectedBank->set('bank_name', '');
+            $selectedBank->set('bank_address', '');
+            $selectedBank->set('swift_code', '');
+        }
 
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', 1);
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
+        $viewer->assign('CLIENT_TYPE', $client_type);
         $viewer->assign('COUNTRY_OPTION', $country_type ?? null);
         $viewer->assign('CUSTOM_COUNTRY', $custom_country ?? "");
-        $viewer->assign('CLIENT_TYPE', $client_type);
+        $viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);
+        $viewer->assign('SELECTED_BANK', $selectedBank ?? null);
 
         // REQUEST VALUES PASSED BY CONTROLLER
         $viewer->assign('DOCNO', $request->get('docNo'));
