@@ -39,12 +39,6 @@ class ActivitySummary
 
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
-        echo '<pre>';
-        echo 'Activity Summary SQL: ' . $sql . PHP_EOL;
-        echo 'Summary: ';
-        var_dump($summary);
-        echo '</pre>';
-
         $results  = [];
         foreach ($summary as $item) {
             $results[] = [
