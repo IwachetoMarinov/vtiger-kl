@@ -491,6 +491,7 @@
                                 {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 1}
                                     <span
                                         style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                                    <span style="display: inline-block; margin-left:2mm;">Singapore</span>
                                 {/if}
                             {/if}
                         </div>
@@ -501,6 +502,7 @@
                                 {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 2}
                                     <span
                                         style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                                    <span style="display: inline-block; margin-left:2mm;">Switzerland</span>
                                 {/if}
                             {/if}
                         </div>
@@ -511,6 +513,7 @@
                                 {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 3}
                                     <span
                                         style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                                    <span style="display: inline-block; margin-left:2mm;">Hong Kong</span>
                                 {/if}
                             {/if}
                         </div>
@@ -531,6 +534,7 @@
                                 {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 4}
                                     <span
                                         style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                                    <span style="display: inline-block; margin-left:2mm;">{$CUSTOM_COUNTRY|default:''}</span>
                                 {/if}
                             {/if}
                         </div>
