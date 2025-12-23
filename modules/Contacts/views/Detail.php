@@ -61,6 +61,11 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$activity = new dbo_db\ActivitySummary();
 		$activity_data = $activity->getActivitySummary($clientID);
 
+		echo '<pre>';
+		echo 'Fetched Activity Summary Data: ';
+		var_dump($activity_data);
+		echo '</pre>';
+
 		$holdings = new dbo_db\HoldingsDB();
 		$holdings_data = $holdings->getHoldings($clientID);
 
