@@ -38,6 +38,7 @@
             height: 297mm;
             margin: auto;
             padding: 8mm 10mm;
+            padding-top: 3mm;
         }
 
         /* Header */
@@ -356,7 +357,7 @@
     <div class="printAreaContainer">
 
         <!-- HEADER -->
-        <table class="header-table">
+        <table>
             <tr>
                 <td class="logo">
                     <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
@@ -741,7 +742,7 @@
                         </div>
                     </div>
 
-                    <div style="margin-top:10mm;">
+                    <div style="margin-top:6mm;">
                         <div class="signature-line">...............................................</div><br>
                         Signature
                     </div>
