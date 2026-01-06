@@ -30,7 +30,13 @@
 
         body {
             font-family: 'Open Sans';
-            font-size: 11pt;
+            font-size: 9pt;
+            color: #666;
+        }
+
+        #downloadBtn,
+        .select2-container {
+            font-size: 12pt;
         }
 
         .printAreaContainer {
@@ -176,20 +182,6 @@
             display: inline-block;
         }
 
-        /* Bank Details Section */
-        .bank-details {
-            margin: 2mm 0;
-        }
-
-        .bank-row {
-            margin-bottom: 1.5mm;
-        }
-
-        .bank-row-flex {
-            display: flex;
-            justify-content: space-between;
-        }
-
         /* Signature Section */
         .signature-section {
             margin-top: 2mm;
@@ -255,7 +247,7 @@
 
         .main-table {
             border: 1px solid #000;
-            margin-top: 5mm;
+            margin-top: 3.5mm;
             padding: 3.5mm 2mm;
         }
 
@@ -283,11 +275,6 @@
             possition: relative;
             padding-bottom: 1mm;
             border-bottom: 1px solid #000;
-        }
-
-        .bank-row-codes {
-            display: flex;
-            justify-content: space-between;
         }
 
         .bank-half-item {
@@ -458,7 +445,7 @@
 
         <!-- SECTION 1 -->
         <section class="main-table">
-            <div class="additional-section bolder-element">
+            <div class="additional-section bolder-element" style="margin-top: 0mm;">
                 1. I/We hereby instruct GPM:
             </div>
 
@@ -624,72 +611,40 @@
                 <div style="margin-left: 2mm; margin-top:2mm;">
                     <p>(b) to <span class="bolder-element">GPM’s bank account</span> as follows:</p>
                     <!-- BANK DETAILS -->
-                    <div class="details-container">
-                        <div class="bank-details">
-                            <div class="bank-row">
-                                Bank Name: <span style="font-style: italic;">
-                                    {if isset($SELECTED_BANK)}
-                                        {$SELECTED_BANK->get('bank_name')}
-                                    {/if}
-                                </span>
-                            </div>
-                            <div class="bank-row">
-                                Bank Address: <span style="font-style: italic;">
-                                    {if isset($SELECTED_BANK)}
-                                        {$SELECTED_BANK->get('bank_address')}
-                                    {/if}
-                                </span>
-                            </div>
-                            <div class="bank-row bank-row-codes">
-                                <p>
-                                    Bank Code: <span style="font-style: italic;">
-                                        {if isset($SELECTED_BANK)}
-                                            {$SELECTED_BANK->get('bank_code')}
-                                        {/if}
-                                    </span></p>
-                                <p>
-                                    Branch Code: <span style="font-style: italic;">
-                                        {if isset($SELECTED_BANK)}
-                                            {$SELECTED_BANK->get('branch_code')}
-                                        {/if}
-                                    </span></p>
-                                <p> Swift Code: <span style="font-style: italic;"> {if isset($SELECTED_BANK)}
-                                            {$SELECTED_BANK->get('swift_code')}
-                                        {/if}
-                                    </span></p>
-                            </div>
+                    <div style="padding-left: 5mm;">
+                        {if $SELECTED_BANK}
+                            {assign var=iban value=$SELECTED_BANK->get('iban_no')|lower|replace:' ':''}
+                            {assign var=bank_routing_no value=$SELECTED_BANK->get('bank_routing_no')|lower|replace:' ':''}
 
-                            <div class="bank-row bank-row-flex">
-                                <p class="bank-half-item">
-                                    Account No: <span style="font-style: italic;"> {if isset($SELECTED_BANK)}
-                                            {$SELECTED_BANK->get('account_no')}
-                                        {/if}
-                                    </span>
-                                </p>
-                                <p class="bank-half-item">
-                                    Name of Account Holder: <span style="font-style: italic;">
-                                        {if isset($SELECTED_BANK)}
-                                            {$SELECTED_BANK->get('account_holder_name')}
-                                        {/if}
-                                    </span>
-                                </p>
-                            </div>
+                            <div>
+                                Please transfer the payment net of charges to our bank account:<br>
+                                Beneficiary: {$SELECTED_BANK->get('beneficiary_name')}<br>
+                                Account No: {$SELECTED_BANK->get('account_no')}
+                                {$SELECTED_BANK->get('account_currency')}<br>
 
-                            <div class="bank-row bank-row-flex">
-                                <p class="bank-half-item">
-                                    Intermediary Bank:: <span style="font-style: italic;"> {if isset($SELECTED_BANK)}
-                                            {$SELECTED_BANK->get('intermediary_bank')}
-                                        {/if}
-                                    </span>
-                                </p>
-                                <p class="bank-half-item">
-                                    Swift Code:: <span style="font-style: italic;"> {if isset($SELECTED_BANK)}
-                                            {$SELECTED_BANK->get('intermediary_swift_code')}
-                                        {/if}
-                                    </span>
-                                </p>
+                                {if $iban neq 'x'}
+                                    IBAN: {$SELECTED_BANK->get('iban_no')}<br>
+                                {/if}
+
+                                Bank: {$SELECTED_BANK->get('bank_name')}<br>
+                                Bank Address: {$SELECTED_BANK->get('bank_address')}<br>
+                                Swift Code: {$SELECTED_BANK->get('swift_code')}<br>
+
+                                {if $bank_routing_no neq 'x'}
+                                    Bank Code: {$SELECTED_BANK->get('bank_code')}<br>
+                                    Branch Code: {$SELECTED_BANK->get('branch_code')}<br>
+                                {else}
+                                    Routing No: {$SELECTED_BANK->get('bank_routing_no')}<br>
+                                {/if}
+
+                                <br>
+
+                                {if !empty($SELECTED_BANK->get('intermediary_bank'))}
+                                    Intermediary Bank: {$SELECTED_BANK->get('intermediary_bank')}<br>
+                                    Swift Code: {$SELECTED_BANK->get('intermediary_swift_code')}<br>
+                                {/if}
                             </div>
-                        </div>
+                        {/if}
                     </div>
                 </div>
             </div>

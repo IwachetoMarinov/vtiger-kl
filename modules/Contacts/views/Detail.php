@@ -102,11 +102,6 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$years_array  = $this->createYearRange(2020, date('Y'));
 		$years = array_reverse($years_array);
 
-		// echo '<pre>';
-		// echo 'Activity Summary Data: ';
-		// var_dump($activity_data);
-		// echo '</pre>';
-
 		$viewer = $this->getViewer($request);
 
 		// Assign safely to TPL
