@@ -37,10 +37,6 @@ class ActivitySummary
 
         $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_TxHx] $where order by [Tx_Date] DESC";
 
-        // echo "<pre>";
-        // print_r($sql);
-        // echo "</pre>";
-
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
         // echo "<pre>";
@@ -49,10 +45,12 @@ class ActivitySummary
 
         $results  = [];
         foreach ($summary as $item) {
+            $description = $item['Description'] ? $item['Description'] : $item['Tx_Desc'] ?? '';
+
             $results[] = [
                 'voucher_no' => $item['Tx_No'] ?? '',
                 'voucher_type' => $item['Tx_Type'] ?? '',
-                'description' => $item['Description'] ?? '',
+                'description' => $description,
                 'table_name' => $item['TableName'] ?? '',
                 'usd_val' => $item['Matched_Amt'] ? floatval($item['Matched_Amt']) : 0.00,
                 'doctype' => $item['Description'] ?? '',

@@ -307,7 +307,7 @@
                                 <tr>
                                     <td style="width:75%;">SUBTOTAL:</td>
                                     <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
-                                            {$ERP_DOCUMENT['amount']}</strong></td>
+                                            {$ERP_DOCUMENT->grandTotal}</strong></td>
                                 </tr>
                                 <tr>
                                     <td style="width:75%;">GST on Storage charge (0%)</td>
@@ -318,7 +318,7 @@
                             <tr>
                                 <th style="width:75%;">TOTAL STORAGE FEE:</th>
                                 <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
-                                        {$ERP_DOCUMENT['amount']}</strong></td>
+                                        {$ERP_DOCUMENT->grandTotal}</strong></td>
                             </tr>
                         </table>
 

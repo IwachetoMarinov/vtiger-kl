@@ -56,8 +56,9 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         global $root_directory;
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
+        $year  = date('Y');
 
-        $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . "-SO";
+        $fileName = $clientID . '-' . $year . "-SO";
         $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
         fwrite($handle, $html);
         fclose($handle);

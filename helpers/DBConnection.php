@@ -19,9 +19,7 @@ class DBConnection
             $db_username = $_ENV['DB_USERNAME'] ?? getenv('DB_USERNAME') ?: '';
             $db_password = $_ENV['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?: '';
 
-            if (!$db_username || !$db_password) {
-                return null;
-            }
+            if (!$db_username || !$db_password) return null;
 
             $serverName = "qcpitech.ddns.net";
             $connectionOptions = [

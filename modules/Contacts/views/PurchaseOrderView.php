@@ -50,6 +50,18 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $selectedBank = null;
         if (!empty($bankAccountId)) $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
 
+        if (empty($selectedBank)) {
+            // fallback dummy object to prevent template fatal
+            $selectedBank = new Vtiger_Record_Model();
+            $selectedBank->set('beneficiary_name', '');
+            $selectedBank->set('account_no', '');
+            $selectedBank->set('account_currency', '');
+            $selectedBank->set('iban_no', '');
+            $selectedBank->set('bank_name', '');
+            $selectedBank->set('bank_address', '');
+            $selectedBank->set('swift_code', '');
+        }
+
         $viewer = $this->getViewer($request);
         $viewer->assign('PRICING_OPTION', $pricingOption);
         $viewer->assign('CLIENT_TYPE', $client_type);
@@ -82,8 +94,9 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         global $root_directory;
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
+        $year  = date('Y');
 
-        $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . "-PO";
+        $fileName = $clientID . '-' . $year . "-PO";
         $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
         fwrite($handle, $html);
         fclose($handle);

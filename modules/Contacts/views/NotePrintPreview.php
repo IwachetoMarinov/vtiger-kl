@@ -121,8 +121,13 @@ class Contacts_NotePrintPreview_View extends Vtiger_Index_View
         global $root_directory;
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
+        $year = date('Y');
+        // Get last part of docNo after last '/'
+        $docNoParts = explode('/', $request->get('docNo'));
+        $docNoLastPart = end($docNoParts);
 
-        $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . '-' . $template_name;
+        $fileName = $clientID . '-' . $template_name . '-' . $year . '-' . $docNoLastPart . '-' . $template_name;
+        // $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . '-' . $template_name;
         $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
         fwrite($handle, $html);
         fclose($handle);
