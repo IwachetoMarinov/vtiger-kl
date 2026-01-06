@@ -69,7 +69,15 @@ class Contacts_ViewCR_View extends Vtiger_Index_View
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
 
-        $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . "-CR";
+        $year = date('Y');
+        // Get last part of docNo after last '/'
+        $docNoParts = explode('/', $request->get('docNo'));
+        $docNoLastPart = end($docNoParts);
+        $template_name = "CR";
+
+        $fileName = $clientID . '-' . $template_name . '-' . $year . '-' . $docNoLastPart . '-' . $template_name;
+
+        // $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . "-CR";
         $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
         fwrite($handle, $html);
         fclose($handle);

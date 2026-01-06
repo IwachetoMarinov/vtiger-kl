@@ -126,7 +126,14 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         } elseif ($docType == 'PWD' || $docType == 'PUR') {
             $docType = 'PI';
         }
-        $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . '-' . $docType;
+
+        $year = date('Y');
+        // Get last part of docNo after last '/'
+        $docNoParts = explode('/', $request->get('docNo'));
+        $docNoLastPart = end($docNoParts);
+
+        $fileName = $clientID . '-' . $docType . '-' . $year . '-' . $docNoLastPart . '-' . $docType;
+        // $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . '-' . $docType;
         $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
         fwrite($handle, $html);
         fclose($handle);
