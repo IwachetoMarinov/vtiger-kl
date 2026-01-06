@@ -279,7 +279,6 @@
 
                         {assign var="calcTotal" value=0}
                         {assign var="SUB_TOTAL" value=0}
-                        {assign var="TOTAL_FEE" value=0}
                         {assign var="GST_RATE" value=0.07}
                         <table class="activity-tbl">
                             <tr>
@@ -295,7 +294,7 @@
                                         {assign var="total" value=$charge->totalItemAmount}
                                         {assign var="calcTotal" value=$calcTotal+round($total,2)}
                                         {assign var="SUB_TOTAL" value=$SUB_TOTAL+round($total,2)}
-                                        &nbsp;&nbsp;&nbsp;&nbsp;- {$charge->remarks}<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;- {$charge->description}<br>
                                     {/foreach}
                                 </td>
                                 <td style="text-align:right;vertical-align: top;line-height: 2"><br>
@@ -309,35 +308,11 @@
 
                             {assign var="GST_AMOUNT" value=$SUB_TOTAL * $GST_RATE}
                             {assign var="TOTAL_WITH_GST" value=$SUB_TOTAL + $GST_AMOUNT}
-
-                            {if $ERP_DOCUMENT->GST}
-                                <tr>
-                                    <td style="width:75%;">SUBTOTAL:</td>
-                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
-                                            {number_format($SUB_TOTAL,2)}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td style="width:75%;">GST on Storage charge in Singapore (7%)</td>
-                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
-                                            {number_format($GST_AMOUNT,2)}</strong></td>
-                                </tr>
-                            {/if}
-                            {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no')) && empty($ERP_DOCUMENT->GST)}
-                                <tr>
-                                    <td style="width:75%;">SUBTOTAL:</td>
-                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
-                                            {$ERP_DOCUMENT->grandTotal}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td style="width:75%;">GST on Storage charge (0%)</td>
-                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
-                                            {number_format(0,2)}</strong></td>
-                                </tr>
-                            {/if}
+                           
                             <tr>
                                 <th style="width:75%;">TOTAL STORAGE FEE:</th>
                                 <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
-                                        {number_format($TOTAL_WITH_GST,2)}</strong></td>
+                                        {number_format($SUB_TOTAL,2)}</strong></td>
                             </tr>
                         </table>
 
