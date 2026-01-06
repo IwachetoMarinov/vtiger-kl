@@ -37,7 +37,15 @@ class ActivitySummary
 
         $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_TxHx] $where order by [Tx_Date] DESC";
 
+        // echo "<pre>";
+        // print_r($sql);
+        // echo "</pre>";
+
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
+
+        // echo "<pre>";
+        // print_r($summary);
+        // echo "</pre>";
 
         $results  = [];
         foreach ($summary as $item) {

@@ -33,8 +33,12 @@ class DBConnection
                 "LoginTimeout" => 5
             ];
 
-            // suppress PHP output
-            $conn = @sqlsrv_connect($serverName, $connectionOptions);
+            $conn = sqlsrv_connect($serverName, $connectionOptions);
+
+            // echo "<pre>";
+            // print_r(sqlsrv_errors(SQLSRV_ERR_ALL));
+            // print_r($conn);
+            // echo "</pre>";
 
             if ($conn === false) return null;
 

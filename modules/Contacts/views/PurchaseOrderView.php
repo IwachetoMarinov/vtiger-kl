@@ -55,6 +55,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $viewer->assign('CLIENT_TYPE', $client_type);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', 1);
+        $viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);
         $viewer->assign('SELECTED_BANK', $selectedBank ?? null);
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
