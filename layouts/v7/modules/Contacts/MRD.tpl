@@ -280,7 +280,7 @@
                                         </td>
 
                                         <td style="text-align:right;">
-                                            {number_format($barItem->totalFineOz,3)}
+                                            {number_format($barItem->totalFineOz,2)}
                                         </td>
                                     </tr>
 
@@ -289,7 +289,7 @@
                                 {if $PAGES eq $page}
                                     <tr>
                                         <th style="width:75%;" colspan="2">TOTAL FINE OZ:</th>
-                                        <td style="text-align:right"><strong>{number_format($calcTotal,3)}</strong></td>
+                                        <td style="text-align:right"><strong>{number_format($calcTotal,2)}</strong></td>
                                     </tr>
                                 {/if}
                             </table>

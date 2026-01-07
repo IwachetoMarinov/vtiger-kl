@@ -171,21 +171,29 @@
 
 <body style="margin: 0px;">
     {if $ENABLE_DOWNLOAD_BUTTON}
-        <ul style="list-style-type: none;
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-                background-color: #333;">
+        <script type="text/javascript" src="layouts/v7/lib/jquery/jquery.min.js"></script>
+        <link type='text/css' rel='stylesheet' href='layouts/v7/lib/jquery/select2/select2.css'>
+        <link type='text/css' rel='stylesheet' href='layouts/v7/lib/select2-bootstrap/select2-bootstrap.css'>
+        <script type="text/javascript" src="layouts/v7/lib/jquery/select2/select2.min.js"></script>
+
+        <ul style="list-style-type: none; margin: 0; padding: 0;overflow: hidden;background-color: #333;">
             <li style="float:right"><a style="display: block;
-                color: white;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: none;
-                background-color: #bea364;"
+                color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
                     href="index.php?module=Contacts&view=ActivtySummeryPrintPreview&record={$RECORD_MODEL->getId()}&ActivtySummeryDate={$smarty.request.ActivtySummeryDate}&PDFDownload=true">Download</a>
             </li>
+
+            <li id='printConf' style="float:right">
+                <span style="float: right;margin-right: 1px;color: white;background-color: #bea364;text-decoration: none;
+                display: block;
+                text-align: center;
+                padding: 14px;cursor: pointer;">Settings</span>
+            </li>
+        </ul>
+        <script type="text/javascript" src="layouts/v7/modules/Contacts/resources/PrintConf.js"></script>
+        {include file='printConf.tpl'|vtemplate_path:'Contacts'}
         </ul>
     {/if}
+    
     {assign var="grandTotal" value=0}
     {assign var="movementTotal" value=0}
     {assign var="balanceAmount" value=0}

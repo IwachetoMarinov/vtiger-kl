@@ -335,11 +335,11 @@
                                             </td>
 
                                             <td style="text-align:right;vertical-align: top">
-                                                {number_format($barItem->totalFineOz,3)}
+                                                {number_format($barItem->totalFineOz,2)}
                                             </td>
 
                                             <td style="text-align:right;vertical-align: top">
-                                                {number_format($barItem->totalItemAmount,3)}
+                                                {number_format($barItem->totalItemAmount,2)}
                                             </td>
                                         </tr>
                                     {/if}

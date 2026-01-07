@@ -276,7 +276,7 @@
 
                                         <td><span style="font-size:smaller;font-style:italic;">
                                                 {implode(", ", $barItem->serials)}</span></td>
-                                        <td style="text-align:right;"> {number_format($barItem->totalFineOz,3)}</td>
+                                        <td style="text-align:right;"> {number_format($barItem->totalFineOz,2)}</td>
                                     </tr>
 
                                 {/foreach}
@@ -286,7 +286,7 @@
                                         <th style="width:75%;" colspan="2">TOTAL FINE OZ:</th>
                                         <td></td>
                                         <td style="text-align:right;">
-                                            <strong>{number_format($total_value,3)}</strong>
+                                            <strong>{number_format($total_value,2)}</strong>
                                         </td>
                                     </tr>
                                 {/if}

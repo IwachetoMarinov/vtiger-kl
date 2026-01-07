@@ -275,7 +275,7 @@
                                     <td colspan="2" style='text-align:center;'>{$smarty.request.docNo}</td>
                                     <td style='text-align:center;'>{$ERP_DOCUMENT->documentDate}</td>
                                     {if $metalPrice gt 0}
-                                        <td style='text-align:center;'> {number_format($metalPrice,3)} </td>
+                                        <td style='text-align:center;'> {number_format($metalPrice,2)} </td>
                                     {else}
                                         <td style='text-align:center;'> N/A </td>
                                     {/if}
@@ -327,12 +327,12 @@
                                         <td style="border-bottom:none;vertical-align: top">{$barItem->itemDescription}</td>
 
                                         <td style="text-align:right;vertical-align: top">
-                                            {number_format($barItem->totalFineOz,3)}
+                                            {number_format($barItem->totalFineOz,2)}
                                         </td>
 
                                         {if $barItem->premium > 0 && $metalPrice > 0}
                                             <td style="text-align:right;vertical-align: top">
-                                                {number_format($barItem->premium,3)} %
+                                                {number_format($barItem->premium,2)} %
                                             </td>
                                         {else}
                                             <td style="text-align:right;vertical-align: top">0 %</td>

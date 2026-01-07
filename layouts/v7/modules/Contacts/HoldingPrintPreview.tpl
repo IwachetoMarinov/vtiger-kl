@@ -249,7 +249,7 @@
                                     <th>Gold</th>
                                     {* <th>{vtranslate($metal,'MetalPrice')}</th> *}
                                     {assign var="rate" value=$metal.spot_price|default:0}
-                                    <td style="text-align:center">US$ {number_format($rate, 3, '.', ',')} / Oz..</td>
+                                    <td style="text-align:center">US$ {number_format($rate, 2, '.', ',')} / Oz..</td>
                                 </tr>
                             {/foreach}
                         </table>
@@ -257,7 +257,7 @@
                 </tr>
                 <tr>
                     <td style="text-align: right;font-size: 9pt">
-                        All amounts in currency
+                        All amounts in USD
                     </td>
                 </tr>
                 <tr>
@@ -288,14 +288,14 @@
                                         </td>
 
                                         <td style='vertical-align: top;text-align:right'>
-                                            {number_format($HOLDING->pureOz,3)}
+                                            {number_format($HOLDING->pureOz,2)}
                                         </td>
                                         {* {assign var=CRYPTO value=['MBTC','ETH']}
                                         {if in_array(strtoupper($HOLDING->metal),$CRYPTO) }
                                             <td style='vertical-align: top;text-align:right'>{number_format($HOLDING->pureOz,8)}
                                             </td>
                                         {else}
-                                            <td style='vertical-align: top;text-align:right'>{number_format($HOLDING->pureOz,3)}
+                                            <td style='vertical-align: top;text-align:right'>{number_format($HOLDING->pureOz,2)}
                                             </td>
                                         {/if} *}
                                         <td style='vertical-align: top;text-align:right'>

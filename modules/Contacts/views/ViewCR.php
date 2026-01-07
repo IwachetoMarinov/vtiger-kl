@@ -77,7 +77,7 @@ class Contacts_ViewCR_View extends Vtiger_Index_View
 
         $fileName = $clientID . '-' . $template_name . '-' . $year . '-' . $docNoLastPart . '-' . $template_name;
 
-        // $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . "-CR";
+    // $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . "-CR";
         $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
         fwrite($handle, $html);
         fclose($handle);
