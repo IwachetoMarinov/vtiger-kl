@@ -330,7 +330,7 @@
                                             <td style="vertical-align: top">{$barItem->quantity}</td>
                                             <td style="border-bottom:none;vertical-align: top">
                                                 {$barItem->itemDescription} <br><span
-                                                    style="font-size: smaller;font-style: italic;">{$barItem->serials[0]}</span>
+                                                    style="font-size: smaller;font-style: italic;">{$barItem->serialNumbers}</span>
                                             </td>
 
                                             <td style="text-align:right;vertical-align: top">
@@ -338,11 +338,11 @@
                                             </td>
 
                                             <td style="text-align:right;vertical-align: top">
-                                                {number_format($barItem->totalFineOz,3)}
+                                                {number_format($barItem->totalFineOz,2)}
                                             </td>
 
                                             <td style="text-align:right;vertical-align: top">
-                                                {number_format($barItem->totalItemAmount,3)}
+                                                {number_format($barItem->totalItemAmount,2)}
                                             </td>
                                         </tr>
                                     {/if}

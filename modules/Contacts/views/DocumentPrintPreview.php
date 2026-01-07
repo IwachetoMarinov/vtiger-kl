@@ -42,12 +42,14 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $activity = new dbo_db\ActivitySummary();
         $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
+
+
         $docType = $activity_data['voucherType'] ?? "";
         $erpDoc = (object) $activity_data;
 
-        // echo '<pre>';
+        // echo "<pre>";
         // print_r($erpDoc);
-        // echo '</pre>';
+        // echo "</pre>";
 
         $bankAccountId = $request->get('bank');
         if (empty($bankAccountId) && !empty($allBankAccounts)) {
@@ -110,7 +112,8 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
     {
         foreach ($datas->barItems as $key => $item) {
             if ($item->quantity == 1) {
-                $serials = explode('-', $item->serials[0]);
+                $serials = $item->serialNumbers;
+                // $serials = explode('-', $item->serials[0]);
                 $datas->barItems[$key]->serials[0] = $serials[0];
             }
         }

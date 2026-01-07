@@ -136,7 +136,7 @@
                                     {else}
                                         <td style='vertical-align: top;text-align:center'>
                                             {if $METAL->get('assetname') != 'Storage Charges'}
-                                            {number_format($PRODUCT->get('fine_oz'),3)}{/if}
+                                            {number_format($PRODUCT->get('fine_oz'),2)}{/if}
                                         </td>
                                     {/if}
                                     {if count($RELATED_PRODUCTS) lt 5 && $cnt eq count($RELATED_PRODUCTS)-1}

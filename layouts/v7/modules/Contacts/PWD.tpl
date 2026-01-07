@@ -275,7 +275,7 @@
                                     <td style="vertical-align: top">{$barItem->quantity}</td>
                                     <td style="border-bottom:none;vertical-align: top">
                                         {$barItem->longDesc} <br><span
-                                            style="font-size: smaller;font-style: italic;">{$barItem->serials[0]}</span>
+                                            style="font-size: smaller;font-style: italic;">{$barItem->serialNumbers}</span>
                                     </td>
                                     {if $barItem->metal eq 'mBTC'}
                                         <td style="text-align:right;vertical-align: top">
@@ -284,7 +284,7 @@
                                         <td style="text-align:right;vertical-align: top">
                                             {CurrencyField::convertToUserFormat($total/$barItem->quantity)}</td>
                                     {/if}
-                                    <td style="text-align:right;vertical-align: top">{number_format($barItem->pureOz,3)}
+                                    <td style="text-align:right;vertical-align: top">{number_format($barItem->pureOz,2)}
                                     </td>
                                     <td style="text-align:right;vertical-align: top">
                                         {CurrencyField::convertToUserFormat($total)}</td>
