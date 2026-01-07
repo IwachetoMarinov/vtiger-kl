@@ -103,6 +103,7 @@ class Contacts_Detail_View extends Accounts_Detail_View
 			$activity_data = array_values($activity_data);
 		}
 
+		// Get year and remove current year from list
 		$years_array  = $this->createYearRange(2020, date('Y'));
 		$years = array_reverse($years_array);
 
