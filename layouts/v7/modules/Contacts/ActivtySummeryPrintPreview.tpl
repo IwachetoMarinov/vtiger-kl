@@ -172,9 +172,6 @@
 <body style="margin: 0px;">
     {if $ENABLE_DOWNLOAD_BUTTON}
         <script type="text/javascript" src="layouts/v7/lib/jquery/jquery.min.js"></script>
-        <link type='text/css' rel='stylesheet' href='layouts/v7/lib/jquery/select2/select2.css'>
-        <link type='text/css' rel='stylesheet' href='layouts/v7/lib/select2-bootstrap/select2-bootstrap.css'>
-        <script type="text/javascript" src="layouts/v7/lib/jquery/select2/select2.min.js"></script>
 
         <ul style="list-style-type: none; margin: 0; padding: 0;overflow: hidden;background-color: #333;">
             <li style="float:right"><a style="display: block;
@@ -189,11 +186,11 @@
                 padding: 14px;cursor: pointer;">Settings</span>
             </li>
         </ul>
-        <script type="text/javascript" src="layouts/v7/modules/Contacts/resources/PrintConf.js"></script>
-        {include file='printConf.tpl'|vtemplate_path:'Contacts'}
+        <script type="text/javascript" src="layouts/v7/modules/Contacts/resources/ASPrintConf.js"></script>
+        {include file='ASPrintConf.tpl'|vtemplate_path:'Contacts'}
         </ul>
     {/if}
-    
+
     {assign var="grandTotal" value=0}
     {assign var="movementTotal" value=0}
     {assign var="balanceAmount" value=0}

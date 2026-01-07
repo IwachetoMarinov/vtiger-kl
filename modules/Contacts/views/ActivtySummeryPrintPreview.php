@@ -20,6 +20,9 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
     {
         $moduleName = $request->getModule();
         $selected_currency = $request->get('ActivtySummeryCurrency');
+        $start_date = $request->get('start_date');
+        $end_date = $request->get('end_date');
+        $dateField = 'document_date'; // or 'posting_date'
 
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
@@ -40,9 +43,23 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
             $transactions = array_filter($transactions, function ($txn) use ($selected_currency) {
                 return isset($txn['currency']) && trim($txn['currency']) === $selected_currency;
             });
-
-            // VERY IMPORTANT
             $transactions = array_values($transactions);
+        }
+
+        if (!empty($start_date)) {
+            $startTs = strtotime($start_date . ' 00:00:00');
+            $transactions = array_values(array_filter($transactions, function ($txn) use ($startTs, $dateField) {
+                if (empty($txn[$dateField])) return false;
+                return strtotime($txn[$dateField] . ' 00:00:00') >= $startTs;
+            }));
+        }
+
+        if (!empty($end_date)) {
+            $endTs = strtotime($end_date . ' 23:59:59');
+            $transactions = array_values(array_filter($transactions, function ($txn) use ($endTs, $dateField) {
+                if (empty($txn[$dateField])) return false;
+                return strtotime($txn[$dateField] . ' 23:59:59') <= $endTs;
+            }));
         }
 
         $recordModel = $this->record->getRecord();
