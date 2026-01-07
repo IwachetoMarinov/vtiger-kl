@@ -43,7 +43,7 @@
                             <!-- Year -->
                             <label style="margin: 0; font-size: 13px;">By Year</label>
                             <select id="ActivtySummeryDate" class="inputElement select2" style="width: 110px;">
-                                <option value="">Current Year</option>
+                                <option value="">Select Year</option>
                                 {foreach from=$YEARS item=YEAR}
                                     <option value="{$YEAR}" {if $ASYEAR eq $YEAR}selected{/if}>{$YEAR}</option>
                                 {/foreach}
@@ -184,7 +184,7 @@
                                     </td>
 
                                     <!-- Date -->
-                                    <td nowrap> {$TX.posting_date}</td>
+                                    <td nowrap> {$TX.document_date}</td>
 
                                     <!-- Type -->
                                     <td nowrap>
