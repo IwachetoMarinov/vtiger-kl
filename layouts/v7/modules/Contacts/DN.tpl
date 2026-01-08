@@ -258,7 +258,7 @@
                         All amounts in {$ERP_DOCUMENT->currency}
                     </td>
                 </tr>
-                {assign var="metal_name" value="{$ERP_DOCUMENT->barItems[0]->metal_name}"}
+                {assign var="spot_price" value="{$ERP_DOCUMENT->barItems[0]->spotPrice|default:0}"}
 
                 <tr>
                     <td style="font-size: 9pt; height: 168mm; vertical-align: top;">
@@ -271,7 +271,7 @@
                             <tr>
                                 <td colspan="2" style="text-align: center;">{$smarty.request.docNo}</td>
                                 <td style="text-align: center;">{$ERP_DOCUMENT->documentDate}</td>
-                                <td style="width:25%;text-align: center;">{$metal_name}</td>
+                                <td style="width:25%;text-align: center;">{number_format($spot_price,2)}</td>
                                 <td style="width:25%;text-align: center;">{$ERP_DOCUMENT->currency}
                                     {$ERP_DOCUMENT->fineOz} / Oz.</td>
                             </tr>
@@ -308,7 +308,7 @@
 
                             {assign var="GST_AMOUNT" value=$SUB_TOTAL * $GST_RATE}
                             {assign var="TOTAL_WITH_GST" value=$SUB_TOTAL + $GST_AMOUNT}
-                           
+
                             <tr>
                                 <th style="width:75%;">TOTAL STORAGE FEE:</th>
                                 <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
@@ -328,6 +328,9 @@
                         <br>
                         <div>
                             {if $SELECTED_BANK}
+                                {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
+                                    <input type="hidden" class="selected-bank" value="{$SELECTED_BANK->getId()}">
+                                {/if}
                                 Please transfer the payment net of charges to our bank account:<br>
                                 Beneficiary: {$SELECTED_BANK->get('beneficiary_name')}<br>
                                 Account No: {$SELECTED_BANK->get('account_no')}

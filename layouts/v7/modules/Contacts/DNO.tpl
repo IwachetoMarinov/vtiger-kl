@@ -306,6 +306,9 @@
                         <br>
                         <br>
                         {if $SELECTED_BANK}
+                            {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
+                                <input type="hidden" class="selected-bank" value="{$SELECTED_BANK->getId()}">
+                            {/if}
                             <div>
                                 Please transfer the payment net of charges to our bank account:<br>
                                 Beneficiary: {$SELECTED_BANK->get('beneficiary_name')}<br>

@@ -122,6 +122,10 @@ class ActivitySummary
 
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
+            // echo "<pre>";
+            // print_r($summary);
+            // echo "</pre>";
+
             $items = $this->mapTransactionItems($summary, $transaction);
 
             $transaction['barItems'] = $items;
@@ -190,14 +194,15 @@ class ActivitySummary
 
             $items[] = (object) [
                 'quantity'          => isset($item['Qty']) ? (int)$item['Qty'] : 1,
-                'transactionType'   => $item['Tax_Type'] ?? '',
                 'currency'          => $item['Curr_Code'] ?? '',
                 'metal'             => $item['MT_Code'] ?? '',
                 'metal_name'        => $item['MT_Name'] ?? '',
                 'warehouse'         => $item['WH_Name'] ?? '',
+                'transactionType'         => $item['Tx_Type'] ?? '',
                 'description'       => isset($item['Description']) ? $item['Description'] : (isset($item['Item_Desc']) ? $item['Item_Desc'] : ''),
 
                 'taxAmount'         => isset($item['Tx_Amt']) ? (float)$item['Tx_Amt'] : 0.00,
+                'spotPrice'         => isset($item['Spot_Price']) ? (float)$item['Spot_Price'] : 0.00,
 
                 'postingDate'       =>
                 isset($item['Appr_Date']) && $item['Appr_Date'] instanceof \DateTime

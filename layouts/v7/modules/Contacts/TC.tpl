@@ -255,14 +255,15 @@
                                 {/if} GPM</strong>
                         </td>
                     </tr>
-                                
+
                     <tr>
                         <td style="text-align: right;font-size: 9pt">
                             All amounts in {$ERP_DOCUMENT->currency}
                         </td>
                     </tr>
                     <tr>
-                        {assign var="metalPrice" value=($ERP_DOCUMENT->barItems[0]->price)}
+                        {assign var="metalPrice" value=($ERP_DOCUMENT->barItems[0]->spotPrice)}
+                        {assign var="transactionType" value=($ERP_DOCUMENT->barItems[0]->transactionType)}
                         <td style="font-size: 9pt; height: 168mm; vertical-align: top;">
                             <table class="activity-tbl" style="margin-bottom:5mm">
                                 <tr>
@@ -279,7 +280,7 @@
                                     {else}
                                         <td style='text-align:center;'> N/A </td>
                                     {/if}
-                                    <td style='text-align:center;'>{$ERP_DOCUMENT->description}</td>
+                                    <td style='text-align:center;'>{$transactionType}</td>
                                 </tr>
                             </table>
                             <table class="activity-tbl">
@@ -317,17 +318,22 @@
                                         {assign var="storageCharge" value=$storageCharge+round($total,2)}
                                         {continue}
                                     {else}
-                                        {assign var="calcTotal" value=$calcTotal+round($total,2)}
+                                        {assign var="calcTotal" value=$calcTotal+$barItem->totalItemAmount}
                                     {/if}
 
                                     {* ROW DISPLAY *}
                                     <tr>
                                         <td style="vertical-align: top">{number_format($barItem->quantity,0)}</td>
 
-                                        <td style="border-bottom:none;vertical-align: top">{$barItem->itemDescription}</td>
+                                        <td style="border-bottom:none;vertical-align: top">
+                                            {$barItem->itemDescription}
+                                            <br><span
+                                                style="font-size: smaller;font-style: italic;max-width: 250px;display: inline-block;word-break: break-all;white-space: normal;">
+                                                {$barItem->serialNumbers}</span>
+                                        </td>
 
                                         <td style="text-align:right;vertical-align: top">
-                                            {number_format($barItem->totalFineOz,2)}
+                                            {number_format($barItem->totalFineOz,4)}
                                         </td>
 
                                         {if $barItem->premium > 0 && $metalPrice > 0}
@@ -346,7 +352,8 @@
                                             <td style="text-align:right;vertical-align: top">0 %</td>
                                         {/if} *}
 
-                                        <td style="text-align:right;vertical-align: top">{number_format($total,2)}</td>
+                                        <td style="text-align:right;vertical-align: top">
+                                            {number_format($barItem->totalItemAmount,2)}</td>
                                     </tr>
                                 {/for}
 
@@ -364,7 +371,8 @@
                             <div>
                                 {if isset($COMPANY)}
                                     If you have any questions concerning these transactions, please contact
-                                    <span style="font-weight: 600;">{$COMPANY->get('company_name')}</span> at <br>Tel: {$COMPANY->get('company_phone')} or by email:
+                                    <span style="font-weight: 600;">{$COMPANY->get('company_name')}</span> at <br>Tel:
+                                    {$COMPANY->get('company_phone')} or by email:
                                     relationship@global-precious-metals.com.
                                 {/if}
                             </div>

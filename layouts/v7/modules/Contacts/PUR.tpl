@@ -181,6 +181,8 @@
     {/if}
 
     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+        <script type="text/javascript" src="layouts/v7/lib/jquery/jquery.min.js"></script>
+
         <ul style="list-style-type:none;margin:0;padding:0;overflow:hidden;background-color:#333;">
             <li style="float:right">
                 <a style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
@@ -190,7 +192,17 @@
                     Download
                 </a>
             </li>
+
+            <li id='printConf' style="float:right">
+                <span style="float: right;margin-right: 1px;color: white;background-color: #bea364;text-decoration: none;
+                display: block;
+                text-align: center;
+                padding: 14px;cursor: pointer;">Settings</span>
+            </li>
         </ul>
+       
+        <script type="text/javascript" src="layouts/v7/modules/Contacts/resources/PrintConf.js"></script>
+        {include file='TCPrintConf.tpl'|vtemplate_path:'Contacts'}
     {/if}
 
     {assign var="start" value=0}
@@ -255,6 +267,7 @@
                     </tr>
                     <tr>
                         <td style="font-size: 9pt; height: 168mm; vertical-align: top;">
+                            {assign var="transactionType" value=$ERP_DOCUMENT->barItems[0]->transactionType|default:""}
                             <table class="activity-tbl" style="margin-bottom:5mm">
                                 <tr>
                                     <th colspan="2" style="width:25%;text-align: center;">INVOICE NO</th>
@@ -266,7 +279,7 @@
                                     <td colspan="2" style="text-align: center;">{$smarty.request.docNo}</td>
                                     <td style="text-align: center;">{$ERP_DOCUMENT->documentDate}</td>
                                     <td style="text-align: center;">{$ERP_DOCUMENT->postingDate}</td>
-                                    <td style="text-align: center;">{$ERP_DOCUMENT->description}</td>
+                                    <td style="text-align: center;">{$transactionType}</td>
                                 </tr>
                             </table>
                             <table class="activity-tbl">
@@ -301,12 +314,8 @@
                                     <tr>
                                         <td style="vertical-align: top">{$barItem->quantity}</td>
                                         <td style="border-bottom:none;vertical-align: top">
-                                            {$barItem->description} <br><span style="font-size: smaller;
-                                                                                    font-style: italic;
-                                                                                    max-width: 250px;
-                                                                                    display: inline-block;
-                                                                                    word-break: break-all;
-                                                                                    white-space: normal;">
+                                            {$barItem->description} <br><span
+                                                style="font-size: smaller;font-style: italic;max-width: 250px;display: inline-block;word-break: break-all;white-space: normal;">
                                                 {$barItem->serialNumbers}</span>
                                         </td>
 
@@ -315,7 +324,7 @@
                                         </td>
 
                                         <td style="text-align:right;vertical-align: top">
-                                            {number_format($barItem->totalFineOz,2)}
+                                            {number_format($barItem->totalFineOz,4)}
                                         </td>
 
                                         <td style="text-align:right;vertical-align: top">

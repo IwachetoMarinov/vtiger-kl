@@ -615,6 +615,10 @@
                         {if $SELECTED_BANK}
                             {assign var=iban value=$SELECTED_BANK->get('iban_no')|lower|replace:' ':''}
                             {assign var=bank_routing_no value=$SELECTED_BANK->get('bank_routing_no')|lower|replace:' ':''}
+                            
+                            {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
+                                <input type="hidden" class="selected-bank" value="{$SELECTED_BANK->getId()}">
+                            {/if}
 
                             <div>
                                 Please transfer the payment net of charges to our bank account:<br>

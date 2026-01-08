@@ -288,7 +288,7 @@
                                         </td>
 
                                         <td style='vertical-align: top;text-align:right'>
-                                            {number_format($HOLDING->pureOz * $HOLDING->quantity,2)}
+                                            {number_format($HOLDING->pureOz * $HOLDING->quantity,4)}
                                         </td>
                                         {* {assign var=CRYPTO value=['MBTC','ETH']}
                                         {if in_array(strtoupper($HOLDING->metal),$CRYPTO) }

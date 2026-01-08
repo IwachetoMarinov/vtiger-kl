@@ -90,7 +90,7 @@
                                             <a href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">
                                                 <button type="button" class="btn btn-default module-buttons">
-                                                    Trade Confirmation
+                                                    {$TX.voucher_no}
                                                 </button>
                                             </a>
 
@@ -102,7 +102,7 @@
                                             <a href="index.php?module=Contacts&view=MPDPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">
                                                 <button type="button" class="btn btn-default module-buttons">
-                                                    {$docLabel}
+                                                    {$TX.voucher_no}
                                                 </button>
                                             </a>
 
@@ -115,14 +115,14 @@
                                             <a href="index.php?module=Contacts&view=NotePrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">
                                                 <button type="button" class="btn btn-default module-buttons">
-                                                    {$debitName}
+                                                    {$TX.voucher_no}
                                                 </button>
                                             </a>
 
                                         {else if in_array($TX.voucher_type, ['FCT'])}
                                             {* todo FCT logic *}
                                             <button type="button" class="btn btn-default module-buttons">
-                                                Forex Confirmation
+                                                {$TX.voucher_no}
                                             </button>
 
                                         {else}

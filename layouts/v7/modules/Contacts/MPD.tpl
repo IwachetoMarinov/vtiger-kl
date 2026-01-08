@@ -217,7 +217,7 @@
                                     </td>
 
                                     <td style="text-align:right;">
-                                        {number_format($barItem->totalFineOz,2)}
+                                        {number_format($barItem->totalFineOz,4)}
                                     </td>
                                 </tr>
 
@@ -226,7 +226,7 @@
                             <tr>
                                 <th colspan="2">TOTAL FINE OZ:</th>
                                 <td style="text-align:right">
-                                    <strong>{number_format($total_value,2)}</strong>
+                                    <strong>{number_format($total_value,4)}</strong>
                                 </td>
                             </tr>
 
