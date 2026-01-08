@@ -321,7 +321,7 @@
                                             <td style="text-align:right;vertical-align: top">
                                                 {number_format($total/$barItem->quantity,2)}</td>
                                         {/if}
-                                        <td style="text-align:right;vertical-align: top">{number_format($barItem->pureOz,3)}
+                                        <td style="text-align:right;vertical-align: top">{number_format($barItem->pureOz,4)}
                                         </td>
                                         <td style="text-align:right;vertical-align: top">{number_format($total,2)}</td>
                                     </tr>

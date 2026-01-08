@@ -240,7 +240,7 @@
                                 {foreach item=barItem from=$ERP_DOCUMENT.barItems}
 
                                     {* add to total_value *}
-                                    {assign var="total_value" value=$total_value+$barItem->totalFineOz}
+                                    {assign var="total_value" value=$total_value+$barItem->quantity}
 
                                     <tr>
                                         <td>{number_format($barItem->quantity,0)}</td>
@@ -249,7 +249,7 @@
 
                                         <td><span style="font-size:smaller;font-style:italic;">
                                                 {implode(", ", $barItem->serials)}</span></td>
-                                        <td style="text-align:right;"> {number_format($barItem->totalFineOz,2)}</td>
+                                        <td style="text-align:right;"> {number_format($barItem->totalFineOz,4)}</td>
                                     </tr>
 
                                 {/foreach}
@@ -258,7 +258,7 @@
                                     <tr>
                                         <th style="width:75%;" colspan="2">TOTAL QUANTITY:</th>
                                         <td style="text-align:right" colspan="2">
-                                            <strong>{number_format($total_value,2)}</strong>
+                                            <strong>{number_format($total_value,0)}</strong>
                                         </td>
                                     </tr>
                                 {/if}

@@ -267,6 +267,7 @@
 
                                     {* add to total_value *}
                                     {assign var="total_value" value=$total_value+$barItem->totalFineOz}
+                                    {assign var="calcTotal" value=$calcTotal+$barItem->totalFineOz}
 
                                     <tr>
                                         <td>{number_format($barItem->quantity,0)}</td>
@@ -280,7 +281,7 @@
                                         </td>
 
                                         <td style="text-align:right;">
-                                            {number_format($barItem->totalFineOz,2)}
+                                            {number_format($barItem->totalFineOz,4)}
                                         </td>
                                     </tr>
 
@@ -289,7 +290,7 @@
                                 {if $PAGES eq $page}
                                     <tr>
                                         <th style="width:75%;" colspan="2">TOTAL FINE OZ:</th>
-                                        <td style="text-align:right"><strong>{number_format($calcTotal,2)}</strong></td>
+                                        <td style="text-align:right"><strong>{number_format($calcTotal,4)}</strong></td>
                                     </tr>
                                 {/if}
                             </table>

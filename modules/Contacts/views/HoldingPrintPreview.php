@@ -54,6 +54,10 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
             ];
         }
 
+        // echo "<pre>";
+        // print_r($grouped);
+        // echo "</pre>";
+
         $recordModel = $this->record->getRecord();
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);

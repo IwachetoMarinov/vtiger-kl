@@ -74,7 +74,7 @@
             <span>
                 <a id="printConfSave"
                     style="color: white;text-align: center;padding: 10px;text-decoration: none;background-color: #bea364;"
-                    href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&bank={$SELECTED_BANK->getId()}{if $INTENT}&fromIntent={$smarty.request.fromIntent}{/if}&hideCustomerInfo={$smarty.request.hideCustomerInfo}">Save</a>
+                    href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&tableName={$smarty.request.tableName}&docNo={$smarty.request.docNo}&bank={$SELECTED_BANK->getId()}{if $INTENT}&fromIntent={$smarty.request.fromIntent}{/if}&hideCustomerInfo={$smarty.request.hideCustomerInfo}">Save</a>
             </span>
         {/if}
     </div>

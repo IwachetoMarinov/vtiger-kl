@@ -42,14 +42,20 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $activity = new dbo_db\ActivitySummary();
         $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
-
-
         $docType = $activity_data['voucherType'] ?? "";
         $erpDoc = (object) $activity_data;
 
         // echo "<pre>";
+        // print_r($docType);
         // print_r($erpDoc);
         // echo "</pre>";
+
+        if ($docType == "DN") {
+            // Sort barItems by totalItemAmount ascending
+            usort($erpDoc->barItems, function ($a, $b) {
+                return $a->totalItemAmount <=> $b->totalItemAmount;
+            });
+        }
 
         $bankAccountId = $request->get('bank');
         if (empty($bankAccountId) && !empty($allBankAccounts)) {
@@ -62,6 +68,11 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
 
         $selectedBank = null;
         if (!empty($bankAccountId)) $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
+
+        // echo "<pre>";
+        // print_r("Selected Bank Account:");
+        // print_r($selectedBank);
+        // echo "</pre>";
 
         if (empty($selectedBank)) {
             // fallback dummy object to prevent template fatal

@@ -284,7 +284,7 @@
                                         <td style="text-align:right;vertical-align: top">
                                             {CurrencyField::convertToUserFormat($total/$barItem->quantity)}</td>
                                     {/if}
-                                    <td style="text-align:right;vertical-align: top">{number_format($barItem->pureOz,2)}
+                                    <td style="text-align:right;vertical-align: top">{number_format($barItem->pureOz,4)}
                                     </td>
                                     <td style="text-align:right;vertical-align: top">
                                         {CurrencyField::convertToUserFormat($total)}</td>

@@ -176,7 +176,6 @@
         <link type='text/css' rel='stylesheet' href='layouts/v7/lib/select2-bootstrap/select2-bootstrap.css'>
         <script type="text/javascript" src="layouts/v7/lib/jquery/select2/select2.min.js"></script>
 
-
         <ul style="list-style-type: none;
                 margin: 0;
                 padding: 0;
@@ -338,7 +337,7 @@
                                             </td>
 
                                             <td style="text-align:right;vertical-align: top">
-                                                {number_format($barItem->totalFineOz,2)}
+                                                {number_format($barItem->totalFineOz,4)}
                                             </td>
 
                                             <td style="text-align:right;vertical-align: top">
@@ -409,6 +408,10 @@
                             {if $SELECTED_BANK}
                                 {assign var=iban value=$SELECTED_BANK->get('iban_no')|lower|replace:' ':''}
                                 {assign var=bank_routing_no value=$SELECTED_BANK->get('bank_routing_no')|lower|replace:' ':''}
+
+                                {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
+                                    <input type="hidden" class="selected-bank" value="{$SELECTED_BANK->getId()}">
+                                {/if}
 
                                 <div>
                                     Please transfer the payment net of charges to our bank account:<br>

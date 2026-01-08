@@ -43,6 +43,10 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
 
         $erpDoc = (object) $activity_data;
 
+        // echo "<pre>";
+        // print_r($erpDoc);
+        // echo "</pre>";
+
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('ERP_DOCUMENT', $erpDoc);
