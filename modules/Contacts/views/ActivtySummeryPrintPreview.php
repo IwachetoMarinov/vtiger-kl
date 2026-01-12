@@ -66,7 +66,6 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
 
 
         // Order transactions by amount_in_account_currency ascending
-
         usort($transactions, function ($a, $b) {
             $amtA = isset($a['amount_in_account_currency']) ? floatval($a['amount_in_account_currency']) : 0;
             $amtB = isset($b['amount_in_account_currency']) ? floatval($b['amount_in_account_currency']) : 0;

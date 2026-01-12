@@ -9,8 +9,8 @@ jQuery(function () {
   }
 
   console.log("Init Multiple file upload");
+
   // Date range functionality Transaction history section
-  // SAVE
   jQuery("body").on("click", ".date-range-button", function (e) {
     console.log("Save button clicked");
 
@@ -31,14 +31,28 @@ jQuery(function () {
     let baseUrl = originalUrl.split("&start_date=")[0];
     baseUrl = baseUrl.split("&end_date=")[0];
 
-    console.log("Base url", baseUrl);
-
     window.location.href =
       baseUrl +
       "&start_date=" +
       encodeURIComponent(start) +
       "&end_date=" +
       encodeURIComponent(end);
+  });
+
+  // Switch for order by balance
+  jQuery(document).on("change", ".summary_toggle", function () {
+    console.log("Toggle changed");
+    var isOn = jQuery(this).is(":checked");
+
+    const originalUrl = window.location.href;
+
+    const orderByParam = isOn ? "desc" : "asc";
+
+    // Remove existing orderBy parameter if present
+    let baseUrl = originalUrl.split("&orderBy=")[0];
+
+    window.location.href =
+      baseUrl + "&orderBy=" + encodeURIComponent(orderByParam);
   });
 
   function asArray(fileList) {
