@@ -196,6 +196,8 @@
     {assign var="balanceAmount" value=0}
     {assign var="start" value=0}
     {assign var="end" value=1}
+    {assign var="openingBalance" value=0}
+
     {for $page=1 to $PAGES}
         {if $page eq 1}
             {assign var="end" value=25}
@@ -248,11 +250,11 @@
                         </tr>
                         <tr>
                             <td style="height: 10mm;text-align: left;font-size:11pt">
-                            {if $EARLIEST_DATE && $LATEST_DATE}
-                                For the period of: {$EARLIEST_DATE} to {$LATEST_DATE}
-                            {else}
-                                Date: {date("Y-m-d")}
-                            {/if}
+                                {if $EARLIEST_DATE && $LATEST_DATE}
+                                    For the period of: {$EARLIEST_DATE} to {$LATEST_DATE}
+                                {else}
+                                    Date: {date("Y-m-d")}
+                                {/if}
                             </td>
                         </tr>
                     {/if}
@@ -291,10 +293,6 @@
                                         {assign var="usdVal" value=$usdVal * -1}
                                     {/if}
 
-                                    {* Record movement *}
-                                    {assign var="movementTotal" value=$movementTotal + $usdVal}
-                                    {assign var="balanceAmount" value=$balanceAmount + $usdVal}
-
                                     {assign var="transDate" value=$TRANSACTION['document_date']|default:''}
 
                                     {* Skip FX / MP transactions *}
@@ -307,6 +305,8 @@
 
                                     {* Opening balance row *}
                                     {if $docNo|substr:0:3 eq 'AOP'}
+                                        {assign var="openingBalance" value=$usdVal}
+                                        {assign var="balanceAmount" value=$usdVal}
                                         <tr>
                                             <td colspan="4"><strong>OPENING BALANCE</strong></td>
                                             <td style="text-align:right">
@@ -319,13 +319,12 @@
                                                 </strong>
                                             </td>
                                         </tr>
-                                        {assign var="balanceAmount" value=$usdVal}
                                         {continue}
                                     {/if}
 
-                                    {* Movement + running balance *}
-                                    {* {assign var="movementTotal" value=$movementTotal+$usdVal}
-                                    {assign var="balanceAmount" value=$balanceAmount+$usdVal} *}
+                                    {* Record movement *}
+                                    {assign var="movementTotal" value=$movementTotal + $usdVal}
+                                    {assign var="balanceAmount" value=$balanceAmount + $usdVal}
 
                                     <tr>
                                         <td>{$docNo}</td>
@@ -344,9 +343,9 @@
                                         </td>
                                         <td style="text-align:right">
                                             {if $balanceAmount gte 0}
-                                                {number_format($balanceAmount, 2, '.', ',')}
+                                                {number_format($balanceAmount,2, '.', ',')}
                                             {else}
-                                                ({number_format($balanceAmount*-1, 2, '.', ',')})
+                                                ({number_format($balanceAmount*-1,2, '.', ',')})
                                             {/if}
                                         </td>
                                     </tr>

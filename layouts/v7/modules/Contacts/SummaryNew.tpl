@@ -28,6 +28,63 @@
             text-decoration: none;
             color: #15c;
         }
+
+        /* vTiger switch */
+        .vt-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+            vertical-align: middle;
+        }
+
+        .vt-switch-label {
+            position: absolute;
+            top: -20px;
+            left: -10px;
+        }
+
+        .vt-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .vt-switch-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #c8c8c8;
+            transition: .2s;
+            border-radius: 24px;
+        }
+
+        .vt-switch-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            top: 3px;
+            background: #fff;
+            transition: .2s;
+            border-radius: 50%;
+        }
+
+        .vt-switch input:checked+.vt-switch-slider {
+            background: #2f80ed;
+        }
+
+        .vt-switch input:checked+.vt-switch-slider:before {
+            transform: translateX(20px);
+        }
+
+        .vt-switch input:focus+.vt-switch-slider {
+            box-shadow: 0 0 0 2px rgba(47, 128, 237, .25);
+        }
     </style>
 
     <div class="summaryWidgetContainer">
@@ -67,6 +124,21 @@
                             <button class="btn btn-success btn-sm date-range-button" type="button" data-mode="add">
                                 Save
                             </button>
+
+                            <label style="margin: 0; font-size: 13px;">Sort by balance</label>
+                            <label class="vt-switch">
+                                <span class="vt-switch-label">
+                                    {if $ORDER_BY eq 'desc'}
+                                        Descending &nbsp;&nbsp;
+                                    {else}
+                                        Ascending &nbsp;&nbsp;
+                                    {/if}
+
+                                </span>
+                                <input type="checkbox" name="summary_toggle" class="summary_toggle" value="1"
+                                    {if $ORDER_BY eq 'desc'}checked{/if}>
+                                <span class="vt-switch-slider"></span>
+                            </label>
 
                             <!-- Currency -->
                             <label style="margin: 0; font-size: 13px;">Currency</label>
@@ -176,7 +248,6 @@
                                         {/if}
 
                                     </td>
-
 
 
                                     {* <td style="width: 140px;">

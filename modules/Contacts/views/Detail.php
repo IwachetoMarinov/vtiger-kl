@@ -46,6 +46,10 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$selected_year = $request->get('ActivtySummeryDate');
 		$start_date = $request->get('start_date');
 		$end_date = $request->get('end_date');
+		$order_by = "asc";
+		$order_by_params = $request->get('orderBy');
+
+		if (!empty($order_by_params) && $order_by_params === 'desc') $order_by = "desc";
 
 		$moduleName = $request->getModule();
 
@@ -117,6 +121,21 @@ class Contacts_Detail_View extends Accounts_Detail_View
 
 		$viewer = $this->getViewer($request);
 
+		// Order transactions by amount_in_account_currency ascending based on order_by param
+		if ($order_by === 'asc') {
+			usort($activity_data, function ($a, $b) {
+				$amtA = isset($a['amount_in_account_currency']) ? floatval($a['amount_in_account_currency']) : 0;
+				$amtB = isset($b['amount_in_account_currency']) ? floatval($b['amount_in_account_currency']) : 0;
+				return $amtA <=> $amtB;
+			});
+		} elseif ($order_by === 'desc') {
+			usort($activity_data, function ($a, $b) {
+				$amtA = isset($a['amount_in_account_currency']) ? floatval($a['amount_in_account_currency']) : 0;
+				$amtB = isset($b['amount_in_account_currency']) ? floatval($b['amount_in_account_currency']) : 0;
+				return $amtB <=> $amtA;
+			});
+		}
+
 		// echo "<pre>";
 		// print_r($activity_data);
 		// echo "</pre>";
@@ -127,6 +146,7 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$viewer->assign('OROSOFT_TRANSACTION', $activity_data);
 		$viewer->assign('CERTIFICATE_HOLDING', $certificate_id);
 		$viewer->assign('CURRENCY', $selected_currency);
+		$viewer->assign('ORDER_BY', $order_by);
 		$viewer->assign('SELECTED_YEAR', $selected_year);
 		$viewer->assign('BALANCES', $wallets);
 		$viewer->assign('HOLDINGS', $holdings_data);

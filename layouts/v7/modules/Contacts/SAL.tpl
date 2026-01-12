@@ -333,7 +333,7 @@
                                             </td>
 
                                             <td style="text-align:right;vertical-align: top">
-                                                {$barItem->unitPrice}
+                                                {number_format($barItem->unitPrice,2)}
                                             </td>
 
                                             <td style="text-align:right;vertical-align: top">

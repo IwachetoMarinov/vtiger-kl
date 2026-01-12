@@ -201,14 +201,14 @@
                     <tr>
                         <td colspan="2" style="padding:0; margin:0;">
                             <table class="activity-tbl"
-                                style="width:50%; border-collapse:collapse; table-layout:fixed; margin-left:0;">
+                                style="width:60%; border-collapse:collapse; table-layout:fixed; margin-left:0;">
                                 <tr>
-                                    <th style="width:50%; text-align:center;">REFERENCE</th>
-                                    <th style="width:50%; text-align:center;">CUSTOMER</th>
+                                    <th style="width:70%; text-align:center;">REFERENCE</th>
+                                    <th style="width:30%; text-align:center;">CUSTOMER</th>
                                 </tr>
                                 <tr>
-                                    <td style="height:18px;">{$smarty.request.docNo}</td>
-                                    <td style="height:18px;">{$RECORD_MODEL->get('cf_898')}</td>
+                                    <td style="height:18px; text-align:center;">{$smarty.request.docNo}</td>
+                                    <td style="height:18px; text-align:center;">{$RECORD_MODEL->get('cf_898')}</td>
                                 </tr>
                             </table>
                         </td>
@@ -231,24 +231,27 @@
                             <table class="activity-tbl">
                                 <tr>
                                     <th style="width:10%;">QTY</th>
-                                    <th style="width:40%;">DESCRIPTION</th>
-                                    <th style="width:40%;">SERIAL NUMBERS</th>
-                                    <th style="width:12.5%;text-align:center">FINE OZ.</th>
+                                    <th style="width:70%;">DESCRIPTION</th>
+                                    <th style="width:20%;text-align:center">FINE OZ.</th>
                                 </tr>
                                 {{assign var="total_value" value=0}}
+                                {{assign var="total_oz" value=0}}
 
                                 {foreach item=barItem from=$ERP_DOCUMENT.barItems}
 
                                     {* add to total_value *}
                                     {assign var="total_value" value=$total_value+$barItem->quantity}
+                                    {assign var="total_oz" value=$total_oz+$barItem->totalFineOz}
 
                                     <tr>
                                         <td>{number_format($barItem->quantity,0)}</td>
 
-                                        <td>{$barItem->itemDescription}</td>
+                                        <td>
+                                            <span>{$barItem->itemDescription}</span> <br />
+                                            <span style="font-size:smaller;font-style:italic;">
+                                                {implode(", ", $barItem->serials)}</span>
+                                        </td>
 
-                                        <td><span style="font-size:smaller;font-style:italic;">
-                                                {implode(", ", $barItem->serials)}</span></td>
                                         <td style="text-align:right;"> {number_format($barItem->totalFineOz,4)}</td>
                                     </tr>
 
@@ -256,9 +259,9 @@
 
                                 {if $PAGES eq $page}
                                     <tr>
-                                        <th style="width:75%;" colspan="2">TOTAL QUANTITY:</th>
-                                        <td style="text-align:right" colspan="2">
-                                            <strong>{number_format($total_value,0)}</strong>
+                                        <td style="width:100%;" colspan="3">
+                                            <strong>{number_format($total_value,0)} </strong>
+                                            <strong style="float: right;">{number_format($total_oz,4)}</strong>
                                         </td>
                                     </tr>
                                 {/if}
@@ -276,7 +279,8 @@
                     signing this Collection Acknowledgement receipt.</div>
 
                 <div style="margin-top: 8mm;">
-                    <span>Date: {$ERP_DOCUMENT['documentDate']}</span>
+                    <span>Date:</span>
+                    <span>.........................................</span>
                 </div>
 
                 <div style="margin-top: 5mm;" class="bottom-container">

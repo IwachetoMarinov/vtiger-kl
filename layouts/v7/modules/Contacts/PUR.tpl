@@ -200,7 +200,7 @@
                 padding: 14px;cursor: pointer;">Settings</span>
             </li>
         </ul>
-       
+
         <script type="text/javascript" src="layouts/v7/modules/Contacts/resources/PrintConf.js"></script>
         {include file='TCPrintConf.tpl'|vtemplate_path:'Contacts'}
     {/if}
@@ -320,7 +320,7 @@
                                         </td>
 
                                         <td style="text-align:right;vertical-align: top">
-                                            {$barItem->unitPrice}
+                                            {number_format($barItem->unitPrice,2)}
                                         </td>
 
                                         <td style="text-align:right;vertical-align: top">

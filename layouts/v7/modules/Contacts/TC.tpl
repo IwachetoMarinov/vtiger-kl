@@ -299,8 +299,8 @@
                                 {assign var="serials" value=""}
                                 {assign var="storageCharge" value=0}
                                 {assign var="calcTotal" value=0}
-
                                 {assign var="barItems" value=$ERP_DOCUMENT->barItems|default:[]}
+
 
                                 {for $loopStart=$start to $end}
                                     {if $loopStart >= count($barItems)}{break}{/if}
@@ -310,16 +310,11 @@
                                     {* Build serial list safely *}
                                     {assign var="serials" value=$serials|cat:implode(',', $barItem->serials)|cat:','}
 
-                                    {* Total price calculation *}
-                                    {assign var="total" value=((($barItem->price)*($barItem->totalFineOz))+$barItem->otherCharge)}
 
-                                    {* Skip empty lines (STORAGE) *}
-                                    {if empty($barItem->quantity) and empty($barItem->itemDescription) and $OROSOFT_DOCTYPE eq 'SWD'}
-                                        {assign var="storageCharge" value=$storageCharge+round($total,2)}
-                                        {continue}
-                                    {else}
-                                        {assign var="calcTotal" value=$calcTotal+$barItem->totalItemAmount}
-                                    {/if}
+                                    {* balanceAmount *}
+                                    {assign var="balanceAmount"
+                                            value=($barItem->spotPrice * $barItem->totalFineOz) * (1 + ($barItem->premium / 100))}
+                                    {assign var="calcTotal" value=$calcTotal+$balanceAmount}
 
                                     {* ROW DISPLAY *}
                                     <tr>
@@ -344,19 +339,10 @@
                                             <td style="text-align:right;vertical-align: top">0 %</td>
                                         {/if}
 
-                                        {* {if $barItem->premium > 0 && $metalPrice > 0}
-                                            <td style="text-align:right;vertical-align: top">
-                                                {abs(number_format(($barItem->otherCharge/($barItem->totalFineOz*$metalPrice))*100,2))} %
-                                            </td>
-                                        {else}
-                                            <td style="text-align:right;vertical-align: top">0 %</td>
-                                        {/if} *}
-
                                         <td style="text-align:right;vertical-align: top">
-                                            {number_format($barItem->totalItemAmount,2)}</td>
+                                            {number_format($balanceAmount,2)} </td>
                                     </tr>
                                 {/for}
-
 
                                 {if $PAGES eq $page}
                                     <tr>
