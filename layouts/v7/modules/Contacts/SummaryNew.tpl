@@ -127,7 +127,7 @@
 
                             <label style="margin: 0; font-size: 13px;">Sort by balance</label>
                             <label class="vt-switch">
-                                <span class="vt-switch-label">
+                            <span class="vt-switch-label">
                                     {if $ORDER_BY eq 'desc'}
                                         Descending &nbsp;&nbsp;
                                     {else}
@@ -230,7 +230,7 @@
                                                 </a>
                                             {/if}
 
-                                        {else if in_array($TX.voucher_type, ['DN'])}
+                                        {else if in_array($TX.voucher_type, ['CN'])}
                                             <a class="transaction-link"
                                                 href="index.php?module=Contacts&view=NotePrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">

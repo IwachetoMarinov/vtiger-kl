@@ -45,17 +45,26 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $docType = $activity_data['voucherType'] ?? "";
         $erpDoc = (object) $activity_data;
 
-        // echo "<pre>";
-        // print_r($docType);
-        // print_r($erpDoc);
-        // echo "</pre>";
-
-        if ($docType == "DN") {
+        if ($docType == "DN"  && $tableName !== "DW_DocSTI ") {
             // Sort barItems by totalItemAmount ascending
             usort($erpDoc->barItems, function ($a, $b) {
                 return $a->totalItemAmount <=> $b->totalItemAmount;
             });
         }
+
+        // Reorder Activitity Items for DN documents based on description if it is equal to "Monthly Storage Fee Invoice"
+        foreach ($erpDoc->barItems as $key => $item) {
+            if ($docType == "DN" && $item->description == "Monthly Storage Fee Invoice") {
+                $monthlyStorageItem = $item;
+                unset($erpDoc->barItems[$key]);
+                array_unshift($erpDoc->barItems, $monthlyStorageItem);
+            }
+        }
+
+        // echo "<pre>";
+        // print_r($tableName);
+        // print_r($erpDoc);
+        // echo "</pre>";
 
         $bankAccountId = $request->get('bank');
         if (empty($bankAccountId) && !empty($allBankAccounts)) {
@@ -95,7 +104,8 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);
         $viewer->assign('SELECTED_BANK', $selectedBank ?? null);
-        $viewer->assign('ERP_DOCUMENT', $this->processDoc($erpDoc));
+        $viewer->assign('ERP_DOCUMENT', $erpDoc);
+        // $viewer->assign('ERP_DOCUMENT', $this->processDoc($erpDoc));
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('INTENT', $intent);
         $viewer->assign('COMPANY', $companyRecord);

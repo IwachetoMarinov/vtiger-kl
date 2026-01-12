@@ -123,6 +123,8 @@ class ActivitySummary
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
             // echo "<pre>";
+            // print_r($sql);
+            // print_r($transaction);
             // print_r($summary);
             // echo "</pre>";
 

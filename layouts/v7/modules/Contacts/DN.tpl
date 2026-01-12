@@ -273,7 +273,7 @@
                                 <td style="text-align: center;">{$ERP_DOCUMENT->documentDate}</td>
                                 <td style="width:25%;text-align: center;">{number_format($spot_price,2)}</td>
                                 <td style="width:25%;text-align: center;">{$ERP_DOCUMENT->currency}
-                                    {$ERP_DOCUMENT->fineOz} / Oz.</td>
+                                    {$ERP_DOCUMENT->fineOz} / OZ.</td>
                             </tr>
                         </table>
 

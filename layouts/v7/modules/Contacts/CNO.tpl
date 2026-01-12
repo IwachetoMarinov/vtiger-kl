@@ -270,7 +270,7 @@
                             <tr>
                                 <th>TOTAL CREDIT AMOUNT:</th>
                                 <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
-                                        {CurrencyField::convertToUserFormat($ERP_DOCUMENT->grandTotal)}</strong>
+                                        {number_format($ERP_DOCUMENT->grandTotal, 2, '.', ',')}</strong>
                                 </td>
                             </tr>
                         </table>

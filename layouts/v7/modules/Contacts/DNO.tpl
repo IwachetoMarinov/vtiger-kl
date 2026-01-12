@@ -294,7 +294,7 @@
                             <tr>
                                 <th>TOTAL DEBIT AMOUNT:</th>
                                 <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
-                                        {$ERP_DOCUMENT->grandTotal}
+                                        {number_format($ERP_DOCUMENT->grandTotal, 2, '.', ',')}
                                     </strong>
                                 </td>
                             </tr>
