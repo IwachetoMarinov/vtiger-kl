@@ -124,6 +124,8 @@ jQuery(function () {
 
   // SAVE
   jQuery("body").on("click", "#printConfSave", function (e) {
+    console.log("Save button clicked");
+
     e.preventDefault();
 
     var start = jQuery("#start_date").val();

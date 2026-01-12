@@ -44,6 +44,8 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$recordId = $request->get('record');
 		$selected_currency = $request->get('ActivtySummeryCurrency');
 		$selected_year = $request->get('ActivtySummeryDate');
+		$start_date = $request->get('start_date');
+		$end_date = $request->get('end_date');
 
 		$moduleName = $request->getModule();
 
@@ -54,16 +56,8 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		// REAL CUSTOMER ID FROM RECORD
 		$clientID = $recordModel->get('cf_898');
 
-		// -------------------------------------------
-		// 🔥 REAL ACTIVITY SUMMARY DATA
-		// -------------------------------------------
-
 		$activity = new dbo_db\ActivitySummary();
 		$activity_data = $activity->getActivitySummary($clientID);
-
-		// echo "<pre>";
-		// print_r($activity_data);
-		// echo "</pre>";
 
 		$holdings = new dbo_db\HoldingsDB();
 		$holdings_data = $holdings->getHoldings($clientID);
@@ -75,32 +69,46 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		// Build dynamic currency list based on Activity Summary data
 		$currency_list = $this->getCurrenciesFromActivitySummary($activity_data);
 
-		// Check if selected currency is valid and filter $activity_data
 		if (
 			($selected_currency && in_array($selected_currency, $currency_list)) ||
-			!empty($selected_year)
+			!empty($selected_year) ||
+			!empty($start_date) ||
+			!empty($end_date)
 		) {
-			$activity_data = array_filter($activity_data, function ($item) use (
+			$startTs = !empty($start_date) ? strtotime($start_date . ' 00:00:00') : null;
+			$endTs   = !empty($end_date)   ? strtotime($end_date . ' 23:59:59') : null;
+
+			$activity_data = array_values(array_filter($activity_data, function ($item) use (
 				$selected_currency,
 				$currency_list,
-				$selected_year
+				$selected_year,
+				$startTs,
+				$endTs,
 			) {
 				// Currency filter
 				if ($selected_currency && in_array($selected_currency, $currency_list)) {
-					if (($item['currency'] ?? '') !== $selected_currency) return false;
+					if (($item['currency'] ?? '') !== $selected_currency) {
+						return false;
+					}
 				}
 
 				// Year filter
 				if (!empty($selected_year) && !empty($item['document_date'])) {
-					$itemYear = substr($item['document_date'], 0, 4);
-
+					$itemYear = date('Y', strtotime($item['document_date']));
 					if ($itemYear !== (string) $selected_year) return false;
 				}
 
-				return true;
-			});
+				// Date range filter
+				if (!empty($item['document_date'])) {
+					$itemTs = strtotime($item['document_date']);
 
-			$activity_data = array_values($activity_data);
+					if ($startTs && $itemTs < $startTs) return false;
+
+					if ($endTs && $itemTs > $endTs) return false;
+				}
+
+				return true;
+			}));
 		}
 
 		// Get year and remove current year from list
@@ -108,6 +116,10 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$years = array_reverse($years_array);
 
 		$viewer = $this->getViewer($request);
+
+		// echo "<pre>";
+		// print_r($activity_data);
+		// echo "</pre>";
 
 		// Assign safely to TPL
 		$viewer->assign('CLIENT_CURRENCY', $currency_list);
@@ -122,6 +134,18 @@ class Contacts_Detail_View extends Accounts_Detail_View
 
 		// Continue normal summary
 		return parent::showModuleSummaryView($request);
+	}
+
+	public function getHeaderScripts(Vtiger_Request $request)
+	{
+		$headerScripts = parent::getHeaderScripts($request);
+
+		$jsFileNames = array(
+			'modules.Contacts.resources.MultiDocUpload'
+		);
+
+		$jsScripts = $this->checkAndConvertJsScripts($jsFileNames);
+		return array_merge($headerScripts, $jsScripts);
 	}
 
 
