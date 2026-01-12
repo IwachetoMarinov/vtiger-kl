@@ -12,22 +12,61 @@
 {strip}
 
     {assign var="ASYEAR" value=$smarty.request.ActivtySummeryDate|default:""}
+    {assign var="START_DATE" value=$smarty.request.start_date|default:""}
+    {assign var="END_DATE" value=$smarty.request.end_date|default:""}
+
     {assign var="ASCURRENCY" value=$ACTIVITY_SUMMERY_CURRENCY|default:""}
     {assign var="RECID" value=$RECORD->getId()|default:0}
+
+    <style>
+        div.inputElement {
+            min-width: 100px;
+            max-width: 140px;
+        }
+
+        .transaction-link {
+            text-decoration: none;
+            color: #15c;
+        }
+    </style>
 
     <div class="summaryWidgetContainer">
         <div class="customwidgetContainer_ widgetContentBlock">
 
             <!-- ===================== HEADER ===================== -->
             <div class="widget_header row-fluid">
-                <span class="span11 margin0px">
+                <span class="span12 margin10px">
+                    <h4 class="display-inline-block" style="font-size: 18px; margin: 0; padding: 0;">
+                        TRANSACTION HISTORY
+                    </h4>
+                </span>
+
+                <span class="span12 margin0px" style="margin-left: 0;">
                     <div class="row-fluid">
-                        <h4 class="display-inline-block" style="font-size: 18px; margin: 0; padding: 0;">
-                            TRANSACTION HISTORY
-                        </h4>
 
                         <!-- NEW CLEAN FLEX CONTAINER -->
                         <div style="float: right;display: flex;align-items: center;gap: 12px;">
+
+                            {* Start date *}
+                            <label style="margin: 0; font-size: 13px;">Start date</label>
+
+                            <div class="input-group inputElement">
+                                <input type="text" id="start_date" class="dateField form-control"
+                                    data-date-format="yyyy-mm-dd" autocomplete="off" value="{$START_DATE}">
+                                <span class="input-group-addon js-open-start"><i class="fa fa-calendar"></i></span>
+                            </div>
+
+                            {* End date *}
+                            <label style="margin: 0; font-size: 13px;">End date</label>
+                            <div class="input-group inputElement">
+                                <input type="text" id="end_date" class="dateField form-control"
+                                    data-date-format="yyyy-mm-dd" autocomplete="off" value="{$END_DATE}">
+                                <span class="input-group-addon js-open-end"><i class="fa fa-calendar"></i></span>
+                            </div>
+
+                            <button class="btn btn-success btn-sm date-range-button" type="button" data-mode="add">
+                                Save
+                            </button>
 
                             <!-- Currency -->
                             <label style="margin: 0; font-size: 13px;">Currency</label>
@@ -85,13 +124,12 @@
 
                                 <tr class="listViewEntries1">
                                     <!-- Document number new hyperlink for different type of transaction -->
-                                    <td style="width: 140px;">
+                                    <td style="width: 140px; text-align: center; vertical-align: middle;">
                                         {if in_array($TX.voucher_type, ['SAL','PUR', 'SWD', 'PWD'])}
-                                            <a href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
+                                            <a class="transaction-link"
+                                                href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">
-                                                <button type="button" class="btn btn-default module-buttons">
-                                                    {$TX.voucher_no}
-                                                </button>
+                                                {$TX.voucher_no}
                                             </a>
 
                                         {else if in_array($TX.voucher_type, ['MPD', 'MRD'])}
@@ -99,36 +137,42 @@
                                             {if $TX.voucher_type == 'MRD'}
                                                 {assign var="docLabel" value="Metal Receipt Delivery"}
                                             {/if}
-                                            <a href="index.php?module=Contacts&view=MPDPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
+                                            <a class="transaction-link"
+                                                href="index.php?module=Contacts&view=MPDPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">
-                                                <button type="button" class="btn btn-default module-buttons">
-                                                    {$TX.voucher_no}
-                                                </button>
+                                                {$TX.voucher_no}
                                             </a>
 
-                                        {else if in_array($TX.voucher_type, ['DN', 'CN'])}
-                                            {assign var="debitName" value="Debit Note"}
-                                            {if $TX.voucher_type == 'CN'}
-                                                {assign var="debitName" value="Credit Note"}
+                                        {else if in_array($TX.voucher_type, ['DN'])}
+                                            {if $TX.table_name == 'DW_DocSTI'}
+                                                <a class="transaction-link"
+                                                    href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
+                                                    target="_blank">
+                                                    {$TX.voucher_no}
+                                                </a>
+                                            {else}
+                                                <a class="transaction-link"
+                                                    href="index.php?module=Contacts&view=NotePrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
+                                                    target="_blank">
+                                                    {$TX.voucher_no}
+                                                </a>
                                             {/if}
 
-                                            <a href="index.php?module=Contacts&view=NotePrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
+                                        {else if in_array($TX.voucher_type, ['DN'])}
+                                            <a class="transaction-link"
+                                                href="index.php?module=Contacts&view=NotePrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">
-                                                <button type="button" class="btn btn-default module-buttons">
-                                                    {$TX.voucher_no}
-                                                </button>
+                                                {$TX.voucher_no}
                                             </a>
 
                                         {else if in_array($TX.voucher_type, ['FCT'])}
-                                            {* todo FCT logic *}
-                                            <button type="button" class="btn btn-default module-buttons">
+                                            <a class="transaction-link" href="#">
                                                 {$TX.voucher_no}
-                                            </button>
-
+                                            </a>
                                         {else}
-                                            <button type="button" class="btn btn-default module-buttons">
+                                            <a class="transaction-link" href="#">
                                                 {$TX.voucher_no}
-                                            </button>
+                                            </a>
                                         {/if}
 
                                     </td>
@@ -149,7 +193,7 @@
                                     </td> *}
 
                                     <!-- INV button (only for Sales/Purchase Invoice) -->
-                                    {if in_array($TX.voucher_type, ['SAL','PUR', 'SWD', 'PWD', 'DN'])}
+                                    {if in_array($TX.voucher_type, ['SAL','PUR', 'SWD', 'PWD'])}
                                         <td>
                                             <a href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">
@@ -158,7 +202,7 @@
                                                 </button>
                                             </a>
                                         </td>
-                                    {else if in_array($TX.voucher_type, ['MPD'])}
+                                    {else if in_array($TX.voucher_type, ['MPD', 'MRD'])}
                                         <td>
                                             <a href="index.php?module=Contacts&view=ViewCR&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">
@@ -173,7 +217,7 @@
 
                                     {* Collection Acknowlegement button *}
                                     <td>
-                                        {if in_array($TX.voucher_type, ['MPD', 'SAL'])}
+                                        {if in_array($TX.voucher_type, ['MPD', 'MRD', 'SAL'])}
                                             <a href="index.php?module=Contacts&view=CollectionAcknowledgement&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">
                                                 <button type="button" class="btn btn-default module-buttons">

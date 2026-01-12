@@ -62,11 +62,53 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
             }));
         }
 
+        // Need to calculate earliest and latest date for the filtered transactions
+
+
+        // Order transactions by amount_in_account_currency ascending
+
+        usort($transactions, function ($a, $b) {
+            $amtA = isset($a['amount_in_account_currency']) ? floatval($a['amount_in_account_currency']) : 0;
+            $amtB = isset($b['amount_in_account_currency']) ? floatval($b['amount_in_account_currency']) : 0;
+            return $amtA <=> $amtB;
+        });
+
+
+        // echo "<pre>";
+        // // var_dump(count($transactions));
+        // var_dump($transactions);
+        // echo "</pre>";
+
+        // foreach ($transactions as $txn) {
+        //     echo "<pre>";
+        //     print_r($txn['voucher_no'] ?? 'N/A');
+        //     print_r($txn['amount_in_account_currency'] ?? 'N/A');
+        //     echo "</pre>";
+        // }
+
+
+        $earliestDate = null;
+        $latestDate = null;
+
+        foreach ($transactions as $txn) {
+            if (!empty($txn[$dateField])) {
+                $txnTs = strtotime($txn[$dateField] . ' 00:00:00');
+                if (is_null($earliestDate) || $txnTs < $earliestDate) {
+                    $earliestDate = $txnTs;
+                }
+                if (is_null($latestDate) || $txnTs > $latestDate) {
+                    $latestDate = $txnTs;
+                }
+            }
+        }
+
         $recordModel = $this->record->getRecord();
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', $this->makeDataPage($transactions));
         $viewer->assign('TRANSACTIONS', $transactions);
+        $viewer->assign('EARLIEST_DATE', $earliestDate ? date('Y-M-d', $earliestDate) : null);
+        $viewer->assign('LATEST_DATE', $latestDate ? date('Y-M-d', $latestDate) : null);
         $viewer->assign('COMPANY', $companyRecord);
         if ($request->get('PDFDownload')) {
             $viewer->assign('ENABLE_DOWNLOAD_BUTTON', false);

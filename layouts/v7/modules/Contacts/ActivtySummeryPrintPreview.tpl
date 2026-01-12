@@ -243,12 +243,16 @@
                     {if $page eq 1}
                         <tr>
                             <td style="height: 10mm; text-decoration: underline;text-align: center">
-                                <strong>TRANSACTION HISTORY</strong>
+                                <strong>ACTIVITY SUMMARY</strong>
                             </td>
                         </tr>
                         <tr>
                             <td style="height: 10mm;text-align: left;font-size:11pt">
-                                Date: {date('d-M-y')}
+                            {if $EARLIEST_DATE && $LATEST_DATE}
+                                For the period of: {$EARLIEST_DATE} to {$LATEST_DATE}
+                            {else}
+                                Date: {date("Y-m-d")}
+                            {/if}
                             </td>
                         </tr>
                     {/if}

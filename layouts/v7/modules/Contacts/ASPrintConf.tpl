@@ -3,8 +3,6 @@
 <link type='text/css' rel='stylesheet' href='layouts/v7/lib/todc/css/bootstrap.min.css' />
 <script type="text/javascript" src="libraries/bootstrap/js/bootstrap.min.js"></script>
 
-{* <script src="layouts/v7/lib/bootstrap/js/bootstrap.min.js"></script> *}
-
 <link rel="stylesheet"
     href="libraries/bootstrap/js/eternicode-bootstrap-datepicker/css/bootstrap-datepicker3.css?v=8.4.0">
 <script src="libraries/bootstrap/js/eternicode-bootstrap-datepicker/js/bootstrap-datepicker.js?v=8.4.0"></script>
@@ -71,6 +69,30 @@
     .datepicker-days th,
     .datepicker-days td {
         cursor: pointer;
+    }
+
+    /* Keep the picker layout intact even if page CSS messes with spans/tables */
+    .datepicker table {
+        width: 100% !important;
+    }
+
+    .datepicker-months span.month,
+    .datepicker-years span.year,
+    .datepicker-decades span.decade,
+    .datepicker-centuries span.century {
+        display: inline-block !important;
+        width: 25% !important;
+        /* 4 per row */
+        margin: 1% 0 !important;
+        white-space: nowrap !important;
+        float: none !important;
+    }
+
+    .datepicker-months td,
+    .datepicker-years td,
+    .datepicker-decades td,
+    .datepicker-centuries td {
+        white-space: normal !important;
     }
 </style>
 
