@@ -502,11 +502,6 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
         array_push($erpData['barItems'], ...$dummy_data);
         array_push($erpData['barItems'], ...$dummy_data);
 
-
-        // echo "<pre>";
-        // print_r($erpData);
-        // echo "</pre>";
-
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', $this->makeDataPage($erpData['barItems']));
