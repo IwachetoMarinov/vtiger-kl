@@ -184,12 +184,14 @@
     {assign var="start" value=0}
     {assign var="end" value=1}
     {assign var="calcTotal" value=0}
+
     {for $page=1 to $PAGES}
         {if $page eq 1}
-            {assign var="end" value=14}
+            {assign var="end" value=13}
         {else}
             {assign var="end" value=($end+14)}
         {/if}
+
         <div class="printAreaContainer">
             <div class="full-width">
                 <table class="print-tbl">
@@ -230,11 +232,13 @@
                             </div>
                         </td>
                     </tr>
+
                     <tr>
                         <td style="height: 20mm; text-decoration: underline;text-align: center">
                             <strong>METAL RECEIPT DELIVERY</strong>
                         </td>
                     </tr>
+
                     <tr>
                         {assign var="metalPrice" value=$ERP_DOCUMENT.barItems[0]->price}
                         {assign var="location" value=$ERP_DOCUMENT.barItems[0]->warehouse}
@@ -246,71 +250,70 @@
                                     <th style="width:25%;text-align:center">DELIVERY DATE</th>
                                     <th style="width:25%;text-align:center">LOCATION</th>
                                 </tr>
-
                                 <tr>
                                     <td colspan="2" style="text-align:center;">{$smarty.request.docNo}</td>
                                     <td style="text-align:center;">{$ERP_DOCUMENT['documentDate']}</td>
                                     <td style="text-align:center;">{$ERP_DOCUMENT['postingDate']}</td>
-
                                     <td style="text-align:center;">{$location}</td>
                                 </tr>
                             </table>
+
                             <table class="activity-tbl">
                                 <tr>
                                     <th style="width:10%;">QTY</th>
                                     <th style="width:40%;">DESCRIPTION</th>
                                     <th style="width:12.5%;text-align:center">FINE OZ.</th>
                                 </tr>
-                                {{assign var="total_value" value=0}}
 
-                                {foreach item=barItem from=$ERP_DOCUMENT.barItems}
+                                {assign var="total_value" value=0}
 
-                                    {* add to total_value *}
+                                {for $i=$start to $end}
+                                    {if $i >= count($ERP_DOCUMENT.barItems)}{break}{/if}
+
+                                    {assign var="barItem" value=$ERP_DOCUMENT.barItems[$i]}
+                                    {assign var="start" value=($i+1)}
+
                                     {assign var="total_value" value=$total_value+$barItem->totalFineOz}
                                     {assign var="calcTotal" value=$calcTotal+$barItem->totalFineOz}
 
                                     <tr>
                                         <td>{number_format($barItem->quantity,0)}</td>
-
                                         <td>
-                                            {$barItem->itemDescription}
-                                            <br>
+                                            {$barItem->itemDescription}<br>
                                             <span style="font-size:smaller;font-style:italic;">
                                                 {implode(", ", $barItem->serials)}
                                             </span>
                                         </td>
-
-                                        <td style="text-align:right;">
+                                        <td style="text-align:right">
                                             {number_format($barItem->totalFineOz,4)}
                                         </td>
                                     </tr>
-
-                                {/foreach}
+                                {/for}
 
                                 {if $PAGES eq $page}
                                     <tr>
-                                        <th style="width:75%;" colspan="2">TOTAL FINE OZ:</th>
+                                        <th colspan="2">TOTAL FINE OZ:</th>
                                         <td style="text-align:right"><strong>{number_format($calcTotal,4)}</strong></td>
                                     </tr>
                                 {/if}
                             </table>
                         </td>
                     </tr>
+
                     <tr>
                         <td style='font-size: 8pt;font-weight:bold;width: 85%;'>
                             <div style="margin-top: 2mm;">
                                 {if isset($COMPANY)}
                                     <div style="float:left">
                                         {$COMPANY->get('company_name')}
-                                        {if $COMPANY->get('company_reg_no')} (Co. Reg. No. {$COMPANY->get('company_reg_no')})
-                                        {/if}<br>
+                                        {if $COMPANY->get('company_reg_no')} (Co. Reg. No.
+                                        {$COMPANY->get('company_reg_no')}){/if}<br>
                                         {$COMPANY->get('company_address')}<br>
                                         T: {$COMPANY->get('company_phone')}
                                         {if $COMPANY->get('company_fax')} | Fax: {$COMPANY->get('company_fax')} {/if}
                                         | {$COMPANY->get('company_website')}<br>
                                     </div>
                                 {/if}
-
                                 <div style="float:right;"><br><br>Page {$page} | {$PAGES}</div>
                             </div>
                         </td>
@@ -320,5 +323,6 @@
         </div>
     {/for}
 </body>
+
 
 </html>

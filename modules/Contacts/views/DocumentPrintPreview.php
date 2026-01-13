@@ -87,9 +87,9 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             $selectedBank->set('swift_code', '');
         }
 
-        // echo "<pre>";
-        // print_r($erpDoc);
-        // echo "</pre>";
+        // MUltiple erpDoc barItems print preview debug
+
+
 
         $intent = false;
         if (!empty($request->get('fromIntent'))) {
