@@ -116,17 +116,10 @@ class ActivitySummary
                 $params[] = $doc_no;
             }
 
-            // Get items for this transaction
             $sql = "
                 SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[$table_name] $where";
 
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
-
-            // echo "<pre>";
-            // print_r($sql);
-            // print_r($transaction);
-            // print_r($summary);
-            // echo "</pre>";
 
             $items = $this->mapTransactionItems($summary, $transaction);
 
@@ -199,6 +192,7 @@ class ActivitySummary
                 'currency'          => $item['Curr_Code'] ?? '',
                 'metal'             => $item['MT_Code'] ?? '',
                 'metal_name'        => $item['MT_Name'] ?? '',
+                'metal_type_code'        => $item['Metal_Type_Code'] ?? '',
                 'warehouse'         => $item['WH_Name'] ?? '',
                 'transactionType'         => $item['Tx_Type'] ?? '',
                 'description'       => isset($item['Description']) ? $item['Description'] : (isset($item['Item_Desc']) ? $item['Item_Desc'] : ''),

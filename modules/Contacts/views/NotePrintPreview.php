@@ -1,7 +1,5 @@
 <?php
 
-// ini_set('display_errors', 1); error_reporting(E_ALL);
-
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
 
@@ -46,10 +44,9 @@ class Contacts_NotePrintPreview_View extends Vtiger_Index_View
         $erpDoc = (object) $activity_data;
         $template_name  = $docType  === 'CN' ? 'CNO' : 'DNO';
 
-        // echo "<pre>";
-        // print_r($tableName);
-        // print_r($erpDoc);
-        // echo "</pre>";
+        echo "<pre>";
+        print_r($erpDoc);
+        echo "</pre>";
 
         $bankAccountId = $request->get('bank');
         if (empty($bankAccountId) && !empty($allBankAccounts)) {
@@ -127,12 +124,10 @@ class Contacts_NotePrintPreview_View extends Vtiger_Index_View
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
         $year = date('Y');
-        // Get last part of docNo after last '/'
         $docNoParts = explode('/', $request->get('docNo'));
         $docNoLastPart = end($docNoParts);
 
         $fileName = $clientID . '-' . $template_name . '-' . $year . '-' . $docNoLastPart . '-' . $template_name;
-        // $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . '-' . $template_name;
         $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
         fwrite($handle, $html);
         fclose($handle);

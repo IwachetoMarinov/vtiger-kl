@@ -1,8 +1,5 @@
 <?php
 
-// ini_set('display_errors', 1); error_reporting(E_ALL);
-
-
 class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
 {
 
@@ -71,8 +68,6 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $viewer->assign('SELECTED_BANK', $selectedBank ?? null);
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
-
-        // REQUEST VALUES PASSED BY CONTROLLER
         $viewer->assign('DOCNO', $request->get('docNo'));
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));
         $viewer->assign('hideCustomerInfo', $request->get('hideCustomerInfo'));
@@ -154,9 +149,6 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
 
         foreach ($assets as $asset) {
             $metal_type = $asset['cf_873'];
-
-            // Remove CRYPTO from metal type
-            // if ($metal_type === 'CRYPTO') continue;
 
             if (isset($data[$metal_type])) {
                 // Append to existing metal type

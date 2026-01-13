@@ -1,7 +1,5 @@
 <?php
 
-// ini_set('display_errors', 1); error_reporting(E_ALL);    
-
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
 
@@ -25,13 +23,8 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         $country_type = $request->get('countryOption');
         $custom_country = $request->get('customCountry');
         $companyId = $recordModel->get('company_id');
-        // Client type
         $client_type = $recordModel->get('cf_927');
         $allBankAccounts = [];
-
-        // Get all assets 
-        // $assets = $this->getAssets();
-        // $assets_data = $this->processAssetsData($assets);
 
         $companyRecord = null;
 
@@ -48,7 +41,6 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
             $firstAccount  = reset($allBankAccounts);
             $bankAccountId = $firstAccount->getId();
         }
-
 
         // ✅ Handle no bank accounts gracefully
         if (empty($bankAccountId)) $bankAccountId = null;
@@ -78,8 +70,6 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         $viewer->assign('CUSTOM_COUNTRY', $custom_country ?? "");
         $viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);
         $viewer->assign('SELECTED_BANK', $selectedBank ?? null);
-
-        // REQUEST VALUES PASSED BY CONTROLLER
         $viewer->assign('DOCNO', $request->get('docNo'));
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));
         $viewer->assign('hideCustomerInfo', $request->get('hideCustomerInfo'));
@@ -160,11 +150,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         foreach ($assets as $asset) {
             $metal_type = $asset['cf_873'];
 
-            // Remove CRYPTO from metal type
-            // if ($metal_type === 'CRYPTO') continue;
-
             if (isset($data[$metal_type])) {
-                // Append to existing metal type
                 $data[$metal_type][] = $asset;
             } else {
                 $data[$metal_type] = [$asset];

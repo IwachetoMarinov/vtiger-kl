@@ -1,6 +1,4 @@
-<?php
-
-// ini_set('display_errors', 1); error_reporting(E_ALL);    
+<?php  
 
 class Contacts_SaleOrderView_View extends Vtiger_Index_View
 {
@@ -20,7 +18,6 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
         $companyId = $recordModel->get('company_id');
-        // Client type
         $client_type = $recordModel->get('cf_927');
 
         $companyRecord = null;
@@ -34,8 +31,6 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
         $viewer->assign('CLIENT_TYPE', $client_type);
-
-        // REQUEST VALUES PASSED BY CONTROLLER
         $viewer->assign('DOCNO', $request->get('docNo'));
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));
         $viewer->assign('CLIENT_NAME', $request->get('clientName') ?? '');

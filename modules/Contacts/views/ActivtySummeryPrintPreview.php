@@ -62,29 +62,12 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
             }));
         }
 
-        // Need to calculate earliest and latest date for the filtered transactions
-
-
         // Order transactions by amount_in_account_currency ascending
         usort($transactions, function ($a, $b) {
             $amtA = isset($a['amount_in_account_currency']) ? floatval($a['amount_in_account_currency']) : 0;
             $amtB = isset($b['amount_in_account_currency']) ? floatval($b['amount_in_account_currency']) : 0;
             return $amtA <=> $amtB;
         });
-
-
-        // echo "<pre>";
-        // // var_dump(count($transactions));
-        // var_dump($transactions);
-        // echo "</pre>";
-
-        // foreach ($transactions as $txn) {
-        //     echo "<pre>";
-        //     print_r($txn['voucher_no'] ?? 'N/A');
-        //     print_r($txn['amount_in_account_currency'] ?? 'N/A');
-        //     echo "</pre>";
-        // }
-
 
         $earliestDate = null;
         $latestDate = null;

@@ -1,7 +1,5 @@
 <?php
 
-// ini_set('display_errors', 1);error_reporting(E_ALL);
-
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
 
@@ -34,18 +32,10 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         if (!empty($companyId))
             $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
 
-        // ------------------------------------------------------
-        // GET DATA FROM new ERP HOLDINGSDB CLASS
-        // ------------------------------------------------------
-
         $activity = new dbo_db\ActivitySummary();
         $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
         $erpDoc = (object) $activity_data;
-
-        // echo "<pre>";
-        // print_r($erpDoc);
-        // echo "</pre>";
 
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
@@ -54,6 +44,7 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('COMPANY', $companyRecord);
         $viewer->assign('PAGES', $this->makeDataPage($erpDoc->barItems));
+
         if ($request->get('PDFDownload')) {
             $html = $viewer->view("TC.tpl", $moduleName, true);
             $this->downloadPDF($html, $request);

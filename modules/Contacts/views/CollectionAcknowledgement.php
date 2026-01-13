@@ -25,7 +25,6 @@ class Contacts_CollectionAcknowledgement_View extends Vtiger_Index_View
         $docNo = $request->get('docNo');
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
-        $comId = $recordModel->get('related_entity');
         $tableName = $request->get('tableName');
         $companyId = $recordModel->get('company_id');
 
@@ -44,8 +43,6 @@ class Contacts_CollectionAcknowledgement_View extends Vtiger_Index_View
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
         $viewer->assign('ERP_DOCUMENT', $erpData);
-
-        // REQUEST VALUES PASSED BY CONTROLLER
         $viewer->assign('DOCNO', $request->get('docNo'));
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));
         $viewer->assign('hideCustomerInfo', $request->get('hideCustomerInfo'));

@@ -136,10 +136,6 @@ class Contacts_Detail_View extends Accounts_Detail_View
 			});
 		}
 
-		// echo "<pre>";
-		// print_r($activity_data);
-		// echo "</pre>";
-
 		// Assign safely to TPL
 		$viewer->assign('CLIENT_CURRENCY', $currency_list);
 		$viewer->assign('ACTIVITY_SUMMERY_CURRENCY', $selected_currency);

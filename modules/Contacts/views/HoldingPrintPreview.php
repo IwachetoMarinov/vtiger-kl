@@ -1,7 +1,5 @@
 <?php
 
-// ini_set('display_errors', 1); error_reporting(E_ALL);
-
 include_once 'dbo_db/HoldingsDB.php';
 
 class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
@@ -53,10 +51,6 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
                 'longDesc' => $item['description'],
             ];
         }
-
-        // echo "<pre>";
-        // print_r($grouped);
-        // echo "</pre>";
 
         $recordModel = $this->record->getRecord();
         $viewer = $this->getViewer($request);
