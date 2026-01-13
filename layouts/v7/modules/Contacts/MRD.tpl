@@ -292,13 +292,16 @@
 
                                     {assign var="total_value" value=$total_value+$barItem->totalFineOz}
                                     {assign var="calcTotal" value=$calcTotal+$barItem->totalFineOz}
+                                    {* Get up to 80 symbols from serials *}
+                                    {assign var="serials" value=implode(", ", $barItem->serials)}
+                                    {assign var="serials" value=$serials|truncate:80:"..."}
 
                                     <tr>
                                         <td>{number_format($barItem->quantity,0)}</td>
                                         <td>
                                             {$barItem->itemDescription}<br>
                                             <span style="font-size:smaller;font-style:italic;">
-                                                {implode(", ", $barItem->serials)}
+                                                {$serials}
                                             </span>
                                         </td>
                                         <td style="text-align:right">

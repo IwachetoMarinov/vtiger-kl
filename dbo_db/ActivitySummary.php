@@ -190,6 +190,10 @@ class ActivitySummary
                 $totalItemAmount = (float)$item['TxAmt'];
             }
 
+            $description = $item['Description'] ?? (isset($item['Item_Desc']) ? $item['Item_Desc'] : '');
+
+            if (empty($description) && isset($item['Desciption'])) $description = $item['Desciption'];
+
             $items[] = (object) [
                 'quantity'          => isset($item['Qty']) ? (int)$item['Qty'] : 1,
                 'currency'          => $item['Curr_Code'] ?? '',
@@ -198,7 +202,7 @@ class ActivitySummary
                 'metal_type_code'        => $item['Metal_Type_Code'] ?? '',
                 'warehouse'         => $item['WH_Name'] ?? '',
                 'transactionType'         => $item['Tx_Type'] ?? '',
-                'description'       => isset($item['Description']) ? $item['Description'] : (isset($item['Item_Desc']) ? $item['Item_Desc'] : ''),
+                'description'       => $description,
 
                 'taxAmount'         => isset($item['Tx_Amt']) ? (float)$item['Tx_Amt'] : 0.00,
                 'spotPrice'         => isset($item['Spot_Price']) ? (float)$item['Spot_Price'] : 0.00,

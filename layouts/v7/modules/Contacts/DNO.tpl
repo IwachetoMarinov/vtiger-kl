@@ -278,6 +278,8 @@
                 </tr>
                 <tr>
                     <td style="width:25%;font-size: 9pt; height: 138mm; vertical-align: top;">
+                        {assign var="description" value=$ERP_DOCUMENT->barItems[0]->description|default:""}
+
                         <table class="activity-tbl">
                             <tr>
                                 <th style="width:70%;">DESCRIPTION</th>
@@ -285,7 +287,7 @@
                             </tr>
                             <tr>
                                 <td style="height: 30mm;border-bottom:none;vertical-align: top">
-                                    {$ERP_DOCUMENT->description}
+                                    {$description}
                                 </td>
                                 <td style="text-align:right;vertical-align: top">
                                     {CurrencyField::convertToUserFormat($ERP_DOCUMENT->grandTotal)}
