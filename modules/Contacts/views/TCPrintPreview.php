@@ -35,6 +35,10 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         $activity = new dbo_db\ActivitySummary();
         $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
+        // echo "<pre>";
+        // print_r($activity_data);
+        // echo "</pre>";
+
         $erpDoc = (object) $activity_data;
 
         $viewer = $this->getViewer($request);
@@ -56,7 +60,7 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
     function makeDataPage($transaction)
     {
         $totalPage = 1;
-        $recordCount = 26;
+        $recordCount = 15;
         if (count($transaction) > $recordCount) {
             $totaldataAfterFirstPage = count($transaction) - $recordCount;
             $totalPage = ceil($totaldataAfterFirstPage / $recordCount) + 1;

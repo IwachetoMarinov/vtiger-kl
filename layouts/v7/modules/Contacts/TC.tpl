@@ -27,12 +27,27 @@
         }
 
         .printAreaContainer {
-            height: 297mm;
             width: 210mm;
-            border: 1px solid #fff;
-            margin: auto;
-            padding: 15mm 15mm;
+            height: 297mm;
+            padding: 15mm;
+            box-sizing: border-box;
+            /* ✅ key fix */
+            margin: 0 auto;
             position: relative;
+            page-break-after: always;
+            break-after: page;
+        }
+
+        .printAreaContainer:last-child {
+            page-break-after: auto;
+            break-after: auto;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
         }
 
         .printAreaContainer * {
@@ -201,10 +216,11 @@
     {assign var="end" value=1}
     {for $page=1 to $PAGES}
         {if $page eq 1}
-            {assign var="end" value=26}
+            {assign var="end" value=13}
         {else}
-            {assign var="end" value=($end+26)}
+            {assign var="end" value=($end+14)}
         {/if}
+
         <div class="printAreaContainer">
             <div class="full-width">
                 <table class="print-tbl">
@@ -313,7 +329,7 @@
 
                                     {* balanceAmount *}
                                     {assign var="balanceAmount"
-                                            value=($barItem->spotPrice * $barItem->totalFineOz) * (1 + ($barItem->premium / 100))}
+                                                    value=($barItem->spotPrice * $barItem->totalFineOz) * (1 + ($barItem->premium / 100))}
                                     {assign var="calcTotal" value=$calcTotal+$balanceAmount}
 
                                     {* ROW DISPLAY *}
