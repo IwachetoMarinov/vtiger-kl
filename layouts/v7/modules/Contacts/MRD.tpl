@@ -297,8 +297,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style='font-size: 8pt;font-weight: bold;position: absolute;bottom: 14px;width: 85%'>
-                            <div>
+                        <td style='font-size: 8pt;font-weight:bold;width: 85%;'>
+                            <div style="margin-top: 2mm;">
                                 {if isset($COMPANY)}
                                     <div style="float:left">
                                         {$COMPANY->get('company_name')}
