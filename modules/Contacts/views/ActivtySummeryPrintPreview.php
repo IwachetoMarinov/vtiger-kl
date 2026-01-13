@@ -102,7 +102,7 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
         }
     }
 
-    function makeDataPage($transaction)
+    protected function makeDataPage($transaction)
     {
         $totalPage = 1;
         if (count($transaction) > 25) {

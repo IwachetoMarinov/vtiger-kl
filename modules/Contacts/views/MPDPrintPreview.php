@@ -508,7 +508,7 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
 
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
-        $viewer->assign('PAGES', 1);
+        $viewer->assign('PAGES', $this->makeDataPage($erpData['barItems']));
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
         $viewer->assign('ERP_DOCUMENT', $erpData);
@@ -526,6 +526,17 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
         } else {
             $viewer->view("$doctype.tpl", $moduleName);
         }
+    }
+
+    protected function makeDataPage($transaction)
+    {
+        $totalPage = 1;
+        if (count($transaction) > 15) {
+            $totaldataAfterFirstPage = count($transaction) - 15;
+            $totalPage = ceil($totaldataAfterFirstPage / 15) + 1;
+        }
+
+        return $totalPage;
     }
 
     public function postProcess(Vtiger_Request $request) {}

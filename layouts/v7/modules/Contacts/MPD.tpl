@@ -89,15 +89,16 @@
 
     {assign var="start" value=0}
     {assign var="end" value=1}
+    {assign var="calcTotal" value=0}
 
     {for $page=1 to $PAGES}
 
         {if $page eq 1}
-            {assign var="end" value=26}
+            {assign var="end" value=13}
         {else}
-            {assign var="end" value=($end+26)}
+            {assign var="end" value=($end+14)}
         {/if}
-
+        
         <div class="printAreaContainer">
 
             <table class="print-tbl">
@@ -197,13 +198,18 @@
                                 <th style="width:40%;">DESCRIPTION</th>
                                 <th style="width:12.5%;text-align:center">FINE OZ.</th>
                             </tr>
-                            {{assign var="total_value" value=0}}
 
+                            {assign var="total_value" value=0}
 
-                            {foreach item=barItem from=$ERP_DOCUMENT.barItems}
+                            {for $i=$start to $end}
+                                {if $i >= count($ERP_DOCUMENT.barItems)}{break}{/if}
+
+                                {assign var="barItem" value=$ERP_DOCUMENT.barItems[$i]}
+                                {assign var="start" value=($i+1)}
 
                                 {* add to total_value *}
                                 {assign var="total_value" value=$total_value+$barItem->totalFineOz}
+                                {assign var="calcTotal" value=$calcTotal+$barItem->totalFineOz}
 
                                 <tr>
                                     <td>{number_format($barItem->quantity,0)}</td>
@@ -221,14 +227,16 @@
                                     </td>
                                 </tr>
 
-                            {/foreach}
+                            {/for}
 
-                            <tr>
-                                <th colspan="2">TOTAL FINE OZ:</th>
-                                <td style="text-align:right">
-                                    <strong>{number_format($total_value,4)}</strong>
-                                </td>
-                            </tr>
+                            {if $PAGES eq $page}
+                                <tr>
+                                    <th colspan="2">TOTAL FINE OZ:</th>
+                                    <td style="text-align:right">
+                                        <strong>{number_format($calcTotal,4)}</strong>
+                                    </td>
+                                </tr>
+                            {/if}
 
                         </table>
 
