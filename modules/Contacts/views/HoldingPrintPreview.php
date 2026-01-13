@@ -36,6 +36,7 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
 
         $LBMA_DATE = isset($holdings_data[0]['spot_date']) && is_array($holdings_data) ? date('d-M-y', strtotime($holdings_data[0]['spot_date'])) : '';
 
+        // SHOULD BE REMOVED after testing
         $dummy_holdings = [
             [
                 'spot_date'  => '2026-01-12',
