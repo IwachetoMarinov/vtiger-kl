@@ -217,16 +217,14 @@
         <script type="text/javascript" src="layouts/v7/modules/Contacts/resources/PrintConf.js"></script>
         {include file='TCPrintConf.tpl'|vtemplate_path:'Contacts'}
     {/if}
-
-
     {assign var="start" value=0}
     {assign var="end" value=1}
-    {assign var="page" value=0}
-
-    {foreach from=$PAGES item=pageSize}
-
-        {assign var="page" value=$page+1}
-        {assign var="end" value=($start + $pageSize - 1)}
+    {for $page=1 to $PAGES}
+        {if $page eq 1}
+            {assign var="end" value=13}
+        {else}
+            {assign var="end" value=($end+14)}
+        {/if}
 
         <div class="printAreaContainer">
             <div class="full-width">
@@ -313,6 +311,7 @@
                                     <th style="width:12.5%;text-align:center">FINE OZ.</th>
                                     <th style="width:12.5%;text-align:center">
                                         {if $ERP_DOCUMENT->voucherType eq 'PUR'}DISCOUNT{else}PREMIUM{/if}(%)
+                                        {* {if $ERP_DOCUMENT->barItems[0]->otherCharge < 0}DISCOUNT{else}PREMIUM{/if}(%) *}
                                     </th>
                                     <th style="width:25%;text-align:center">TOTAL {$ERP_DOCUMENT->currency}</th>
                                 </tr>
@@ -323,18 +322,22 @@
                                 {assign var="calcTotal" value=0}
                                 {assign var="barItems" value=$ERP_DOCUMENT->barItems|default:[]}
 
+
                                 {for $loopStart=$start to $end}
                                     {if $loopStart >= count($barItems)}{break}{/if}
                                     {assign var="barItem" value=$barItems[$loopStart]}
+                                    {assign var="start" value=($loopStart+1)}
 
                                     {* Build serial list safely *}
                                     {assign var="serials" value=$serials|cat:implode(',', $barItem->serials)|cat:','}
 
+
                                     {* balanceAmount *}
                                     {assign var="balanceAmount"
-                                            value=($barItem->spotPrice * $barItem->totalFineOz) * (1 + ($barItem->premium / 100))}
+                                                            value=($barItem->spotPrice * $barItem->totalFineOz) * (1 + ($barItem->premium / 100))}
                                     {assign var="calcTotal" value=$calcTotal+$balanceAmount}
 
+                                    {* ROW DISPLAY *}
                                     <tr>
                                         <td style="vertical-align: top">{number_format($barItem->quantity,0)}</td>
 
@@ -358,12 +361,11 @@
                                         {/if}
 
                                         <td style="text-align:right;vertical-align: top">
-                                            {number_format($balanceAmount,2)}
-                                        </td>
+                                            {number_format($balanceAmount,2)} </td>
                                     </tr>
                                 {/for}
 
-                                {if $page eq count($PAGES)}
+                                {if $PAGES eq $page}
                                     <tr>
                                         <th style="width:75%;" colspan="4">TOTAL TRADE AMOUNT:</th>
                                         <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
@@ -399,19 +401,14 @@
                                     </div>
                                 {/if}
 
-                                <div style="float:right;"><br><br>Page {$page} | {count($PAGES)}</div>
+                                <div style="float:right;"><br><br>Page {$page} | {$PAGES}</div>
                             </div>
                         </td>
                     </tr>
                 </table>
             </div>
         </div>
-
-        {* advance cursor for next page *}
-        {assign var="start" value=($end+1)}
-
-    {/foreach}
-
+    {/for}
 </body>
 
 </html>
