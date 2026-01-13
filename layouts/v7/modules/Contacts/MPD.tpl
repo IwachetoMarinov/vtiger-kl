@@ -25,14 +25,32 @@
             margin: 0px
         }
 
-        .printAreaContainer {
+        /* .printAreaContainer {
             height: 297mm;
             width: 210mm;
             border: 1px solid #fff;
             margin: auto;
             padding: 15mm 15mm;
             position: relative;
+        } */
+
+        .printAreaContainer {
+            width: 210mm;
+            height: 297mm;
+            padding: 15mm;
+            box-sizing: border-box;
+            /* ✅ key fix */
+            margin: 0 auto;
+            position: relative;
+            page-break-after: always;
+            break-after: page;
         }
+
+        .printAreaContainer:last-child {
+            page-break-after: auto;
+            break-after: auto;
+        }
+
 
         .printAreaContainer * {
             box-sizing: border-box;
@@ -71,6 +89,15 @@
         table.activity-tbl th {
             background: #bca263;
         }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
+            /* or margin: 10mm if you want */
+        }
     </style>
 </head>
 
@@ -98,7 +125,7 @@
         {else}
             {assign var="end" value=($end+14)}
         {/if}
-        
+
         <div class="printAreaContainer">
 
             <table class="print-tbl">
