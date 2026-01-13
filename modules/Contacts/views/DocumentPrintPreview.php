@@ -45,16 +45,22 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $docType = $activity_data['voucherType'] ?? "";
         $erpDoc = (object) $activity_data;
 
-        // echo "<pre>";
-        // print_r($docType);
-        // print_r($erpDoc);
-        // echo "</pre>";
-
-        if ($docType == "DN") {
+        if ($docType == "DN"  && $tableName !== "DW_DocSTI ") {
             // Sort barItems by totalItemAmount ascending
             usort($erpDoc->barItems, function ($a, $b) {
                 return $a->totalItemAmount <=> $b->totalItemAmount;
             });
+        }
+
+        // Reorder Activitity Items for DN documents based on description if it is equal to "Monthly Storage Fee Invoice"
+        foreach ($erpDoc->barItems as $key => $item) {
+            $item = (object) $item;
+            $item->metal = $this->getMetalName($item->metal_type_code);
+            if ($docType == "DN" && $item->description == "Monthly Storage Fee Invoice") {
+                $monthlyStorageItem = $item;
+                unset($erpDoc->barItems[$key]);
+                array_unshift($erpDoc->barItems, $monthlyStorageItem);
+            }
         }
 
         $bankAccountId = $request->get('bank');
@@ -69,11 +75,6 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $selectedBank = null;
         if (!empty($bankAccountId)) $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
 
-        // echo "<pre>";
-        // print_r("Selected Bank Account:");
-        // print_r($selectedBank);
-        // echo "</pre>";
-
         if (empty($selectedBank)) {
             // fallback dummy object to prevent template fatal
             $selectedBank = new Vtiger_Record_Model();
@@ -86,6 +87,10 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             $selectedBank->set('swift_code', '');
         }
 
+        // echo "<pre>";
+        // print_r($erpDoc);
+        // echo "</pre>";
+
         $intent = false;
         if (!empty($request->get('fromIntent'))) {
             $intent = Vtiger_Record_Model::getInstanceById($request->get('fromIntent'), 'GPMIntent');
@@ -95,7 +100,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);
         $viewer->assign('SELECTED_BANK', $selectedBank ?? null);
-        $viewer->assign('ERP_DOCUMENT', $this->processDoc($erpDoc));
+        $viewer->assign('ERP_DOCUMENT', $erpDoc);
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('INTENT', $intent);
         $viewer->assign('COMPANY', $companyRecord);
@@ -119,16 +124,18 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         return $totalPage;
     }
 
-    function processDoc($datas)
+    protected function getMetalName($code)
     {
-        foreach ($datas->barItems as $key => $item) {
-            if ($item->quantity == 1) {
-                $serials = $item->serialNumbers;
-                // $serials = explode('-', $item->serials[0]);
-                $datas->barItems[$key]->serials[0] = $serials[0];
-            }
-        }
-        return $datas;
+        $metal_names = [
+            'XAU' => 'Gold',
+            'XAG' => 'Silver',
+            'XPT' => 'Platinum',
+            'XPD' => 'Palladium',
+            'XPL' => 'Palladium',
+            'MBTC' => 'mBitCoin',
+        ];
+
+        return $metal_names[$code] ?? '';
     }
 
     public function postProcess(Vtiger_Request $request) {}
@@ -151,7 +158,6 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $docNoLastPart = end($docNoParts);
 
         $fileName = $clientID . '-' . $docType . '-' . $year . '-' . $docNoLastPart . '-' . $docType;
-        // $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . '-' . $docType;
         $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
         fwrite($handle, $html);
         fclose($handle);

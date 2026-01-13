@@ -1,8 +1,5 @@
 <?php
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
 
@@ -34,7 +31,6 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
         if (!empty($companyId))
             $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
 
-        // $accountId = $recordModel->get('account_id');
         $activity = new dbo_db\ActivitySummary();
         $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
@@ -44,22 +40,19 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
         $viewer->assign('ERP_DOCUMENT', $erpData);
-
-        // REQUEST VALUES PASSED BY CONTROLLER
         $viewer->assign('DOCNO', $request->get('docNo'));
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));
         $viewer->assign('hideCustomerInfo', $request->get('hideCustomerInfo'));
+
         $doctype = 'MPD';
 
         if ($tableName === 'DW_DocMRD') $doctype = 'MRD';
 
         if ($request->get('PDFDownload')) {
-            // $html = $viewer->view("MPD.tpl", $moduleName, true);
             $html = $viewer->view("$doctype.tpl", $moduleName, true);
             $this->downloadPDF($html, $request);
         } else {
             $viewer->view("$doctype.tpl", $moduleName);
-            // $viewer->view("MPD.tpl", $moduleName);
         }
     }
 

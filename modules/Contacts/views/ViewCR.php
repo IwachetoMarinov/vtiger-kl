@@ -1,7 +1,5 @@
 <?php
 
-// ini_set('display_errors', 1); error_reporting(E_ALL);    
-
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
 
@@ -47,8 +45,6 @@ class Contacts_ViewCR_View extends Vtiger_Index_View
         $viewer->assign('ERP_DOCUMENT', $erpData);
         $viewer->assign('ID_OPTION', $request->get('idOption') ?? null);
         $viewer->assign('COMPANY_OPTION', $request->get('companyOption') ?? null);
-
-        // REQUEST VALUES PASSED BY CONTROLLER
         $viewer->assign('DOCNO', $request->get('docNo'));
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));
         $viewer->assign('hideCustomerInfo', $request->get('hideCustomerInfo'));
@@ -77,7 +73,6 @@ class Contacts_ViewCR_View extends Vtiger_Index_View
 
         $fileName = $clientID . '-' . $template_name . '-' . $year . '-' . $docNoLastPart . '-' . $template_name;
 
-    // $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . "-CR";
         $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
         fwrite($handle, $html);
         fclose($handle);

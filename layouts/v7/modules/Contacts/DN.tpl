@@ -259,6 +259,7 @@
                     </td>
                 </tr>
                 {assign var="spot_price" value="{$ERP_DOCUMENT->barItems[0]->spotPrice|default:0}"}
+                {assign var="metal" value="{$ERP_DOCUMENT->barItems[0]->metal|default:''}"}
 
                 <tr>
                     <td style="font-size: 9pt; height: 168mm; vertical-align: top;">
@@ -271,9 +272,9 @@
                             <tr>
                                 <td colspan="2" style="text-align: center;">{$smarty.request.docNo}</td>
                                 <td style="text-align: center;">{$ERP_DOCUMENT->documentDate}</td>
-                                <td style="width:25%;text-align: center;">{number_format($spot_price,2)}</td>
+                                <td style="width:25%;text-align: center;">{$metal}</td>
                                 <td style="width:25%;text-align: center;">{$ERP_DOCUMENT->currency}
-                                    {$ERP_DOCUMENT->fineOz} / Oz.</td>
+                                    {$ERP_DOCUMENT->fineOz} / OZ.</td>
                             </tr>
                         </table>
 
@@ -287,7 +288,7 @@
                             </tr>
                             <tr>
                                 <td style="height:50mm;border-bottom:none;vertical-align: top;line-height: 2">Storage
-                                    charge for {$ERP_DOCUMENT->metal} for the period from
+                                    charge {if isset($metal) && $metal != "" } for <span style="font-weight: 600;">{$metal}</span> {/if} for the period from
                                     {$ERP_DOCUMENT->documentDate} to {$ERP_DOCUMENT->postingDate}:<br>
                                     {foreach from=$ERP_DOCUMENT->barItems item=charge}
 
