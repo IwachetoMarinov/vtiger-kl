@@ -51,6 +51,12 @@
             break-after: auto;
         }
 
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+        }
 
         .printAreaContainer * {
             box-sizing: border-box;
@@ -88,15 +94,6 @@
 
         table.activity-tbl th {
             background: #bca263;
-        }
-
-        @media print {
-            @page {
-                size: A4;
-                margin: 0;
-            }
-
-            /* or margin: 10mm if you want */
         }
     </style>
 </head>

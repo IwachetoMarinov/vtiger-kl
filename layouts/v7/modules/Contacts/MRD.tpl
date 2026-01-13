@@ -25,13 +25,30 @@
             margin: 0px
         }
 
+
+
         .printAreaContainer {
-            height: 297mm;
             width: 210mm;
-            border: 1px solid #fff;
-            margin: auto;
-            padding: 15mm 15mm;
+            height: 297mm;
+            padding: 15mm;
+            box-sizing: border-box;
+            /* ✅ key fix */
+            margin: 0 auto;
             position: relative;
+            page-break-after: always;
+            break-after: page;
+        }
+
+        .printAreaContainer:last-child {
+            page-break-after: auto;
+            break-after: auto;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
         }
 
         .printAreaContainer * {

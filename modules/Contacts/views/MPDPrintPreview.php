@@ -37,6 +37,7 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
         $activity = new dbo_db\ActivitySummary();
         $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
+        // SHOULD BE REMOVED LATER - DUMMY DATA FOR TESTING PURPOSES
         $dummy_data = [
             [
                 'quantity'  => 5,
