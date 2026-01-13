@@ -57,11 +57,6 @@
 
         }
 
-        .printAreaContainer:last-child {
-            page-break-after: auto;
-            break-after: auto;
-        }
-
         .printAreaContainer .full-width {
             width: 100%;
         }
@@ -287,7 +282,7 @@
                     <tr>
                         {assign var="metalPrice" value=($ERP_DOCUMENT->barItems[0]->spotPrice)}
                         {assign var="transactionType" value=($ERP_DOCUMENT->barItems[0]->transactionType)}
-                        <td style="font-size: 9pt; height: 168mm; vertical-align: top;">
+                        <td style="font-size: 9pt; vertical-align: top;">
                             <table class="activity-tbl" style="margin-bottom:5mm">
                                 <tr>
                                     <th colspan="2" style="width:25%;text-align:center">TRANSACTION ID</th>
