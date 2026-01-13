@@ -69,7 +69,7 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
 
         // How many characters roughly fit in one wrapped line in your DESCRIPTION column.
         // (Adjust if needed; 55–75 is typical depending on font/column width)
-        $charsPerLine = 110;
+        $charsPerLine = 150;
         // $charsPerLine = 65;
 
         // Every extra wrapped line consumes extra "row units"
