@@ -336,7 +336,7 @@
                                         <td style="border-bottom:none;vertical-align: top">
                                             {$barItem->itemDescription}
                                             <br><span
-                                                style="font-size: smaller;font-style: italic;max-width: 250px;display: inline-block;word-break: break-all;white-space: normal;">
+                                                style="font-size: smaller;font-style: italic;max-width: 250px;display: inline-block;word-break: break-all;white-space: normal; font-size: 9px;">
                                                 {$barItem->serialNumbers}</span>
                                         </td>
 
