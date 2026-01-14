@@ -87,10 +87,6 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             $selectedBank->set('swift_code', '');
         }
 
-        // MUltiple erpDoc barItems print preview debug
-
-
-
         $intent = false;
         if (!empty($request->get('fromIntent'))) {
             $intent = Vtiger_Record_Model::getInstanceById($request->get('fromIntent'), 'GPMIntent');

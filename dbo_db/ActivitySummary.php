@@ -122,7 +122,7 @@ class ActivitySummary
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
             // SHOULD be removed later - dummy data for testing purposes
-            $summary = array_merge($summary, $summary, $summary, $summary, $summary, $summary, $summary, $summary, $summary, $summary);
+            // $summary = array_merge($summary, $summary, $summary, $summary, $summary, $summary, $summary, $summary, $summary, $summary);
 
             $items = $this->mapTransactionItems($summary, $transaction);
 
