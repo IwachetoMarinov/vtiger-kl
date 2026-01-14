@@ -1,7 +1,5 @@
 <?php
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
 
@@ -36,10 +34,6 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
 
         $activity = new dbo_db\ActivitySummary();
         $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);
-
-        // echo "<pre>";
-        // print_r($activity_data);
-        // echo "</pre>";
 
         $erpDoc = (object) $activity_data;
         $pages = $this->makeDataPages($erpDoc->barItems);
