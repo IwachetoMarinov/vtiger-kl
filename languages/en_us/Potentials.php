@@ -25,7 +25,7 @@ $languageStrings = array(
 	'Probability' => 'Probability',
 	'Campaign Source' => 'Campaign Source',
 	'Forecast Amount' => 'Weighted Revenue',
-	'Related To' => 'Organization Name',
+	'Related To' => 'Organisation Name',
 	'Contact Name' => 'Contact Name',
         'Type' => 'Type',
 	

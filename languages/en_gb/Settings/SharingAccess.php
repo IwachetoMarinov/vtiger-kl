@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 $languageStrings = array(
-	'Accounts'                     => 'Organizations & Contacts'    , // TODO: Review
+	'Accounts'                     => 'Organisations & Contacts'    , // TODO: Review
 	'LBL_ADD_CUSTOM_RULE'          => 'Add Custom Privilege Rule'   , 
 	'Read Only'                    => 'R'                           , 
 	'Read Write'                   => 'R+W'                         , 

@@ -27,7 +27,7 @@ $languageStrings = array(
 	'Title' => 'Title',
 	'Solution' => 'Solution',
 	'From Portal' => 'From Portal',
-	'Related To' => 'Organization Name',
+	'Related To' => 'Organisation Name',
 	'Contact Name' => 'Contact Name',
 	//Added for existing picklist entries
 

@@ -121,7 +121,7 @@
                         <tr>
                             {assign var=FLDNAME value="account_id"}
                             <td>
-                                {vtranslate('Organization Name',$SOURCE_MODULE)}
+                                {vtranslate('Organisation Name',$SOURCE_MODULE)}
                                 <input type="hidden" class="vtiger_field_name" value="{$FLDNAME}" />
                             </td>
                             <td>

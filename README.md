@@ -71,3 +71,72 @@ Deploy in github with export/import database
 
 1. chmod +x deploy.sh // Only first time
 2. ./deploy.sh
+
+
+3. Pull all changes from github repo: `sudo git pull origin main`
+4. Install new packages if need it `composer install`
+5. Give permissions:
+     `sudo chown -R $USER:$USER /var/www/html`
+     `sudo chmod -R 775 /var/www/html`
+6. Login to mysql `mysql -u vtigeruser -p` after that enter the password
+    6.1. Use databasel `USE vtiger_gpm;` 
+7. import database (if it neeed) add file only with `_changes_` in the name `mysql -u vtigeruser -p vtiger_gpm < db_backups/vtiger_gpm_changes_2025_11_05_1621.sql`
+8. Restart apache server `sudo service apache2 restart`
+
+9. If VM instalation failed and got 'Access to restricted file' 
+    9.1 Check in config file: $dbconfig['db_server'] = 'localhost';
+                                $dbconfig['db_port'] = ':3306';
+                                $dbconfig['db_username'] = 'root';
+                                $dbconfig['db_password'] = '';
+                                $dbconfig['db_name'] = 'vtiger_gpm';
+                                $dbconfig['db_type'] = 'mysqli';
+                                $dbconfig['db_status'] = 'true';
+                                $site_URL = 'http://localhost/vtiger-gpm/';
+                                $root_directory = '/var/www/html/';
+
+10. Clear cache: `rm -rf test/templates_c/v7`
+   10.1 After that you should create this folder `mkdir -p test/templates_c/v7`
+   10.2 Perrmission to this folder: `sudo chown -R www-data:www-data test/templates_c`, `sudo chmod -R 775 test/templates_c`
+
+11. Open config.ini  file `nano config.inc.php`
+
+12. count how many times cron ran with log file `grep -c "Cron job completed" logs/order_cron.log`
+
+12.1. Get 50 rows from log file `tail -n 50 /var/www/html/logs/order_cron.log`
+
+13. Check the system’s cron logs (server-wide) `sudo grep CRON /var/log/syslog`
+
+14. Change field in CRM
+    14.1 First select table and field id from table based on label `SELECT fieldid, fieldlabel, fieldname, columnname, tablename, typeofdata FROM vtiger_field WHERE fieldlabel = 'Indicative FX spot';`
+    14.2 Change database column to TEXT (if you wanna change other type must add type) `ALTER TABLE vtiger_gpmintent MODIFY COLUMN indicative_fx_spot VARCHAR(255);` 
+    14.3 Update field metadata `UPDATE vtiger_field SET typeofdata = 'V~O' WHERE fieldid = 1035;`
+    14.4 Change UI type (VERY IMPORTANT) `UPDATE vtiger_field SET uitype = 1 WHERE fieldid = 1035;`
+
+
+15. Run cron for metals manually: `bash /var/www/html/vtiger_metals_cron.sh`
+
+16. Check cron jobs for my current user `sudo crontab -u iwacheto -l`
+
+17. Open file for current user `sudo crontab -u iwacheto -e`
+
+18. Check cron job permissions `ls -l /var/www/html/vtiger_metals_cron.sh`
+
+19. Make it executable any cron job `sudo chmod +x /var/www/html/vtiger_metals_cron.sh` and `sudo chown iwacheto:iwacheto /var/www/html/vtiger_metals_cron.sh`
+
+20. When create Holding certificate do not forget to check and give permissions for these folder '/modules/HoldingCertificate/tmp' and '/var/www/html/test/templates_c/v7/' with these commands: 
+     `sudo chown -R iwacheto:www-data /var/www/html/modules/HoldingCertificate/tmp/`
+     `sudo chmod -R 775 /var/www/html/modules/HoldingCertificate/tmp/`
+
+    `sudo chown -R iwacheto:www-data /var/www/html/test/templates_c/`
+    `sudo chmod -R 775 /var/www/html/test/templates_c/`
+
+21. delete ALL QR codes?  `find /var/www/html/modules/HoldingCertificate -maxdepth 1 -name "*.png" -delete`   
+
+22. add git configs `git config user.name "IwachetoMarinov"`  and `git config user.email "ivailo.marinov@webrika.bg"`
+
+23. Add permissions to write in templates_c directory: `sudo chown -R www-data:www-data /var/www/html/test/templates_c` and `sudo chmod -R 775 /var/www/html/test/templates_c`
+
+24. Move Intent, Assets and MetalPrices to ASSETS menu `UPDATE vtiger_app2tab SET appname = 'SALES' WHERE tabid IN (SELECT tabid FROM vtiger_tab WHERE name IN ('Assets', 'MetalPrice', 'GPMIntent'));`
+     
+25. To change any main menu name go to `languages/en_us/Vtiger.php` and find menu name
+   

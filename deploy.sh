@@ -1,50 +1,92 @@
 #!/bin/bash
 # ----------------------------------------------
-# vTiger Solo Dev Auto Deploy Script
+# vTiger Solo Dev Auto Deploy Script (Schema diff only + Server-safe SQL)
 # Author: Ivaylo Marinov
 # ----------------------------------------------
 
-# === CONFIGURATION ===
 DB_NAME="vtiger_gpm"
 DB_USER="root"
 DB_PASS=""
 BACKUP_DIR="./db_backups"
-DATE=$(date +"%Y_%m_%d_%H%M")
-SQL_FILE="$BACKUP_DIR/${DB_NAME}_$DATE.sql"
+DATE=$(date +"%Y-%m-%d %H:%M:%S")
+STAMP=$(date +"%Y_%m_%d_%H%M")
+
+TEMP_SCHEMA="$BACKUP_DIR/tmp_schema.sql"
+LAST_SCHEMA=$(ls -t "$BACKUP_DIR"/*_schema_*.sql 2>/dev/null | head -n 1)
+DIFF_FILE="$BACKUP_DIR/${DB_NAME}_changes_${STAMP}.diff"
+SQL_FILE="$BACKUP_DIR/${DB_NAME}_changes_${STAMP}.sql"
 GIT_BRANCH="develop"
 
-# === CHECKS ===
-if [ ! -d "$BACKUP_DIR" ]; then
-  mkdir -p "$BACKUP_DIR"
-fi
 
-# === 1. BACKUP DATABASE ===
-echo "🔄 Backing up database '$DB_NAME'..."
-mysqldump -u"$DB_USER" -p"$DB_PASS" "$DB_NAME" > "$SQL_FILE"
+log() {
+  echo "[$(date +"%Y-%m-%d %H:%M:%S")] $1"
+}
+
+# 1️⃣ Dump current DB schema (no data, no comments)
+log "🔄 Dumping current schema for '$DB_NAME' (no data)..."
+mysqldump -u"$DB_USER" -p"$DB_PASS" --no-data --skip-comments "$DB_NAME" > "$TEMP_SCHEMA"
 if [ $? -ne 0 ]; then
-  echo "❌ Database backup failed. Aborting!"
+  log "❌ Schema dump failed. Aborting!"
   exit 1
 fi
-echo "✅ Database backup created: $SQL_FILE"
 
-# === 2. GIT ADD & COMMIT ===
-echo "📦 Staging Git changes..."
-git add .
+# 2️⃣ Compare to last schema (if exists)
+if [ -f "$LAST_SCHEMA" ]; then
+  log "🔍 Comparing with last schema: $LAST_SCHEMA"
+
+  diff -u "$LAST_SCHEMA" "$TEMP_SCHEMA" | grep -v "^--- Dump completed" > "$DIFF_FILE"
+
+  if [ -s "$DIFF_FILE" ]; then
+    log "✅ Schema changes detected — saving new schema and diff."
+    mv "$TEMP_SCHEMA" "$BACKUP_DIR/${DB_NAME}_schema_${STAMP}.sql"
+
+    # 🧹 CLEAN THE DIFF → BUILD COMPLETE SQL BLOCKS
+    # 🧹 CLEAN THE DIFF → BUILD COMPLETE SQL BLOCKS FROM ADDED LINES
+    awk '
+      /^\+DROP TABLE/      { sub(/^\+/, "", $0); print; next }
+      /^\+CREATE TABLE/    { sub(/^\+/, "", $0); in_create=1; print; next }
+      in_create && /^\+/   {
+        sub(/^\+/, "", $0)
+        print
+        if ($0 ~ /ENGINE=|CHARSET=|COLLATE=|\);$/) in_create=0
+        next
+      }
+    ' "$DIFF_FILE" > "$SQL_FILE"
+
+
+
+
+    if [ -s "$SQL_FILE" ]; then
+      log "✅ Server-ready SQL file created: $SQL_FILE"
+      log "💡 To apply changes on the server, run:"
+      log "   mysql -u $DB_USER -p $DB_NAME < $SQL_FILE"
+    else
+      log "⚠️ No valid SQL statements found in diff (only metadata changes)."
+      rm -f "$SQL_FILE"
+    fi
+
+  else
+    log "ℹ️ No schema differences detected — cleaning up temp files."
+    rm -f "$TEMP_SCHEMA" "$DIFF_FILE"
+  fi
+else
+  log "⚠️ No previous schema found — saving first reference schema."
+  mv "$TEMP_SCHEMA" "$BACKUP_DIR/${DB_NAME}_schema_${STAMP}.sql"
+fi
+
+# 3️⃣ Git operations
+log "📦 Staging Git changes..."
+git add "$BACKUP_DIR"
 
 echo "✍️  Enter commit message (or press Enter for default):"
 read COMMIT_MSG
 if [ -z "$COMMIT_MSG" ]; then
-  COMMIT_MSG="Auto-deploy on $DATE"
+  COMMIT_MSG="Auto-deploy (schema changes only) on $STAMP"
 fi
 
-git commit -m "$COMMIT_MSG"
+git commit -m "$COMMIT_MSG" >/dev/null 2>&1
+git push origin "$GIT_BRANCH" >/dev/null 2>&1
+log "🚀 Git push completed (branch: $GIT_BRANCH)."
 
-# === 3. PUSH TO GITHUB ===
-echo "🚀 Pushing to GitHub ($GIT_BRANCH)..."
-git push origin "$GIT_BRANCH"
-
-# === 4. OPTIONAL: KEEP ONLY LAST 5 BACKUPS ===
-echo "🧹 Cleaning old backups (keeping last 5)..."
-ls -t "$BACKUP_DIR"/*.sql | tail -n +6 | xargs -r rm --
-
-echo "✅ Deploy complete!"
+log "✅ Deploy finished successfully."
+echo "------------------------------------------"

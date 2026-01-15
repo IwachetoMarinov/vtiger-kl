@@ -9,7 +9,7 @@
  *************************************************************************************/
 $languageStrings = array(
     'SharingAccess' => 'Sharing Rules',
-	'Accounts' => 'Organizations & Contacts',
+	'Accounts' => 'Organisations & Contacts',
 	'LBL_ADD_CUSTOM_RULE' => 'Add Custom Rule',
 	'Read Only' => 'Read Only',
 	'Read Write' => 'Read/Write',

@@ -9,7 +9,7 @@
  *************************************************************************************/
 $languageStrings = array(
 	// Basic Strings
-	'Accounts' => 'Organizations',
+	'Accounts' => 'Organisations',
 	'SINGLE_Accounts' => 'Organization',
 	'LBL_ADD_RECORD' => 'Add Organization',
 	'LBL_RECORDS_LIST' => 'Organization List',
@@ -22,7 +22,7 @@ $languageStrings = array(
 
 	//Field Labels
 	'industry' => 'Industry',
-	'Account Name' => 'Organization Name',
+	'Account Name' => 'Organisation Name',
 	'Account No' => 'Organization Number',
 	'Website' => 'Website',
 	'Ticker Symbol' => 'Ticker Symbol',

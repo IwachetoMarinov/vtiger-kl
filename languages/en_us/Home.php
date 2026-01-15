@@ -9,7 +9,7 @@
  *************************************************************************************/
 $languageStrings = array(
 	// Home Page Components
-	'ALVT' => 'Top Organizations',
+	'ALVT' => 'Top Organisations',
 	'PLVT' => 'Top Opportunities',
 	'QLTQ' => 'Top Quotes',
 	'CVLVT' => 'Key Metrics',

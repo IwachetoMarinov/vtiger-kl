@@ -8,6 +8,9 @@
  * All Rights Reserved.
  ************************************************************************************/
 
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 class Assets_Detail_View extends Vtiger_Detail_View {
 
 	function preProcess(Vtiger_Request $request, $display=true) {

@@ -1,4 +1,5 @@
 vendor/*
+test/*
 !vendor/.htaccess
 .vscode/*
 config.inc.php
@@ -6,3 +7,14 @@ config.inc.php
 logs/
 storage/
 cache/
+# === Debug logs ===
+wkhtml_debug.log
+pdf_debug.log
+
+api/api_debug.log
+
+# === Local logs ===
+db_backups/deploy.log
+test-db.php
+
+.env

@@ -114,11 +114,11 @@ $languageStrings = array(
 	'SalesOrder Reports'=>'Sales Order Reports', //Added for SO
 	'Invoice Reports'=>'Invoice Reports',
 	'Campaign Reports'=>'Campaign Reports', //Added for Campaigns
-	'Contacts by Accounts'=>'Contacts by Organizations',
-	'Contacts without Accounts'=>'Contacts without Organizations',
+	'Contacts by Accounts'=>'Contacts by Organisations',
+	'Contacts without Accounts'=>'Contacts without Organisations',
 	'Contacts by Potentials'=>'Contacts by Opportunities',
-	'Contacts related to Accounts'=>'Contacts related to Organizations',
-	'Contacts not related to Accounts'=>'Contacts not related to Organizations',
+	'Contacts related to Accounts'=>'Contacts related to Organisations',
+	'Contacts not related to Accounts'=>'Contacts not related to Organisations',
 	'Contacts related to Potentials'=>'Contacts related to Opportunities',
 	'Lead by Source'=>'Lead by Source',
 	'Lead Status Report'=>'Lead Status Report',
@@ -148,12 +148,12 @@ $languageStrings = array(
 
 	'Email Reports'=>'Email Reports',
 	'Contacts Email Report'=>'Contacts Email Report',
-	'Accounts Email Report'=>'Organizations Email Report',
+	'Accounts Email Report'=>'Organisations Email Report',
 	'Leads Email Report'=>'Leads Email Report',
 	'Vendors Email Report'=>'Vendors Email Report',
 
 	'Emails sent to Contacts' => 'Emails sent to Contacts',
-	'Emails sent to Organizations' => 'Emails sent to Organizations',
+	'Emails sent to Organisations' => 'Emails sent to Organisations',
 	'Emails sent to Leads' => 'Emails sent to Leads',
 	'Emails sent to Vendors' => 'Emails sent to Vendors',
 

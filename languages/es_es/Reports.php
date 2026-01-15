@@ -209,7 +209,7 @@ $languageStrings = array(
 
   'LBL_SAME_LEVEL_ROLES' => 'Mismo Nivel De Funciones',
   'LBL_SUBORDINATE_ROLES' => 'Funciones Subordinadas',
-  'Emails sent to Organizations' => 'Los correos electrónicos enviados a las Organizaciones',
+  'Emails sent to Organisations' => 'Los correos electrónicos enviados a las Organizaciones',
   'LBL_SHARE_REPORT' => 'Informe De Acciones',
   'LBL_SHARED_REPORTS' => 'Compartió Conmigo',
   'LBL_PINNED' => 'Anclado',

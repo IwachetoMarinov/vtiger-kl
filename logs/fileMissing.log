@@ -556,3 +556,219 @@ C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::preProcess::76<br>
 C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::triggerPreProcess::214<br>
 C:\laragon\www\vtiger-gpm\index.php::process::26<br>
 
+Traced on 2025-11-18 15:36:12
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\data\CRMEntity.php::checkFileAccessForInclusion::59<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\Utils.php::getInstance::224<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerCRMObjectMeta.php::vtws_getModuleInstance::44<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerModuleOperation.php::__construct::32<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerModuleOperation.php::getMetaInstance::20<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\Utils.php::__construct::472<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\QueryGenerator.php::vtws_getModuleHandlerFromName::98<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\QueryGenerator.php::getMeta::74<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\EnhancedQueryGenerator.php::__construct::16<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\models\ListView.php::__construct::373<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\views\List.php::getInstance::58<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::preProcess::76<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::triggerPreProcess::214<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
+Traced on 2025-11-18 15:36:15
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\data\CRMEntity.php::checkFileAccessForInclusion::59<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\Utils.php::getInstance::224<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerCRMObjectMeta.php::vtws_getModuleInstance::44<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerModuleOperation.php::__construct::32<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerModuleOperation.php::getMetaInstance::20<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\Utils.php::__construct::472<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\QueryGenerator.php::vtws_getModuleHandlerFromName::98<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\QueryGenerator.php::getMeta::74<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\EnhancedQueryGenerator.php::__construct::16<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\models\ListView.php::__construct::373<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\views\List.php::getInstance::58<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::preProcess::76<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::triggerPreProcess::214<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
+Traced on 2025-11-18 15:36:16
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\data\CRMEntity.php::checkFileAccessForInclusion::59<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\models\Module.php::getInstance::1585<br>
+C:\laragon\www\vtiger-gpm\modules\Settings\LayoutEditor\models\Field.php::getCompulsoryMandatoryFieldList::142<br>
+C:\laragon\www\vtiger-gpm\test\templates_c\v7\54a25e6683247a64a4348ffe0ef125a2da85a1fd_0.file.FieldsList.tpl.php::isMandatoryOptionDisabled::117<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_template_resource_base.php::content_691ae44b5e1955_53145995::123<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_template_compiled.php::getRenderedTemplateCode::114<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_internal_template.php::render::217<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_internal_template.php::render::386<br>
+C:\laragon\www\vtiger-gpm\test\templates_c\v7\79b2babe3d16588edb62b30c2e97062477078d2f_0.file.Index.tpl.php::_subTemplateRender::47<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_template_resource_base.php::content_691ae44b20c730_55863801::123<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_template_compiled.php::getRenderedTemplateCode::114<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_internal_template.php::render::217<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_internal_templatebase.php::render::238<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_internal_templatebase.php::_execute::134<br>
+C:\laragon\www\vtiger-gpm\includes\runtime\Viewer.php::display::226<br>
+C:\laragon\www\vtiger-gpm\modules\Settings\LayoutEditor\views\Index.php::view::119<br>
+C:\laragon\www\vtiger-gpm\includes\runtime\Controller.php::showFieldLayout::65<br>
+C:\laragon\www\vtiger-gpm\modules\Settings\LayoutEditor\views\Index.php::invokeExposedMethod::50<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::process::215<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
+Traced on 2025-11-18 15:36:19
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\data\CRMEntity.php::checkFileAccessForInclusion::59<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\Utils.php::getInstance::224<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerCRMObjectMeta.php::vtws_getModuleInstance::44<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerModuleOperation.php::__construct::32<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerModuleOperation.php::getMetaInstance::20<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\Utils.php::__construct::472<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\QueryGenerator.php::vtws_getModuleHandlerFromName::98<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\QueryGenerator.php::getMeta::74<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\EnhancedQueryGenerator.php::__construct::16<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\models\ListView.php::__construct::373<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\views\List.php::getInstance::58<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::preProcess::76<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::triggerPreProcess::214<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
+Traced on 2025-11-18 15:36:21
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\data\CRMEntity.php::checkFileAccessForInclusion::59<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\Utils.php::getInstance::224<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerCRMObjectMeta.php::vtws_getModuleInstance::44<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerModuleOperation.php::__construct::32<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerModuleOperation.php::getMetaInstance::20<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\Utils.php::__construct::472<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\QueryGenerator.php::vtws_getModuleHandlerFromName::98<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\QueryGenerator.php::getMeta::74<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\EnhancedQueryGenerator.php::__construct::16<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\models\ListView.php::__construct::373<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\views\List.php::getInstance::58<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::preProcess::76<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::triggerPreProcess::214<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
+Traced on 2025-11-18 15:36:23
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\data\CRMEntity.php::checkFileAccessForInclusion::59<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\Utils.php::getInstance::224<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerCRMObjectMeta.php::vtws_getModuleInstance::44<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerModuleOperation.php::__construct::32<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerModuleOperation.php::getMetaInstance::20<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\Utils.php::__construct::472<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\QueryGenerator.php::vtws_getModuleHandlerFromName::98<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\QueryGenerator.php::getMeta::74<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\EnhancedQueryGenerator.php::__construct::16<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\models\ListView.php::__construct::373<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\views\List.php::getInstance::58<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::preProcess::76<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::triggerPreProcess::214<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
+Traced on 2025-11-18 15:36:24
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\data\CRMEntity.php::checkFileAccessForInclusion::59<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\Utils.php::getInstance::224<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerCRMObjectMeta.php::vtws_getModuleInstance::44<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerModuleOperation.php::__construct::32<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerModuleOperation.php::getMetaInstance::20<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\Utils.php::__construct::472<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\QueryGenerator.php::vtws_getModuleHandlerFromName::98<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\QueryGenerator.php::getMeta::74<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\EnhancedQueryGenerator.php::__construct::16<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\models\ListView.php::__construct::373<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\views\List.php::getInstance::58<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::preProcess::76<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::triggerPreProcess::214<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
+Traced on 2025-11-18 15:36:25
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\data\CRMEntity.php::checkFileAccessForInclusion::59<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\Utils.php::getInstance::224<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerCRMObjectMeta.php::vtws_getModuleInstance::44<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerModuleOperation.php::__construct::32<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerModuleOperation.php::getMetaInstance::20<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\Utils.php::__construct::472<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\QueryGenerator.php::vtws_getModuleHandlerFromName::98<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\QueryGenerator.php::getMeta::74<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\EnhancedQueryGenerator.php::__construct::16<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\models\ListView.php::__construct::373<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\views\List.php::getInstance::58<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::preProcess::76<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::triggerPreProcess::214<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
+Traced on 2025-11-18 15:36:27
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\data\CRMEntity.php::checkFileAccessForInclusion::59<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\models\Module.php::getInstance::1585<br>
+C:\laragon\www\vtiger-gpm\modules\Settings\LayoutEditor\models\Field.php::getCompulsoryMandatoryFieldList::142<br>
+C:\laragon\www\vtiger-gpm\test\templates_c\v7\54a25e6683247a64a4348ffe0ef125a2da85a1fd_0.file.FieldsList.tpl.php::isMandatoryOptionDisabled::117<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_template_resource_base.php::content_691ae44b5e1955_53145995::123<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_template_compiled.php::getRenderedTemplateCode::114<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_internal_template.php::render::217<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_internal_template.php::render::386<br>
+C:\laragon\www\vtiger-gpm\test\templates_c\v7\79b2babe3d16588edb62b30c2e97062477078d2f_0.file.Index.tpl.php::_subTemplateRender::47<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_template_resource_base.php::content_691ae44b20c730_55863801::123<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_template_compiled.php::getRenderedTemplateCode::114<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_internal_template.php::render::217<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_internal_templatebase.php::render::238<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_internal_templatebase.php::_execute::134<br>
+C:\laragon\www\vtiger-gpm\includes\runtime\Viewer.php::display::226<br>
+C:\laragon\www\vtiger-gpm\modules\Settings\LayoutEditor\views\Index.php::view::119<br>
+C:\laragon\www\vtiger-gpm\includes\runtime\Controller.php::showFieldLayout::65<br>
+C:\laragon\www\vtiger-gpm\modules\Settings\LayoutEditor\views\Index.php::invokeExposedMethod::50<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::process::215<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
+Traced on 2025-11-18 15:36:31
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\data\CRMEntity.php::checkFileAccessForInclusion::59<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\models\Module.php::getInstance::1585<br>
+C:\laragon\www\vtiger-gpm\modules\Settings\LayoutEditor\models\Field.php::getCompulsoryMandatoryFieldList::142<br>
+C:\laragon\www\vtiger-gpm\test\templates_c\v7\54a25e6683247a64a4348ffe0ef125a2da85a1fd_0.file.FieldsList.tpl.php::isMandatoryOptionDisabled::117<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_template_resource_base.php::content_691ae44b5e1955_53145995::123<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_template_compiled.php::getRenderedTemplateCode::114<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_internal_template.php::render::217<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_internal_template.php::render::386<br>
+C:\laragon\www\vtiger-gpm\test\templates_c\v7\79b2babe3d16588edb62b30c2e97062477078d2f_0.file.Index.tpl.php::_subTemplateRender::47<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_template_resource_base.php::content_691ae44b20c730_55863801::123<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_template_compiled.php::getRenderedTemplateCode::114<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_internal_template.php::render::217<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_internal_templatebase.php::render::238<br>
+C:\laragon\www\vtiger-gpm\vendor\smarty\smarty\libs\sysplugins\smarty_internal_templatebase.php::_execute::134<br>
+C:\laragon\www\vtiger-gpm\includes\runtime\Viewer.php::display::226<br>
+C:\laragon\www\vtiger-gpm\modules\Settings\LayoutEditor\views\Index.php::view::119<br>
+C:\laragon\www\vtiger-gpm\includes\runtime\Controller.php::showFieldLayout::65<br>
+C:\laragon\www\vtiger-gpm\modules\Settings\LayoutEditor\views\Index.php::invokeExposedMethod::50<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::process::215<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
+Traced on 2025-11-18 15:36:45
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\data\CRMEntity.php::checkFileAccessForInclusion::59<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\Utils.php::getInstance::224<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerCRMObjectMeta.php::vtws_getModuleInstance::44<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerModuleOperation.php::__construct::32<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\VtigerModuleOperation.php::getMetaInstance::20<br>
+C:\laragon\www\vtiger-gpm\include\Webservices\Utils.php::__construct::472<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\QueryGenerator.php::vtws_getModuleHandlerFromName::98<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\QueryGenerator.php::getMeta::74<br>
+C:\laragon\www\vtiger-gpm\include\QueryGenerator\EnhancedQueryGenerator.php::__construct::16<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\models\ListView.php::__construct::373<br>
+C:\laragon\www\vtiger-gpm\modules\Vtiger\views\List.php::getInstance::58<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::preProcess::76<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::triggerPreProcess::214<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
