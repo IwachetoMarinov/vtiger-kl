@@ -129,9 +129,9 @@ For email features:
 
 ## 10. Optional Tools
 
-- Cron service enabled (for scheduled workflows)
-- Redis / Memcached (for performance optimization)
-- Backup solution for database and application files
+- Cron service enabled (for scheduled workflows) - Mandatory
+- Redis / Memcached (for performance optimization) - Optional
+- Backup solution for database and application files  - Mandatory
 
 ---
 
