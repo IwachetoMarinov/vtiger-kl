@@ -112,8 +112,8 @@
                                             <span style="display:inline-block; width: 20px;"></span>-<span
                                                 style="display:inline-block; width: 20px;"></span>
                                             {number_format($HOLDING.quantity,0)} {$HOLDING.description}
-                                            {* {if !empty($HOLDING->modiefiedSerials)}- Serial
-                                            {implode(", ",$HOLDING->modiefiedSerials)}{/if}<br> *}
+                                            {if !empty($HOLDING.serial_no)}- Serial
+                                            {$HOLDING.serial_no}{/if}<br>
                                         {/foreach}
                                     {/foreach}
                                     <br>

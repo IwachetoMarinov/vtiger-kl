@@ -39,10 +39,6 @@ class ActivitySummary
 
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
-        // echo "<pre>";
-        // print_r($summary);
-        // echo "</pre>";
-
         $results  = [];
         foreach ($summary as $item) {
             $description = $item['Description'] ? $item['Description'] : $item['Tx_Desc'] ?? '';
@@ -120,9 +116,6 @@ class ActivitySummary
                 SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[$table_name] $where";
 
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
-
-            // SHOULD be removed later - dummy data for testing purposes
-            // $summary = array_merge($summary, $summary, $summary, $summary, $summary, $summary, $summary, $summary, $summary, $summary);
 
             $items = $this->mapTransactionItems($summary, $transaction);
 
