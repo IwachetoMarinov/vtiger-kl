@@ -2,7 +2,6 @@
 /* modules/Assets/MetalsCron.php */
 
 include_once 'data/CRMEntity.php';
-// include_once 'modules/Metals/Metals.php';
 include_once 'modules/Users/Users.php';
 
 use Dotenv\Dotenv;
@@ -12,6 +11,8 @@ class MetalsCron
 
     private $db_username;
     private $db_password;
+    private $db_name;
+    private $server_name;
     private $connection;
 
     public function __construct()
@@ -22,10 +23,12 @@ class MetalsCron
 
         $this->db_username = $_ENV['DB_USERNAME'] ?? getenv('DB_USERNAME') ?: '';
         $this->db_password = $_ENV['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?: '';
+        $this->server_name = $_ENV['DB_SERVER_NAME'] ?? getenv('DB_SERVER_NAME') ?: '';
+        $this->db_name     = $_ENV['DB_EXTERNAL_NAME'] ?? getenv('DB_EXTERNAL_NAME') ?: '';
 
-        $serverName = "qcpitech.ddns.net";
+        $serverName = $this->server_name;
         $connectionOptions = array(
-            "Database" => "GPM_DW",
+            "Database" => $this->db_name,
             "Uid" => $this->db_username,
             "PWD" => $this->db_password,
             "TrustServerCertificate" => true,
