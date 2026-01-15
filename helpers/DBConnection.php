@@ -18,12 +18,14 @@ class DBConnection
 
             $db_username = $_ENV['DB_USERNAME'] ?? getenv('DB_USERNAME') ?: '';
             $db_password = $_ENV['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?: '';
+            $server_name = $_ENV['DB_SERVER_NAME'] ?? getenv('DB_SERVER_NAME') ?: '';
+            $db_name = $_ENV['DB_EXTERNAL_NAME'] ?? getenv('DB_EXTERNAL_NAME') ?: '';
 
-            if (!$db_username || !$db_password) return null;
+            if (!$db_username || !$db_password || !$server_name || !$db_name) return null;
 
-            $serverName = "qcpitech.ddns.net";
+            $serverName = $server_name;
             $connectionOptions = [
-                "Database" => "GPM_DW",
+                "Database" => $db_name,
                 "Uid" => $db_username,
                 "PWD" => $db_password,
                 "TrustServerCertificate" => true,
@@ -32,11 +34,6 @@ class DBConnection
             ];
 
             $conn = sqlsrv_connect($serverName, $connectionOptions);
-
-            // echo "<pre>";
-            // print_r(sqlsrv_errors(SQLSRV_ERR_ALL));
-            // print_r($conn);
-            // echo "</pre>";
 
             if ($conn === false) return null;
 
