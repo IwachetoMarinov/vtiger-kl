@@ -1,92 +1,56 @@
 #!/bin/bash
 # ----------------------------------------------
-# vTiger Solo Dev Auto Deploy Script (Schema diff only + Server-safe SQL)
+# Simple MySQL DB Backup Script (full dump)
 # Author: Ivaylo Marinov
 # ----------------------------------------------
 
+set -euo pipefail
+
 DB_NAME="vtiger_gpm"
 DB_USER="root"
-DB_PASS=""
+DB_PASS=""           
 BACKUP_DIR="./db_backups"
-DATE=$(date +"%Y-%m-%d %H:%M:%S")
-STAMP=$(date +"%Y_%m_%d_%H%M")
+COMPRESS=true       
 
-TEMP_SCHEMA="$BACKUP_DIR/tmp_schema.sql"
-LAST_SCHEMA=$(ls -t "$BACKUP_DIR"/*_schema_*.sql 2>/dev/null | head -n 1)
-DIFF_FILE="$BACKUP_DIR/${DB_NAME}_changes_${STAMP}.diff"
-SQL_FILE="$BACKUP_DIR/${DB_NAME}_changes_${STAMP}.sql"
-GIT_BRANCH="develop"
-
+STAMP="$(date +"%Y_%m_%d_%H%M%S")"
+OUT_SQL="${BACKUP_DIR}/${DB_NAME}_backup_${STAMP}.sql"
+OUT_GZ="${OUT_SQL}.gz"
 
 log() {
   echo "[$(date +"%Y-%m-%d %H:%M:%S")] $1"
 }
 
-# 1️⃣ Dump current DB schema (no data, no comments)
-log "🔄 Dumping current schema for '$DB_NAME' (no data)..."
-mysqldump -u"$DB_USER" -p"$DB_PASS" --no-data --skip-comments "$DB_NAME" > "$TEMP_SCHEMA"
-if [ $? -ne 0 ]; then
-  log "❌ Schema dump failed. Aborting!"
-  exit 1
+# Ensure backup directory exists
+mkdir -p "$BACKUP_DIR"
+
+# Build mysql auth args safely
+MYSQL_AUTH=(-u"$DB_USER")
+if [[ -n "${DB_PASS}" ]]; then
+  MYSQL_AUTH+=(-p"$DB_PASS")
 fi
 
-# 2️⃣ Compare to last schema (if exists)
-if [ -f "$LAST_SCHEMA" ]; then
-  log "🔍 Comparing with last schema: $LAST_SCHEMA"
+log "🔄 Creating full dump for database '${DB_NAME}'..."
 
-  diff -u "$LAST_SCHEMA" "$TEMP_SCHEMA" | grep -v "^--- Dump completed" > "$DIFF_FILE"
-
-  if [ -s "$DIFF_FILE" ]; then
-    log "✅ Schema changes detected — saving new schema and diff."
-    mv "$TEMP_SCHEMA" "$BACKUP_DIR/${DB_NAME}_schema_${STAMP}.sql"
-
-    # 🧹 CLEAN THE DIFF → BUILD COMPLETE SQL BLOCKS
-    # 🧹 CLEAN THE DIFF → BUILD COMPLETE SQL BLOCKS FROM ADDED LINES
-    awk '
-      /^\+DROP TABLE/      { sub(/^\+/, "", $0); print; next }
-      /^\+CREATE TABLE/    { sub(/^\+/, "", $0); in_create=1; print; next }
-      in_create && /^\+/   {
-        sub(/^\+/, "", $0)
-        print
-        if ($0 ~ /ENGINE=|CHARSET=|COLLATE=|\);$/) in_create=0
-        next
-      }
-    ' "$DIFF_FILE" > "$SQL_FILE"
-
-
-
-
-    if [ -s "$SQL_FILE" ]; then
-      log "✅ Server-ready SQL file created: $SQL_FILE"
-      log "💡 To apply changes on the server, run:"
-      log "   mysql -u $DB_USER -p $DB_NAME < $SQL_FILE"
-    else
-      log "⚠️ No valid SQL statements found in diff (only metadata changes)."
-      rm -f "$SQL_FILE"
-    fi
-
-  else
-    log "ℹ️ No schema differences detected — cleaning up temp files."
-    rm -f "$TEMP_SCHEMA" "$DIFF_FILE"
-  fi
+if [[ "$COMPRESS" == "true" ]]; then
+  mysqldump "${MYSQL_AUTH[@]}" \
+    --single-transaction \
+    --routines \
+    --triggers \
+    --events \
+    --hex-blob \
+    --default-character-set=utf8mb4 \
+    "$DB_NAME" | gzip -c > "$OUT_GZ"
+  log "✅ Backup created: $OUT_GZ"
 else
-  log "⚠️ No previous schema found — saving first reference schema."
-  mv "$TEMP_SCHEMA" "$BACKUP_DIR/${DB_NAME}_schema_${STAMP}.sql"
+  mysqldump "${MYSQL_AUTH[@]}" \
+    --single-transaction \
+    --routines \
+    --triggers \
+    --events \
+    --hex-blob \
+    --default-character-set=utf8mb4 \
+    "$DB_NAME" > "$OUT_SQL"
+  log "✅ Backup created: $OUT_SQL"
 fi
 
-# 3️⃣ Git operations
-log "📦 Staging Git changes..."
-git add "$BACKUP_DIR"
-
-echo "✍️  Enter commit message (or press Enter for default):"
-read COMMIT_MSG
-if [ -z "$COMMIT_MSG" ]; then
-  COMMIT_MSG="Auto-deploy (schema changes only) on $STAMP"
-fi
-
-git commit -m "$COMMIT_MSG" >/dev/null 2>&1
-git push origin "$GIT_BRANCH" >/dev/null 2>&1
-log "🚀 Git push completed (branch: $GIT_BRANCH)."
-
-log "✅ Deploy finished successfully."
-echo "------------------------------------------"
+log "✅ Done."
