@@ -1,6 +1,6 @@
 <?php
 /* ===============================
- * FORCE DEBUG – DO NOT REMOVE
+ * FORCE DEBUG
  * =============================== */
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -9,42 +9,44 @@ error_reporting(E_ALL);
 echo "STEP 0: PHP STARTED\n";
 
 /* ===============================
- * CLI CHECK
+ * CLI ONLY
  * =============================== */
 if (php_sapi_name() !== 'cli') {
-    die("ERROR: CLI only\n");
+    die("CLI only\n");
 }
 echo "STEP 1: CLI OK\n";
 
 /* ===============================
- * BOOTSTRAP
+ * BOOTSTRAP VTIGER
  * =============================== */
 chdir(__DIR__);
 
 require_once 'config.inc.php';
-echo "STEP 2: config.inc.php loaded\n";
+echo "STEP 2: config loaded\n";
 
 require_once 'includes/main/WebUI.php';
 echo "STEP 3: WebUI loaded\n";
 
 require_once 'modules/Users/Users.php';
-echo "STEP 4: Users module loaded\n";
+echo "STEP 4: Users loaded\n";
 
 global $adb;
 
 /* ===============================
- * DELETE ALL USERS
+ * RESET USERS (SAFE)
  * =============================== */
 $adb->pquery("DELETE FROM vtiger_user2role", []);
 $adb->pquery("DELETE FROM vtiger_users", []);
-echo "STEP 5: Users deleted\n";
+$adb->pquery("DELETE FROM vtiger_users_seq", []);
+$adb->pquery("INSERT INTO vtiger_users_seq (id) VALUES (0)", []);
+echo "STEP 5: Users reset\n";
 
 /* ===============================
  * GET ROLE
  * =============================== */
 $res = $adb->pquery("SELECT roleid FROM vtiger_role LIMIT 1", []);
 if ($adb->num_rows($res) === 0) {
-    die("ERROR: No roles found\n");
+    die("NO ROLE FOUND\n");
 }
 $roleId = $adb->query_result($res, 0, 'roleid');
 echo "STEP 6: Role found ($roleId)\n";
@@ -62,17 +64,27 @@ $user->column_fields['is_admin']   = 'on';
 $user->column_fields['roleid']     = $roleId;
 
 $user->save('Users');
-echo "STEP 7: User record saved (ID={$user->id})\n";
+echo "STEP 7: User saved (ID={$user->id})\n";
+
+if (empty($user->id)) {
+    die("USER ID INVALID\n");
+}
 
 /* ===============================
- * SET PASSWORD (PHASH)
+ * RELOAD USER (REQUIRED IN 8.4)
  * =============================== */
-$user->setPassword('admin@1234');
-$user->save('Users');
+$adminUser = new Users();
+$adminUser->retrieve_entity_info($user->id, 'Users');
+$adminUser->id = $user->id;
+
+/* ===============================
+ * SET PASSWORD (CORRECT METHOD)
+ * =============================== */
+$adminUser->change_password('admin@1234');
 echo "STEP 8: Password set\n";
 
 /* ===============================
- * ROLE MAPPING
+ * ROLE MAPPING (FORCE)
  * =============================== */
 $adb->pquery(
     "INSERT INTO vtiger_user2role (userid, roleid) VALUES (?, ?)",
@@ -81,7 +93,7 @@ $adb->pquery(
 echo "STEP 9: Role mapped\n";
 
 /* ===============================
- * CLEAR CACHE
+ * CLEAR CACHE / SESSIONS
  * =============================== */
 @exec('rm -rf cache/* storage/session/*');
 echo "STEP 10: Cache cleared\n";
