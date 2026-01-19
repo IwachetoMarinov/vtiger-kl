@@ -33,7 +33,8 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             // ✅ Company record
             $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
             // ✅ Bank accounts
-            $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($companyId);
+            // $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($companyId);
+            $allBankAccounts = BankAccount_Record_Model::getAllInstances();
             $bankAccountId   = $request->get('bank');
         }
 
@@ -72,6 +73,12 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
 
         $selectedBank = null;
         if (!empty($bankAccountId)) $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
+
+        // echo "<pre>";
+        // // ✅ All bank accounts data
+        // print_r($selectedBank);
+        // echo "</pre>";
+
 
         if (empty($selectedBank)) {
             // fallback dummy object to prevent template fatal

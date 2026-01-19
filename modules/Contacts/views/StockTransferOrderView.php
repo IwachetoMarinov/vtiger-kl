@@ -32,7 +32,8 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
             // ✅ Company record
             $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
             // ✅ Bank accounts
-            $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($companyId);
+            // $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($companyId);
+            $allBankAccounts = BankAccount_Record_Model::getAllInstances();
             $bankAccountId   = $request->get('bank');
         }
 

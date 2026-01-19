@@ -51,6 +51,47 @@ class BankAccount_Record_Model extends Vtiger_Record_Model
         return $instances;
     }
 
+    public static function getAllInstances()
+    {
+        $db = PearDatabase::getInstance();
+
+        $result = $db->pquery(
+            "SELECT crm.crmid AS bankaccountid
+         FROM vtiger_crmentity crm
+         WHERE crm.deleted = 0
+         AND crm.setype = 'BankAccount'",
+            []
+        );
+
+        $rows = $db->num_rows($result);
+        $instances = [];
+
+        for ($i = 0; $i < $rows; $i++) {
+            $recordId = $db->query_result($result, $i, 'bankaccountid');
+
+            $focus = CRMEntity::getInstance('BankAccount');
+            $focus->id = $recordId;
+            $focus->retrieve_entity_info($recordId, 'BankAccount');
+
+            $modelClassName = Vtiger_Loader::getComponentClassName(
+                'Model',
+                'Record',
+                'BankAccount'
+            );
+
+            $instance = new $modelClassName();
+
+            $instances[] = $instance
+                ->setData($focus->column_fields)
+                ->set('id', $recordId)
+                ->setModule('BankAccount')
+                ->setEntity($focus);
+        }
+
+        return $instances;
+    }
+
+
     public static function OLDgetInstancesByCompanyID($comId)
     {
         $db = PearDatabase::getInstance();
