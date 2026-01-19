@@ -227,3 +227,4 @@
 - If the app can’t bind, ensure it listens on `0.0.0.0` (not only `localhost`)
 - If DB auth fails, confirm host permissions (`'user'@'%'` vs `'user'@'localhost'`)
 - If permissions fail, verify ownership of `~/apps/<PROJECT_DIR>` belongs to `appuser`
+
