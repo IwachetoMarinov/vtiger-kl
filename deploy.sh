@@ -1,6 +1,6 @@
 #!/bin/bash
 # ----------------------------------------------
-# MySQL DB Backup Script (schema only: tables, no data)
+# MySQL DB Backup Script (FULL dump - vTiger SAFE)
 # Author: Ivaylo Marinov
 # ----------------------------------------------
 
@@ -13,7 +13,7 @@ BACKUP_DIR="./db_backups"
 COMPRESS=true
 
 STAMP="$(date +"%Y_%m_%d_%H%M%S")"
-OUT_SQL="${BACKUP_DIR}/${DB_NAME}_schema_${STAMP}.sql"
+OUT_SQL="${BACKUP_DIR}/${DB_NAME}_full_${STAMP}.sql"
 OUT_GZ="${OUT_SQL}.gz"
 
 log() {
@@ -27,24 +27,24 @@ if [[ -n "${DB_PASS}" ]]; then
   MYSQL_AUTH+=(-p"$DB_PASS")
 fi
 
-log "🔄 Creating schema-only dump for database '${DB_NAME}' (no INSERTs)..."
+log "Creating FULL vTiger DB dump..."
 
 DUMP_ARGS=(
-  --no-data                # ✅ no rows / no INSERT statements
   --single-transaction
   --routines
   --triggers
   --events
+  --add-drop-table
   --hex-blob
   --default-character-set=utf8mb4
 )
 
 if [[ "$COMPRESS" == "true" ]]; then
   mysqldump "${MYSQL_AUTH[@]}" "${DUMP_ARGS[@]}" "$DB_NAME" | gzip -c > "$OUT_GZ"
-  log "✅ Schema backup created: $OUT_GZ"
+  log "Backup created: $OUT_GZ"
 else
   mysqldump "${MYSQL_AUTH[@]}" "${DUMP_ARGS[@]}" "$DB_NAME" > "$OUT_SQL"
-  log "✅ Schema backup created: $OUT_SQL"
+  log "Backup created: $OUT_SQL"
 fi
 
-log "✅ Done."
+log "DONE"
