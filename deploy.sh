@@ -1,6 +1,6 @@
 #!/bin/bash
 # ----------------------------------------------
-# MySQL DB Backup Script (FULL dump - vTiger SAFE)
+# MySQL DB Backup Script (SCHEMA ONLY - EMPTY TABLES)
 # Author: Ivaylo Marinov
 # ----------------------------------------------
 
@@ -13,7 +13,7 @@ BACKUP_DIR="./db_backups"
 COMPRESS=true
 
 STAMP="$(date +"%Y_%m_%d_%H%M%S")"
-OUT_SQL="${BACKUP_DIR}/${DB_NAME}_full_${STAMP}.sql"
+OUT_SQL="${BACKUP_DIR}/${DB_NAME}_schema_${STAMP}.sql"
 OUT_GZ="${OUT_SQL}.gz"
 
 log() {
@@ -27,9 +27,10 @@ if [[ -n "${DB_PASS}" ]]; then
   MYSQL_AUTH+=(-p"$DB_PASS")
 fi
 
-log "Creating FULL vTiger DB dump..."
+log "Creating SCHEMA-ONLY (empty tables) vTiger DB dump..."
 
 DUMP_ARGS=(
+  --no-data
   --single-transaction
   --routines
   --triggers
