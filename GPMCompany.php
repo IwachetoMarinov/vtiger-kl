@@ -38,19 +38,6 @@ if (!$CompanyNameField) {
     $module->setEntityIdentifier($CompanyNameField);
 }
 
-$OROSoftCodeField = Vtiger_Field::getInstance('company_orosoft_code', $module);
-if (!$OROSoftCodeField) {
-    $OROSoftCodeField = new Vtiger_Field();
-    $OROSoftCodeField->name = 'company_orosoft_code';
-    $OROSoftCodeField->label = 'OROSoft Code';
-    $OROSoftCodeField->table = $module->basetable;
-    $OROSoftCodeField->column = 'company_orosoft_code';
-    $OROSoftCodeField->columntype = 'VARCHAR(256)';
-    $OROSoftCodeField->uitype = 1;
-    $OROSoftCodeField->typeofdata = 'V~M';
-    $infoBlock->addField($OROSoftCodeField);
-}
-
 $GSTNOField = Vtiger_Field::getInstance('company_gst_no', $module);
 if (!$GSTNOField) {
     $GSTNOField = new Vtiger_Field();
@@ -156,6 +143,20 @@ if (!$modifiedTimeField) {
     $infoBlock->addField($modifiedTimeField);
 }
 
+$CompanyRegNoField = Vtiger_Field::getInstance('company_reg_no', $module);
+if (!$CompanyRegNoField) {
+    $CompanyRegNoField = new Vtiger_Field();
+    $CompanyRegNoField->name = 'company_reg_no';
+    $CompanyRegNoField->label = 'Com. Reg. No';
+    $CompanyRegNoField->table = $module->basetable;
+    $CompanyRegNoField->column = 'company_reg_no';
+    $CompanyRegNoField->columntype = 'VARCHAR(255)';
+    $CompanyRegNoField->uitype = 1;
+    $CompanyRegNoField->typeofdata = 'V~M'; // mandatory
+    $infoBlock->addField($CompanyRegNoField);
+}
+
+
 $allFilter = Vtiger_Filter::getInstance('All', $module);
 if (!$allFilter) {
     $allFilter = new Vtiger_Filter();
@@ -164,7 +165,7 @@ if (!$allFilter) {
     $module->addFilter($allFilter);
     // Add fields to the filter created
     $allFilter->addField($CompanyNameField)
-        ->addField($OROSoftCodeField, 1)
+        ->addField($CompanyRegNoField, 1)
         ->addField($CompanyAddressField, 2)
         ->addField($CompanyPhoneField, 3)
         ->addField($CompanyFaxField, 4)
@@ -178,7 +179,7 @@ global $adb;
 $seqid = $adb->getUniqueID('vtiger_settings_field');
 
 $adb->pquery('INSERT INTO vtiger_settings_field(fieldid,blockid,name,sequence,description,linkto) values(?,?,?,?,?,?)', array($seqid, 8, 'Companies', 10, 'Modules to Configure Company information', 'index.php?module=GPMCompany&view=List'));
-$adb->pquery("delete from vtiger_field  where fieldname like ?", array('footer_company%'));
+// $adb->pquery("delete from vtiger_field  where fieldname like ?", array('footer_company%'));
 
 echo "Module GPMCompany created successfully.\n";
 

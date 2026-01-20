@@ -130,6 +130,7 @@ if (!$certificateStatusField) {
     $certificateStatusField = new Vtiger_Field();
     $certificateStatusField->name = 'certificate_status';
     $certificateStatusField->label = 'Status';
+    $certificateStatusField->table = $module->basetable;
     $certificateStatusField->column = 'certificate_status';
     $certificateStatusField->columntype = 'VARCHAR(100)';
     $certificateStatusField->uitype = 16; // Picklist
@@ -183,19 +184,6 @@ if (!$modifiedTimeField) {
     $infoBlock->addField($modifiedTimeField);
 }
 
-/* ------- Description (long text) ------- */
-$descriptionField = Vtiger_Field::getInstance('description', $module);
-if (!$descriptionField) {
-    $descriptionField = new Vtiger_Field();
-    $descriptionField->name = 'description';
-    $descriptionField->label = 'Certificate Data';
-    $descriptionField->table = 'vtiger_crmentity';
-    $descriptionField->column = 'description';
-    $descriptionField->uitype = 19; // Textarea
-    $descriptionField->typeofdata = 'V~O';
-
-    $descriptionBlock->addField($descriptionField);
-}
 
 /**
  * LIST VIEW FILTER
@@ -230,25 +218,3 @@ $adb->pquery(
 );
 
 echo "Module HoldingCertificate created successfully.\n";
-
-
-// $result = $adb->pquery("select * from vtiger_cron_task where module = ?", array('HoldingCertificate'));
-
-// echo "Creating a cron Service. \n";
-// if ($adb->num_rows($result)) {
-//     echo "Certificate Intgrety cheking Cron already exist,\n";
-// } else {
-//     $sql = "INSERT INTO vtiger_cron_task (name,handler_file,frequency,laststart,lastend,status,module,sequence,description) VALUES(?,?,?,?,?,?,?,?,?)";
-//     $parama = array(
-//         'Holding Certificate',
-//         'cron/modules/HoldingCertificate/certificateIntegrityChecker.service',
-//         '600',
-//         NULL,
-//         NULL,
-//         1,
-//         'HoldingCertificate',
-//         9,
-//         'Recommended frequency for Certificate Integrity Checker is 1 day'
-//     );
-//     $adb->pquery($sql, $parama);
-// }

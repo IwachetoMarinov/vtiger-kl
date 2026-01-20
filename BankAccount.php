@@ -10,7 +10,7 @@ $module = Vtiger_Module::getInstance('BankAccount');
 if (!$module) {
     $module = new Vtiger_Module();
     $module->name = 'BankAccount';
-    $module->parent = 'Tools';
+    $module->parent = 'Support';
 
     $module->save();
     $module->initTables();
@@ -171,7 +171,7 @@ if (!$relatedEntity) {
     $relatedEntity->uitype = 16;
     $relatedEntity->typeofdata = 'V~M';
     $infoBlock->addField($relatedEntity);
-    $relatedEntity->setPicklistValues(array('GPM', 'GPS'));
+    $relatedEntity->setPicklistValues(array('GPM', 'GPS', 'GPM-DB', 'GPM-HK'));
 }
 $ERPAccountField = Vtiger_Field::getInstance('erp_account_no', $module);
 if (!$ERPAccountField) {
@@ -263,76 +263,6 @@ if (!$intermediarySwiftCodeField) {
     $IntermediaryBlock->addField($intermediarySwiftCodeField);
 }
 
-$footerBlock = Vtiger_Block::getInstance('Template Footer Details', $module);
-if (!$footerBlock) {
-    $footerBlock = new Vtiger_Block();
-    $footerBlock->label = 'Template Footer Details';
-    $module->addBlock($footerBlock);
-}
-
-$footerCompnayNameField = Vtiger_Field::getInstance('footer_company_name', $module);
-if (!$footerCompnayNameField) {
-    $footerCompnayNameField = new Vtiger_Field();
-    $footerCompnayNameField->name = 'footer_company_name';
-    $footerCompnayNameField->label = 'Company name';
-    $footerCompnayNameField->table = $module->basetable;
-    $footerCompnayNameField->column = 'footer_company_name';
-    $footerCompnayNameField->columntype = 'VARCHAR(256)';
-    $footerCompnayNameField->uitype = 1;
-    $footerCompnayNameField->typeofdata = 'V~M';
-    $footerBlock->addField($footerCompnayNameField);
-}
-
-$footerCompnanyAddressField = Vtiger_Field::getInstance('footer_company_address', $module);
-if (!$footerCompnanyAddressField) {
-    $footerCompnanyAddressField = new Vtiger_Field();
-    $footerCompnanyAddressField->name = 'footer_company_address';
-    $footerCompnanyAddressField->label = 'Company Address';
-    $footerCompnanyAddressField->table = $module->basetable;
-    $footerCompnanyAddressField->column = 'footer_company_address';
-    $footerCompnanyAddressField->columntype = 'VARCHAR(512)';
-    $footerCompnanyAddressField->uitype = 21;
-    $footerCompnanyAddressField->typeofdata = 'V~M';
-    $footerBlock->addField($footerCompnanyAddressField);
-}
-
-$footerCompnayPhoneField = Vtiger_Field::getInstance('footer_company_phone', $module);
-if (!$footerCompnayPhoneField) {
-    $footerCompnayPhoneField = new Vtiger_Field();
-    $footerCompnayPhoneField->name = 'footer_company_phone';
-    $footerCompnayPhoneField->label = 'Company Phone';
-    $footerCompnayPhoneField->table = $module->basetable;
-    $footerCompnayPhoneField->column = 'footer_company_phone';
-    $footerCompnayPhoneField->columntype = 'VARCHAR(64)';
-    $footerCompnayPhoneField->uitype = 1;
-    $footerCompnayPhoneField->typeofdata = 'V~M';
-    $footerBlock->addField($footerCompnayPhoneField);
-}
-$footerCompnayFaxField = Vtiger_Field::getInstance('footer_company_fax', $module);
-if (!$footerCompnayFaxField) {
-    $footerCompnayFaxField = new Vtiger_Field();
-    $footerCompnayFaxField->name = 'footer_company_fax';
-    $footerCompnayFaxField->label = 'Company Fax';
-    $footerCompnayFaxField->table = $module->basetable;
-    $footerCompnayFaxField->column = 'footer_company_fax';
-    $footerCompnayFaxField->columntype = 'VARCHAR(64)';
-    $footerCompnayFaxField->uitype = 1;
-    $footerCompnayFaxField->typeofdata = 'V~O';
-    $footerBlock->addField($footerCompnayFaxField);
-}
-$footerCompnayWebsiteField = Vtiger_Field::getInstance('footer_company_website', $module);
-if (!$footerCompnayWebsiteField) {
-    $footerCompnayWebsiteField = new Vtiger_Field();
-    $footerCompnayWebsiteField->name = 'footer_company_website';
-    $footerCompnayWebsiteField->label = 'Company Website';
-    $footerCompnayWebsiteField->table = $module->basetable;
-    $footerCompnayWebsiteField->column = 'footer_company_website';
-    $footerCompnayWebsiteField->columntype = 'VARCHAR(128)';
-    $footerCompnayWebsiteField->uitype = 1;
-    $footerCompnayWebsiteField->typeofdata = 'V~M';
-    $footerBlock->addField($footerCompnayWebsiteField);
-}
-
 $allFilter = Vtiger_Filter::getInstance('All', $module);
 if (!$allFilter) {
     $allFilter = new Vtiger_Filter();
@@ -357,6 +287,14 @@ $module->setDefaultSharing('Public_ReadOnly');
 $module->enableTools(array('Merge', 'Export', 'Import'));
 
 global $adb;
-$adb->pquery('INSERT INTO vtiger_app2tab(tabid,appname,sequence,visible) values(?,?,?,?)', array(getTabid('BankAccount'), 'SUPPORT', 30, 1));
+$adb->pquery(
+    'DELETE FROM vtiger_app2tab WHERE tabid=? AND appname=?',
+    array(getTabid('BankAccount'), 'Support')
+);
+$adb->pquery(
+    'INSERT INTO vtiger_app2tab(tabid,appname,sequence,visible) values(?,?,?,?)',
+    array(getTabid('BankAccount'), 'Support', 30, 1)
+);
+
 
 echo "BankAccount Module Installed Successfully";
