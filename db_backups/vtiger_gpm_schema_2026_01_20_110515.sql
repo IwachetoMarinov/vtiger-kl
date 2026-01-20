@@ -10304,4 +10304,4 @@ CREATE TABLE `vtiger_wsapp_sync_state` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-01-19 10:16:30
+-- Dump completed on 2026-01-20 11:05:20
