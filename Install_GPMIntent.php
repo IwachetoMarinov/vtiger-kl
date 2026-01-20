@@ -19,7 +19,7 @@ if (!$module) {
     $module = new Vtiger_Module();
     $module->name   = 'GPMIntent';
     $module->label  = 'Intent';
-    $module->parent = 'INVENTORY';
+    $module->parent = 'Trades';
     $module->save();
     $module->initTables();     // creates vtiger_gpmintent & vtiger_gpmintentcf
     $module->initWebservice(); // ws entity
@@ -36,30 +36,21 @@ $infoBlock     = Vtiger_Block::getInstance('Intent Information',   $module) ?: (
     $module->addBlock($b);
     return $b;
 })();
+
 $packageBlock  = Vtiger_Block::getInstance('Package Information',  $module) ?: (function () use ($module) {
     $b = new Vtiger_Block();
     $b->label = 'Package Information';
     $module->addBlock($b);
     return $b;
 })();
-$tradeBlock    = Vtiger_Block::getInstance('Trade Information',    $module) ?: (function () use ($module) {
-    $b = new Vtiger_Block();
-    $b->label = 'Trade Information';
-    $module->addBlock($b);
-    return $b;
-})();
-$deliveryBlock = Vtiger_Block::getInstance('Delivery Information', $module) ?: (function () use ($module) {
-    $b = new Vtiger_Block();
-    $b->label = 'Delivery Information';
-    $module->addBlock($b);
-    return $b;
-})();
+
 $checklistBlock = Vtiger_Block::getInstance('Checklist',            $module) ?: (function () use ($module) {
     $b = new Vtiger_Block();
     $b->label = 'Checklist';
     $module->addBlock($b);
     return $b;
 })();
+
 $itemBlock     = Vtiger_Block::getInstance('ITEM_INFO',            $module) ?: (function () use ($module) {
     $b = new Vtiger_Block();
     $b->label = 'ITEM_INFO';
@@ -68,6 +59,20 @@ $itemBlock     = Vtiger_Block::getInstance('ITEM_INFO',            $module) ?: (
 })();
 
 // ===== Fields (entity id first) =====
+$entity = Vtiger_Field::getInstance('intent_no', $module);
+if (!$entity) {
+    $entity = new Vtiger_Field();
+    $entity->name       = 'intent_no';
+    $entity->label      = 'Intent No';
+    $entity->table      = $module->basetable;               // vtiger_gpmintent
+    $entity->column     = 'intent_no';
+    $entity->columntype = 'VARCHAR(64)';                    // roomy enough
+    $entity->uitype     = 4;                                // autonumber display
+    $entity->typeofdata = 'V~O';
+    $infoBlock->addField($entity);
+    $module->setEntityIdentifier($entity);
+}
+
 $entity = Vtiger_Field::getInstance('intent_no', $module);
 if (!$entity) {
     $entity = new Vtiger_Field();
@@ -109,19 +114,7 @@ if (!$contactERP) {
     $infoBlock->addField($contactERP);
 }
 
-$metalType = Vtiger_Field::getInstance('gpm_metal_type', $module);
-if (!$metalType) {
-    $metalType = new Vtiger_Field();
-    $metalType->name       = 'gpm_metal_type';
-    $metalType->label      = 'Metal Type';
-    $metalType->table      = $module->basetable;
-    $metalType->column     = 'gpm_metal_type';
-    $metalType->columntype = 'VARCHAR(64)';
-    $metalType->uitype     = 16;            // picklist
-    $metalType->typeofdata = 'V~M';
-    $infoBlock->addField($metalType);
-    pick($metalType, ['XAU', 'XAG', 'XPT', 'XPD', 'XRH', 'CRYPTO']);
-}
+
 
 $status = Vtiger_Field::getInstance('intent_status', $module);
 if (!$status) {
@@ -144,39 +137,33 @@ if (!$status) {
     ]);
 }
 
-$indicSpot = Vtiger_Field::getInstance('indicative_spot_price', $module);
-if (!$indicSpot) {
-    $indicSpot = new Vtiger_Field();
-    $indicSpot->name       = 'indicative_spot_price';
-    $indicSpot->label      = 'Indicative Spot (USD)';
-    $indicSpot->table      = $module->basetable;
-    $indicSpot->column     = 'indicative_spot_price';
-    $indicSpot->columntype = 'DECIMAL(12,4)';
-    $indicSpot->uitype     = 71;
-    $indicSpot->typeofdata = 'N~O';
-    $infoBlock->addField($indicSpot);
+// Lead Location (text)
+$leadLoc = Vtiger_Field::getInstance('lead_location', $module);
+if (!$leadLoc) {
+    $leadLoc = new Vtiger_Field();
+    $leadLoc->name       = 'lead_location';
+    $leadLoc->label      = 'Lead Location';
+    $leadLoc->table      = $module->basetable;
+    $leadLoc->column     = 'lead_location';
+    $leadLoc->columntype = 'VARCHAR(128)';
+    $leadLoc->uitype     = 1;
+    $leadLoc->typeofdata = 'V~O';
+    $infoBlock->addField($leadLoc);
 }
 
-$orderType = Vtiger_Field::getInstance('gpm_order_type', $module);
-if (!$orderType) {
-    $orderType = new Vtiger_Field();
-    $orderType->name       = 'gpm_order_type';
-    $orderType->label      = 'Order Type';
-    $orderType->table      = $module->basetable;
-    $orderType->column     = 'gpm_order_type';
-    $orderType->columntype = 'VARCHAR(128)';
-    $orderType->uitype     = 16;
-    $orderType->typeofdata = 'V~M';
-    $infoBlock->addField($orderType);
-    pick($orderType, [
-        'Purchase & Delivery',
-        'Purchase & Storage',
-        'Sale',
-        'Deposit of Metals',
-        'Withdrawal of Metals',
-        'Forward Contract',
-        'To be confirmed'
-    ]);
+// Lead (relation to Leads)
+$lead = Vtiger_Field::getInstance('lead_id', $module);
+if (!$lead) {
+    $lead = new Vtiger_Field();
+    $lead->name       = 'lead_id';
+    $lead->label      = 'Lead';
+    $lead->table      = $module->basetable;
+    $lead->column     = 'lead_id';
+    $lead->columntype = 'INT(11)';
+    $lead->uitype     = 10;
+    $lead->typeofdata = 'V~O';
+    $infoBlock->addField($lead);
+    $lead->setRelatedModules(['Leads']);
 }
 
 $remark = Vtiger_Field::getInstance('remark', $module);
@@ -206,19 +193,6 @@ if (!$loc) {
     pick($loc, ['Geneva, Switzerland', 'Zurich, Switzerland', 'Singapore', 'Hong Kong', 'Other']);
 }
 
-$otherLoc = Vtiger_Field::getInstance('gpm_order_other_location', $module);
-if (!$otherLoc) {
-    $otherLoc = new Vtiger_Field();
-    $otherLoc->name       = 'gpm_order_other_location';
-    $otherLoc->label      = 'Other Location';
-    $otherLoc->table      = $module->basetable;
-    $otherLoc->column     = 'gpm_order_other_location';
-    $otherLoc->columntype = 'VARCHAR(128)';
-    $otherLoc->uitype     = 1;
-    $otherLoc->typeofdata = 'V~O';
-    $infoBlock->addField($otherLoc); // FIX: add itself, not $loc
-}
-
 $labels = Vtiger_Field::getInstance('gpm_labels', $module);
 if (!$labels) {
     $labels = new Vtiger_Field();
@@ -242,32 +216,82 @@ if (!$labels) {
     ]);
 }
 
-$pkgCur = Vtiger_Field::getInstance('package_currency', $module);
-if (!$pkgCur) {
-    $pkgCur = new Vtiger_Field();
-    $pkgCur->name       = 'package_currency';
-    $pkgCur->label      = 'Package Currency';
-    $pkgCur->table      = $module->basetable;
-    $pkgCur->column     = 'package_currency';
-    $pkgCur->columntype = 'VARCHAR(12)';
-    $pkgCur->uitype     = 16;
-    $pkgCur->typeofdata = 'V~M';
-    $packageBlock->addField($pkgCur);
-    pick($pkgCur, ['USD', 'EUR', 'SGD', 'CHF']);
+// Package Information block fields
+
+$metalType = Vtiger_Field::getInstance('gpm_metal_type', $module);
+if (!$metalType) {
+    $metalType = new Vtiger_Field();
+    $metalType->name       = 'gpm_metal_type';
+    $metalType->label      = 'Metal Type';
+    $metalType->table      = $module->basetable;
+    $metalType->column     = 'gpm_metal_type';
+    $metalType->columntype = 'VARCHAR(64)';
+    $metalType->uitype     = 16;            // picklist
+    $metalType->typeofdata = 'V~M';
+    $packageBlock->addField($metalType);
+    pick($metalType, ['XAU', 'XAG', 'XPT', 'XPD', 'XRH', 'CRYPTO']);
 }
 
-$indicFx = Vtiger_Field::getInstance('indicative_fx_spot', $module);
-if (!$indicFx) {
-    $indicFx = new Vtiger_Field();
-    $indicFx->name       = 'indicative_fx_spot';
-    $indicFx->label      = 'Indicative FX spot';
-    $indicFx->table      = $module->basetable;
-    $indicFx->column     = 'indicative_fx_spot';
-    $indicFx->columntype = 'DECIMAL(12,4)';
-    $indicFx->uitype     = 71;
-    $indicFx->typeofdata = 'N~O';
-    $packageBlock->addField($indicFx);
+$orderType = Vtiger_Field::getInstance('gpm_order_type', $module);
+if (!$orderType) {
+    $orderType = new Vtiger_Field();
+    $orderType->name       = 'gpm_order_type';
+    $orderType->label      = 'Order Type';
+    $orderType->table      = $module->basetable;
+    $orderType->column     = 'gpm_order_type';
+    $orderType->columntype = 'VARCHAR(128)';
+    $orderType->uitype     = 16;
+    $orderType->typeofdata = 'V~M';
+    $packageBlock->addField($orderType);
+    pick($orderType, [
+        'Purchase & Delivery',
+        'Purchase & Storage',
+        'Sale',
+        'Deposit of Metals',
+        'Withdrawal of Metals',
+        'Forward Contract',
+        'To be confirmed'
+    ]);
 }
+
+$currency = Vtiger_Field::getInstance('package_currency', $module);
+if (!$currency) {
+    $currency = new Vtiger_Field();
+    $currency->name       = 'package_currency';
+    $currency->label      = 'Currency';
+    $currency->table      = $module->basetable;
+    $currency->column     = 'package_currency';
+    $currency->columntype = 'VARCHAR(12)';
+    $currency->uitype     = 16;
+    $currency->typeofdata = 'V~M';
+    $packageBlock->addField($currency);
+} else {
+    $currency->label = 'Currency';
+    $currency->save();
+}
+pick($currency, [
+    'AUD',
+    'CAD',
+    'CHF',
+    'CNY',
+    'EUR',
+    'GBP',
+    'HKD',
+    'IDR',
+    'INR',
+    'JPY',
+    'KRW',
+    'MYR',
+    'NZD',
+    'PHP',
+    'QAR',
+    'SAR',
+    'SGD',
+    'THB',
+    'TWD',
+    'USD',
+    'VND'
+]);
 
 $pkgAmt = Vtiger_Field::getInstance('package_price', $module);
 if (!$pkgAmt) {
@@ -282,95 +306,17 @@ if (!$pkgAmt) {
     $packageBlock->addField($pkgAmt);
 }
 
-$pkgAmtUSD = Vtiger_Field::getInstance('package_price_usd', $module);
-if (!$pkgAmtUSD) {
-    $pkgAmtUSD = new Vtiger_Field();
-    $pkgAmtUSD->name       = 'package_price_usd';
-    $pkgAmtUSD->label      = 'Package Amount (USD)';
-    $pkgAmtUSD->table      = $module->basetable;
-    $pkgAmtUSD->column     = 'package_price_usd';
-    $pkgAmtUSD->columntype = 'DECIMAL(24,2)';
-    $pkgAmtUSD->uitype     = 71;
-    $pkgAmtUSD->typeofdata = 'N~O';
-    $packageBlock->addField($pkgAmtUSD);
-}
-
-$tradeDate = Vtiger_Field::getInstance('trade_date', $module);
-if (!$tradeDate) {
-    $tradeDate = new Vtiger_Field();
-    $tradeDate->name       = 'trade_date';
-    $tradeDate->label      = 'Trade date';
-    $tradeDate->table      = $module->basetable;
-    $tradeDate->column     = 'trade_date';
-    $tradeDate->columntype = 'DATE';
-    $tradeDate->uitype     = 5;
-    $tradeDate->typeofdata = 'D~O';
-    $tradeBlock->addField($tradeDate);
-}
-
-$docNo = Vtiger_Field::getInstance('document_no', $module);
-if (!$docNo) {
-    $docNo = new Vtiger_Field();
-    $docNo->name       = 'document_no';
-    $docNo->label      = 'Document Number';
-    $docNo->table      = $module->basetable;
-    $docNo->column     = 'document_no';
-    $docNo->columntype = 'VARCHAR(64)';
-    $docNo->uitype     = 1;
-    $docNo->typeofdata = 'V~O';
-    $tradeBlock->addField($docNo);
-}
-
-$deliveryDate = Vtiger_Field::getInstance('delivery_date', $module);
-if (!$deliveryDate) {
-    $deliveryDate = new Vtiger_Field();
-    $deliveryDate->name       = 'delivery_date';
-    $deliveryDate->label      = 'Delivery Date';
-    $deliveryDate->table      = $module->basetable;
-    $deliveryDate->column     = 'delivery_date';
-    $deliveryDate->columntype = 'DATE';
-    $deliveryDate->uitype     = 5;
-    $deliveryDate->typeofdata = 'D~O';
-    $deliveryBlock->addField($deliveryDate);
-}
-
-$special = Vtiger_Field::getInstance('special_instructions', $module);
-if (!$special) {
-    $special = new Vtiger_Field();
-    $special->name       = 'special_instructions';
-    $special->label      = 'Special Instructions';
-    $special->table      = $module->basetable;
-    $special->column     = 'special_instructions';
-    $special->columntype = 'VARCHAR(500)';
-    $special->uitype     = 21;
-    $special->typeofdata = 'V~O';
-    $deliveryBlock->addField($special);
-}
-
-$spot = Vtiger_Field::getInstance('spot_price', $module);
-if (!$spot) {
-    $spot = new Vtiger_Field();
-    $spot->name       = 'spot_price';
-    $spot->label      = 'Spot Price';
-    $spot->table      = $module->basetable;
-    $spot->column     = 'spot_price';
-    $spot->columntype = 'DECIMAL(12,4)';
-    $spot->uitype     = 71;
-    $spot->typeofdata = 'N~O';
-    $tradeBlock->addField($spot);
-}
-
-$fxspot = Vtiger_Field::getInstance('fx_spot_price', $module);
-if (!$fxspot) {
-    $fxspot = new Vtiger_Field();
-    $fxspot->name       = 'fx_spot_price';
-    $fxspot->label      = 'FX Spot';
-    $fxspot->table      = $module->basetable;
-    $fxspot->column     = 'fx_spot_price';
-    $fxspot->columntype = 'DECIMAL(12,4)';
-    $fxspot->uitype     = 71;
-    $fxspot->typeofdata = 'N~O';
-    $tradeBlock->addField($fxspot);
+$indicSpot = Vtiger_Field::getInstance('indicative_spot_price', $module);
+if (!$indicSpot) {
+    $indicSpot = new Vtiger_Field();
+    $indicSpot->name       = 'indicative_spot_price';
+    $indicSpot->label      = 'Indicative Spot';
+    $indicSpot->table      = $module->basetable;
+    $indicSpot->column     = 'indicative_spot_price';
+    $indicSpot->columntype = 'DECIMAL(12,4)';
+    $indicSpot->uitype     = 71;       // currency/number style input
+    $indicSpot->typeofdata = 'N~M';     // mandatory
+    $packageBlock->addField($indicSpot);
 }
 
 $totalOz = Vtiger_Field::getInstance('total_oz', $module);
@@ -503,7 +449,7 @@ $mt->enableTrackingForModule(getTabid('GPMIntent'));
 global $adb;
 $adb->pquery(
     'INSERT IGNORE INTO vtiger_app2tab (tabid,appname,sequence,visible) VALUES (?,?,?,?)',
-    [getTabid('GPMIntent'), 'INVENTORY', 30, 1]
+    [getTabid('GPMIntent'), 'TRADES', 30, 1]
 );
 
 // Safe create of detail lines table
