@@ -8051,3 +8051,14 @@ a.btnReport:hover {
   height: 450px;
   overflow: auto;
 }
+
+/* Custom STYLES */
+/* Hide INVENTORY app from sidebar */
+[data-app-name="INVENTORY"] {
+    display: none !important;
+}
+
+/* Hide Mail Manager module */
+[data-default-url="index.php?module=MailManager&view=List"] {
+    display: none !important;
+}

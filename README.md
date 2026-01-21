@@ -171,6 +171,12 @@ sudo systemctl restart php8.2-fpm || true
 
 31. Backup database `mysqldump -u root -p vtiger_gpm > db_backups/vtiger_backup.sql`
 
+32. Rename base module name: `go to this file C:\laragon\www\vtiger-gpm\languages\en_us\Vtiger.php and find label name`
+
+33. Change One module to other
+33.1 Find id or ids of modules thats should be moved `SELECT tabid, name FROM vtiger_tab WHERE name IN ('Assets','MetalPrice');`
+33.2 Update SQL we need to know appname `UPDATE vtiger_app2tab SET appname = 'SUPPORT' WHERE tabid IN (38,56);`
+
 
 
    
