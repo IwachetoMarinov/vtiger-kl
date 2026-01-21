@@ -772,3 +772,73 @@ C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::preProcess::76<br>
 C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::triggerPreProcess::214<br>
 C:\laragon\www\vtiger-gpm\index.php::process::26<br>
 
+Traced on 2026-01-21 12:01:21
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\vtlib\Vtiger\AccessControl.php::checkFileAccessForInclusion::25<br>
+C:\laragon\www\vtiger-gpm\vtlib\Vtiger\AccessControl.php::loadUserPrivilegesWithId::44<br>
+C:\laragon\www\vtiger-gpm\modules\Users\Users.php::loadUserPrivileges::648<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::retrieveCurrentUserInfoFromFile::47<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::getLogin::104<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
+Traced on 2026-01-21 12:01:23
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\vtlib\Vtiger\AccessControl.php::checkFileAccessForInclusion::25<br>
+C:\laragon\www\vtiger-gpm\vtlib\Vtiger\AccessControl.php::loadUserPrivilegesWithId::44<br>
+C:\laragon\www\vtiger-gpm\modules\Users\Users.php::loadUserPrivileges::648<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::retrieveCurrentUserInfoFromFile::47<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::getLogin::104<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
+Traced on 2026-01-21 12:01:23
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\vtlib\Vtiger\AccessControl.php::checkFileAccessForInclusion::25<br>
+C:\laragon\www\vtiger-gpm\vtlib\Vtiger\AccessControl.php::loadUserPrivilegesWithId::44<br>
+C:\laragon\www\vtiger-gpm\modules\Users\Users.php::loadUserPrivileges::648<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::retrieveCurrentUserInfoFromFile::47<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::getLogin::104<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
+Traced on 2026-01-21 12:01:23
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\vtlib\Vtiger\AccessControl.php::checkFileAccessForInclusion::25<br>
+C:\laragon\www\vtiger-gpm\vtlib\Vtiger\AccessControl.php::loadUserPrivilegesWithId::44<br>
+C:\laragon\www\vtiger-gpm\modules\Users\Users.php::loadUserPrivileges::648<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::retrieveCurrentUserInfoFromFile::47<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::getLogin::104<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
+Traced on 2026-01-21 12:01:24
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\vtlib\Vtiger\AccessControl.php::checkFileAccessForInclusion::25<br>
+C:\laragon\www\vtiger-gpm\vtlib\Vtiger\AccessControl.php::loadUserPrivilegesWithId::44<br>
+C:\laragon\www\vtiger-gpm\modules\Users\Users.php::loadUserPrivileges::648<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::retrieveCurrentUserInfoFromFile::47<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::getLogin::104<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
+Traced on 2026-01-21 12:01:24
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\vtlib\Vtiger\AccessControl.php::checkFileAccessForInclusion::25<br>
+C:\laragon\www\vtiger-gpm\vtlib\Vtiger\AccessControl.php::loadUserPrivilegesWithId::44<br>
+C:\laragon\www\vtiger-gpm\modules\Users\Users.php::loadUserPrivileges::648<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::retrieveCurrentUserInfoFromFile::47<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::getLogin::104<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
+Traced on 2026-01-21 12:01:25
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\vtlib\Vtiger\AccessControl.php::checkFileAccessForInclusion::25<br>
+C:\laragon\www\vtiger-gpm\vtlib\Vtiger\AccessControl.php::loadUserPrivilegesWithId::44<br>
+C:\laragon\www\vtiger-gpm\modules\Users\Users.php::loadUserPrivileges::648<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::retrieveCurrentUserInfoFromFile::47<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::getLogin::104<br>
+C:\laragon\www\vtiger-gpm\index.php::process::26<br>
+
