@@ -139,4 +139,38 @@ Deploy in github with export/import database
 24. Move Intent, Assets and MetalPrices to ASSETS menu `UPDATE vtiger_app2tab SET appname = 'SALES' WHERE tabid IN (SELECT tabid FROM vtiger_tab WHERE name IN ('Assets', 'MetalPrice', 'GPMIntent'));`
      
 25. To change any main menu name go to `languages/en_us/Vtiger.php` and find menu name
+
+26. Install Microsoft ODBC driver repo + driver
+
+sudo apt update
+sudo apt install -y curl gnupg2 ca-certificates apt-transport-https unixodbc unixodbc-dev
+
+curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft.gpg
+
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/debian/12/prod bookworm main" \
+| sudo tee /etc/apt/sources.list.d/mssql-release.list
+
+sudo apt update
+sudo ACCEPT_EULA=Y apt install -y msodbcsql18
+
+27. Install build deps for PHP 8.2 extensions `sudo apt install -y php8.2-dev php-pear gcc g++ make pkg-config`
+
+28. Install the PHP extensions `sudo pecl install sqlsrv pdo_sqlsrv`
+
+29. Enable them :
+
+echo "extension=sqlsrv" | sudo tee /etc/php/8.2/mods-available/sqlsrv.ini
+echo "extension=pdo_sqlsrv" | sudo tee /etc/php/8.2/mods-available/pdo_sqlsrv.ini
+
+sudo phpenmod sqlsrv pdo_sqlsrv
+
+30. Restart your web stack 
+sudo systemctl restart apache2 || true
+sudo systemctl restart php8.2-fpm || true
+
+
+31. Backup database `mysqldump -u root -p vtiger_gpm > db_backups/vtiger_backup.sql`
+
+
+
    
