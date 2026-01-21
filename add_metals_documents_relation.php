@@ -1,24 +1,6 @@
 <?php
 // Composer dependencies (Monolog, etc.)
 require_once __DIR__ . '/vendor/autoload.php';
-// include_once 'config.inc.php';
-// include_once 'include/utils/utils.php';
-// include_once 'vtlib/Vtiger/Module.php';
-// include_once 'modules/Users/Users.php';
-
-// global $current_user;
-// $current_user = Users::getActiveAdminUser();
-
-// $metals = Vtiger_Module::getInstance('Metals');
-// $documents = Vtiger_Module::getInstance('Documents');
-
-// if ($metals && $documents) {
-//     $metals->setRelatedList($documents, 'Documents', ['ADD','SELECT']);
-//     echo "✅ Metals ↔ Documents relation recreated successfully.";
-// } else {
-//     echo "❌ Could not load module instances.";
-// }
-
 include_once 'vtlib/Vtiger/Module.php';
 
 $moduleInstance = Vtiger_Module::getInstance('Contacts');
