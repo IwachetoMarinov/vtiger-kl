@@ -9,6 +9,18 @@
  * All Rights Reserved.
  * *********************************************************************************** */
 
-class Leads_Detail_View extends Accounts_Detail_View {
+class Leads_Detail_View extends Accounts_Detail_View
+{
 
+    public function getHeaderScripts(Vtiger_Request $request)
+    {
+        $headerScripts = parent::getHeaderScripts($request);
+
+        $jsFileNames = array(
+            'modules.Leads.resources.MultiDocUpload'
+        );
+
+        $jsScripts = $this->checkAndConvertJsScripts($jsFileNames);
+        return array_merge($headerScripts, $jsScripts);
+    }
 }

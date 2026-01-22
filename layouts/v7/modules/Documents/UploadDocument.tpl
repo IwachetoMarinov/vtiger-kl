@@ -36,6 +36,12 @@
 								<input type="hidden" name="max_upload_limit" value="{$MAX_UPLOAD_LIMIT_BYTES}" />
 								<input type="hidden" name="max_upload_limit_mb" value="{$MAX_UPLOAD_LIMIT_MB}" />
 
+								{assign var=MULTI_UPLOAD_MODULES value=','|explode:"Contacts,Leads"}
+								{assign var=IS_MULTI_UPLOAD value=false}
+								{if isset($PARENT_MODULE) && in_array($PARENT_MODULE, $MULTI_UPLOAD_MODULES)}
+									{assign var=IS_MULTI_UPLOAD value=true}
+								{/if}
+
 								<div id="dragandrophandler" class="dragdrop-dotted">
 									<div style="font-size:175%;">
 										<span class="fa fa-upload"></span>&nbsp;&nbsp;
@@ -47,7 +53,7 @@
 									<div>
 										<div class="fileUploadBtn btn btn-primary">
 											<span><i class="fa fa-laptop"></i>
-												{if isset($PARENT_MODULE) && $PARENT_MODULE eq 'Contacts'}
+												{if $IS_MULTI_UPLOAD}
 													{vtranslate('LBL_SELECT_FILES_FROM_COMPUTER', $MODULE)}
 												{else}
 													{vtranslate('LBL_SELECT_FILE_FROM_COMPUTER', $MODULE)}
@@ -57,9 +63,7 @@
 											{* <input type="file" name="{$FIELD_MODEL->getFieldName()}" value="{if isset($FIELD_VALUE)}{$FIELD_VALUE}{/if}" data-rule-required="true" /> *}
 											<input type="file" name="{$FIELD_MODEL->getFieldName()}"
 												value="{if isset($FIELD_VALUE)}{$FIELD_VALUE}{/if}"
-												data-rule-required="true"
-												{if isset($PARENT_MODULE) && $PARENT_MODULE eq 'Contacts'}multiple="multiple"
-												{/if} />
+												data-rule-required="true" {if $IS_MULTI_UPLOAD}multiple="multiple" {/if} />
 
 										</div>
 										&nbsp;&nbsp;&nbsp;<i class="fa fa-info-circle cursorPointer" data-toggle="tooltip"
@@ -69,7 +73,7 @@
 								</div>
 
 								<table class="massEditTable table no-border">
-									{if !(isset($PARENT_MODULE) && $PARENT_MODULE eq 'Contacts')}
+									{if !$IS_MULTI_UPLOAD}
 										<tr>
 											{assign var="FIELD_MODEL" value=$FIELD_MODELS['notes_title']}
 											<td class="fieldLabel col-lg-2">
@@ -116,7 +120,7 @@
 										{/if}
 									</tr>
 
-									{if !(isset($PARENT_MODULE) && $PARENT_MODULE eq 'Contacts')}
+									{if !$IS_MULTI_UPLOAD}
 										<tr>
 											{assign var="FIELD_MODEL" value=$FIELD_MODELS['notecontent']}
 											{if $FIELD_MODELS['notecontent']}

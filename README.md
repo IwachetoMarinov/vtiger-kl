@@ -177,6 +177,8 @@ sudo systemctl restart php8.2-fpm || true
 33.1 Find id or ids of modules thats should be moved `SELECT tabid, name FROM vtiger_tab WHERE name IN ('Assets','MetalPrice');`
 33.2 Update SQL we need to know appname `UPDATE vtiger_app2tab SET appname = 'SUPPORT' WHERE tabid IN (38,56);`
 
+34. Multiple file upload template file - `C:\laragon\www\vtiger-gpm\layouts\v7\modules\Documents\UploadDocument.tpl` 
+
 
 
    
