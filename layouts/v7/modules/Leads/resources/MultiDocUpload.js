@@ -1,58 +1,16 @@
 jQuery(function () {
-  // Contacts only
-  if (
-    typeof app === "undefined" ||
-    app.getModuleName() !== "Contacts" ||
-    !app.getRecordId()
-  ) {
+  if (typeof app === "undefined" || !app.getModuleName || !app.getRecordId)
     return;
-  }
 
-  console.log("Init Multiple file upload");
+  var moduleName = app.getModuleName();
+  var recordId = app.getRecordId();
 
-  // Date range functionality Transaction history section
-  jQuery("body").on("click", ".date-range-button", function (e) {
-    console.log("Save button clicked");
+  // Enable multi-upload for these modules
+  var MULTI_UPLOAD_MODULES = ["Contacts", "Leads"];
 
-    e.preventDefault();
+  if (!recordId || MULTI_UPLOAD_MODULES.indexOf(moduleName) === -1) return;
 
-    var start = jQuery("#start_date").val();
-    var end = jQuery("#end_date").val();
-
-    if (!start || !end) {
-      alert("Please select Start Date and End Date");
-      return;
-    }
-
-    const originalUrl = window.location.href;
-
-    // Remove existing parameters if present
-    let baseUrl = originalUrl.split("&start_date=")[0];
-    baseUrl = baseUrl.split("&end_date=")[0];
-
-    window.location.href =
-      baseUrl +
-      "&start_date=" +
-      encodeURIComponent(start) +
-      "&end_date=" +
-      encodeURIComponent(end);
-  });
-
-  // Switch for order by balance
-  jQuery(document).on("change", ".summary_toggle", function () {
-    console.log("Toggle changed");
-    var isOn = jQuery(this).is(":checked");
-
-    const originalUrl = window.location.href;
-
-    const orderByParam = isOn ? "desc" : "asc";
-
-    // Remove existing orderBy parameter if present
-    let baseUrl = originalUrl.split("&orderBy=")[0];
-
-    window.location.href =
-      baseUrl + "&orderBy=" + encodeURIComponent(orderByParam);
-  });
+  console.log("Init Multiple file upload for:", moduleName, recordId);
 
   function asArray(fileList) {
     return Array.prototype.slice.call(fileList || []);
@@ -61,40 +19,32 @@ jQuery(function () {
   jQuery(document).on("shown.bs.modal", ".modal", function () {
     var $modal = jQuery(this);
 
-    // Identify the Documents upload modal
+    // Documents upload modal
     var $file = $modal.find('input[type="file"][name="filename"]');
     if (!$file.length) return;
 
-    // prevent double init per modal instance
     if ($modal.data("multiUploadInit")) return;
     $modal.data("multiUploadInit", true);
 
-    // enable multiple file selection
     $file.attr("multiple", "multiple");
-
-    // Store selected/dropped files here until user clicks Upload/Save
     $modal.data("pendingFiles", []);
 
-    // Status area
     var $status = $modal.find(".js-multi-status");
     if (!$status.length) {
       $modal
         .find("#dragandrophandler")
         .append(
-          '<div class="js-multi-status" style="margin-top:10px;font-size:13px;color:#555;"></div>'
+          '<div class="js-multi-status" style="margin-top:10px;font-size:13px;color:#555;"></div>',
         );
       $status = $modal.find(".js-multi-status");
     }
 
     function showSelectedCount() {
       var files = $modal.data("pendingFiles") || [];
-      if (!files.length) {
-        $status.html("No files selected.");
-      } else if (files.length === 1) {
+      if (!files.length) $status.html("No files selected.");
+      else if (files.length === 1)
         $status.html("<b>Selected:</b> 1 file<br>" + files[0].name);
-      } else {
-        $status.html("<b>Selected:</b> " + files.length + " files");
-      }
+      else $status.html("<b>Selected:</b> " + files.length + " files");
     }
 
     function setPendingFiles(files) {
@@ -102,16 +52,11 @@ jQuery(function () {
       showSelectedCount();
     }
 
-    // When user selects files using the vtiger button -> DO NOT upload, just store
     $file.off("change.multi").on("change.multi", function () {
-      var files = asArray(this.files);
-      setPendingFiles(files);
-
-      // reset input so selecting same files again triggers change event
+      setPendingFiles(asArray(this.files));
       jQuery(this).val("");
     });
 
-    // Drag & drop: store files, don't upload
     var $dropArea = $modal.find("#dragandrophandler");
     if ($dropArea.length) {
       $dropArea.off("dragover.multi drop.multi");
@@ -131,7 +76,6 @@ jQuery(function () {
       });
     }
 
-    // Build FormData from existing form fields (except the file input)
     function buildBaseFormData() {
       var fd = new FormData();
       var $form = $modal.find("form[name='upload']");
@@ -157,7 +101,6 @@ jQuery(function () {
       return fd;
     }
 
-    // Upload queue (called ONLY on click)
     function uploadPendingFiles() {
       var files = $modal.data("pendingFiles") || [];
       if (!files.length) {
@@ -165,7 +108,6 @@ jQuery(function () {
         return;
       }
 
-      // Disable button while uploading
       var $btn = $modal.find("#js-upload-document");
       $btn.prop("disabled", true).addClass("disabled");
 
@@ -176,38 +118,32 @@ jQuery(function () {
       function next() {
         if (i >= files.length) {
           $status.html(
-            "<b>Finished</b><br>Uploaded: " + ok + "<br>Failed: " + fail
+            "<b>Finished</b><br>Uploaded: " + ok + "<br>Failed: " + fail,
           );
-
           setTimeout(function () {
             try {
               $modal.modal("hide");
             } catch (e) {}
             window.location.reload();
           }, 900);
-
           return;
         }
 
         var file = files[i];
         var fd = buildBaseFormData();
 
-        // Required fields fallback (based on your payload)
+        // required fallbacks
         if (!fd.has("module")) fd.append("module", "Documents");
         if (!fd.has("action")) fd.append("action", "SaveAjax");
         if (!fd.has("document_source")) fd.append("document_source", "Vtiger");
         if (!fd.has("relationOperation"))
           fd.append("relationOperation", "true");
-        if (!fd.has("sourceModule")) fd.append("sourceModule", "Contacts");
-        if (!fd.has("sourceRecord"))
-          fd.append("sourceRecord", app.getRecordId());
+        if (!fd.has("sourceModule")) fd.append("sourceModule", moduleName);
+        if (!fd.has("sourceRecord")) fd.append("sourceRecord", recordId);
         if (!fd.has("filelocationtype")) fd.append("filelocationtype", "I");
         if (!fd.has("notecontent")) fd.append("notecontent", "");
 
-        // Title per file
         fd.set("notes_title", file.name);
-
-        // Add file
         fd.append("filename", file);
 
         $status.html(
@@ -216,7 +152,7 @@ jQuery(function () {
             " / " +
             files.length +
             "<br>" +
-            file.name
+            file.name,
         );
 
         jQuery
@@ -242,8 +178,6 @@ jQuery(function () {
       next();
     }
 
-    // IMPORTANT:
-    // Intercept the default vtiger submit and replace with our "upload on button click"
     $modal
       .find("form[name='upload']")
       .off("submit.multi")
@@ -254,7 +188,6 @@ jQuery(function () {
         return false;
       });
 
-    // Footer Upload button triggers our upload
     $modal
       .find("#js-upload-document")
       .off("click.multi")
@@ -265,7 +198,6 @@ jQuery(function () {
         return false;
       });
 
-    // Initial status
     showSelectedCount();
   });
 });
