@@ -1,0 +1,7 @@
+ul.nav.nav-tabs li[data-label-key="Emails"],
+ul.nav.nav-tabs li[data-label-key="Assets"],
+ul.nav.nav-tabs li[data-label-key="Campaigns"],
+ul.nav.nav-tabs li[data-label-key="Invoice"],
+ul.nav.nav-tabs li[data-label-key="Quotes"] {
+    display: none !important;
+}

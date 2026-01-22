@@ -36,7 +36,7 @@
 								<input type="hidden" name="max_upload_limit" value="{$MAX_UPLOAD_LIMIT_BYTES}" />
 								<input type="hidden" name="max_upload_limit_mb" value="{$MAX_UPLOAD_LIMIT_MB}" />
 
-								{assign var=MULTI_UPLOAD_MODULES value=','|explode:"Contacts,Leads"}
+								{assign var=MULTI_UPLOAD_MODULES value=','|explode:"Contacts,Leads,Accounts"}
 								{assign var=IS_MULTI_UPLOAD value=false}
 								{if isset($PARENT_MODULE) && in_array($PARENT_MODULE, $MULTI_UPLOAD_MODULES)}
 									{assign var=IS_MULTI_UPLOAD value=true}

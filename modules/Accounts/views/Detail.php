@@ -9,31 +9,33 @@
  * All Rights Reserved.
  * *********************************************************************************** */
 
-class Accounts_Detail_View extends Vtiger_Detail_View {
+class Accounts_Detail_View extends Vtiger_Detail_View
+{
 
 	/**
 	 * Function to get activities
 	 * @param Vtiger_Request $request
 	 * @return <List of activity models>
 	 */
-	public function getActivities(Vtiger_Request $request) {
+	public function getActivities(Vtiger_Request $request)
+	{
 		$moduleName = 'Calendar';
 		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
 
 		$currentUserPriviligesModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
-		if($currentUserPriviligesModel->hasModulePermission($moduleModel->getId())) {
+		if ($currentUserPriviligesModel->hasModulePermission($moduleModel->getId())) {
 			$moduleName = $request->getModule();
 			$recordId = $request->get('record');
 
 			$pageNumber = $request->get('page');
-			if(empty ($pageNumber)) {
+			if (empty($pageNumber)) {
 				$pageNumber = 1;
 			}
 			$pagingModel = new Vtiger_Paging_Model();
 			$pagingModel->set('page', $pageNumber);
 			$pagingModel->set('limit', 10);
 
-			if(!$this->record) {
+			if (!$this->record) {
 				$this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
 			}
 			$recordModel = $this->record->getRecord();
@@ -52,7 +54,32 @@ class Accounts_Detail_View extends Vtiger_Detail_View {
 		}
 	}
 
-	public function showModuleDetailView(Vtiger_Request $request) {
+	public function getHeaderScripts(Vtiger_Request $request)
+	{
+		$headerScripts = parent::getHeaderScripts($request);
+
+		$jsFileNames = array(
+			'modules.Accounts.resources.MultiDocUpload'
+		);
+
+		$jsScripts = $this->checkAndConvertJsScripts($jsFileNames);
+		return array_merge($headerScripts, $jsScripts);
+	}
+
+	public function getHeaderCss(Vtiger_Request $request)
+	{
+		$headerCss = parent::getHeaderCss($request);
+
+		$cssFileNames = array(
+			'~/layouts/v7/modules/Accounts/resources/custom.css',
+		);
+
+		$cssInstances = $this->checkAndConvertCssStyles($cssFileNames);
+		return array_merge($headerCss, $cssInstances);
+	}
+
+	public function showModuleDetailView(Vtiger_Request $request)
+	{
 		$recordId = $request->get('record');
 		$moduleName = $request->getModule();
 
@@ -67,5 +94,4 @@ class Accounts_Detail_View extends Vtiger_Detail_View {
 
 		return parent::showModuleDetailView($request);
 	}
-
 }

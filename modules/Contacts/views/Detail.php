@@ -164,6 +164,17 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		return array_merge($headerScripts, $jsScripts);
 	}
 
+	public function getHeaderCss(Vtiger_Request $request)
+	{
+		$headerCss = parent::getHeaderCss($request);
+
+		$cssFileNames = array(
+			'~/layouts/v7/modules/Contacts/resources/custom.css',
+		);
+
+		$cssInstances = $this->checkAndConvertCssStyles($cssFileNames);
+		return array_merge($headerCss, $cssInstances);
+	}
 
 	function getCertificateId($recordId)
 	{

@@ -1,0 +1,4 @@
+ul.nav.nav-tabs li[data-label-key="Assets"],
+ul.nav.nav-tabs li[data-label-key="Campaigns"] {
+    display: none !important;
+}
