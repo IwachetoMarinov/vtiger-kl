@@ -122,6 +122,37 @@ jQuery(function () {
     jQuery(this).datepicker("hide");
   });
 
+  // RESET
+  jQuery("body").on("click", "#resetDatesButton", function (e) {
+    e.preventDefault();
+    jQuery("#start_date").val("");
+    jQuery("#end_date").val("");
+  });
+
+  // Download button functionality
+  jQuery("body").on("click", "#downloadBtn", function (e) {
+    e.preventDefault();
+    const buttonUrl = jQuery(this).find("a").attr("href");
+
+    const url = window.location.href;
+
+    // Get start and end dates from url parameters
+    const urlParams = new URLSearchParams(url.split("?")[1]);
+    const startDate = urlParams.get("start_date");
+    const endDate = urlParams.get("end_date");
+
+    let downloadUrl = buttonUrl;
+
+    if (startDate && endDate) {
+      downloadUrl += "&start_date=" + encodeURIComponent(startDate);
+      downloadUrl += "&end_date=" + encodeURIComponent(endDate);
+    }
+
+    console.log("downloadUrl: ", downloadUrl);
+
+    window.location.href = downloadUrl;
+  });
+
   // SAVE
   jQuery("body").on("click", "#printConfSave", function (e) {
     console.log("Save button clicked");

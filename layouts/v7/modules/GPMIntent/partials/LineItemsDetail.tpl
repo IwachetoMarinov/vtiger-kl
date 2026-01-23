@@ -20,7 +20,7 @@
                     <th class="lineItemBlockHeader">Product</th>
                     <th class="lineItemBlockHeader">Quantity</th>
                     <th class="lineItemBlockHeader">Fine Oz</th>
-                    <th class="lineItemBlockHeader">Premium (%)</th>
+                    <th class="lineItemBlockHeader">Premium/Discount (%)</th>
                     <th class="lineItemBlockHeader">Premium</th>
                     <th class="lineItemBlockHeader">Value</th>
                 </tr>

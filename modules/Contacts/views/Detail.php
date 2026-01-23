@@ -120,21 +120,39 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$years = array_reverse($years_array);
 
 		$viewer = $this->getViewer($request);
+		// echo "<pre>";
+		// print_r($activity_data);
+		// echo "</pre>";
 
-		// Order transactions by amount_in_account_currency ascending based on order_by param
+		// New order by document_date ascending/descending based on order_by param
 		if ($order_by === 'asc') {
 			usort($activity_data, function ($a, $b) {
-				$amtA = isset($a['amount_in_account_currency']) ? floatval($a['amount_in_account_currency']) : 0;
-				$amtB = isset($b['amount_in_account_currency']) ? floatval($b['amount_in_account_currency']) : 0;
-				return $amtA <=> $amtB;
+				$dateA = isset($a['document_date']) ? strtotime($a['document_date']) : 0;
+				$dateB = isset($b['document_date']) ? strtotime($b['document_date']) : 0;
+				return $dateA <=> $dateB;
 			});
 		} elseif ($order_by === 'desc') {
 			usort($activity_data, function ($a, $b) {
-				$amtA = isset($a['amount_in_account_currency']) ? floatval($a['amount_in_account_currency']) : 0;
-				$amtB = isset($b['amount_in_account_currency']) ? floatval($b['amount_in_account_currency']) : 0;
-				return $amtB <=> $amtA;
+				$dateA = isset($a['document_date']) ? strtotime($a['document_date']) : 0;
+				$dateB = isset($b['document_date']) ? strtotime($b['document_date']) : 0;
+				return $dateB <=> $dateA;
 			});
 		}
+
+		// Order transactions by amount_in_account_currency ascending based on order_by param
+		// if ($order_by === 'asc') {
+		// 	usort($activity_data, function ($a, $b) {
+		// 		$amtA = isset($a['amount_in_account_currency']) ? floatval($a['amount_in_account_currency']) : 0;
+		// 		$amtB = isset($b['amount_in_account_currency']) ? floatval($b['amount_in_account_currency']) : 0;
+		// 		return $amtA <=> $amtB;
+		// 	});
+		// } elseif ($order_by === 'desc') {
+		// 	usort($activity_data, function ($a, $b) {
+		// 		$amtA = isset($a['amount_in_account_currency']) ? floatval($a['amount_in_account_currency']) : 0;
+		// 		$amtB = isset($b['amount_in_account_currency']) ? floatval($b['amount_in_account_currency']) : 0;
+		// 		return $amtB <=> $amtA;
+		// 	});
+		// }
 
 		// Assign safely to TPL
 		$viewer->assign('CLIENT_CURRENCY', $currency_list);

@@ -44,9 +44,11 @@ class GPMIntent_ViewQuotation_View extends GPMIntent_DocView_View
 		$products = GPMIntent_Line_Model::getInstanceByIntent($recordId);
 
 		$moduleModel = Vtiger_Module_Model::getInstance('GPMIntent');
+		$client_no = Vtiger_Record_Model::getInstanceById($recordId, 'GPMIntent')->get('contact_erp_no');
+
 		$fields = $moduleModel->getFields();
 
-		$targetLabel = 'Currency'; 
+		$targetLabel = 'Currency';
 
 		$fieldName = null;
 		foreach ($fields as $f) {
@@ -66,6 +68,10 @@ class GPMIntent_ViewQuotation_View extends GPMIntent_DocView_View
 		} else if ($gpm_order_type == 'Sale') {
 			$discount = "DISCOUNT";
 		}
+
+		// echo "<pre>";
+		// print_r($recordModel);
+		// echo "</pre>";
 
 		$viewer = $this->getViewer($request);
 		$viewer = $this->getViewer($request);

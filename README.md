@@ -225,5 +225,26 @@ JOIN (
 ) t ON t.holdingcertificateid = B.crmid
 SET B.deleted = 1;`
 
+36. Remove field in Module 
+  36.1 Find field id from module by module name
+   - `SELECT fieldid, tabid, fieldname, fieldlabel, uitype, presence, block
+FROM vtiger_field
+WHERE tabid = (SELECT tabid FROM vtiger_tab WHERE name='Potentials')
+  AND (fieldlabel='Organisation Name' OR fieldname IN ('related_to','account_id'));`
+
+  36.2 Remove it the field 
+   - `UPDATE vtiger_field SET presence = 1 WHERE fieldid = 113;`
+
+
+37. Rename name of column in module
+  37.1 Find field information
+  `SELECT fieldid, fieldname, fieldlabel, tabid
+FROM vtiger_field
+WHERE fieldlabel = 'Contact Name'
+  AND tabid = (SELECT tabid FROM vtiger_tab WHERE name='Potentials');`
+
+  37.2 Update field name `UPDATE vtiger_field SET fieldlabel = 'Client Name' WHERE fieldlabel = 'Contact Name'   AND tabid = (SELECT tabid FROM vtiger_tab WHERE name='Potentials');`
+
+
 
    

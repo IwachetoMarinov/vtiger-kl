@@ -28,8 +28,8 @@
                     <div class="col-md-1 col-sm-3 col-xs-2">
                         <label>Fine Oz</label>
                     </div>
-                    <div class="col-md-1 col-sm-3 col-xs-2">
-                        <label class='pre_disc'>Premium (%)</label>
+                    <div class="col-md-2 col-sm-3 col-xs-2">
+                        <label class='pre_disc'>Premium/Discount (%)</label>
                     </div>
                     <div class="col-md-1 col-sm-3 col-xs-2" style="padding: 0;padding-left: 15px;">
                         <label class='pre_disc_usd'></label>

@@ -53,6 +53,12 @@
         z-index: 200000 !important;
     }
 
+    #resetDatesButton {
+        border: none;
+        cursor: pointer;
+    }
+    
+    #resetDatesButton,
     #printConfSave {
         background: #bea364;
         color: #fff;
@@ -134,5 +140,8 @@
             href="index.php?module=Contacts&view=ActivtySummeryPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}">
             Save
         </a>
+
+        {* Reset dates button *}
+        <button id="resetDatesButton" type="button">Reset</button>
     </div>
 </div>
