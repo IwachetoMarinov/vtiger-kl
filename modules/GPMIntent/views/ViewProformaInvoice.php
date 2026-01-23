@@ -26,7 +26,33 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 
 		// ✅ Get Contact related to Intent
 		$contactId = $intent->get('contact_id');
-		$intent_currency = $intent->get('cf_1132');
+		$moduleModel = Vtiger_Module_Model::getInstance('GPMIntent');
+		$fields = $moduleModel->getFields();
+
+		$targetLabel = 'Currency';
+
+		$fieldName = null;
+		foreach ($fields as $f) {
+			if (strcasecmp($f->get('label'), $targetLabel) === 0) {
+				$fieldName = $f->getName();
+				break;
+			}
+		}
+
+		$intent_currency = $fieldName ? $intent->get($fieldName) : '';
+
+		// echo "<pre>";
+		// print_r($intent_currency);
+		// echo "</pre>";
+
+		$gpm_order_type = $intent->get('gpm_order_type');
+		$discount  = "PREMIUM / (DISCOUNT)";
+
+		if ($gpm_order_type == 'Purchase & Storage' || $gpm_order_type == 'Purchase & Delivery') {
+			$discount = "PREMIUM";
+		} else if ($gpm_order_type == 'Sale') {
+			$discount = "DISCOUNT";
+		}
 
 		if (empty($contactId)) throw new AppException("Intent has no related Contact ID.");
 
