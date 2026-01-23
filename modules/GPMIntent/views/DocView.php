@@ -37,7 +37,6 @@ class GPMIntent_DocView_View extends Vtiger_Index_View
         $recordId = $request->get('record');
         $client_no = Vtiger_Record_Model::getInstanceById($recordId, 'GPMIntent')->get('contact_erp_no');
 
-
         $fileName = "$client_no-$view_name-$year-$recordId";
         // $fileName = md5(rand());
 

@@ -22,6 +22,7 @@
         div.inputElement {
             min-width: 100px;
             max-width: 140px;
+            margin-right: 10px;
         }
 
         .transaction-link {
@@ -85,6 +86,14 @@
         .vt-switch input:focus+.vt-switch-slider {
             box-shadow: 0 0 0 2px rgba(47, 128, 237, .25);
         }
+
+        .filter-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 3mm;
+        }
     </style>
 
     <div class="summaryWidgetContainer">
@@ -102,7 +111,7 @@
                     <div class="row-fluid">
 
                         <!-- NEW CLEAN FLEX CONTAINER -->
-                        <div style="float: right;display: flex;align-items: center;gap: 12px;">
+                        <div style="" class="filter-container">
 
                             {* Start date *}
                             <label style="margin: 0; font-size: 13px;">Start date</label>
@@ -125,9 +134,9 @@
                                 Save
                             </button>
 
-                            <label style="margin: 0; font-size: 13px;">Sort by balance</label>
+                            <label style="margin: 0; font-size: 13px;">Sort by date</label>
                             <label class="vt-switch">
-                            <span class="vt-switch-label">
+                                <span class="vt-switch-label">
                                     {if $ORDER_BY eq 'desc'}
                                         Descending &nbsp;&nbsp;
                                     {else}
@@ -187,7 +196,7 @@
                                 <th></th>
                                 <th>DATE</th>
                                 <th>DESCRIPTION</th>
-                                <th>DEPOSIT</th>
+                                <th>AMOUNT</th>
                             </tr>
                         </thead>
 

@@ -40,18 +40,16 @@ jQuery(function () {
 
   // Switch for order by balance
   jQuery(document).on("change", ".summary_toggle", function () {
-    console.log("Toggle changed");
-    var isOn = jQuery(this).is(":checked");
-
-    const originalUrl = window.location.href;
-
+    const isOn = jQuery(this).is(":checked");
     const orderByParam = isOn ? "desc" : "asc";
 
-    // Remove existing orderBy parameter if present
-    let baseUrl = originalUrl.split("&orderBy=")[0];
+    const url = new URL(window.location.href);
 
-    window.location.href =
-      baseUrl + "&orderBy=" + encodeURIComponent(orderByParam);
+    // Set or update the param
+    url.searchParams.set("orderBy", orderByParam);
+
+    // Redirect
+    window.location.href = url.toString();
   });
 
   function asArray(fileList) {
@@ -81,7 +79,7 @@ jQuery(function () {
       $modal
         .find("#dragandrophandler")
         .append(
-          '<div class="js-multi-status" style="margin-top:10px;font-size:13px;color:#555;"></div>'
+          '<div class="js-multi-status" style="margin-top:10px;font-size:13px;color:#555;"></div>',
         );
       $status = $modal.find(".js-multi-status");
     }
@@ -176,7 +174,7 @@ jQuery(function () {
       function next() {
         if (i >= files.length) {
           $status.html(
-            "<b>Finished</b><br>Uploaded: " + ok + "<br>Failed: " + fail
+            "<b>Finished</b><br>Uploaded: " + ok + "<br>Failed: " + fail,
           );
 
           setTimeout(function () {
@@ -216,7 +214,7 @@ jQuery(function () {
             " / " +
             files.length +
             "<br>" +
-            file.name
+            file.name,
         );
 
         jQuery

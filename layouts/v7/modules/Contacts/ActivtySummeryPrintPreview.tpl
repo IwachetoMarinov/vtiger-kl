@@ -174,7 +174,7 @@
         <script type="text/javascript" src="layouts/v7/lib/jquery/jquery.min.js"></script>
 
         <ul style="list-style-type: none; margin: 0; padding: 0;overflow: hidden;background-color: #333;">
-            <li style="float:right"><a style="display: block;
+            <li id="downloadBtn" style="float:right"><a style="display: block;
                 color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
                     href="index.php?module=Contacts&view=ActivtySummeryPrintPreview&record={$RECORD_MODEL->getId()}&ActivtySummeryDate={$smarty.request.ActivtySummeryDate}&PDFDownload=true">Download</a>
             </li>

@@ -45,15 +45,6 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 		// print_r($intent_currency);
 		// echo "</pre>";
 
-		$gpm_order_type = $intent->get('gpm_order_type');
-		$discount  = "PREMIUM / (DISCOUNT)";
-
-		if ($gpm_order_type == 'Purchase & Storage' || $gpm_order_type == 'Purchase & Delivery') {
-			$discount = "PREMIUM";
-		} else if ($gpm_order_type == 'Sale') {
-			$discount = "DISCOUNT";
-		}
-
 		if (empty($contactId)) throw new AppException("Intent has no related Contact ID.");
 
 		$recordModel = Vtiger_Record_Model::getInstanceById($contactId, 'Contacts');
@@ -74,9 +65,10 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 			// ✅ Company record
 			$companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
 			// ✅ Bank accounts
-			$allBankAccounts = BankAccount_Record_Model::getAllInstances();
-			$bankAccountId   = $request->get('bank');
 		}
+
+		$allBankAccounts = BankAccount_Record_Model::getAllInstances();
+		$bankAccountId   = $request->get('bank');
 
 		if (empty($bankAccountId) && !empty($allBankAccounts)) {
 			$firstAccount  = reset($allBankAccounts);
