@@ -62,12 +62,19 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
             }));
         }
 
-        // Order transactions by amount_in_account_currency ascending
-        usort($transactions, function ($a, $b) {
-            $amtA = isset($a['amount_in_account_currency']) ? floatval($a['amount_in_account_currency']) : 0;
-            $amtB = isset($b['amount_in_account_currency']) ? floatval($b['amount_in_account_currency']) : 0;
-            return $amtA <=> $amtB;
+        // Order transactions by date ascending
+        usort($transactions, function ($a, $b) use ($dateField) {
+            $dateA = !empty($a[$dateField]) ? strtotime($a[$dateField] . ' 00:00:00') : 0;
+            $dateB = !empty($b[$dateField]) ? strtotime($b[$dateField] . ' 00:00:00') : 0;
+            return $dateA <=> $dateB;
         });
+
+        // Order transactions by amount_in_account_currency ascending
+        // usort($transactions, function ($a, $b) {
+        //     $amtA = isset($a['amount_in_account_currency']) ? floatval($a['amount_in_account_currency']) : 0;
+        //     $amtB = isset($b['amount_in_account_currency']) ? floatval($b['amount_in_account_currency']) : 0;
+        //     return $amtA <=> $amtB;
+        // });
 
         $earliestDate = null;
         $latestDate = null;

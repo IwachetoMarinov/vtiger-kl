@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>TRANSACTION HISTORY</title>
+    <title>ACTIVITY SUMMARY</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -91,10 +91,6 @@
             color: #cd3330;
             font-weight: bold;
             font-size: 20pt;
-        }
-
-        .hidden {
-            /*display: none;*/
         }
 
         table.content-table th {
