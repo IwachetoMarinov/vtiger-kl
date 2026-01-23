@@ -26,7 +26,20 @@ class GPMIntent_DocView_View extends Vtiger_Index_View
     {
         global $root_directory;
 
-        $fileName = md5(rand());
+        $year = date('Y');
+        $view = $request->get('view');
+        $view_name  = "QU";
+
+        if ($view == 'ViewProformaInvoice') {
+            $view_name = "PROFORMA INVOICE";
+        }
+
+        $recordId = $request->get('record');
+        $client_no = Vtiger_Record_Model::getInstanceById($recordId, 'GPMIntent')->get('contact_erp_no');
+
+
+        $fileName = "$client_no-$view_name-$year-$recordId";
+        // $fileName = md5(rand());
 
         // 1) write HTML exactly as before
         $htmlPath = $root_directory . $fileName . '.html';

@@ -62,6 +62,11 @@ class Accounts_Detail_View extends Vtiger_Detail_View
 			'modules.Accounts.resources.MultiDocUpload'
 		);
 
+		// Only for Accounts detail view
+		if ($request->getModule() !== 'Accounts' || $request->get('view') !== 'Detail') {
+			return $headerScripts;
+		}
+
 		$jsScripts = $this->checkAndConvertJsScripts($jsFileNames);
 		return array_merge($headerScripts, $jsScripts);
 	}
@@ -73,6 +78,11 @@ class Accounts_Detail_View extends Vtiger_Detail_View
 		$cssFileNames = array(
 			'~/layouts/v7/modules/Accounts/resources/custom.css',
 		);
+
+		// Only for Accounts detail view
+		if ($request->getModule() !== 'Accounts' || $request->get('view') !== 'Detail') {
+			return $headerCss;
+		}
 
 		$cssInstances = $this->checkAndConvertCssStyles($cssFileNames);
 		return array_merge($headerCss, $cssInstances);

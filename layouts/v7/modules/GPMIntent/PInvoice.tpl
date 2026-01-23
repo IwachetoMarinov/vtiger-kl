@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>GPM PROFORMA SALE INVOICE</title>
+    <title>PROFORMA INVOICE</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {include file="partials/printCSS.tpl"|vtemplate_path:GPMIntent}
@@ -80,9 +80,9 @@
                             </tr>
                             <tr>
                                 <td style="text-align:center">PI/{date('Y')}/{$INTENT->get('intent_no')}</td>
-                                <td style="text-align:center">{date('j M Y',strtotime($INTENT->get('modifiedtime')))}
+                                <td style="text-align:center">{date('Y-m-d',strtotime($INTENT->get('modifiedtime')))}
                                 </td>
-                                <td style="text-align:center">{date('j M Y',strtotime($INTENT->get('modifiedtime')))}
+                                <td style="text-align:center">{date('Y-m-d',strtotime($INTENT->get('modifiedtime')))}
                                 </td>
                                 <td style="text-align:center">{$INTENT->get('gpm_order_type')}</td>
                             </tr>
@@ -91,7 +91,7 @@
                 </tr>
 
                 <tr>
-                    <td style="text-align:right;font-size:9pt">All amounts in currency</td>
+                    <td style="text-align:right;font-size:9pt">All amounts in {$INTENT_CURRENCY}</td>
                 </tr>
 
                 <!-- Product table -->
@@ -135,19 +135,6 @@
                                 <td style="text-align:right"><strong>{$INTENT_CURRENCY}
                                         {number_format($INTENT->get('total_amount'),2)}</strong></td>
                             </tr>
-
-                            {if $INTENT_CURRENCY neq 'USD'}
-                                <tr>
-                                    <th colspan="4">
-                                        TOTAL INVOICE AMOUNT IN {$INTENT_CURRENCY}
-                                        ({if $INTENT_CURRENCY eq 'EUR'}EUR/USD{else}USD/{$INTENT_CURRENCY}{/if}
-                                        RATE
-                                        {if $INTENT->get('fx_spot_price') eq 0}{$INTENT->get('indicative_fx_spot')}{else}{$INTENT->get('fx_spot_price')}{/if})
-                                    </th>
-                                    <td style="text-align:right"><strong>{$INTENT_CURRENCY}
-                                            {number_format($INTENT->get('total_foreign_amount'),2)}</strong></td>
-                                </tr>
-                            {/if}
                         </table>
 
                         <!-- Remarks -->

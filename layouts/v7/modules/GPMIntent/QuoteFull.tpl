@@ -68,11 +68,11 @@
                         <table class="activity-tbl" style="margin-bottom:5mm;margin-top:5mm">
                             <tr>
                                 <th style="width:25%;text-align:center">DATE</th>
-                                <th style="width:25%;text-align:center">CUSTOMER REQUIREMENT</th>
+                                <th style="width:25%;text-align:center">ORDER</th>
                                 <th style="width:25%;text-align:center">LOCATION</th>
                             </tr>
                             <tr>
-                                <td style="text-align:center">{date('j M Y',strtotime($INTENT->get('modifiedtime')))}
+                                <td style="text-align:center">{date('Y-m-d',strtotime($INTENT->get('modifiedtime')))}
                                 </td>
                                 <td style="text-align:center">{$INTENT->get('gpm_order_type')}</td>
                                 <td style="text-align:center">{$INTENT->get('gpm_order_location')}</td>
@@ -90,14 +90,14 @@
                                 <th>{vtranslate($INTENT->get('gpm_metal_type'),'MetalPrice')}</th>
                                 <td style="text-align:center">
                                     {$INTENT_CURRENCY}
-                                    {number_format($INTENT->get('indicative_spot_price'),2, '.', ',')} / Oz.
+                                    {number_format($INTENT->get('indicative_spot_price'),2, '.', ',')} / oz.
                             </tr>
                         </table>
                     </td>
                 </tr>
                 <tr>
                     <td style="text-align: right;font-size: 9pt">
-                        All amounts in currency
+                       All amounts in {if isset($INTENT_CURRENCY)}{$INTENT_CURRENCY}{else}currency{/if}
                     </td>
                 </tr>
                 <tr>
@@ -106,9 +106,9 @@
                             <tr>
                                 <th style="width:10%;">QTY</th>
                                 <th style="width:40%;">DESCRIPTION</th>
-                                <th style="width:10%;">PREMIUM / (DISCOUNT)</th>
+                                <th style="width:10%;">{$DISCOUNT}</th>
                                 <th style="width:12%;text-align:center"> {$INTENT_CURRENCY} / UNIT</th>
-                                <th style="width:8%;text-align:center">FINE WEIGHT</th>
+                                <th style="width:8%;text-align:center">FINE OZ.</th>
                                 <th style="width:20%;text-align:center">TOTAL</th>
                             </tr>
                             {foreach item=PRODUCT key=cnt from=$RELATED_PRODUCTS}
@@ -158,18 +158,6 @@
                                         {$INTENT_CURRENCY}
                                         {number_format($INTENT->get('total_amount'),2)}</strong></td>
                             </tr>
-                            {if $INTENT_CURRENCY neq 'USD'}
-                                <tr>
-                                    <th style="width:75%;" colspan="5">TOTAL QUOTE VALUE IN
-                                        {$INTENT_CURRENCY}: {if $INTENT_CURRENCY eq 'EUR'}
-                                        (EUR/USD{else}(USD/{$INTENT_CURRENCY}
-                                        {/if} RATE
-                                        {if $INTENT->get('fx_spot_price') eq 0 }{$INTENT->get('indicative_fx_spot')}{else}{$INTENT->get('fx_spot_price')}{/if}
-                                        )</th>
-                                    <td style="text-align:right"><strong>{$INTENT->get('package_currency')}
-                                            {number_format($INTENT->get('total_foreign_amount'),2)}</strong></td>
-                                </tr>
-                            {/if}
                         </table>
                         <br>
                         <div>

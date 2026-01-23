@@ -24,16 +24,16 @@ class GPMIntent_ViewQuotation_View extends GPMIntent_DocView_View
 		}
 
 		$recordModel = (empty($intent->get('contact_id'))) ? Vtiger_Record_Model::getInstanceById($intent->get('lead_id'), 'Leads') : Vtiger_Record_Model::getInstanceById($intent->get('contact_id'), 'Contacts');
-		$recordModelModule = (empty($intent->get('contact_id'))) ? 'Leads' :'Contacts';
+		$recordModelModule = (empty($intent->get('contact_id'))) ? 'Leads' : 'Contacts';
 
-        $companyId = $recordModel->get('company_id');
+		$companyId = $recordModel->get('company_id');
 
-        $companyRecord = null;
+		$companyRecord = null;
 
-        if (!empty($companyId))
-            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
-		
-		if(!Users_Privileges_Model::isPermitted($recordModelModule, 'DetailView', $recordModel->getId())) {
+		if (!empty($companyId))
+			$companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
+
+		if (!Users_Privileges_Model::isPermitted($recordModelModule, 'DetailView', $recordModel->getId())) {
 			throw new AppException('You are not permitted to view the Lead or the Contact information associated with this Intent!');
 		}
 
@@ -43,12 +43,35 @@ class GPMIntent_ViewQuotation_View extends GPMIntent_DocView_View
 
 		$products = GPMIntent_Line_Model::getInstanceByIntent($recordId);
 
-		$intent_currency = $intent->get('cf_1132');
-		
+		$moduleModel = Vtiger_Module_Model::getInstance('GPMIntent');
+		$fields = $moduleModel->getFields();
+
+		$targetLabel = 'Currency'; 
+
+		$fieldName = null;
+		foreach ($fields as $f) {
+			if (strcasecmp($f->get('label'), $targetLabel) === 0) {
+				$fieldName = $f->getName();
+				break;
+			}
+		}
+
+		$intent_currency = $fieldName ? $intent->get($fieldName) : '';
+
+		$gpm_order_type = $intent->get('gpm_order_type');
+		$discount  = "PREMIUM / (DISCOUNT)";
+
+		if ($gpm_order_type == 'Purchase & Storage' || $gpm_order_type == 'Purchase & Delivery') {
+			$discount = "PREMIUM";
+		} else if ($gpm_order_type == 'Sale') {
+			$discount = "DISCOUNT";
+		}
+
 		$viewer = $this->getViewer($request);
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RECORD_MODEL', $recordModel);
 		$viewer->assign('INTENT', $intent);
+		$viewer->assign('DISCOUNT', $discount);
 		$viewer->assign('INTENT_CURRENCY', $intent_currency ?? "");
 		$viewer->assign('RELATED_PRODUCTS', $products);
 		$viewer->assign('DOWNLOAD_LINK', $downloadLink);
