@@ -167,31 +167,42 @@
             /* ===== PAGE SETUP ===== */
             @page {
                 size: A4;
-                margin: 0;
+                margin: 10mm;
+                /* IMPORTANT: prevents right-side clipping on most printers */
             }
 
             html,
             body {
                 margin: 0 !important;
                 padding: 0 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
 
             /* ===== ONE CONTAINER = ONE PAGE ===== */
             .printAreaContainer {
-                width: 210mm !important;
-                min-height: 297mm !important;
+                /* Use available printable width instead of forcing 210mm */
+                width: auto !important;
+
+                /* Keep A4 height feel */
+                min-height: calc(297mm - 20mm) !important;
+                /* page height minus top/bottom margins */
                 height: auto !important;
 
-                margin: 0 !important;
-                padding: 15mm 15mm !important;
+                margin: 0 auto !important;
 
-                page-break-after: always;
-                break-after: page;
+                /* Your internal padding can stay */
+                padding: 15mm !important;
 
-                page-break-inside: avoid;
-                break-inside: avoid;
+                page-break-after: always !important;
+                break-after: page !important;
 
-                overflow: hidden;
+                /* Don't clip content */
+                overflow: visible !important;
+
+                /* Avoid splitting the container itself */
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
 
             /* ===== HIDE TOP CONTROLS ===== */
@@ -201,40 +212,51 @@
                 display: none !important;
             }
 
-            /* ===== TABLE BEHAVIOR ===== */
-
-            /* Allow table to split across pages */
+            /* ===== TABLE WIDTH + LAYOUT (prevents growing wider than page) ===== */
             table.activity-tbl {
+                width: 100% !important;
+                table-layout: fixed !important;
+                /* KEY: prevents long text expanding the table */
+                border-collapse: collapse !important;
+
                 page-break-inside: auto !important;
                 break-inside: auto !important;
-                width: 100%;
             }
 
             /* Never split a row */
             table.activity-tbl tr {
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
-                page-break-after: auto !important;
-                break-after: auto !important;
             }
 
-            /* Repeat header row on every page */
+            /* Repeat header */
             table.activity-tbl thead {
                 display: table-header-group !important;
             }
 
-            /* Optional: footer group support */
-            table.activity-tbl tfoot {
-                display: table-footer-group !important;
+            table.activity-tbl tbody {
+                display: table-row-group !important;
             }
 
-            /* Avoid accidental global blocking */
-            table,
-            tbody {
-                page-break-inside: auto !important;
-                break-inside: auto !important;
+            /* Wrapping rules so DESCRIPTION / DOC NO can't push width */
+            table.activity-tbl th,
+            table.activity-tbl td {
+                overflow-wrap: anywhere !important;
+                word-break: break-word !important;
             }
 
+            /* Keep numeric columns in one line, but never overflow */
+            table.activity-tbl td:nth-child(4),
+            table.activity-tbl td:nth-child(5) {
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+            }
+
+            /* Optional: center the whole table block a bit (looks nicer) */
+            table.print-tbl {
+                width: 100% !important;
+            }
         }
     </style>
 </head>
