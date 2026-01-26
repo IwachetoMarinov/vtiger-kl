@@ -163,11 +163,9 @@
         }
 
         @media print {
-
-            /* Make browser print predictably */
             @page {
                 size: A4;
-                margin: 0;
+                margin: 10mm;
             }
 
             html,
@@ -176,33 +174,46 @@
                 padding: 0 !important;
             }
 
-            /* Each container = one printed page */
             .printAreaContainer {
-                width: 210mm !important;
-                /* IMPORTANT: A4 width */
-                min-height: 297mm !important;
-                /* A4 height */
+                width: 100% !important;
+                min-height: auto !important;
                 height: auto !important;
-                /* avoid fixed height splitting */
                 margin: 0 !important;
-                padding: 15mm 15mm !important;
+                padding: 0 !important;
                 page-break-after: always;
                 break-after: page;
-                page-break-inside: avoid;
                 break-inside: avoid;
+            }
+
+            /* Put your inner padding on the table container instead of the page box */
+            .print-tbl {
+                width: 190mm !important;
+                /* A4(210) - 2*10mm page margins */
+                margin: 0 auto !important;
+            }
+
+            table.activity-tbl {
+                width: 100% !important;
+                table-layout: fixed;
+            }
+
+            table.activity-tbl th,
+            table.activity-tbl td {
+                word-break: break-word;
+                overflow-wrap: anywhere;
+            }
+
+            table.activity-tbl td:nth-child(4),
+            table.activity-tbl td:nth-child(5) {
+                white-space: nowrap;
                 overflow: hidden;
+                text-overflow: ellipsis;
             }
 
-            /* Avoid splitting rows across pages */
-            table,
-            tr,
-            td,
-            th {
-                page-break-inside: avoid;
-                break-inside: avoid;
+            table.activity-tbl td:nth-child(3) {
+                white-space: normal;
             }
 
-            /* If your top toolbar exists, hide it in print */
             #downloadBtn,
             #printConf,
             ul {
