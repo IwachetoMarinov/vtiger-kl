@@ -32,11 +32,12 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         if (!empty($companyId)) {
             // ✅ Company record
             $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
-            // ✅ Bank accounts
-            // $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($companyId);
-            $allBankAccounts = BankAccount_Record_Model::getAllInstances();
-            $bankAccountId   = $request->get('bank');
         }
+        
+        // ✅ Bank accounts
+        // $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($companyId);
+        $allBankAccounts = BankAccount_Record_Model::getAllInstances();
+        $bankAccountId   = $request->get('bank');
 
         $activity = new dbo_db\ActivitySummary();
         $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);
@@ -96,6 +97,10 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         if (!empty($request->get('fromIntent'))) {
             $intent = Vtiger_Record_Model::getInstanceById($request->get('fromIntent'), 'GPMIntent');
         }
+
+        // echo "<pre>";
+        // print_r($erpDoc);
+        // echo "</pre>";
 
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);

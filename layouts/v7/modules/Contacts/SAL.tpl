@@ -368,7 +368,8 @@
                                         </tr>
                                         <tr>
                                             <td style="width:75%;" colspan="4">GST on Storage charge (0%)</td>
-                                            <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
+                                            <td style="text-align:right"><strong>
+                                                    {$ERP_DOCUMENT->currency}
                                                     {number_format(0,2)}</strong></td>
                                         </tr>
                                     {/if}
@@ -393,6 +394,9 @@
                             </table>
                             <br>
                             <br>
+                            <pre>
+                                    {* {var_dump(MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency))} *}
+                                    </pre>
                             {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))}
                                 <div>
                                     {if $INTENT && $INTENT->get('package_currency') eq 'SGD'}

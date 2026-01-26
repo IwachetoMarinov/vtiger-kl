@@ -30,12 +30,11 @@ class Contacts_NotePrintPreview_View extends Vtiger_Index_View
         $allBankAccounts = [];
 
         if (!empty($companyId)) {
-            // ✅ Company record
             $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
-            // ✅ Bank accounts
-            $allBankAccounts = BankAccount_Record_Model::getAllInstances();
-            $bankAccountId   = $request->get('bank');
         }
+
+        $allBankAccounts = BankAccount_Record_Model::getAllInstances();
+        $bankAccountId   = $request->get('bank');
 
         $activity = new dbo_db\ActivitySummary();
         $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);
