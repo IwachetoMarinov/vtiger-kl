@@ -38,7 +38,13 @@
             box-sizing: border-box;
             font-family: 'Open Sans';
             color: #666;
+        }
 
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
         }
 
         .printAreaContainer .full-width {
@@ -395,8 +401,8 @@
                             <br>
                             <br>
                             <pre>
-                                    {* {var_dump(MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency))} *}
-                                    </pre>
+                                        {* {var_dump(MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency))} *}
+                                        </pre>
                             {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))}
                                 <div>
                                     {if $INTENT && $INTENT->get('package_currency') eq 'SGD'}
