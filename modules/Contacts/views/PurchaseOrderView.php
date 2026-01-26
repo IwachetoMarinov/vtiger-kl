@@ -28,12 +28,11 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $companyRecord = null;
 
         if (!empty($companyId)) {
-            // ✅ Company record
             $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
-            // ✅ Bank accounts
-            $allBankAccounts = BankAccount_Record_Model::getAllInstances();
-            $bankAccountId   = $request->get('bank');
         }
+        
+        $allBankAccounts = BankAccount_Record_Model::getAllInstances();
+        $bankAccountId   = $request->get('bank');
 
         $bankAccountId = $request->get('bank');
         if (empty($bankAccountId) && !empty($allBankAccounts)) {
