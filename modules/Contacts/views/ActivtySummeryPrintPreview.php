@@ -112,8 +112,8 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
     protected function makeDataPage($transaction)
     {
         $totalPage = 1;
-        if (count($transaction) > 25) {
-            $totaldataAfterFirstPage = count($transaction) - 25;
+        if (count($transaction) > 22) {
+            $totaldataAfterFirstPage = count($transaction) - 22;
             $totalPage = ceil($totaldataAfterFirstPage / 30) + 1;
         }
         return $totalPage;

@@ -39,7 +39,6 @@
             height: 297mm;
             padding: 15mm;
             box-sizing: border-box;
-            /* ✅ key fix */
             margin: 0 auto;
             position: relative;
             page-break-after: always;
