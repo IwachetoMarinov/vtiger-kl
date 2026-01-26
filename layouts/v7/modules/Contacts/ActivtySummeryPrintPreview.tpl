@@ -163,10 +163,78 @@
         }
 
         @media print {
+
+            /* ===== PAGE SETUP ===== */
             @page {
                 size: A4;
                 margin: 0;
             }
+
+            html,
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* ===== ONE CONTAINER = ONE PAGE ===== */
+            .printAreaContainer {
+                width: 210mm !important;
+                min-height: 297mm !important;
+                height: auto !important;
+
+                margin: 0 !important;
+                padding: 15mm 15mm !important;
+
+                page-break-after: always;
+                break-after: page;
+
+                page-break-inside: avoid;
+                break-inside: avoid;
+
+                overflow: hidden;
+            }
+
+            /* ===== HIDE TOP CONTROLS ===== */
+            #downloadBtn,
+            #printConf,
+            ul {
+                display: none !important;
+            }
+
+            /* ===== TABLE BEHAVIOR ===== */
+
+            /* Allow table to split across pages */
+            table.activity-tbl {
+                page-break-inside: auto !important;
+                break-inside: auto !important;
+                width: 100%;
+            }
+
+            /* Never split a row */
+            table.activity-tbl tr {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                page-break-after: auto !important;
+                break-after: auto !important;
+            }
+
+            /* Repeat header row on every page */
+            table.activity-tbl thead {
+                display: table-header-group !important;
+            }
+
+            /* Optional: footer group support */
+            table.activity-tbl tfoot {
+                display: table-footer-group !important;
+            }
+
+            /* Avoid accidental global blocking */
+            table,
+            tbody {
+                page-break-inside: auto !important;
+                break-inside: auto !important;
+            }
+
         }
     </style>
 </head>
@@ -268,90 +336,96 @@
                     <tr>
                         <td style="vertical-align: top;">
                             <table class="activity-tbl">
-                                <tr>
-                                    <th>DOCUMENT NO.</th>
-                                    <th style="width: 22mm;text-align: center;min-width: 28mm;">DATE</th>
-                                    <th>DESCRIPTION</th>
-                                    <th style="width: 22mm;">DEPOSIT/(WITHDRAWAL)</th>
-                                    <th style="text-align: center">BALANCE</th>
-                                </tr>
+                                <thead>
+                                    <tr>
+                                        <th>DOCUMENT NO.</th>
+                                        <th style="width: 22mm;text-align: center;min-width: 28mm;">DATE</th>
+                                        <th>DESCRIPTION</th>
+                                        <th style="width: 22mm;">DEPOSIT/(WITHDRAWAL)</th>
+                                        <th style="text-align: center">BALANCE</th>
+                                    </tr>
+                                </thead>
 
-                                {for $loopStart=$start to $end}
-                                    {if $loopStart >= count($TRANSACTIONS)}{break}{/if}
+                                {* Loop through transactions for the page *}
+                                <tbody>
+                                    {for $loopStart=$start to $end}
+                                        {if $loopStart >= count($TRANSACTIONS)}{break}{/if}
 
-                                    {assign var="start" value=($loopStart+1)}
-                                    {assign var="TRANSACTION" value=$TRANSACTIONS[$loopStart]}
+                                        {assign var="start" value=($loopStart+1)}
+                                        {assign var="TRANSACTION" value=$TRANSACTIONS[$loopStart]}
 
-                                    {* Asign description *}
-                                    {assign var="description" value=$TRANSACTION['description']|default:''}
+                                        {* Asign description *}
+                                        {assign var="description" value=$TRANSACTION['description']|default:''}
 
 
-                                    {* Normalize values to avoid null warnings *}
-                                    {assign var="docNo" value=$TRANSACTION['voucher_no']|default:''}
-                                    {assign var="usdVal" value=$TRANSACTION['amount_in_account_currency']|default:0}
+                                        {* Normalize values to avoid null warnings *}
+                                        {assign var="docNo" value=$TRANSACTION['voucher_no']|default:''}
+                                        {assign var="usdVal" value=$TRANSACTION['amount_in_account_currency']|default:0}
 
-                                    {* Determine direction based on type *}
-                                    {if in_array($TRANSACTION['voucher_type'], ['PUR','PAY'])}
-                                        {assign var="usdVal" value=$usdVal * -1}
-                                    {/if}
+                                        {* Determine direction based on type *}
+                                        {if in_array($TRANSACTION['voucher_type'], ['PUR','PAY'])}
+                                            {assign var="usdVal" value=$usdVal * -1}
+                                        {/if}
 
-                                    {assign var="transDate" value=$TRANSACTION['document_date']|default:''}
+                                        {assign var="transDate" value=$TRANSACTION['document_date']|default:''}
 
-                                    {* Skip FX / MP transactions *}
-                                    {if in_array($docNo|substr:0:3, array('FXP','FXR','MPD','MRD'))}
-                                        {continue}
-                                    {/if}
+                                        {* Skip FX / MP transactions *}
+                                        {if in_array($docNo|substr:0:3, array('FXP','FXR','MPD','MRD'))}
+                                            {continue}
+                                        {/if}
 
-                                    {* Grand total always accumulates *}
-                                    {assign var="grandTotal" value=$grandTotal+$usdVal}
+                                        {* Grand total always accumulates *}
+                                        {assign var="grandTotal" value=$grandTotal+$usdVal}
 
-                                    {* Opening balance row *}
-                                    {if $docNo|substr:0:3 eq 'AOP'}
-                                        {assign var="openingBalance" value=$usdVal}
-                                        {assign var="balanceAmount" value=$usdVal}
+                                        {* Opening balance row *}
+                                        {if $docNo|substr:0:3 eq 'AOP'}
+                                            {assign var="openingBalance" value=$usdVal}
+                                            {assign var="balanceAmount" value=$usdVal}
+                                            <tr>
+                                                <td colspan="4"><strong>OPENING BALANCE</strong></td>
+                                                <td style="text-align:right">
+                                                    <strong>
+                                                        {if $usdVal > 0}
+                                                            {number_format($usdVal, 2, '.', ',')}
+                                                        {else}
+                                                            ({number_format($usdVal*-1, 2, '.', ',')})
+                                                        {/if}
+                                                    </strong>
+                                                </td>
+                                            </tr>
+                                            {continue}
+                                        {/if}
+
+                                        {* Record movement *}
+                                        {assign var="movementTotal" value=$movementTotal + $usdVal}
+                                        {assign var="balanceAmount" value=$balanceAmount + $usdVal}
+
                                         <tr>
-                                            <td colspan="4"><strong>OPENING BALANCE</strong></td>
+                                            <td>{$docNo}</td>
+                                            <td>
+                                                {if $transDate ne ''}
+                                                    {$transDate|date_format:"%d-%b-%y"}
+                                                {/if}
+                                            </td>
+                                            <td>{$description}</td>
                                             <td style="text-align:right">
-                                                <strong>
-                                                    {if $usdVal > 0}
-                                                        {number_format($usdVal, 2, '.', ',')}
-                                                    {else}
-                                                        ({number_format($usdVal*-1, 2, '.', ',')})
-                                                    {/if}
-                                                </strong>
+                                                {if $usdVal > 0}
+                                                    {number_format($usdVal, 2, '.', ',')}
+                                                {else}
+                                                    ({number_format($usdVal*-1, 2, '.', ',')})
+                                                {/if}
+                                            </td>
+                                            <td style="text-align:right">
+                                                {if $balanceAmount gte 0}
+                                                    {number_format($balanceAmount,2, '.', ',')}
+                                                {else}
+                                                    ({number_format($balanceAmount*-1,2, '.', ',')})
+                                                {/if}
                                             </td>
                                         </tr>
-                                        {continue}
-                                    {/if}
-
-                                    {* Record movement *}
-                                    {assign var="movementTotal" value=$movementTotal + $usdVal}
-                                    {assign var="balanceAmount" value=$balanceAmount + $usdVal}
-
-                                    <tr>
-                                        <td>{$docNo}</td>
-                                        <td>
-                                            {if $transDate ne ''}
-                                                {$transDate|date_format:"%d-%b-%y"}
-                                            {/if}
-                                        </td>
-                                        <td>{$description}</td>
-                                        <td style="text-align:right">
-                                            {if $usdVal > 0}
-                                                {number_format($usdVal, 2, '.', ',')}
-                                            {else}
-                                                ({number_format($usdVal*-1, 2, '.', ',')})
-                                            {/if}
-                                        </td>
-                                        <td style="text-align:right">
-                                            {if $balanceAmount gte 0}
-                                                {number_format($balanceAmount,2, '.', ',')}
-                                            {else}
-                                                ({number_format($balanceAmount*-1,2, '.', ',')})
-                                            {/if}
-                                        </td>
-                                    </tr>
-                                {/for}
+                                    {/for}
+                                </tbody>
+                                {* If last page, show totals *}
 
 
                                 {if $PAGES eq $page}
