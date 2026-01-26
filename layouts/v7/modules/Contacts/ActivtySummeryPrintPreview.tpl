@@ -161,6 +161,54 @@
             right: 0px;
             opacity: .4;
         }
+
+        @media print {
+
+            /* Make browser print predictably */
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
+            html,
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Each container = one printed page */
+            .printAreaContainer {
+                width: 210mm !important;
+                /* IMPORTANT: A4 width */
+                min-height: 297mm !important;
+                /* A4 height */
+                height: auto !important;
+                /* avoid fixed height splitting */
+                margin: 0 !important;
+                padding: 15mm 15mm !important;
+                page-break-after: always;
+                break-after: page;
+                page-break-inside: avoid;
+                break-inside: avoid;
+                overflow: hidden;
+            }
+
+            /* Avoid splitting rows across pages */
+            table,
+            tr,
+            td,
+            th {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            /* If your top toolbar exists, hide it in print */
+            #downloadBtn,
+            #printConf,
+            ul {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -259,7 +307,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="font-size: 10pt; height: {if $page eq 1}203{else}224{/if}mm; vertical-align: top;">
+                        <td style="vertical-align: top;">
                             <table class="activity-tbl">
                                 <tr>
                                     <th>DOCUMENT NO.</th>
