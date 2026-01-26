@@ -165,59 +165,7 @@
         @media print {
             @page {
                 size: A4;
-                margin: 10mm;
-            }
-
-            html,
-            body {
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            .printAreaContainer {
-                width: 100% !important;
-                min-height: auto !important;
-                height: auto !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                page-break-after: always;
-                break-after: page;
-                break-inside: avoid;
-            }
-
-            /* Put your inner padding on the table container instead of the page box */
-            .print-tbl {
-                width: 190mm !important;
-                /* A4(210) - 2*10mm page margins */
-                margin: 0 auto !important;
-            }
-
-            table.activity-tbl {
-                width: 100% !important;
-                table-layout: fixed;
-            }
-
-            table.activity-tbl th,
-            table.activity-tbl td {
-                word-break: break-word;
-                overflow-wrap: anywhere;
-            }
-
-            table.activity-tbl td:nth-child(4),
-            table.activity-tbl td:nth-child(5) {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            table.activity-tbl td:nth-child(3) {
-                white-space: normal;
-            }
-
-            #downloadBtn,
-            #printConf,
-            ul {
-                display: none !important;
+                margin: 0;
             }
         }
     </style>
