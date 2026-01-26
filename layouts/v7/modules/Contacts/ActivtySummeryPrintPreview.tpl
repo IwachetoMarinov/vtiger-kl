@@ -26,10 +26,9 @@
 
         .printAreaContainer {
             height: 297mm;
-            width: 230mm;
+            width: 210mm;
             border: 1px solid #fff;
             margin: auto;
-            margin-top: 10px;
             padding: 15mm 15mm;
             position: relative;
         }
