@@ -39,4 +39,24 @@ class MASForex_Record_Model extends Vtiger_Record_Model
 
         return $result;
     }
+
+    public static function getLatestExchangeRateByCurrency($date, $currency)
+    {
+        $metalsAPI = new MetalsAPI();
+        $data = $metalsAPI->getLatestExchangeRate($date);
+        $result = [];
+
+        // echo "<pre>";
+        // print_r($data);
+        // echo "</pre>";
+
+        // foreach ($data as $row) {
+        //     $cc  = $row['Curr_Code'];
+        //     $key = strtolower($cc) . '_sgd';
+
+        //     if (!isset($result[$key])) $result[$key] = $row['rate'];
+        // }
+
+        return $result;
+    }
 }

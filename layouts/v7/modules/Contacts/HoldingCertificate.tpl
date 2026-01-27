@@ -163,7 +163,7 @@
                     </td>
                     <td>
                         <div id='logo' style='float: right;'>
-                            <img src='layouts/v7/modules/HoldingCertificate/gpm_logo.png' style='width: 72px;'>
+                            <img src='layouts/v7/modules/HoldingCertificate/logo.png' style='width: 72px;'>
                         </div>
                     </td>
                 </tr>

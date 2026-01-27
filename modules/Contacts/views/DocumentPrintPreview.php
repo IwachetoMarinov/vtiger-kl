@@ -33,6 +33,8 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             // ✅ Company record
             $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
         }
+
+        // $rates = MASForex_Record_Model::getLatestExchangeRateByCurrency("2025-10-12", "SGD");
         
         // ✅ Bank accounts
         // $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($companyId);
