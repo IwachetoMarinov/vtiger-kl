@@ -49,6 +49,17 @@ class MASForex_Record_Model extends Vtiger_Record_Model
 
         $metalsAPI = new MetalsAPI();
         $data = $metalsAPI->getLatestExchangeRate($date);
+
+        if (!$data || count($data) == 0) {
+            // Try fetching up to 14 days back
+            for ($i = 1; $i <= 14; $i++) {
+                $newDate = date('Y-m-d', strtotime($date . " -$i days"));
+
+                $data = $metalsAPI->getLatestExchangeRate($newDate);
+                if ($data && count($data) > 0)  break;
+            }
+        }
+        
         $result = [];
 
         foreach ($data as $row) {
