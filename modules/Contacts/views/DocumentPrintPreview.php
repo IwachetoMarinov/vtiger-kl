@@ -34,8 +34,6 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
         }
 
-        // $rates = MASForex_Record_Model::getLatestExchangeRateByCurrency("2025-10-12", "SGD");
-        
         // ✅ Bank accounts
         // $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($companyId);
         $allBankAccounts = BankAccount_Record_Model::getAllInstances();
@@ -77,12 +75,6 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $selectedBank = null;
         if (!empty($bankAccountId)) $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
 
-        // echo "<pre>";
-        // // ✅ All bank accounts data
-        // print_r($selectedBank);
-        // echo "</pre>";
-
-
         if (empty($selectedBank)) {
             // fallback dummy object to prevent template fatal
             $selectedBank = new Vtiger_Record_Model();
@@ -99,10 +91,6 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         if (!empty($request->get('fromIntent'))) {
             $intent = Vtiger_Record_Model::getInstanceById($request->get('fromIntent'), 'GPMIntent');
         }
-
-        // echo "<pre>";
-        // print_r($erpDoc);
-        // echo "</pre>";
 
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);

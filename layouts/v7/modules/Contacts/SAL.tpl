@@ -394,20 +394,22 @@
                             </table>
                             <br>
                             <br>
-                            <pre>
-                          
-                                    {* {var_dump(MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency))} *}
-                                    </pre>
-                            {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))}
-                                <div>
-                                    {if $INTENT && $INTENT->get('package_currency') eq 'SGD'}
-                                        *Remarks: USD/SGD exchange rate at SGD {$INTENT->get('fx_spot_price')} / USD
-                                    {else}
-                                        *Remarks: USD/SGD exchange rate at SGD
-                                        {$ERP_DOCUMENT->exchange_rates} / USD
-                                    {/if}
-                                </div>
-                            {/if}
+                            
+                            {* {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))} *}
+                            
+                            {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency)}
+                            {* <pre>{var_dump($exchangeRateInfo)}</pre> *}
+                                {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
+                                    <div>
+                                        {if $ERP_DOCUMENT->currency eq 'SGD'}
+                                            *Remarks: USD/SGD exchange rate at SGD {$exchangeRateInfo['rate']} / USD
+                                        {else}
+                                            *Remarks: {$ERP_DOCUMENT->currency}/SGD exchange rate at SGD
+                                            {$exchangeRateInfo['rate']} / {$ERP_DOCUMENT->currency}
+                                        {/if}
+                                    </div>
+                                {/if}
+                            {* {/if} *}
                             <br>
                             <br>
                             {if $SELECTED_BANK}
