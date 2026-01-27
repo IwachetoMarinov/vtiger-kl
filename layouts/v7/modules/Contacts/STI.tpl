@@ -324,12 +324,21 @@
 
                         <br>
                         <br>
-                        {if !empty($COMPANY->get('company_gst_no'))}
-                            <div>
-                                *Remarks: USD/SGD exchange rate at SGD
-                                {MASForex_Record_Model::getExchangeRate($ERP_DOCUMENT['rawDocDate'], 'usd_sgd')} / USD
-                            </div>
-                        {/if}
+                        {* {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))} *}
+
+                            {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency)}
+
+                            {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
+                                <div>
+                                    {if $ERP_DOCUMENT->currency eq 'SGD'}
+                                        *Remarks: USD/SGD exchange rate at SGD {$exchangeRateInfo['rate']} / USD
+                                    {else}
+                                        *Remarks: {$ERP_DOCUMENT->currency}/SGD exchange rate at SGD
+                                        {$exchangeRateInfo['rate']} / {$ERP_DOCUMENT->currency}
+                                    {/if}
+                                </div>
+                            {/if}
+                        {* {/if} *}
                         <br>
                         <br>
                         <div>

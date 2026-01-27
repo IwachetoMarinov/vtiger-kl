@@ -42,20 +42,41 @@ class MASForex_Record_Model extends Vtiger_Record_Model
 
     public static function getLatestExchangeRateByCurrency($date, $currency)
     {
+        if (!$date || $date == "" || $date == "0000-00-00" || !isset($currency)) return [];
+
+        // If currency is SGD, return USD to SGD rate
+        if (strtolower($currency) == "sgd") $currency = "USD";
+
         $metalsAPI = new MetalsAPI();
         $data = $metalsAPI->getLatestExchangeRate($date);
+
+        if (!$data || count($data) == 0) {
+            // Try fetching up to 14 days back
+            for ($i = 1; $i <= 14; $i++) {
+                $newDate = date('Y-m-d', strtotime($date . " -$i days"));
+
+                $data = $metalsAPI->getLatestExchangeRate($newDate);
+                if ($data && count($data) > 0)  break;
+            }
+        }
+        
         $result = [];
 
-        // echo "<pre>";
-        // print_r($data);
-        // echo "</pre>";
+        foreach ($data as $row) {
+            $cc  = $row['Curr_Code'];
 
-        // foreach ($data as $row) {
-        //     $cc  = $row['Curr_Code'];
-        //     $key = strtolower($cc) . '_sgd';
+            if (strtolower($cc) != strtolower($currency)) continue;
 
-        //     if (!isset($result[$key])) $result[$key] = $row['rate'];
-        // }
+            if (strtolower($cc) == strtolower($currency)) {
+                $item = [
+                    'currency' => $cc,
+                    'date' => $row['Exc_Date'],
+                    'rate'     => $row['100CurrToSGD']
+                ];
+                $result = $item;
+                break;
+            }
+        }
 
         return $result;
     }

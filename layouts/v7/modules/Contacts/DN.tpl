@@ -288,7 +288,8 @@
                             </tr>
                             <tr>
                                 <td style="height:50mm;border-bottom:none;vertical-align: top;line-height: 2">Storage
-                                    charge {if isset($metal) && $metal != "" } for <span style="font-weight: 600;">{$metal}</span> {/if} for the period from
+                                    charge {if isset($metal) && $metal != "" } for <span
+                                        style="font-weight: 600;">{$metal}</span> {/if} for the period from
                                     {$ERP_DOCUMENT->documentDate} to {$ERP_DOCUMENT->postingDate}:<br>
                                     {foreach from=$ERP_DOCUMENT->barItems item=charge}
 
@@ -319,12 +320,21 @@
 
                         <br>
                         <br>
-                        {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))}
-                            <div>
-                                *Remarks: USD/SGD exchange rate at SGD
-                                {MASForex_Record_Model::getExchangeRate($ERP_DOCUMENT->documentDate, 'usd_sgd')} / USD
-                            </div>
-                        {/if}
+                        {* {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))} *}
+
+                            {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency)}
+                            {* <pre>{var_dump($exchangeRateInfo)}</pre>  *}
+                            {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
+                                <div>
+                                    {if $ERP_DOCUMENT->currency eq 'SGD'}
+                                        *Remarks: USD/SGD exchange rate at SGD {$exchangeRateInfo['rate']} / USD
+                                    {else}
+                                        *Remarks: {$ERP_DOCUMENT->currency}/SGD exchange rate at SGD
+                                        {$exchangeRateInfo['rate']} / {$ERP_DOCUMENT->currency}
+                                    {/if}
+                                </div>
+                            {/if}
+                        {* {/if} *}
                         <br>
                         <br>
                         <div>
