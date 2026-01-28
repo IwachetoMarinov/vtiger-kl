@@ -3,112 +3,84 @@
 
 <head>
     <title>CERTIFICATE OF OWNERSHIP</title>
+
     <style>
+        /* ================== FONTS ================== */
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
-            src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+            src: local('Open Sans'),
+                url(https://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
         }
 
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 700;
-            src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+            src: local('Open Sans Bold'),
+                url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
         }
 
+        /* ================== GLOBAL RESET ================== */
         * {
             box-sizing: border-box;
         }
 
-        .printAreaContainer {
-            height: 297mm;
-            width: 210mm;
-            margin: auto;
-            margin-top: 10px;
-            /* padding: 15mm 15mm; */
-            padding: 5mm;
-            position: relative;
-            font-size: 10pt;
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: white;
+            font-family: 'Open Sans', Arial, sans-serif;
         }
 
-        .printAreaContainer * {
-            box-sizing: border-box;
-            font-family: 'Open Sans';
-            color: #666;
-        }
-
+        /* ================== A4 PRINT CANVAS ================== */
         @media print {
             @page {
                 size: A4;
                 margin: 0;
             }
-        }
-
-        @media print {
 
             html,
             body {
                 width: 210mm;
                 height: 297mm;
-                margin: 0 !important;
-                padding: 0 !important;
             }
 
-            /* Remove anything that can push you to page 2 */
-            .printAreaContainer {
-                width: 210mm;
-                height: 297mm;
-                margin: 0 !important;
-                padding: 5mm !important;
-                overflow: hidden;
-                /* prevents accidental second page */
-            }
-
-            /* If you're *just barely* overflowing, this guarantees 1 page */
             body {
-                zoom: 0.94;
-                /* tune 0.92–0.98 depending on your longest certificate */
-            }
-
-            /* Prevent browser from splitting blocks */
-            table,
-            tr,
-            td,
-            #allContent,
-            #content,
-            #signature,
-            #companyInfo,
-            #logo,
-            #QRCode,
-            #heading {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
-            }
-
-            /* Reduce big margins that cause overflow */
-            .cerHeading {
-                margin: 12px !important;
-            }
-
-            #QRCode img {
-                max-height: 95mm;
-                height: auto;
+                overflow: hidden;
             }
         }
 
+        /* ================== MAIN CONTAINER ================== */
+        .printAreaContainer {
+            width: 210mm;
+            height: 297mm;
+            margin: 0 auto;
+            padding: 10mm;
+            position: relative;
+            font-size: 10pt;
+            overflow: hidden;
+        }
 
-        .printAreaContainer .full-width {
+        .printAreaContainer * {
+            font-family: 'Open Sans';
+            color: #666;
+        }
+
+        /* ================== TABLE ================== */
+        .print-tbl {
             width: 100%;
-        }
-
-        .printAreaContainer .print-tbl {
             border-collapse: collapse;
-            width: 100%;
-            border: none;
+            table-layout: fixed;
         }
 
+        .print-tbl td {
+            vertical-align: top;
+        }
+
+        /* ================== TEXT HELPERS ================== */
         .print-txt-center {
             text-align: center;
         }
@@ -121,19 +93,100 @@
             text-align: right;
         }
 
-        .print-footer {
-            height: 20mm;
-            background: #008ECA;
-        }
-
+        /* ================== HEADING ================== */
         .cerHeading {
             text-align: center;
-            margin: 25px;
+            margin: 12px 0;
             font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
             font-size: 14pt;
             color: #9e9d9d;
         }
+
+        /* ================== QR CODE ================== */
+        #QRCode {
+            text-align: center;
+        }
+
+        #QRCode img {
+            display: block;
+            margin: 0 auto;
+            width: 60mm;
+            /* HARD LIMIT */
+            max-width: 100%;
+            height: auto;
+        }
+
+        #QRCode a {
+            display: inline-block;
+            max-width: 100%;
+            font-size: 9pt;
+            color: black;
+            text-decoration: none;
+            word-break: break-all;
+            /* prevents page overflow */
+        }
+
+        /* ================== CONTENT ================== */
+        #content p {
+            color: black;
+            text-align: justify;
+            margin-bottom: 10px;
+        }
+
+        /* ================== SIGNATURE ================== */
+        #signature img {
+            height: 80px;
+            margin-top: 30px;
+            display: block;
+        }
+
+        #signature p {
+            color: black;
+            margin-top: 5px;
+        }
+
+        /* ================== FOOTER (PINNED, NO FLOATS) ================== */
+        #companyInfo {
+            position: absolute;
+            left: 10mm;
+            bottom: 10mm;
+            font-size: 8pt;
+            max-width: 150mm;
+        }
+
+        #companyInfo p {
+            margin: 0;
+        }
+
+        #logo {
+            position: absolute;
+            right: 10mm;
+            bottom: 10mm;
+        }
+
+        #logo img {
+            width: 72px;
+            height: auto;
+            display: block;
+        }
+
+        /* ================== PAGE BREAK SAFETY ================== */
+        table,
+        tr,
+        td,
+        #printAreaContainer,
+        #QRCode,
+        #heading,
+        #allContent,
+        #content,
+        #signature,
+        #companyInfo,
+        #logo {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
     </style>
+
 </head>
 
 <body style="margin: 0px;">
