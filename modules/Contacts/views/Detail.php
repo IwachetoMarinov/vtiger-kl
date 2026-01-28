@@ -52,6 +52,8 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		// Check if there is no selected year set current year
 		if (empty($selected_year)) $selected_year = date('Y');
 
+		if (isset($start_date) && !empty($start_date)) $selected_year = '';
+
 		if (!empty($order_by_params) && $order_by_params === 'asc') $order_by = "asc";
 
 		$moduleName = $request->getModule();

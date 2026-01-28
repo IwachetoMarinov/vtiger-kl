@@ -244,14 +244,11 @@
                                 <th>LONDON FIX ON</th>
                                 <td style="text-align:center">{$LBMA_DATE}</td>
                             </tr>
-                            {foreach from=$ERP_HOLDINGMETALS item=metal}
-                                <tr>
-                                    <th>Gold</th>
-                                    {* <th>{vtranslate($metal,'MetalPrice')}</th> *}
-                                    {assign var="rate" value=$metal.spot_price|default:0}
-                                    <td style="text-align:center">US$ {number_format($rate, 2, '.', ',')} / Oz..</td>
-                                </tr>
-                            {/foreach}
+                            {assign var="spot_price" value={$ERP_HOLDINGMETALS[0]['spot_price']|default:0} }
+                            <tr>
+                                <th>Gold</th>
+                                <td style="text-align:center">US$ {number_format($spot_price, 2, '.', ',')} / Oz..</td>
+                            </tr>
                         </table>
                     </td>
                 </tr>

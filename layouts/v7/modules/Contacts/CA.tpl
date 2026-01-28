@@ -36,7 +36,8 @@
 
         .bottom-container {
             display: flex;
-            gap: 10mm;
+            gap: 8mm;
+            font-size: 9.5pt;
         }
 
         .bottom-container-item {

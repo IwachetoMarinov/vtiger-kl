@@ -43,6 +43,10 @@ class Contacts_NotePrintPreview_View extends Vtiger_Index_View
         $erpDoc = (object) $activity_data;
         $template_name  = $docType  === 'CN' ? 'CNO' : 'DNO';
 
+        // echo "<pre>";
+        // var_dump($erpDoc);
+        // echo "</pre>";
+
         $bankAccountId = $request->get('bank');
         if (empty($bankAccountId) && !empty($allBankAccounts)) {
             $firstAccount  = reset($allBankAccounts);
