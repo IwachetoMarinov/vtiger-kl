@@ -18,6 +18,10 @@
     {assign var="ASCURRENCY" value=$ACTIVITY_SUMMERY_CURRENCY|default:""}
     {assign var="RECID" value=$RECORD->getId()|default:0}
 
+    {if $ASYEAR eq ""}
+        {assign var="ASYEAR" value={date('Y')}}
+    {/if}
+
     <style>
         div.inputElement {
             min-width: 100px;
@@ -134,6 +138,12 @@
                                 Save
                             </button>
 
+                            {if $START_DATE neq '' and $END_DATE neq ''}
+                                <button class="btn btn-default btn-sm date-range-clear-button" type="button" data-mode="clear">
+                                    Clear
+                                </button>
+                            {/if}
+
                             <label style="margin: 0; font-size: 13px;">Sort by date</label>
                             <label class="vt-switch">
                                 <span class="vt-switch-label">
@@ -170,12 +180,21 @@
                             </select>
 
                             <!-- Download button -->
-                            <a href="index.php?module=Contacts&view=ActivtySummeryPrintPreview&record={$RECID}&ActivtySummeryDate={$ASYEAR}&ActivtySummeryCurrency={$ASCURRENCY}"
-                                target="_blank">
-                                <button class="btn btn-default" type="button">
-                                    <span class="fa fa-download"></span>&nbsp;Download
-                                </button>
-                            </a>
+                            {if $START_DATE neq '' and $END_DATE neq ''}
+                                <a href="index.php?module=Contacts&view=ActivtySummeryPrintPreview&record={$RECID}&start_date={$START_DATE}&end_date={$END_DATE}&ActivtySummeryDate={$ASYEAR}&ActivtySummeryCurrency={$ASCURRENCY}"
+                                    target="_blank">
+                                    <button class="btn btn-default" type="button">
+                                        <span class="fa fa-download"></span>&nbsp;Download
+                                    </button>
+                                </a>
+                            {else}
+                                <a href="index.php?module=Contacts&view=ActivtySummeryPrintPreview&record={$RECID}&ActivtySummeryDate={$ASYEAR}&ActivtySummeryCurrency={$ASCURRENCY}"
+                                    target="_blank">
+                                    <button class="btn btn-default" type="button">
+                                        <span class="fa fa-download"></span>&nbsp;Download
+                                    </button>
+                                </a>
+                            {/if}
 
                         </div> <!-- END FLEX -->
 

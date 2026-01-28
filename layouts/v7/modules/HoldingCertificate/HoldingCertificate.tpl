@@ -31,7 +31,7 @@
         body {
             margin: 0;
             padding: 0;
-            background: white;
+            background: #fff;
             font-family: 'Open Sans', Arial, sans-serif;
         }
 
@@ -59,14 +59,28 @@
             height: 297mm;
             margin: 0 auto;
             padding: 10mm;
+
+            /* IMPORTANT: reserve space for footer so it never overlaps content */
+            padding-bottom: 30mm;
+
             position: relative;
             font-size: 10pt;
             overflow: hidden;
+
+            /* KEY: vertically center the document block */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .printAreaContainer * {
             font-family: 'Open Sans';
             color: #666;
+        }
+
+        /* Make wrapper fill width */
+        .full-width {
+            width: 100%;
         }
 
         /* ================== CENTERED CONTENT COLUMN ================== */
@@ -75,7 +89,7 @@
             /* change to 175/180 if you want wider */
         }
 
-        /* IMPORTANT: make the table ACTUALLY be the centered column */
+        /* IMPORTANT: table is the centered “column” */
         .print-tbl {
             width: var(--colWidth) !important;
             margin: 0 auto !important;
@@ -153,16 +167,9 @@
             margin: 0 0 10px 0;
         }
 
-        /* FIX: your template uses <span style="display:inline-block; width: 20px;"></span>
-     Those spans push the dash list left and make the whole block look off-center.
-     Remove them visually. */
+        /* Remove template indentation spans (they visually shift text left) */
         #content span[style*="width: 20px"] {
             display: none !important;
-        }
-
-        /* Keep the “- item” lines aligned cleanly */
-        #content p {
-            padding-left: 0;
         }
 
         /* ================== SIGNATURE ================== */
@@ -178,13 +185,13 @@
         }
 
         /* ================== FOOTER (PINNED TO PAGE EDGES) ================== */
-        /* Footer must NOT be inside the centered column layout */
         #companyInfo {
             position: absolute;
             left: 10mm;
             bottom: 10mm;
             font-size: 8pt;
             max-width: 150mm;
+            float: none !important;
         }
 
         #companyInfo p {
@@ -195,12 +202,20 @@
             position: absolute;
             right: 10mm;
             bottom: 10mm;
+            float: none !important;
         }
 
         #logo img {
             width: 72px;
             height: auto;
             display: block;
+        }
+
+        /* ================== CRITICAL OVERRIDE ================== */
+        /* Your HTML forces: height:170mm inline on the content cell.
+     That prevents true centering. Override it. */
+        td[style*="height:170mm"] {
+            height: auto !important;
         }
 
         /* ================== PAGE BREAK SAFETY ================== */
@@ -218,8 +233,6 @@
             break-inside: avoid !important;
         }
     </style>
-
-
 </head>
 
 <body style="margin: 0px;">

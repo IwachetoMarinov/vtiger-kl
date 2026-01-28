@@ -46,10 +46,13 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$selected_year = $request->get('ActivtySummeryDate');
 		$start_date = $request->get('start_date');
 		$end_date = $request->get('end_date');
-		$order_by = "asc";
+		$order_by = "desc";
 		$order_by_params = $request->get('orderBy');
 
-		if (!empty($order_by_params) && $order_by_params === 'desc') $order_by = "desc";
+		// Check if there is no selected year set current year
+		if (empty($selected_year)) $selected_year = date('Y');
+
+		if (!empty($order_by_params) && $order_by_params === 'asc') $order_by = "asc";
 
 		$moduleName = $request->getModule();
 

@@ -12,8 +12,6 @@ jQuery(function () {
 
   // Date range functionality Transaction history section
   jQuery("body").on("click", ".date-range-button", function (e) {
-    console.log("Save button clicked");
-
     e.preventDefault();
 
     var start = jQuery("#start_date").val();
@@ -36,6 +34,17 @@ jQuery(function () {
       encodeURIComponent(start) +
       "&end_date=" +
       encodeURIComponent(end);
+  });
+
+  // Date Range clear button
+  jQuery("body").on("click", ".date-range-clear-button", function (e) {
+    e.preventDefault();
+    const originalUrl = window.location.href;
+
+    // Remove existing parameters if present
+    let baseUrl = originalUrl.split("&start_date=")[0];
+    baseUrl = baseUrl.split("&end_date=")[0];
+    window.location.href = baseUrl;
   });
 
   // Switch for order by balance
