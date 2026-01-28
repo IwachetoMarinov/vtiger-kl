@@ -185,6 +185,48 @@
             page-break-inside: avoid !important;
             break-inside: avoid !important;
         }
+
+        /* ================== CENTER CONTENT COLUMN ================== */
+
+        /* Wrap main content visually */
+        .print-tbl {
+            max-width: 170mm;
+            /* readable column width */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Center heading block */
+        #heading {
+            text-align: center;
+        }
+
+        /* Keep paragraphs readable (not centered text) */
+        #content p {
+            text-align: justify;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* QR already centered, but enforce column alignment */
+        #QRCode {
+            max-width: 170mm;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Signature should align with text column */
+        #signature {
+            max-width: 170mm;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer stays pinned to page, NOT to column */
+        #companyInfo,
+        #logo {
+            max-width: none;
+        }
     </style>
 
 </head>
