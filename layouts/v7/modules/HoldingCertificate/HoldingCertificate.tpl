@@ -69,15 +69,33 @@
             color: #666;
         }
 
-        /* ================== TABLE ================== */
+        /* ================== CENTERED CONTENT COLUMN ================== */
+        :root {
+            --colWidth: 170mm;
+            /* change to 175/180 if you want wider */
+        }
+
+        /* IMPORTANT: make the table ACTUALLY be the centered column */
         .print-tbl {
-            width: 100%;
+            width: var(--colWidth) !important;
+            margin: 0 auto !important;
             border-collapse: collapse;
             table-layout: fixed;
         }
 
         .print-tbl td {
             vertical-align: top;
+        }
+
+        /* All main blocks share the same centered column width */
+        #QRCode,
+        #heading,
+        #allContent,
+        #content,
+        #signature {
+            width: var(--colWidth);
+            margin-left: auto;
+            margin-right: auto;
         }
 
         /* ================== TEXT HELPERS ================== */
@@ -111,9 +129,12 @@
             display: block;
             margin: 0 auto;
             width: 60mm;
-            /* HARD LIMIT */
             max-width: 100%;
             height: auto;
+        }
+
+        #QRCode p {
+            margin: 6px 0 0 0;
         }
 
         #QRCode a {
@@ -123,14 +144,25 @@
             color: black;
             text-decoration: none;
             word-break: break-all;
-            /* prevents page overflow */
         }
 
         /* ================== CONTENT ================== */
         #content p {
             color: black;
             text-align: justify;
-            margin-bottom: 10px;
+            margin: 0 0 10px 0;
+        }
+
+        /* FIX: your template uses <span style="display:inline-block; width: 20px;"></span>
+     Those spans push the dash list left and make the whole block look off-center.
+     Remove them visually. */
+        #content span[style*="width: 20px"] {
+            display: none !important;
+        }
+
+        /* Keep the “- item” lines aligned cleanly */
+        #content p {
+            padding-left: 0;
         }
 
         /* ================== SIGNATURE ================== */
@@ -145,7 +177,8 @@
             margin-top: 5px;
         }
 
-        /* ================== FOOTER (PINNED, NO FLOATS) ================== */
+        /* ================== FOOTER (PINNED TO PAGE EDGES) ================== */
+        /* Footer must NOT be inside the centered column layout */
         #companyInfo {
             position: absolute;
             left: 10mm;
@@ -174,7 +207,6 @@
         table,
         tr,
         td,
-        #printAreaContainer,
         #QRCode,
         #heading,
         #allContent,
@@ -185,49 +217,8 @@
             page-break-inside: avoid !important;
             break-inside: avoid !important;
         }
-
-        /* ================== CENTER CONTENT COLUMN ================== */
-
-        /* Wrap main content visually */
-        .print-tbl {
-            max-width: 170mm;
-            /* readable column width */
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Center heading block */
-        #heading {
-            text-align: center;
-        }
-
-        /* Keep paragraphs readable (not centered text) */
-        #content p {
-            text-align: justify;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* QR already centered, but enforce column alignment */
-        #QRCode {
-            max-width: 170mm;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Signature should align with text column */
-        #signature {
-            max-width: 170mm;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Footer stays pinned to page, NOT to column */
-        #companyInfo,
-        #logo {
-            max-width: none;
-        }
     </style>
+
 
 </head>
 
