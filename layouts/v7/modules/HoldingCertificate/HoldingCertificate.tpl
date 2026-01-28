@@ -46,6 +46,59 @@
             }
         }
 
+        @media print {
+
+            html,
+            body {
+                width: 210mm;
+                height: 297mm;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Remove anything that can push you to page 2 */
+            .printAreaContainer {
+                width: 210mm;
+                height: 297mm;
+                margin: 0 !important;
+                padding: 5mm !important;
+                overflow: hidden;
+                /* prevents accidental second page */
+            }
+
+            /* If you're *just barely* overflowing, this guarantees 1 page */
+            body {
+                zoom: 0.94;
+                /* tune 0.92–0.98 depending on your longest certificate */
+            }
+
+            /* Prevent browser from splitting blocks */
+            table,
+            tr,
+            td,
+            #allContent,
+            #content,
+            #signature,
+            #companyInfo,
+            #logo,
+            #QRCode,
+            #heading {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            /* Reduce big margins that cause overflow */
+            .cerHeading {
+                margin: 12px !important;
+            }
+
+            #QRCode img {
+                max-height: 95mm;
+                height: auto;
+            }
+        }
+
+
         .printAreaContainer .full-width {
             width: 100%;
         }
