@@ -58,7 +58,7 @@
                 <!-- Invoice header -->
                 <tr>
                     <td style="height:10mm;text-decoration:underline;text-align:center"><strong>
-                            PROFORMA SALE INVOICE
+                            PROFORMA INVOICE
                         </strong></td>
                 </tr>
 

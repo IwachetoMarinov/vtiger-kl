@@ -179,13 +179,13 @@ sudo systemctl restart php8.2-fpm || true
 
 34. Multiple file upload template file - `C:\laragon\www\vtiger-gpm\layouts\v7\modules\Documents\UploadDocument.tpl` 
 
-35. Find and delete created nots_id for HoldingCertificate
-35.1. `select notes_id from vtiger_holdingcertificate AS A join vtiger_crmentity AS B ON (A.holdingcertificateid = B.crmid) where A.contact_id = ? AND A.certificate_status = 'Active'  order by holdingcertificateid DESC limit 1`
+35. Find and delete created notes_id for HoldingCertificate
+35.1. `select notes_id from vtiger_holdingcertificate AS A join vtiger_crmentity AS B ON (A.holdingcertificateid = B.crmid) where A.contact_id = <contact_id> AND A.certificate_status = 'Active'  order by holdingcertificateid DESC limit 1`
 35.2  `SET @note_id := (
   SELECT A.notes_id
   FROM vtiger_holdingcertificate AS A
   JOIN vtiger_crmentity AS B ON A.holdingcertificateid = B.crmid
-  WHERE A.contact_id = 11
+  WHERE A.contact_id = <contact_id>
     AND A.certificate_status = 'Active'
   ORDER BY A.holdingcertificateid DESC
   LIMIT 1
@@ -202,7 +202,7 @@ JOIN (
     SELECT A2.holdingcertificateid
     FROM vtiger_holdingcertificate A2
     JOIN vtiger_crmentity B2 ON A2.holdingcertificateid = B2.crmid
-    WHERE A2.contact_id = 11
+    WHERE A2.contact_id = <contact_id>
       AND A2.certificate_status = 'Active'
     ORDER BY A2.holdingcertificateid DESC
     LIMIT 1

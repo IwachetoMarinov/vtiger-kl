@@ -27,7 +27,8 @@
             width: 210mm;
             margin: auto;
             margin-top: 10px;
-            padding: 15mm 15mm;
+            /* padding: 15mm 15mm; */
+            padding: 5mm;
             position: relative;
             font-size: 10pt;
         }
@@ -36,7 +37,13 @@
             box-sizing: border-box;
             font-family: 'Open Sans';
             color: #666;
+        }
 
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
         }
 
         .printAreaContainer .full-width {
@@ -68,7 +75,7 @@
 
         .cerHeading {
             text-align: center;
-            margin: 40px;
+            margin: 25px;
             font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
             font-size: 14pt;
             color: #9e9d9d;
@@ -165,8 +172,7 @@
                     </td>
                     <td>
                         <div id='logo' style='float: right;'>
-                            <img src="{$site_URL}layouts/v7/modules/HoldingCertificate/logo.png"
-                                style='width: 72px;' />
+                            <img src="{$site_URL}layouts/v7/modules/HoldingCertificate/logo.png" style='width: 72px;' />
                         </div>
                     </td>
                 </tr>
