@@ -330,8 +330,6 @@
                                             value=($barItem->spotPrice * $barItem->totalFineOz) * (1 + ($barItem->premium / 100))}
                                     {assign var="calcTotal" value=$calcTotal+$balanceAmount}
 
-                                    <pre>{var_dump($balanceAmount)}</pre>
-
                                     <tr>
                                         <td style="vertical-align: top">{number_format($barItem->quantity,0)}</td>
 
