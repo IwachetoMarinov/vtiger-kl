@@ -60,7 +60,7 @@
       position: relative;
       margin: 0 auto;
       background: #fff;
-      overflow: hidden;
+      /* overflow: hidden; */
       font-size: 10pt;
       padding-left: 20mm;
       padding-right: 20mm;
