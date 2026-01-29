@@ -201,7 +201,7 @@
     }
 
     #logo img {
-      width: 110px;
+      width: 160px;
       height: auto;
       display: block;
     }
