@@ -117,6 +117,12 @@
                 overflow: hidden;
             }
         }
+
+        #logo img {
+            width: 160px;
+            height: auto;
+            display: block;
+        }
     </style>
 </head>
 
@@ -155,7 +161,7 @@
                                         {foreach item=HOLDING from=$HOLDINGS}
                                             <span style="display:inline-block; width: 20px;"></span>-<span
                                                 style="display:inline-block; width: 20px;"></span>
-                                            {number_format($HOLDING.quantity,0)} {$HOLDING.description}
+                                            {number_format($HOLDING.quantity,0)} {$HOLDING.description} {$HOLDING.brand}
                                             {if !empty($HOLDING.serial_no)}- Serial
                                             {$HOLDING.serial_no}{/if}<br>
                                         {/foreach}
