@@ -104,9 +104,9 @@ class HoldingsDB
             $summary[] = $row;
         }
 
-        echo "<pre>";
-        var_dump($summary);
-        echo "</pre>";
+        // echo "<pre>";
+        // var_dump($summary);
+        // echo "</pre>";
 
         sqlsrv_free_stmt($stmt);
 
@@ -120,7 +120,7 @@ class HoldingsDB
                 'acq_tx_no' => $item['Acq_Tx_No'] ?? '',
                 'item_code' => $item['Item_Code'],
                 'description' => $item['Item_Desc'],
-                'quantity' => $item['Quantity'] ?? 0,
+                'quantity' => $item['Quantity'] ?? 1,
                 'location' => $item['WH_Code'] ?? '',
                 'brand' => $item['Brand'] ?? '',
             ];

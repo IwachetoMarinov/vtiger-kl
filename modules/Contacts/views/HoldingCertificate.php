@@ -35,9 +35,9 @@ class Contacts_HoldingCertificate_View extends Vtiger_Index_View
         $holdings = new dbo_db\HoldingsDB();
         $holdings_data = $holdings->getHoldingsData($clientID);
 
-        echo "<pre>";
-        var_dump($holdings_data);
-        echo "</pre>";
+        // echo "<pre>";
+        // var_dump($holdings_data);
+        // echo "</pre>";
 
         $viewer = new Vtiger_Viewer();
         $viewer->assign('RECORD_MODEL', $recordModel);
