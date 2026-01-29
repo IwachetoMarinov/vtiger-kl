@@ -193,7 +193,7 @@
     }
 
     #logo img {
-      width: 72px;
+      width: 110px;
       height: auto;
       display: block;
     }
@@ -260,7 +260,7 @@
                 {foreach item=HOLDINGS key=location from=$ERP_HOLDINGS}
                   {foreach item=HOLDING from=$HOLDINGS}
                     <span style="display:inline-block; width: 20px;"></span>-<span style="display:inline-block; width: 20px;"></span>
-                    {number_format($HOLDING.quantity,0)} {$HOLDING.description}
+                    {number_format($HOLDING.quantity,0)} {$HOLDING.description} {$HOLDING.brand}
                     {if !empty($HOLDING.serial_no)}- Serial {$HOLDING.serial_no}{/if}<br>
                   {/foreach}
                 {/foreach}
