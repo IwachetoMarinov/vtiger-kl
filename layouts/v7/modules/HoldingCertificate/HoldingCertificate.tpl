@@ -215,7 +215,7 @@
                     </td>
                     <td>
                         <div id='logo' style='float: right;'>
-                            <img src="{$site_URL}layouts/v7/modules/HoldingCertificate/logo.png" style='width: 72px;' />
+                            <img src="{$site_URL}layouts/v7/modules/HoldingCertificate/logo.png" />
                         </div>
                     </td>
                 </tr>
