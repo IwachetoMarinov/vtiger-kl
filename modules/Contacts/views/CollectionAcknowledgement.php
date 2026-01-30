@@ -3,6 +3,10 @@
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
 
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+
 class Contacts_CollectionAcknowledgement_View extends Vtiger_Index_View
 {
 
@@ -30,6 +34,13 @@ class Contacts_CollectionAcknowledgement_View extends Vtiger_Index_View
 
         if (!empty($companyId))
             $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
+
+        if (empty($companyRecord)) $companyRecord = Contacts_DefaultCompany_View::process($request);
+
+        // echo "<pre>";
+        // echo "Company Record: ";;
+        // var_dump($companyRecord);
+        // echo "</pre>";
 
         // $accountId = $recordModel->get('account_id');
         $activity = new dbo_db\ActivitySummary();

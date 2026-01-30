@@ -161,7 +161,7 @@
                                         {foreach item=HOLDING from=$HOLDINGS}
                                             <span style="display:inline-block; width: 20px;"></span>-<span
                                                 style="display:inline-block; width: 20px;"></span>
-                                            {number_format($HOLDING.quantity,0)} {$HOLDING.description} {$HOLDING.brand}
+                                            {number_format($HOLDING.quantity,0)} {$HOLDING.metal} {$HOLDING.description}
                                             {if !empty($HOLDING.serial_no)}- Serial
                                             {$HOLDING.serial_no}{/if}<br>
                                         {/foreach}

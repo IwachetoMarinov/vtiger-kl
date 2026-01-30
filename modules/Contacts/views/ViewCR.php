@@ -30,6 +30,8 @@ class Contacts_ViewCR_View extends Vtiger_Index_View
         if (!empty($companyId))
             $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
 
+        if (empty($companyRecord)) $companyRecord = Contacts_DefaultCompany_View::process($request);
+
         if ($tableName !== null && $tableName !== '') {
             $activity = new dbo_db\ActivitySummary();
             $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);

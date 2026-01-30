@@ -112,19 +112,40 @@ class HoldingsDB
 
         $results = [];
         foreach ($summary as $item) {
+            $quantity = $item['Qty'] ? $item['Qty'] : $item['Quantity'] ?? 1;
+            $serial = $item['Ser_No_List'] ? $item['Ser_No_List'] : $item['Ser_No'] ?? 1;
+
             $results[] = [
-                'serial_no' => $item['Ser_No'],
+                'serial_no' => $serial,
                 'gross_oz' => $item['GrossOz'] ?? 0,
                 'fine_oz' => $item['FineOz'] ?? 0,
                 'purity' => $item['Purity'] ?? 0,
                 'acq_tx_no' => $item['Acq_Tx_No'] ?? '',
                 'item_code' => $item['Item_Code'],
                 'description' => $item['Item_Desc'],
-                'quantity' => $item['Quantity'] ?? 1,
+                'quantity' => $quantity,
                 'location' => $item['WH_Code'] ?? '',
                 'brand' => $item['Brand'] ?? '',
+                'mt_code' => $item['MT_Code'] ?? '',
+                "metal" => $this->getMetalName($item['MT_Code'] ?? ''),
             ];
         }
         return $results;
+    }
+
+    protected function getMetalName($code): string
+    {
+        if (!$code) return '';
+
+        $metal_names = [
+            'XAU' => 'Gold',
+            'XAG' => 'Silver',
+            'XPT' => 'Platinum',
+            'XPD' => 'Palladium',
+            'XPL' => 'Palladium',
+            'MBTC' => 'mBitCoin',
+        ];
+
+        return $metal_names[$code] ?? '';
     }
 }

@@ -30,7 +30,7 @@
             width: 210mm;
             border: 1px solid #fff;
             margin: auto;
-            padding: 15mm 15mm;
+            padding: 10mm 10mm;
             position: relative;
         }
 
@@ -166,7 +166,7 @@
                     <tr>
                         <td style="height: 28mm;">
                             <img src='layouts/v7/modules/Contacts/resources/gpm-new-logo.png'
-                                style="max-height: 100%; float:left;width: 154px;">
+                                style="max-height: 100%; float:left;width: 192px;">
                             <div style="font-size: 11pt;margin-top: 20mm; float:right;">
                                 <span>From: {$RECORD_MODEL->get('cf_898')}</span>
                             </div>
@@ -175,12 +175,14 @@
                     <tr>
                         <td style="height: 20mm;text-align: left">
                             <div style="max-width:50%">
-                                <div style="margin-top: 10mm;">To:</div>
-                                <div style="font-weight: 700;">
-                                    {if isset($COMPANY)}
-                                        {$COMPANY->get('company_name')}
-                                    {/if}
-                                </div>
+                                {if isset($COMPANY)}
+                                    <div style="margin-top: 10mm;">To:
+                                        <span style="font-weight: 700; text-transform: capitalize;">
+                                            {$COMPANY->get('company_name')}
+                                        </span>
+                                    </div>
+                                {/if}
+
                                 <div>
                                     {if isset($COMPANY)}
                                         {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
@@ -279,7 +281,7 @@
                     shall cease when the Customer or its authorised representative has acknowledged receipt of the goods by
                     signing this Collection Acknowledgement receipt.</div>
 
-                <div style="margin-top: 8mm;">
+                <div style="margin-top: 8mm; font-size: 9.5pt;">
                     <span>Date:</span>
                     <span>.........................................</span>
                 </div>
@@ -306,19 +308,24 @@
                     </div>
                 </div>
 
-                <div style="margin-top: 5mm;" class="bottom-container">
-                    <div class="bottom-container-item">
-                        <div
-                            style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 100px;background-color:#dce6f9;">
-                        </div>
-                        <p>Signature</p>
-                    </div>
-                    <div class="bottom-container-item">
-                        <div
-                            style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 100px;background-color:#dce6f9;">
-                        </div>
-                        <p>Signature</p>
-                    </div>
+                <div style="margin-top:5mm;">
+                    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                        <tr>
+                            <td width="48%" valign="top">
+                                <div style="height:100px;"></div>
+                                <div style="border-bottom:1px solid #000; margin-bottom:2mm;"></div>
+                                <p style="margin:0;">Signature</p>
+                            </td>
+
+                            <td width="4%"></td>
+
+                            <td width="48%" valign="top">
+                                <div style="height:100px;"></div>
+                                <div style="border-bottom:1px solid #000; margin-bottom:2mm;"></div>
+                                <p style="margin:0;">Signature</p>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
