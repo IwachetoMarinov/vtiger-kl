@@ -28,21 +28,9 @@ class Contacts_CollectionAcknowledgement_View extends Vtiger_Index_View
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
         $tableName = $request->get('tableName');
-        $companyId = $recordModel->get('company_id');
 
-        $companyRecord = null;
+        $companyRecord = Contacts_DefaultCompany_View::process();
 
-        if (!empty($companyId))
-            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
-
-        if (empty($companyRecord)) $companyRecord = Contacts_DefaultCompany_View::process($request);
-
-        // echo "<pre>";
-        // echo "Company Record: ";;
-        // var_dump($companyRecord);
-        // echo "</pre>";
-
-        // $accountId = $recordModel->get('account_id');
         $activity = new dbo_db\ActivitySummary();
         $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 

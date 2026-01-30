@@ -24,15 +24,10 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $tableName = $request->get('tableName');
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
-        $companyId = $recordModel->get('company_id');
 
-        $companyRecord = null;
         $allBankAccounts = [];
 
-        if (!empty($companyId)) {
-            // ✅ Company record
-            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
-        }
+        $companyRecord = Contacts_DefaultCompany_View::process();
 
         // ✅ Bank accounts
         // $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($companyId);

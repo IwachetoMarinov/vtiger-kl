@@ -24,16 +24,13 @@ class Contacts_NotePrintPreview_View extends Vtiger_Index_View
         $tableName = $request->get('tableName');
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
-        $companyId = $recordModel->get('company_id');
 
-        $companyRecord = null;
         $allBankAccounts = [];
 
-        if (!empty($companyId)) {
-            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
-        }
+        $companyRecord = Contacts_DefaultCompany_View::process();
 
         $allBankAccounts = BankAccount_Record_Model::getAllInstances();
+
         $bankAccountId   = $request->get('bank');
 
         $activity = new dbo_db\ActivitySummary();
@@ -42,10 +39,6 @@ class Contacts_NotePrintPreview_View extends Vtiger_Index_View
         $docType = $activity_data['voucherType'] ?? "";
         $erpDoc = (object) $activity_data;
         $template_name  = $docType  === 'CN' ? 'CNO' : 'DNO';
-
-        // echo "<pre>";
-        // var_dump($erpDoc);
-        // echo "</pre>";
 
         $bankAccountId = $request->get('bank');
         if (empty($bankAccountId) && !empty($allBankAccounts)) {

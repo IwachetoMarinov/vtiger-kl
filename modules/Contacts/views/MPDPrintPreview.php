@@ -24,12 +24,8 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
         $tableName = $request->get('tableName');
-        $companyId = $recordModel->get('company_id');
 
-        $companyRecord = null;
-
-        if (!empty($companyId))
-            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
+        $companyRecord = Contacts_DefaultCompany_View::process();
 
         $activity = new dbo_db\ActivitySummary();
         $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);

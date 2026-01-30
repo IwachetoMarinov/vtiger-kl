@@ -22,7 +22,7 @@ class CompanyFallbackModel
 
 class Contacts_DefaultCompany_View
 {
-    public static function process(Vtiger_Request $request)
+    public static function process()
     {
         $adb = PearDatabase::getInstance();
         $res = $adb->pquery('SELECT * FROM vtiger_organizationdetails LIMIT 1', []);

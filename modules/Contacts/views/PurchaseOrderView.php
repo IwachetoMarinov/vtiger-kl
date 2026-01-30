@@ -17,7 +17,6 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
     {
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
-        $companyId = $recordModel->get('company_id');
         // Client type
         $client_type = $recordModel->get('cf_927');
 
@@ -25,12 +24,8 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
 
         $allBankAccounts = [];
 
-        $companyRecord = null;
+        $companyRecord = Contacts_DefaultCompany_View::process();
 
-        if (!empty($companyId)) {
-            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
-        }
-        
         $allBankAccounts = BankAccount_Record_Model::getAllInstances();
         $bankAccountId   = $request->get('bank');
 

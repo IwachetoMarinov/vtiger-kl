@@ -20,12 +20,8 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
     {
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
-        $companyId = $recordModel->get('company_id');
 
-        $companyRecord = null;
-
-        if (!empty($companyId))
-            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
+        $companyRecord = Contacts_DefaultCompany_View::process();
 
         // REAL CUSTOMER ID FROM RECORD
         $clientID = $recordModel->get('cf_898');
