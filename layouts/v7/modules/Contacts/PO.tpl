@@ -43,12 +43,16 @@
             width: 210mm;
             height: 297mm;
             margin: auto;
-            padding: 8mm 10mm;
+            padding: 6mm;
         }
 
         /* Header */
         .header-table {
             width: 100%;
+            margin-bottom: 1mm;
+        }
+
+        .table-heading {
             margin-bottom: 4mm;
         }
 
@@ -57,7 +61,7 @@
         }
 
         .logo {
-            width: 35mm;
+          width: 60mm;
         }
 
         .title {
@@ -131,7 +135,7 @@
             font-weight: bold;
         }
 
-        .metal-row-label {
+        td.metal-row-label {
             text-align: left;
             font-weight: bold;
             padding-left: 2mm;
@@ -307,11 +311,13 @@
                 </a>
             </li>
 
+            {assign var=bank_account_id value=$smarty.request.bank|default:$SELECTED_BANK->getId()}
+
             <li style="float: right;margin-top: 5px;margin-right: 5px;width: 198px;">
                 <select class="inputElement select2" name="bank_accounts" id="bank_accounts">
                     <option value="">Select Bank Account</option>
                     {foreach item=account from=$ALL_BANK_ACCOUNTS}
-                        <option {if $smarty.request.bank  eq $account->getId() } selected {/if} value="{$account->getId()}">
+                        <option {if $bank_account_id  eq $account->getId() } selected {/if} value="{$account->getId()}">
                             {$account->get('bank_alias_name')}</option>
                     {/foreach}
                 </select>
@@ -340,7 +346,7 @@
     <div class="printAreaContainer">
 
         <!-- HEADER -->
-        <table class="header-table">
+        <table class="header-table ">
             <tr>
                 <td class="logo">
                     <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
@@ -350,11 +356,9 @@
             </tr>
         </table>
 
-        <table class="header-table">
+        <table class="header-table table-heading">
             <tr>
-                <td class="logo"></td>
-                <td class="title" style="text-decoration: underline;">PURCHASE & STORAGE ORDER</td>
-                <td style="width:25mm;"></td>
+                <td class="title" style="text-decoration: underline; text-align: center;">PURCHASE & STORAGE ORDER</td>
             </tr>
         </table>
 
@@ -546,10 +550,9 @@
                 <div style="padding-left: 5mm;margin-top:1.5mm">
                     <div>(a) <span class="bolder-element">from the following jurisdiction:</span></div>
 
-                    <div style="padding-left: 5mm;">Country:
+                    <div style="padding-left: 5mm; margin-top: 2mm;">Country:
                         <span>..............................................................................................................................................</span>
                     </div>
-
 
                     <div style="margin:1.5mm 0;">(b) <span class="bolder-element">to GPM’s bank account </span>as
                         follows:</div>
@@ -643,7 +646,9 @@
                         the terms and conditions of the Customer Metal Agreement executed and entered into by and
                         between
                         me/us and
-                        Global Precious Metals Pte. Ltd.:</span>
+                        {if isset($COMPANY)}
+                            <span style="text-transform: capitalize;">{$COMPANY->get('company_name')}</span>
+                        {/if}.</span>
                 </div>
 
                 <!-- SIGNATURE SECTION -->
@@ -653,7 +658,7 @@
                             <div class="signature-section-left">Place: <span class="line"
                                     style="font-style: italic;">{$RECORD_MODEL->get('mailingcountry')}</span></div>
                             <div class="signature-section-right">
-                                Date: <span class="line">................................</span>
+                                Date:
                             </div>
                         </div>
 
