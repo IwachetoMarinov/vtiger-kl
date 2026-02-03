@@ -42,7 +42,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
 
     public function postProcess(Vtiger_Request $request) {}
 
-    function downloadPDF($html, Vtiger_Request $request)
+    protected function downloadPDF($html, Vtiger_Request $request)
     {
         global $root_directory;
         $recordModel = $this->record->getRecord();
@@ -54,7 +54,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         fwrite($handle, $html);
         fclose($handle);
 
-        exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $root_directory . "$fileName.html " . $root_directory . "$fileName.pdf");
+        exec("wkhtmltopdf --enable-local-file-access --enable-forms -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $root_directory . "$fileName.html " . $root_directory . "$fileName.pdf");
         unlink($root_directory . $fileName . '.html');
 
         header("Content-type: application/pdf");

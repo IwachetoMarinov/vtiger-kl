@@ -37,7 +37,7 @@
             width: 210mm;
             height: 297mm;
             margin: auto;
-            padding: 8mm 10mm;
+            padding: 6mm;
         }
 
         /* Header */
@@ -51,12 +51,12 @@
         }
 
         .logo {
-            width: 35mm;
+            width: 70mm;
         }
 
         .title {
             text-align: center;
-            font-size: 13pt;
+            font-size: 14pt;
             font-weight: bold;
             padding-top: 3mm;
         }
@@ -125,7 +125,7 @@
             font-weight: bold;
         }
 
-        .metal-row-label {
+        td.metal-row-label {
             text-align: left;
             font-weight: bold;
             padding-left: 2mm;
@@ -249,6 +249,18 @@
         .from-container-wrapper {
             display: flex;
         }
+
+        .custom-editable-input {
+            border: none;
+            possition: relative;
+            padding-bottom: 1mm;
+            width: 100%;
+            border-bottom: 1px dotted #000;
+        }
+
+        .custom-editable-input:focus {
+            outline: none;
+        }
     </style>
 </head>
 
@@ -268,7 +280,7 @@
     <div class="printAreaContainer">
 
         <!-- HEADER -->
-        <table class="header-table">
+        <table class="header-table" style="margin-bottom: 1mm;">
             <tr>
                 <td class="logo">
                     <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
@@ -280,9 +292,7 @@
 
         <table class="header-table">
             <tr>
-                <td class="logo"></td>
-                <td class="title" style="text-decoration: underline;">SALE ORDER</td>
-                <td style="width:25mm;"></td>
+                <td class="title" style="text-decoration: underline; text-align: center;">SALE ORDER</td>
             </tr>
         </table>
 
@@ -344,7 +354,7 @@
                 <div class="place-container"><strong>To:</strong></div>
                 <div class="company-container">
                     <div style="padding:2mm;min-height:27mm;">
-                        <div>
+                        <div style="text-transform: capitalize; font-weight: 600;">
                             {if isset($COMPANY)}
                                 {$COMPANY->get('company_name')}
                             {/if}
@@ -370,20 +380,19 @@
         <section class="main-table">
             <div class="additional-section bolder-element">
                 <strong>1.</strong> This Sale Order is subject to and governed by the terms and conditions of the
-                Customer Metal Agreement (CMA) executed and delivered by the undersigned.
+                Customer Metal Agreement (CMA) executed and entered into by and between me/us and GPM.
             </div>
 
             <!-- SECTION 2 -->
             <div class="section-title bolder-element">
                 <strong>2.</strong> I/We hereby wish to sell to
-                <span>
+                <span style="text-transform: capitalize;">
                     {if isset($COMPANY)}
                         {$COMPANY->get('company_name')}
                     {else }.................................................
                     {/if}
                 </span>
-                the following
-                precious metals:
+                the following precious metals:
             </div>
 
             <!-- METALS TABLE -->
@@ -433,20 +442,21 @@
                 <div style="margin-top: 2mm;">
                     .............................................................................................................................................................................
                 </div>
+                <input type="text" class="custom-editable-input" value="{$SERIALS|default:''}" />
             </div>
 
             <!-- SECTION 3 -->
             <div class="additional-section">
                 If the metal to be sold is not currently in storage with GPM, please specify the
-                exact pack up location and the details of the person authorised to release the metal to GPM (if
+                exact pack-up location and the details of the person authorised to release the metal to GPM (if
                 applicable, IC/Passport number):
                 <div style="margin-top:2mm;">
-                    Pick-up lication:
+                    Pick-up location:
                     <span>................................................................................................................................</span>
                 </div>
 
                 <div style="margin-top:2mm;">
-                    <span>Authorized person: Full name:</span>
+                    <span>Authorised person: Full name:</span>
                     <span>..................................................................... </span>
                     <span> IC/Passport No:</span>
                     <span>..............</span>
