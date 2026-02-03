@@ -248,3 +248,5 @@ WHERE fieldlabel = 'Contact Name'
 
 
    
+
+<!-- mysql -u vtigeruser -p -e "USE vtiger_gpm; SELECT id,user_name,is_admin FROM vtiger_users;" -->

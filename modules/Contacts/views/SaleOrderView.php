@@ -45,26 +45,78 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
     protected function downloadPDF($html, Vtiger_Request $request)
     {
         global $root_directory;
+
+        // --- Build safe paths ---
         $recordModel = $this->record->getRecord();
-        $clientID = $recordModel->get('cf_898');
-        $year  = date('Y');
+        $clientID = preg_replace('/[^A-Za-z0-9_-]/', '', (string)$recordModel->get('cf_898'));
+        $year = date('Y');
 
-        $fileName = $clientID . '-' . $year . "-SO";
-        $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
-        fwrite($handle, $html);
-        fclose($handle);
+        $fileName = $clientID . '-' . $year . '-SO';
 
-        exec("wkhtmltopdf --enable-local-file-access --enable-forms -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $root_directory . "$fileName.html " . $root_directory . "$fileName.pdf");
-        unlink($root_directory . $fileName . '.html');
+        // Ensure root_directory ends with /
+        $dir = rtrim($root_directory, '/\\') . DIRECTORY_SEPARATOR;
 
-        header("Content-type: application/pdf");
-        header("Cache-Control: private");
-        header("Content-Disposition: attachment; filename=$fileName.pdf");
-        header("Content-Description: Global Precious Metals CRM Data");
-        ob_clean();
-        flush();
-        readfile($root_directory . "$fileName.pdf");
-        unlink($root_directory . "$fileName.pdf");
+        // IMPORTANT: better to store temp files under cache/ not the project root
+        // If you want root folder anyway, keep $dir as is.
+        $tmpDir = $dir . 'cache' . DIRECTORY_SEPARATOR;
+        if (!is_dir($tmpDir)) {
+            @mkdir($tmpDir, 0775, true);
+        }
+
+        $htmlPath = $tmpDir . $fileName . '.html';
+        $pdfPath  = $tmpDir . $fileName . '.pdf';
+
+        // --- Write HTML ---
+        $bytes = @file_put_contents($htmlPath, $html);
+        if ($bytes === false) {
+            header("HTTP/1.1 500 Internal Server Error");
+            die("Cannot write HTML file: {$htmlPath}");
+        }
+
+        // --- Generate PDF (forms enabled) ---
+        // NOTE: --enable-forms only works if your HTML inputs have NAME attributes.
+        // e.g. <input type="text" name="serials" ...>
+        $cmd = sprintf(
+            'wkhtmltopdf --enable-local-file-access --enable-forms --print-media-type -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking %s %s 2>&1',
+            escapeshellarg($htmlPath),
+            escapeshellarg($pdfPath)
+        );
+
+        $output = shell_exec($cmd);
+
+        // Remove html always
+        @unlink($htmlPath);
+
+        // --- Validate PDF creation ---
+        if (!file_exists($pdfPath) || filesize($pdfPath) < 5000) {
+            header("HTTP/1.1 500 Internal Server Error");
+            $msg = "wkhtmltopdf failed.\n\nCMD:\n{$cmd}\n\nOUTPUT:\n{$output}\n";
+            die(nl2br(htmlspecialchars($msg, ENT_QUOTES, 'UTF-8')));
+        }
+
+        // --- Stream PDF to browser ---
+        // Clean any output buffer before headers
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        header('Content-Type: application/pdf');
+        header('Cache-Control: private');
+        header('Content-Disposition: attachment; filename="' . $fileName . '.pdf"');
+        header('Content-Length: ' . filesize($pdfPath));
+
+        // Stream
+        $fp = fopen($pdfPath, 'rb');
+        if ($fp === false) {
+            header("HTTP/1.1 500 Internal Server Error");
+            die("Cannot open PDF for reading: {$pdfPath}");
+        }
+
+        fpassthru($fp);
+        fclose($fp);
+
+        // Cleanup
+        @unlink($pdfPath);
         exit;
     }
 }
