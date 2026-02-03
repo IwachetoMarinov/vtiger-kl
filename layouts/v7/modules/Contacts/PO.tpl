@@ -604,14 +604,14 @@
 
                 <div style="margin-left: 5mm; margin-top:2mm;">
 
-                    <pre>{var_dump($PRICING_OPTION)}</pre>
-
                     <div>
                         <label>
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-                                <input type="radio" name="pricing_option" value="1" {if $PRICING_OPTION eq '1'}checked{/if}>
+                                <input type="checkbox" name="pricing_option_one" class="checkbox-radio pricing-option-one"
+                                    {if $PRICING_OPTION neq '2'}checked{/if}>
+                                {* <input type="radio" name="pricing_option" value="1" {if $PRICING_OPTION eq '1'}checked{/if}> *}
                             {else}
-                                {if $PRICING_OPTION eq '1'}
+                                {if $PRICING_OPTION neq '2'}
                                     <span
                                         style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
                                 {/if}
@@ -620,10 +620,12 @@
                         </label>
                     </div>
 
-                    <div>
+                    <div style="margin-top: 2mm;">
                         <label>
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-                                <input type="radio" name="pricing_option" value="2" {if $PRICING_OPTION eq '2'}checked{/if}>
+                                <input type="checkbox" name="pricing_option_two" class="checkbox-radio pricing-option-two"
+                                    {if $PRICING_OPTION eq '2'}checked{/if}>
+                                {* <input type="radio" name="pricing_option" value="2" {if $PRICING_OPTION eq '2'}checked{/if}> *}
                             {else}
                                 {if $PRICING_OPTION eq '2'}
                                     <span
@@ -696,12 +698,25 @@
     <script>
         document.getElementById('downloadBtn').addEventListener('click', function(e) {
 
-            const checked = document.querySelector('input[name="pricing_option"]:checked');
+            // const checked = document.querySelector('input[name="pricing_option"]:checked');
+            const firstChecked = document.querySelector('input.pricing-option-two:checked');
+            const secondChecked = document.querySelector('input.pricing-option-one:checked');
+
             const countryOption = document.querySelector('input[name="country_option"]');
             const addressOption = document.querySelector('input[name="address_option"]');
 
+            let checked = null;
+            if (firstChecked) {
+                checked = "1";
+            } else if (secondChecked) {
+                checked = "2";
+            }
+
+            console.log("checked:", checked);
+
+
             const url = new URL(this.href);
-            if (checked) url.searchParams.set('pricing_option', checked?.value);
+            if (checked) url.searchParams.set('pricing_option', checked);
             else url.searchParams.delete('pricing_option');
 
             if (countryOption && countryOption.checked) {
