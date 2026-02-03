@@ -61,7 +61,7 @@
         }
 
         .logo {
-          width: 60mm;
+           width: 52mm;
         }
 
         .title {
@@ -648,7 +648,7 @@
                         me/us and
                         {if isset($COMPANY)}
                             <span style="text-transform: capitalize;">{$COMPANY->get('company_name')}</span>
-                        {/if}.</span>
+                        {/if}</span>
                 </div>
 
                 <!-- SIGNATURE SECTION -->

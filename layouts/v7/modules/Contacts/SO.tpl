@@ -51,7 +51,7 @@
         }
 
         .logo {
-            width: 60mm;
+            width: 52mm;
         }
 
         .title {
