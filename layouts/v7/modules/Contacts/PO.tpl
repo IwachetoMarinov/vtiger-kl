@@ -417,7 +417,7 @@
                 <div class="place-container"><strong>To:</strong></div>
                 <div class="company-container">
                     <div style="padding:2mm;min-height:27mm;">
-                        <div>
+                        <div style="text-transform: capitalize; font-weight: 600;">
                             {if isset($COMPANY)}
                                 {$COMPANY->get('company_name')}
                             {/if}
@@ -514,7 +514,7 @@
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                         <input type="checkbox" name="country_option">
                     {else}
-                        {if isset($COUNTRY_OPTION)}
+                        {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION neq ''}
                             <span
                                 style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
                         {/if}
@@ -528,7 +528,7 @@
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                         <input type="checkbox" name="address_option">
                     {else}
-                        {if isset($ADDRESS_OPTION)}
+                        {if isset($ADDRESS_OPTION) && $ADDRESS_OPTION neq ''}
                             <span
                                 style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
                         {/if}
@@ -558,7 +558,7 @@
                         {if $SELECTED_BANK}
                             {assign var=iban value=$SELECTED_BANK->get('iban_no')|lower|replace:' ':''}
                             {assign var=bank_routing_no value=$SELECTED_BANK->get('bank_routing_no')|lower|replace:' ':''}
-                            
+
                             {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
                                 <input type="hidden" class="selected-bank" value="{$SELECTED_BANK->getId()}">
                             {/if}
@@ -604,6 +604,8 @@
 
                 <div style="margin-left: 5mm; margin-top:2mm;">
 
+                    <pre>{var_dump($PRICING_OPTION)}</pre>
+
                     <div>
                         <label>
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
@@ -621,9 +623,9 @@
                     <div>
                         <label>
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-                                <input type="radio" name="pricing_option" value="2" {if $PRICING_OPTION eq '1'}checked{/if}>
+                                <input type="radio" name="pricing_option" value="2" {if $PRICING_OPTION eq '2'}checked{/if}>
                             {else}
-                                {if $PRICING_OPTION eq '1'}
+                                {if $PRICING_OPTION eq '2'}
                                     <span
                                         style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
                                 {/if}
@@ -699,7 +701,8 @@
             const addressOption = document.querySelector('input[name="address_option"]');
 
             const url = new URL(this.href);
-            if (checked) url.searchParams.set('pricing_option', checked.value);
+            if (checked) url.searchParams.set('pricing_option', checked?.value);
+            else url.searchParams.delete('pricing_option');
 
             if (countryOption && countryOption.checked) {
                 url.searchParams.set('countryOption', '1');

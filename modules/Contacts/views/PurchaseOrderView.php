@@ -41,6 +41,10 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $selectedBank = null;
         if (!empty($bankAccountId)) $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
 
+        // echo "<pre>";
+        // var_dump($selectedBank);
+        // echo "</pre>";
+
         if (empty($selectedBank)) {
             // fallback dummy object to prevent template fatal
             $selectedBank = new Vtiger_Record_Model();

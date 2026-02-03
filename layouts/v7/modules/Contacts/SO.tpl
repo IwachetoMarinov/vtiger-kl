@@ -532,23 +532,6 @@
 
                     {/if}
 
-                    <!-- Add editable fields where needed -->
-                    <div style="margin-top: 20px;">
-                        <label>Customer Signature:</label><br>
-                        <input type="text" name="customer_signature"
-                            style="width: 400px; height: 60px; border: 2px solid #000; padding: 10px;">
-                    </div>
-
-                    <div style="margin-top: 20px;">
-                        <label>Notes:</label><br>
-                        <textarea name="notes" rows="5"
-                            style="width: 100%; border: 1px solid #000; padding: 10px;"></textarea>
-                    </div>
-
-                    <div style="margin-top: 20px;">
-                        <input type="checkbox" name="terms_agreed"> I agree to the terms
-                    </div>
-
                     <div class="signature-section-item">
                         <div class="signature-section-left">
                             Signed by: <span class="long-line" style="font-style: italic;">
