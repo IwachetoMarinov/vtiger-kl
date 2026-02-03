@@ -344,25 +344,24 @@
 
                 <div style="margin-top: 5mm;">This Collection Order is subject to and governed by the terms and conditions
                     of the Customer Metal Agreement
-                    executed and entered into by and between me/us and Global Precious Metals Pte. Ltd.</div>
+                    executed and entered into by and between me/us and {if isset($COMPANY)}
+                        <span style="text-transform: capitalize;">{$COMPANY->get('company_name')}</span>
+                    {/if}
+                </div>
 
                 <div style="margin-top: 5mm;" class="bottom-container">
                     <div class="signed-item"></div>
                     <div class="behalf-item">
                         <span>Date: </span>
-                        <span>................................</span>
                     </div>
                 </div>
 
                 <div style="margin-top: 5mm;" class="bottom-container">
                     <div class="signed-item">
                         <span>Signed by: </span>
-                        <span style="font-style: italic;font-weight: bold;">{$RECORD_MODEL->get('firstname')}
-                            {$RECORD_MODEL->get('lastname')}</span>
                     </div>
                     <div class="behalf-item">
                         <span>On behalf of:</span>
-                        <span style="font-weight: 700;">Global Precious Metals Pte Ltd</span>
                     </div>
                 </div>
 
@@ -377,6 +376,7 @@
                 </div>
             </div>
         </div>
+
     {/for}
 
     <script>

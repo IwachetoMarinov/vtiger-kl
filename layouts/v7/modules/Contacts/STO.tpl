@@ -43,13 +43,17 @@
             width: 210mm;
             height: 297mm;
             margin: auto;
-            padding: 8mm 10mm;
+            padding: 6mm;
             padding-top: 3mm;
         }
 
         /* Header */
         .header-table {
             width: 100%;
+            margin-bottom: 1mm;
+        }
+
+         .table-heading {
             margin-bottom: 4mm;
         }
 
@@ -58,7 +62,7 @@
         }
 
         .logo {
-            width: 35mm;
+            width: 52mm;
         }
 
         .title {
@@ -132,7 +136,7 @@
             font-weight: bold;
         }
 
-        .metal-row-label {
+        td.metal-row-label {
             text-align: left;
             font-weight: bold;
             padding-left: 2mm;
@@ -354,11 +358,9 @@
             </tr>
         </table>
 
-        <table class="header-table">
+        <table class="header-table table-heading">
             <tr>
-                <td class="logo"></td>
-                <td class="title" style="text-decoration: underline;">SHIPMENT & STORAGE ORDER</td>
-                <td style="width:25mm;"></td>
+                <td class="title" style="text-decoration: underline; text-align: center;">SHIPMENT & STORAGE ORDER</td>
             </tr>
         </table>
 
@@ -421,7 +423,7 @@
                 <div class="place-container"><strong>To:</strong></div>
                 <div class="company-container">
                     <div style="padding:2mm;min-height:27mm;">
-                        <div>
+                        <div style="text-transform: capitalize; font-weight: 600;">
                             {if isset($COMPANY)}
                                 {$COMPANY->get('company_name')}
                             {/if}
@@ -560,21 +562,32 @@
                                 {/if}
                             {/if}
                         </div>
+                        <div>
+                            {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                                <input class="country-checkbox" type="checkbox" name="4"> Dubai
+                            {else}
+                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 4}
+                                    <span
+                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                                    <span style="display: inline-block; margin-left:2mm;">Dubai</span>
+                                {/if}
+                            {/if}
+                        </div>
                     </div>
 
                     <div>
                         <div>
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <div class="custom-country">
-                                    <input class="country-checkbox" type="checkbox" name="4">
+                                    <input class="country-checkbox" type="checkbox" name="5">
                                     <div>
-                                        Other country or precision (Please specify):
+                                        Other country or location (Please specify): 
                                         <input type="text" class="custom-country-input" value="{$CUSTOM_COUNTRY|default:''}"
                                             style="width:60mm; margin-left:2mm;" />
                                     </div>
                                 </div>
                             {else}
-                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 4}
+                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 5}
                                     <span
                                         style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
                                     <span style="display: inline-block; margin-left:2mm;">{$CUSTOM_COUNTRY|default:''}</span>
@@ -597,7 +610,7 @@
             <!-- SECTION 3 -->
             <div class="additional-section ">
                 <div style="margin-bottom:2mm;" class="bolder-element">
-                    3. I/We make the payment of the above Purchase Amount:
+                    3. I/We make the payment of the Shipping and Storage Fees:
                 </div>
 
                 <div style="margin-left: 2mm;">
@@ -671,8 +684,7 @@
                                 style="font-style: italic;">{$RECORD_MODEL->get('mailingcountry')}</span></div>
                         <div class="signature-section-right">
                             {* Today date *}
-                            Date: <span class="line">{$smarty.now|date_format:"%m/%d/%Y"}
-                            </span>
+                            Date: 
                         </div>
                     </div>
 
@@ -722,7 +734,7 @@
 
                     const customInput = document.querySelector('.custom-country-input');
 
-                    if (name == '4') {
+                    if (name == '5') {
                         if (customInput) customInput.focus();
                     } else {
                         if (customInput) customInput.value = '';
@@ -750,7 +762,7 @@
             if (countryType) {
                 url.searchParams.set('countryOption', countryType);
 
-                if (countryType == '4' && customInput) {
+                if (countryType == '5' && customInput) {
                     url.searchParams.set('customCountry', customInput.value || '');
                 }
             }

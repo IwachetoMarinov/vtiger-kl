@@ -56,12 +56,8 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         // Ensure root_directory ends with /
         $dir = rtrim($root_directory, '/\\') . DIRECTORY_SEPARATOR;
 
-        // IMPORTANT: better to store temp files under cache/ not the project root
-        // If you want root folder anyway, keep $dir as is.
         $tmpDir = $dir . 'cache' . DIRECTORY_SEPARATOR;
-        if (!is_dir($tmpDir)) {
-            @mkdir($tmpDir, 0775, true);
-        }
+        if (!is_dir($tmpDir)) @mkdir($tmpDir, 0775, true);
 
         $htmlPath = $tmpDir . $fileName . '.html';
         $pdfPath  = $tmpDir . $fileName . '.pdf';

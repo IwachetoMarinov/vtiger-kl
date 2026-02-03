@@ -43,12 +43,16 @@
             width: 210mm;
             height: 297mm;
             margin: auto;
-            padding: 8mm 10mm;
+            padding: 6mm;
         }
 
         /* Header */
         .header-table {
             width: 100%;
+            margin-bottom: 1mm;
+        }
+
+        .table-heading {
             margin-bottom: 4mm;
         }
 
@@ -57,7 +61,7 @@
         }
 
         .logo {
-            width: 35mm;
+           width: 52mm;
         }
 
         .title {
@@ -131,7 +135,7 @@
             font-weight: bold;
         }
 
-        .metal-row-label {
+        td.metal-row-label {
             text-align: left;
             font-weight: bold;
             padding-left: 2mm;
@@ -307,11 +311,13 @@
                 </a>
             </li>
 
+            {assign var=bank_account_id value=$smarty.request.bank|default:$SELECTED_BANK->getId()}
+
             <li style="float: right;margin-top: 5px;margin-right: 5px;width: 198px;">
                 <select class="inputElement select2" name="bank_accounts" id="bank_accounts">
                     <option value="">Select Bank Account</option>
                     {foreach item=account from=$ALL_BANK_ACCOUNTS}
-                        <option {if $smarty.request.bank  eq $account->getId() } selected {/if} value="{$account->getId()}">
+                        <option {if $bank_account_id  eq $account->getId() } selected {/if} value="{$account->getId()}">
                             {$account->get('bank_alias_name')}</option>
                     {/foreach}
                 </select>
@@ -340,7 +346,7 @@
     <div class="printAreaContainer">
 
         <!-- HEADER -->
-        <table class="header-table">
+        <table class="header-table ">
             <tr>
                 <td class="logo">
                     <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
@@ -350,11 +356,9 @@
             </tr>
         </table>
 
-        <table class="header-table">
+        <table class="header-table table-heading">
             <tr>
-                <td class="logo"></td>
-                <td class="title" style="text-decoration: underline;">PURCHASE & STORAGE ORDER</td>
-                <td style="width:25mm;"></td>
+                <td class="title" style="text-decoration: underline; text-align: center;">PURCHASE & STORAGE ORDER</td>
             </tr>
         </table>
 
@@ -417,7 +421,7 @@
                 <div class="place-container"><strong>To:</strong></div>
                 <div class="company-container">
                     <div style="padding:2mm;min-height:27mm;">
-                        <div>
+                        <div style="text-transform: capitalize; font-weight: 600;">
                             {if isset($COMPANY)}
                                 {$COMPANY->get('company_name')}
                             {/if}
@@ -514,7 +518,7 @@
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                         <input type="checkbox" name="country_option">
                     {else}
-                        {if isset($COUNTRY_OPTION)}
+                        {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION neq ''}
                             <span
                                 style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
                         {/if}
@@ -528,7 +532,7 @@
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                         <input type="checkbox" name="address_option">
                     {else}
-                        {if isset($ADDRESS_OPTION)}
+                        {if isset($ADDRESS_OPTION) && $ADDRESS_OPTION neq ''}
                             <span
                                 style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
                         {/if}
@@ -546,10 +550,9 @@
                 <div style="padding-left: 5mm;margin-top:1.5mm">
                     <div>(a) <span class="bolder-element">from the following jurisdiction:</span></div>
 
-                    <div style="padding-left: 5mm;">Country:
+                    <div style="padding-left: 5mm; margin-top: 2mm;">Country:
                         <span>..............................................................................................................................................</span>
                     </div>
-
 
                     <div style="margin:1.5mm 0;">(b) <span class="bolder-element">to GPM’s bank account </span>as
                         follows:</div>
@@ -558,7 +561,7 @@
                         {if $SELECTED_BANK}
                             {assign var=iban value=$SELECTED_BANK->get('iban_no')|lower|replace:' ':''}
                             {assign var=bank_routing_no value=$SELECTED_BANK->get('bank_routing_no')|lower|replace:' ':''}
-                            
+
                             {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
                                 <input type="hidden" class="selected-bank" value="{$SELECTED_BANK->getId()}">
                             {/if}
@@ -607,9 +610,11 @@
                     <div>
                         <label>
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-                                <input type="radio" name="pricing_option" value="1" {if $PRICING_OPTION eq '1'}checked{/if}>
+                                <input type="checkbox" name="pricing_option_one" class="checkbox-radio pricing-option-one"
+                                    {if $PRICING_OPTION neq '2'}checked{/if}>
+                                {* <input type="radio" name="pricing_option" value="1" {if $PRICING_OPTION eq '1'}checked{/if}> *}
                             {else}
-                                {if $PRICING_OPTION eq '1'}
+                                {if $PRICING_OPTION neq '2'}
                                     <span
                                         style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
                                 {/if}
@@ -618,12 +623,14 @@
                         </label>
                     </div>
 
-                    <div>
+                    <div style="margin-top: 2mm;">
                         <label>
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-                                <input type="radio" name="pricing_option" value="2" {if $PRICING_OPTION eq '1'}checked{/if}>
+                                <input type="checkbox" name="pricing_option_two" class="checkbox-radio pricing-option-two"
+                                    {if $PRICING_OPTION eq '2'}checked{/if}>
+                                {* <input type="radio" name="pricing_option" value="2" {if $PRICING_OPTION eq '2'}checked{/if}> *}
                             {else}
-                                {if $PRICING_OPTION eq '1'}
+                                {if $PRICING_OPTION eq '2'}
                                     <span
                                         style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
                                 {/if}
@@ -639,7 +646,9 @@
                         the terms and conditions of the Customer Metal Agreement executed and entered into by and
                         between
                         me/us and
-                        Global Precious Metals Pte. Ltd.:</span>
+                        {if isset($COMPANY)}
+                            <span style="text-transform: capitalize;">{$COMPANY->get('company_name')}</span>
+                        {/if}</span>
                 </div>
 
                 <!-- SIGNATURE SECTION -->
@@ -649,7 +658,7 @@
                             <div class="signature-section-left">Place: <span class="line"
                                     style="font-style: italic;">{$RECORD_MODEL->get('mailingcountry')}</span></div>
                             <div class="signature-section-right">
-                                Date: <span class="line">................................</span>
+                                Date:
                             </div>
                         </div>
 
@@ -692,14 +701,38 @@
 
 
     <script>
+        document.querySelectorAll('.checkbox-radio').forEach(function(element) {
+            element.addEventListener('change', function() {
+                if (this.classList.contains('pricing-option-one')) {
+                    document.querySelector('.pricing-option-two').checked = false;
+                } else if (this.classList.contains('pricing-option-two')) {
+                    document.querySelector('.pricing-option-one').checked = false;
+                }
+            });
+        });
+
         document.getElementById('downloadBtn').addEventListener('click', function(e) {
 
-            const checked = document.querySelector('input[name="pricing_option"]:checked');
+            // const checked = document.querySelector('input[name="pricing_option"]:checked');
+            const firstChecked = document.querySelector('input.pricing-option-one:checked');
+            const secondChecked = document.querySelector('input.pricing-option-two:checked');
+
             const countryOption = document.querySelector('input[name="country_option"]');
             const addressOption = document.querySelector('input[name="address_option"]');
 
+            let checked = null;
+            if (firstChecked) {
+                checked = "1";
+            } else if (secondChecked) {
+                checked = "2";
+            }
+
+            console.log("checked:", checked);
+
+
             const url = new URL(this.href);
-            if (checked) url.searchParams.set('pricing_option', checked.value);
+            if (checked) url.searchParams.set('pricing_option', checked);
+            else url.searchParams.delete('pricing_option');
 
             if (countryOption && countryOption.checked) {
                 url.searchParams.set('countryOption', '1');
