@@ -11,6 +11,10 @@ cache/
 wkhtml_debug.log
 pdf_debug.log
 
+tabdata.php
+parent_tabdata.php
+user_privileges/*
+
 api/api_debug.log
 
 # === Local logs ===
