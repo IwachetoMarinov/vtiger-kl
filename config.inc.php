@@ -1,4 +1,5 @@
 <?php
+
 /*********************************************************************************
  * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
  * ("License"); You may not use this file except in compliance with the 
@@ -11,7 +12,29 @@
  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
-********************************************************************************/
+ ********************************************************************************/
+$envPath = __DIR__ . '/.env';
+if (file_exists($envPath)) {
+      foreach (file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+            $line = trim($line);
+            if ($line === '' || $line[0] === '#') continue;
+            if (strpos($line, '=') === false) continue;
+
+            [$k, $v] = explode('=', $line, 2);
+            $k = trim($k);
+            $v = trim($v);
+
+            // strip surrounding quotes
+            if ((str_starts_with($v, '"') && str_ends_with($v, '"')) ||
+                  (str_starts_with($v, "'") && str_ends_with($v, "'"))
+            ) {
+                  $v = substr($v, 1, -1);
+            }
+
+            putenv("$k=$v");
+            $_ENV[$k] = $v;
+      }
+}
 
 // Adjust error_reporting favourable to deployment.
 version_compare(PHP_VERSION, '5.5.0') <= 0 ? error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED & E_ERROR) : error_reporting(E_WARNING & ~E_NOTICE & ~E_DEPRECATED  & E_ERROR & ~E_STRICT); // PRODUCTION
@@ -23,7 +46,7 @@ include('vtigerversion.php');
 
 // more than 8MB memory needed for graphics
 // memory limit default value = 64M
-ini_set('memory_limit','512M');
+ini_set('memory_limit', '512M');
 
 // show or hide calendar, world clock, calculator, chat and CKEditor 
 // Do NOT remove the quotes if you set these to false! 
@@ -31,7 +54,8 @@ $CALENDAR_DISPLAY = 'true';
 $USE_RTE = 'true';
 
 // helpdesk support email id and support name (Example: 'support@vtiger.com' and 'vtiger support')
-$HELPDESK_SUPPORT_EMAIL_ID = 'iwacheto@abv.bg';
+$HELPDESK_SUPPORT_EMAIL_ID = getenv('HELPDESK_SUPPORT_EMAIL_ID') ?: $HELPDESK_SUPPORT_EMAIL_ID ?? '';
+// $HELPDESK_SUPPORT_EMAIL_ID = 'iwacheto@abv.bg';
 $HELPDESK_SUPPORT_NAME = 'your-support name';
 $HELPDESK_SUPPORT_EMAIL_REPLY_ID = $HELPDESK_SUPPORT_EMAIL_ID;
 
@@ -44,17 +68,24 @@ $HELPDESK_SUPPORT_EMAIL_REPLY_ID = $HELPDESK_SUPPORT_EMAIL_ID;
       db_name
 */
 
-$dbconfig['db_server'] = 'localhost';
-$dbconfig['db_port'] = ':3306';
-$dbconfig['db_username'] = 'root';
-$dbconfig['db_password'] = '';
-$dbconfig['db_name'] = 'vtiger_gpm';
+$dbconfig['db_server']   = getenv('DB_HOST') ?: ($dbconfig['db_server']   ?? 'localhost');
+$dbconfig['db_port']     = getenv('DB_PORT') ?: ($dbconfig['db_port']     ?? ':3306');
+$dbconfig['db_username'] = getenv('DB_USER') ?: ($dbconfig['db_username'] ?? 'root');
+$dbconfig['db_password'] = getenv('DB_PASS') ?: ($dbconfig['db_password'] ?? '');
+$dbconfig['db_name']     = getenv('DB_NAME') ?: ($dbconfig['db_name']     ?? 'vtiger_gpm');
+
 $dbconfig['db_type'] = 'mysqli';
 $dbconfig['db_status'] = 'true';
 
-// TODO: test if port is empty
+// $dbconfig['db_username'] = 'vtigeruser';
+// $dbconfig['db_password'] = 'StrongPassword123!';
+// $dbconfig['db_name'] = 'vtiger_gpm';
+// $dbconfig['db_type'] = 'mysqli';
+// $dbconfig['db_status'] = 'true';
+
+
 // TODO: set db_hostname dependending on db_type
-$dbconfig['db_hostname'] = $dbconfig['db_server'].$dbconfig['db_port'];
+$dbconfig['db_hostname'] = $dbconfig['db_server'] . $dbconfig['db_port'];
 
 // log_sql default value = false
 $dbconfig['log_sql'] = false;
@@ -79,12 +110,15 @@ $dbconfigoption['ssl'] = false;
 
 $host_name = $dbconfig['db_hostname'];
 
-$site_URL = 'http://localhost/vtiger-gpm/';
+// $site_URL = 'http://34.170.106.104/';
+// $site_URL = 'http://localhost/vtiger-gpm/';
+$site_URL = getenv('SITE_URL') ?: ($site_URL ?? 'http://localhost/vtiger-gpm/');
 
 // url for customer portal (Example: http://vtiger.com/portal)
-$PORTAL_URL = $site_URL.'/customerportal';
+$PORTAL_URL = $site_URL . '/customerportal';
 // root directory path
-$root_directory = 'C:\laragon\www\vtiger-gpm/';
+$root_directory = getenv('ROOT_DIRECTORY') ?: ($root_directory ?? 'C:\laragon\www\vtiger-gpm/');
+// $root_directory = '/var/www/html/';
 
 // cache direcory path
 $cache_dir = 'cache/';
@@ -100,7 +134,7 @@ $upload_dir = 'cache/upload/';
 
 // maximum file size for uploaded files in bytes also used when uploading import files
 // upload_maxsize default value = 3000000
-$upload_maxsize = 3145728;//3MB
+$upload_maxsize = 3145728; //3MB
 
 // flag to allow export functionality
 // 'all' to allow anyone to use exports 
@@ -168,8 +202,8 @@ $php_max_execution_time = 0;
 $default_timezone = 'UTC';
 
 /** If timezone is configured, try to set it */
-if(isset($default_timezone) && function_exists('date_default_timezone_set')) {
-	@date_default_timezone_set($default_timezone);
+if (isset($default_timezone) && function_exists('date_default_timezone_set')) {
+      @date_default_timezone_set($default_timezone);
 }
 
 //Set the default layout 
@@ -179,4 +213,3 @@ $default_layout = 'v7';
 $maxListFieldsSelectionSize = 15;
 
 include_once 'config.security.php';
-?>
