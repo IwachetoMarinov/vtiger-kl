@@ -442,8 +442,8 @@
                 <div style="margin-top: 2mm;">
                     .............................................................................................................................................................................
                 </div>
-                <input type="text" name="serials" value="{$SERIALS|default:''}"
-                    style="width: 100%; border: 0; border-bottom: 1px solid #000; font-size: 12pt; padding: 2mm;" />
+                {* <input type="text" name="serials" value="{$SERIALS|default:''}"
+                    style="width: 100%; border: 0; border-bottom: 1px solid #000; font-size: 12pt; padding: 2mm;" /> *}
 
             </div>
 

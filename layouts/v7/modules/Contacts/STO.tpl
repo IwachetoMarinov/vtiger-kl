@@ -579,7 +579,7 @@
                         <div>
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <div class="custom-country">
-                                    <input class="country-checkbox" type="checkbox" name="4">
+                                    <input class="country-checkbox" type="checkbox" name="5">
                                     <div>
                                         Other country or location (Please specify): 
                                         <input type="text" class="custom-country-input" value="{$CUSTOM_COUNTRY|default:''}"
@@ -587,7 +587,7 @@
                                     </div>
                                 </div>
                             {else}
-                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 4}
+                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 5}
                                     <span
                                         style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
                                     <span style="display: inline-block; margin-left:2mm;">{$CUSTOM_COUNTRY|default:''}</span>
@@ -734,7 +734,7 @@
 
                     const customInput = document.querySelector('.custom-country-input');
 
-                    if (name == '4') {
+                    if (name == '5') {
                         if (customInput) customInput.focus();
                     } else {
                         if (customInput) customInput.value = '';
@@ -762,7 +762,7 @@
             if (countryType) {
                 url.searchParams.set('countryOption', countryType);
 
-                if (countryType == '4' && customInput) {
+                if (countryType == '5' && customInput) {
                     url.searchParams.set('customCountry', customInput.value || '');
                 }
             }
