@@ -696,11 +696,21 @@
 
 
     <script>
+        document.querySelectorAll('.checkbox-radio').forEach(function(element) {
+            element.addEventListener('change', function() {
+                if (this.classList.contains('pricing-option-one')) {
+                    document.querySelector('.pricing-option-two').checked = false;
+                } else if (this.classList.contains('pricing-option-two')) {
+                    document.querySelector('.pricing-option-one').checked = false;
+                }
+            });
+        });
+
         document.getElementById('downloadBtn').addEventListener('click', function(e) {
 
             // const checked = document.querySelector('input[name="pricing_option"]:checked');
-            const firstChecked = document.querySelector('input.pricing-option-two:checked');
-            const secondChecked = document.querySelector('input.pricing-option-one:checked');
+            const firstChecked = document.querySelector('input.pricing-option-one:checked');
+            const secondChecked = document.querySelector('input.pricing-option-two:checked');
 
             const countryOption = document.querySelector('input[name="country_option"]');
             const addressOption = document.querySelector('input[name="address_option"]');
