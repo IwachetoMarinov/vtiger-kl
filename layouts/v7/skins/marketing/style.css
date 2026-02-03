@@ -8055,10 +8055,11 @@ a.btnReport:hover {
 /* Custom STYLES */
 /* Hide INVENTORY app from sidebar */
 [data-app-name="INVENTORY"] {
-    display: none !important;
+    /* display: none !important; */
 }
 
-/* Hide Mail Manager module */
+/* Hide Mail Manager and Documents module */
+[data-default-url="index.php?module=Documents&view=List"],
 [data-default-url="index.php?module=MailManager&view=List"] {
     display: none !important;
 }

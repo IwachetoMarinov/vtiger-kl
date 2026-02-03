@@ -69,12 +69,8 @@ class GPM_CertificateHandler
     protected function createHoldingCertificate(Contacts_Record_Model $recordModel, $guid)
     {
         $clientID = $recordModel->get('cf_898');
-        $companyId = $recordModel->get('company_id');
 
-        $companyRecord = null;
-
-        if (!empty($companyId))
-            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
+        $companyRecord = Contacts_DefaultCompany_View::process();
 
         $holdings = new dbo_db\HoldingsDB();
         $holdings_data = $holdings->getHoldingsData($clientID);

@@ -22,19 +22,11 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         $recordModel = $this->record->getRecord();
         $country_type = $request->get('countryOption');
         $custom_country = $request->get('customCountry');
-        $companyId = $recordModel->get('company_id');
         $client_type = $recordModel->get('cf_927');
         $allBankAccounts = [];
 
-        $companyRecord = null;
+        $companyRecord = Contacts_DefaultCompany_View::process();
 
-        if (!empty($companyId)) {
-            // ✅ Company record
-            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
-            // ✅ Bank accounts
-            // $allBankAccounts = BankAccount_Record_Model::getInstancesByCompanyID($companyId);
-        
-            }
         $allBankAccounts = BankAccount_Record_Model::getAllInstances();
         $bankAccountId   = $request->get('bank');
 

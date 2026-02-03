@@ -25,15 +25,15 @@ class Contacts_HoldingCertificate_View extends Vtiger_Index_View
 
         $guid = $this->guidv4(openssl_random_pseudo_bytes(16));
         $clientID = $recordModel->get('cf_898');
-        $companyId = $recordModel->get('company_id');
 
-        $companyRecord = null;
-
-        if (!empty($companyId))
-            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
+        $companyRecord = Contacts_DefaultCompany_View::process();
 
         $holdings = new dbo_db\HoldingsDB();
         $holdings_data = $holdings->getHoldingsData($clientID);
+
+        // echo "<pre>";
+        // var_dump($companyRecord);
+        // echo "</pre>";
 
         $viewer = new Vtiger_Viewer();
         $viewer->assign('RECORD_MODEL', $recordModel);

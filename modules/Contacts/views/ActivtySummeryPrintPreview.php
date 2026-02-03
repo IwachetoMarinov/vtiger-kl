@@ -26,12 +26,8 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
 
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
-        $companyId = $recordModel->get('company_id');
 
-        $companyRecord = null;
-
-        if (!empty($companyId))
-            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
+        $companyRecord = Contacts_DefaultCompany_View::process();
 
         $activity = new dbo_db\ActivitySummary();
         // Get all transactions for the client

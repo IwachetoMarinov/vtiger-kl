@@ -3,6 +3,10 @@
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
 
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+
 class Contacts_CollectionAcknowledgement_View extends Vtiger_Index_View
 {
 
@@ -24,14 +28,9 @@ class Contacts_CollectionAcknowledgement_View extends Vtiger_Index_View
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
         $tableName = $request->get('tableName');
-        $companyId = $recordModel->get('company_id');
 
-        $companyRecord = null;
+        $companyRecord = Contacts_DefaultCompany_View::process();
 
-        if (!empty($companyId))
-            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
-
-        // $accountId = $recordModel->get('account_id');
         $activity = new dbo_db\ActivitySummary();
         $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 

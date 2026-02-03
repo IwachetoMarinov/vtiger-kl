@@ -61,11 +61,7 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 			throw new AppException('You are not permitted to view the Lead or the Contact information associated with this Intent!');
 		}
 
-		if (!empty($companyId)) {
-			// ✅ Company record
-			$companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
-			// ✅ Bank accounts
-		}
+		$companyRecord = Contacts_DefaultCompany_View::process();
 
 		$allBankAccounts = BankAccount_Record_Model::getAllInstances();
 		$bankAccountId   = $request->get('bank');

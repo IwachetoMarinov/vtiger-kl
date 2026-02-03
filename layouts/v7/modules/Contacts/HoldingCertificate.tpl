@@ -54,26 +54,18 @@
     }
 
     /* ================== PAGE WRAPPER ================== */
-    :root {
-      --colWidth: 170mm; /* change to 175/180 if you want wider */
-    }
-
     .page {
       width: 210mm;
       height: 297mm;
       position: relative;
       margin: 0 auto;
       background: #fff;
-      overflow: hidden;
+      /* overflow: hidden; */
       font-size: 10pt;
-    }
-
-    /* This is the ONLY element that defines visual centering */
-    .contentColumn {
-      width: var(--colWidth);
-      margin: 0 auto;           /* true center against the page */
-      padding-top: 10mm;        /* top page margin */
-      padding-bottom: 30mm;     /* reserve space for footer */
+      padding-left: 20mm;
+      padding-right: 20mm;
+      padding-top: 10mm;
+      padding-bottom: 30mm;
     }
 
     .page * {
@@ -169,8 +161,8 @@
     /* ================== FOOTER (PINNED TO PAGE EDGES) ================== */
     .footer {
       position: absolute;
-      left: 10mm;
-      right: 10mm;
+      left: 20mm;
+      right: 20mm;
       bottom: 10mm;
       display: flex;
       justify-content: space-between;
@@ -201,7 +193,7 @@
     }
 
     #logo img {
-      width: 72px;
+      width: 160px;
       height: auto;
       display: block;
     }
@@ -233,78 +225,76 @@
 
 <body style="margin: 0px;">
   <div class="page">
-    <div class="contentColumn">
-      <table class="print-tbl">
-        <tr>
-          <td colspan="2">
-            <div id="QRCode">
-              <img src="{$site_URL}modules/HoldingCertificate/{$GUID}.png" alt="Please scan to verify">
+    <table class="print-tbl">
+      <tr>
+        <td colspan="2">
+          <div id="QRCode">
+            <img src="{$site_URL}modules/HoldingCertificate/{$GUID}.png" alt="Please scan to verify">
+            <p>
+              <a target="_blank"
+                href="https://certificates.global-precious-metals.com/id/{$GUID}">
+                https://certificates.global-precious-metals.com/id/{$GUID}
+              </a>
+            </p>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2">
+          <div id="heading">
+            <p class="cerHeading">CERTIFICATE OF OWNERSHIP</p>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2" style="vertical-align: top;">
+          <div id="allContent">
+            <div id="content">
               <p>
-                <a target="_blank"
-                  href="https://certificates.global-precious-metals.com/id/{$GUID}">
-                  https://certificates.global-precious-metals.com/id/{$GUID}
-                </a>
+                This certificate attests that {$RECORD_MODEL->get('salutationtype')}
+                {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')} is the rightful
+                owner of the following metals:<br><br>
+
+                {foreach item=HOLDINGS key=location from=$ERP_HOLDINGS}
+                  {foreach item=HOLDING from=$HOLDINGS}
+                    <span style="display:inline-block; width: 20px;"></span>-<span style="display:inline-block; width: 20px;"></span>
+                    {number_format($HOLDING.quantity,0)} {$HOLDING.metal} {$HOLDING.description}
+                    {if !empty($HOLDING.serial_no)}- Serial {$HOLDING.serial_no}{/if}<br>
+                  {/foreach}
+                {/foreach}
+
+                <br>
+
+                Global Precious Metals is acting as an adviser to custodize the assets and that
+                while the validity of this certificate if affirmed on our website, we can attest
+                rightful ownership free of lien or pledges to us or any of our vendors. The scope of
+                this certificate does not include any agreement between the rightful owner and
+                parties unrelated to Global Precious Metals.<br><br>
+
+                How to verify certificate validity:<br><br>
+
+                <span style="display:inline-block; width: 20px;"></span>1.<span style="display:inline-block; width: 20px;"></span>
+                Scan QR code or click on url on the top right of this document. The linked page will indicate the status of the
+                certificate.<br>
+
+                <span style="display:inline-block; width: 20px;"></span>2.<span style="display:inline-block; width: 20px;"></span>
+                The page will also indicate the file checksum of the certificate (SHA256 protocol). If you have received this
+                document as a PDF, use an online or offline SHA256 calculator to confirm that the validity refers to the
+                document in your possession. You can also download the document from the page.<br>
               </p>
             </div>
-          </td>
-        </tr>
 
-        <tr>
-          <td colspan="2">
-            <div id="heading">
-              <p class="cerHeading">CERTIFICATE OF OWNERSHIP</p>
+            <div id="signature">
+              <img src="{$site_URL}layouts/v7/modules/HoldingCertificate/nico_sig.png"
+                alt="Signature">
+              <p style="color:black;">Nicolas Mathier<br>CEO</p>
             </div>
-          </td>
-        </tr>
-
-        <tr>
-          <td colspan="2" style="vertical-align: top;">
-            <div id="allContent">
-              <div id="content">
-                <p>
-                  This certificate attests that {$RECORD_MODEL->get('salutationtype')}
-                  {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')} is the rightful
-                  owner of the following metals:<br><br>
-
-                  {foreach item=HOLDINGS key=location from=$ERP_HOLDINGS}
-                    {foreach item=HOLDING from=$HOLDINGS}
-                      <span style="display:inline-block; width: 20px;"></span>-<span style="display:inline-block; width: 20px;"></span>
-                      {number_format($HOLDING.quantity,0)} {$HOLDING.description}
-                      {if !empty($HOLDING.serial_no)}- Serial {$HOLDING.serial_no}{/if}<br>
-                    {/foreach}
-                  {/foreach}
-
-                  <br>
-
-                  Global Precious Metals is acting as an adviser to custodize the assets and that
-                  while the validity of this certificate if affirmed on our website, we can attest
-                  rightful ownership free of lien or pledges to us or any of our vendors. The scope of
-                  this certificate does not include any agreement between the rightful owner and
-                  parties unrelated to Global Precious Metals.<br><br>
-
-                  How to verify certificate validity:<br><br>
-
-                  <span style="display:inline-block; width: 20px;"></span>1.<span style="display:inline-block; width: 20px;"></span>
-                  Scan QR code or click on url on the top right of this document. The linked page will indicate the status of the
-                  certificate.<br>
-
-                  <span style="display:inline-block; width: 20px;"></span>2.<span style="display:inline-block; width: 20px;"></span>
-                  The page will also indicate the file checksum of the certificate (SHA256 protocol). If you have received this
-                  document as a PDF, use an online or offline SHA256 calculator to confirm that the validity refers to the
-                  document in your possession. You can also download the document from the page.<br>
-                </p>
-              </div>
-
-              <div id="signature">
-                <img src="{$site_URL}layouts/v7/modules/HoldingCertificate/nico_sig.png"
-                  alt="Signature">
-                <p style="color:black;">Nicolas Mathier<br>CEO</p>
-              </div>
-            </div>
-          </td>
-        </tr>
-      </table>
-    </div>
+          </div>
+        </td>
+      </tr>
+    </table>
 
     <!-- FOOTER pinned to page, does not affect centering -->
     <div class="footer">

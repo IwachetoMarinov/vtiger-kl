@@ -7789,3 +7789,10 @@ body .fc {
   position: relative;
   display: inline-flex;
 }
+
+/* Hide Mail Manager and Documents module */
+[data-default-url="index.php?module=Documents&view=List"],
+[data-default-url="index.php?module=MailManager&view=List"] {
+    display: none !important;
+}
+

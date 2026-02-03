@@ -1,4 +1,4 @@
-<?php  
+<?php
 
 class Contacts_SaleOrderView_View extends Vtiger_Index_View
 {
@@ -17,13 +17,9 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
     {
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
-        $companyId = $recordModel->get('company_id');
         $client_type = $recordModel->get('cf_927');
 
-        $companyRecord = null;
-
-        if (!empty($companyId))
-            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
+        $companyRecord = Contacts_DefaultCompany_View::process();
 
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);

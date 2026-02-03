@@ -23,12 +23,17 @@ class Contacts_ViewCR_View extends Vtiger_Index_View
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
         $tableName = $request->get('tableName');
-        $companyId = $recordModel->get('company_id');
 
-        $companyRecord = null;
+        // $companyId = $recordModel->get('company_id');
+        // $companyRecord = null;
+        // if (!empty($companyId))
+        //     $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
 
-        if (!empty($companyId))
-            $companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
+        // if (empty($companyRecord)) {
+        //     $companyRecord = Contacts_DefaultCompany_View::process();
+        // }
+
+        $companyRecord = Contacts_DefaultCompany_View::process();
 
         if ($tableName !== null && $tableName !== '') {
             $activity = new dbo_db\ActivitySummary();

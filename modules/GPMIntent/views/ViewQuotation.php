@@ -26,12 +26,7 @@ class GPMIntent_ViewQuotation_View extends GPMIntent_DocView_View
 		$recordModel = (empty($intent->get('contact_id'))) ? Vtiger_Record_Model::getInstanceById($intent->get('lead_id'), 'Leads') : Vtiger_Record_Model::getInstanceById($intent->get('contact_id'), 'Contacts');
 		$recordModelModule = (empty($intent->get('contact_id'))) ? 'Leads' : 'Contacts';
 
-		$companyId = $recordModel->get('company_id');
-
-		$companyRecord = null;
-
-		if (!empty($companyId))
-			$companyRecord = Vtiger_Record_Model::getInstanceById($companyId, 'GPMCompany');
+		$companyRecord = Contacts_DefaultCompany_View::process();
 
 		if (!Users_Privileges_Model::isPermitted($recordModelModule, 'DetailView', $recordModel->getId())) {
 			throw new AppException('You are not permitted to view the Lead or the Contact information associated with this Intent!');
