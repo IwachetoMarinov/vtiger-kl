@@ -65,8 +65,6 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
     {
         global $root_directory;
 
-        require_once $root_directory . 'vendor/autoload.php';
-
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
 
@@ -77,27 +75,37 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
 
         $fileName = $clientID . '-' . $template_name . '-' . $year . '-' . $docNoLastPart . '-' . $template_name;
 
-        // Writable temp dir
+        // ---- Writable temp dir ----
         $tmpDir = rtrim($root_directory, '/') . '/storage/';
-        if (!is_dir($tmpDir)) @mkdir($tmpDir, 0775, true);
-        if (!is_writable($tmpDir)) die('Temp dir not writable: ' . $tmpDir);
+        if (!is_dir($tmpDir)) {
+            @mkdir($tmpDir, 0775, true);
+        }
+        if (!is_writable($tmpDir)) {
+            // fallback to system temp
+            $tmpDir = rtrim(sys_get_temp_dir(), '/') . '/vtiger_pdf/';
+            if (!is_dir($tmpDir)) {
+                @mkdir($tmpDir, 0775, true);
+            }
+        }
+        if (!is_dir($tmpDir) || !is_writable($tmpDir)) {
+            die('Temp directory not writable: ' . $tmpDir);
+        }
 
-        $htmlPath = $tmpDir . $fileName . '.html';
-        $basePdfPath = $tmpDir . $fileName . '_base.pdf';
+        $htmlPath     = $tmpDir . $fileName . '.html';
+        $basePdfPath  = $tmpDir . $fileName . '_base.pdf';
         $finalPdfPath = $tmpDir . $fileName . '.pdf';
 
-        // 1) HTML -> PDF (keeps your exact template)
-        file_put_contents($htmlPath, $html);
+        // ---- (1) Render your HTML template to PDF (pretty layout) ----
+        if (@file_put_contents($htmlPath, $html) === false) {
+            die('Cannot write HTML file: ' . $htmlPath);
+        }
 
-        // $cmd = "wkhtmltopdf --enable-local-file-access -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking "
-        //     . escapeshellarg($htmlPath) . " " . escapeshellarg($basePdfPath) . " 2>&1";
-
+        // LOCK page size/zoom so coordinates are stable
         $cmd = "wkhtmltopdf --enable-local-file-access "
             . "--page-size A4 --dpi 96 --zoom 1 "
-            . "--margin-top 10mm --margin-right 10mm --margin-bottom 10mm --margin-left 10mm "
+            . "--margin-top 0 --margin-right 0 --margin-bottom 0 --margin-left 0 "
             . "--disable-smart-shrinking "
             . escapeshellarg($htmlPath) . " " . escapeshellarg($basePdfPath) . " 2>&1";
-
 
         $out = [];
         $code = 0;
@@ -109,70 +117,91 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             die("wkhtmltopdf failed (exit=$code):\n" . implode("\n", $out));
         }
 
-        // 2) Overlay fillable fields onto the generated PDF
-        $pdf = new \setasign\Fpdi\Tcpdf\Fpdi('P', 'mm', 'A4');
+        // ---- (2) Overlay REAL editable fields (AcroForm) on top of the PDF ----
+        // FPDI + TCPDF
+        $pdf = new \setasign\Fpdi\Tcpdf\Fpdi();
         $pdf->SetAutoPageBreak(false);
         $pdf->SetMargins(0, 0, 0);
-        $pdf->AddPage();
 
         $pageCount = $pdf->setSourceFile($basePdfPath);
-        $tplId = $pdf->importPage(1);
-        $pdf->useTemplate($tplId, 0, 0, 210, 297);
-
-        // IMPORTANT: these coordinates MUST match your template.
-        // I’m giving you working defaults close to your screenshot.
-        // You will adjust X/Y once and it's done forever.
-
-        // City/Location field (approx)
-        $pdf->SetXY(60, 92);
-        $pdf->TextField('city_location', 120, 7, ['border' => 0]);
-
-        // Table fields - 10 rows
-        $startY = 118;   // top of first row inputs
-        $rowH   = 7.5;   // distance between rows
-        $xQty   = 22;
-        $wQty   = 18;
-
-        $xDesc  = 42;
-        $wDesc  = 95;
-
-        $xSerial = 138;
-        $wSerial = 42;
-
-        $xFine  = 181;
-        $wFine  = 22;
-
-        for ($i = 1; $i <= 10; $i++) {
-            $y = $startY + ($i - 1) * $rowH;
-
-            $pdf->SetXY($xQty, $y);
-            $pdf->TextField("qty_$i", $wQty, 6, ['border' => 0]);
-
-            $pdf->SetXY($xDesc, $y);
-            $pdf->TextField("desc_$i", $wDesc, 6, ['border' => 0]);
-
-            $pdf->SetXY($xSerial, $y);
-            $pdf->TextField("serial_$i", $wSerial, 6, ['border' => 0]);
-
-            $pdf->SetXY($xFine, $y);
-            $pdf->TextField("fine_$i", $wFine, 6, ['border' => 0]);
+        if ($pageCount < 1) {
+            @unlink($basePdfPath);
+            die('Base PDF has no pages: ' . $basePdfPath);
         }
 
-        // Collection date field (approx)
-        $pdf->SetXY(110, 205);
-        $pdf->TextField('collection_date', 70, 7, ['border' => 0]);
+        $tplId = $pdf->importPage(1);
+        $size  = $pdf->getTemplateSize($tplId);
 
-        // Save final
+        // Create page with EXACT imported size (prevents scaling mismatch)
+        $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+        $pdf->useTemplate($tplId, 0, 0, $size['width'], $size['height']);
+
+        // ---- Field tuning (adjust these numbers once) ----
+        // Insets make fields look "inside" cells
+        $insetX = 1.0;
+        $insetY = 0.8;
+        $fieldH = 5.2;
+
+        // City/Location field (X/Y tuned for your template)
+        $pdf->SetXY(60, 92);
+        $pdf->TextField('city_location', 120, 6, ['border' => 0]);
+
+        // Reference field (optional)
+        $pdf->SetXY(70, 113);
+        $pdf->TextField('reference', 120, 6, ['border' => 0]);
+
+        // Table fields (10 rows) - tuned for your screenshot
+        $startY  = 130;  // first row Y
+        $rowStep = 7.5;  // distance between rows
+
+        $xQty    = 22;
+        $wQty    = 18;
+        $xDesc   = 42;
+        $wDesc   = 95;
+        $xSerial = 138;
+        $wSerial = 42;
+        $xFine   = 181;
+        $wFine   = 22;
+
+        for ($i = 1; $i <= 10; $i++) {
+            $y = $startY + ($i - 1) * $rowStep;
+
+            $pdf->SetXY($xQty + $insetX, $y + $insetY);
+            $pdf->TextField("qty_$i", $wQty - 2 * $insetX, $fieldH, ['border' => 0]);
+
+            $pdf->SetXY($xDesc + $insetX, $y + $insetY);
+            $pdf->TextField("desc_$i", $wDesc - 2 * $insetX, $fieldH, ['border' => 0]);
+
+            $pdf->SetXY($xSerial + $insetX, $y + $insetY);
+            $pdf->TextField("serial_$i", $wSerial - 2 * $insetX, $fieldH, ['border' => 0]);
+
+            $pdf->SetXY($xFine + $insetX, $y + $insetY);
+            $pdf->TextField("fine_$i", $wFine - 2 * $insetX, $fieldH, ['border' => 0]);
+        }
+
+        // Collection date
+        $pdf->SetXY(110, 250);
+        $pdf->TextField('collection_date', 70, 6, ['border' => 0]);
+
+        // Save final PDF
         $pdf->Output($finalPdfPath, 'F');
 
         @unlink($basePdfPath);
 
-        // Download
+        if (!file_exists($finalPdfPath)) {
+            die('Final PDF was not created: ' . $finalPdfPath);
+        }
+
+        // ---- Download ----
         header("Content-Type: application/pdf");
         header("Cache-Control: private");
         header("Content-Disposition: attachment; filename=\"$fileName.pdf\"");
-        if (ob_get_length()) ob_clean();
+
+        if (ob_get_length()) {
+            ob_clean();
+        }
         flush();
+
         readfile($finalPdfPath);
         @unlink($finalPdfPath);
         exit;
