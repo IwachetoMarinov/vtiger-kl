@@ -60,66 +60,127 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
 
     public function postProcess(Vtiger_Request $request) {}
 
+
     function downloadPDF($html, Vtiger_Request $request)
     {
-        global $root_directory;
-
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
 
         $year = date('Y');
-
-        // Get last part of docNo after last '/'
         $docNoParts = explode('/', (string)$request->get('docNo'));
         $docNoLastPart = end($docNoParts);
+        if (!$docNoLastPart) {
+            $docNoLastPart = 'NO-DOCNO';
+        }
 
         $template_name = "CR";
         $fileName = $clientID . '-' . $template_name . '-' . $year . '-' . $docNoLastPart . '-' . $template_name;
 
-        // IMPORTANT: write temp files into a writable folder (vTiger storage)
-        $tmpDir = $root_directory . 'storage/'; // or 'cache/'
-        if (!is_dir($tmpDir)) {
-            @mkdir($tmpDir, 0775, true);
+        // Create PDF
+        $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+        $pdf->SetCreator('vTiger');
+        $pdf->SetAuthor('Global Precious Metals CRM');
+        $pdf->SetTitle('Collection Request');
+
+        // margins similar to your wkhtmltopdf
+        $pdf->SetMargins(10, 10, 10);
+        $pdf->SetAutoPageBreak(true, 10);
+        $pdf->AddPage();
+
+        // Title
+        $pdf->SetFont('helvetica', 'B', 11);
+        $pdf->Cell(0, 6, 'COLLECTION REQUEST', 0, 1, 'R');
+        $pdf->Ln(3);
+
+        // Header table (REFERENCE / CUSTOMER / ORDER)
+        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->SetFillColor(200, 180, 120); // gold-ish like your template
+        $w1 = 60;
+        $w2 = 60;
+        $w3 = 60;
+        $h = 7;
+
+        $pdf->Cell($w1, $h, 'REFERENCE', 1, 0, 'C', true);
+        $pdf->Cell($w2, $h, 'CUSTOMER',  1, 0, 'C', true);
+        $pdf->Cell($w3, $h, 'ORDER',     1, 1, 'C', true);
+
+        $pdf->SetFont('helvetica', '', 9);
+        $pdf->Cell($w1, 8, '',     1, 0, 'C', false);
+        $pdf->Cell($w2, 8, $clientID ?: '', 1, 0, 'C', false);
+        $pdf->Cell($w3, 8, 'COLLECTION',    1, 1, 'C', false);
+        $pdf->Ln(4);
+
+        // Intro + City/Location field
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->MultiCell(0, 6, 'I/We hereby wish to collect the Stored Metal detailed below at the following location:', 0, 'L', false, 1);
+        $pdf->Ln(1);
+
+        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->Cell(35, 6, 'CITY/LOCATION', 0, 0);
+        $pdf->SetFont('helvetica', '', 9);
+        $pdf->TextField('city_location', 120, 6, ['border' => 1, 'value' => '']);
+        $pdf->Ln(10);
+
+        // Items table header
+        $pdf->SetFont('helvetica', 'B', 9);
+        $pdf->SetFillColor(200, 180, 120);
+        $colQty = 18;
+        $colDesc = 105;
+        $colSerial = 40;
+        $colFine = 27;
+        $rowH = 8;
+
+        $pdf->Cell($colQty,   $rowH, 'QTY',           1, 0, 'C', true);
+        $pdf->Cell($colDesc,  $rowH, 'DESCRIPTION',   1, 0, 'C', true);
+        $pdf->Cell($colSerial, $rowH, 'SERIAL NUMBERS', 1, 0, 'C', true);
+        $pdf->Cell($colFine,  $rowH, 'FINE OZ',       1, 1, 'C', true);
+
+        // 10 rows of REAL editable fields (AcroForm)
+        $pdf->SetFont('helvetica', '', 9);
+
+        for ($i = 1; $i <= 10; $i++) {
+            $x = $pdf->GetX();
+            $y = $pdf->GetY();
+
+            // draw row cells
+            $pdf->Cell($colQty,   $rowH, '', 1, 0);
+            $pdf->Cell($colDesc,  $rowH, '', 1, 0);
+            $pdf->Cell($colSerial, $rowH, '', 1, 0);
+            $pdf->Cell($colFine,  $rowH, '', 1, 1);
+
+            // add form fields on top (border=0 because the cell already has border)
+            $insetX = 1.2;
+            $insetY = 1.2;
+            $pdf->SetXY($x + $insetX, $y + $insetY);
+            $pdf->TextField("qty_$i", $colQty - 2 * $insetX, $rowH - 2 * $insetY, ['border' => 0]);
+
+            $pdf->SetXY($x + $colQty + $insetX, $y + $insetY);
+            $pdf->TextField("desc_$i", $colDesc - 2 * $insetX, $rowH - 2 * $insetY, ['border' => 0]);
+
+            $pdf->SetXY($x + $colQty + $colDesc + $insetX, $y + $insetY);
+            $pdf->TextField("serial_$i", $colSerial - 2 * $insetX, $rowH - 2 * $insetY, ['border' => 0]);
+
+            $pdf->SetXY($x + $colQty + $colDesc + $colSerial + $insetX, $y + $insetY);
+            $pdf->TextField("fine_$i", $colFine - 2 * $insetX, $rowH - 2 * $insetY, ['border' => 0]);
         }
 
-        $htmlPath = $tmpDir . $fileName . '.html';
-        $pdfPath  = $tmpDir . $fileName . '.pdf';
+        $pdf->Ln(5);
 
-        // Write HTML
-        if (file_put_contents($htmlPath, $html) === false) {
-            die('Cannot write HTML file: ' . $htmlPath);
+        // Collection date field
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->Cell(85, 6, 'I/We would like the Collection to take place on:', 0, 0);
+        $pdf->TextField('collection_date', 70, 6, ['border' => 1, 'value' => '']);
+        $pdf->Ln(10);
+
+        // IMPORTANT: output directly (no saving, no readfile)
+        while (ob_get_level()) {
+            ob_end_clean();
         }
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $fileName . '.pdf"');
+        header('Cache-Control: private');
 
-        // Generate PDF
-        $cmd = "wkhtmltopdf --enable-local-file-access -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking "
-            . escapeshellarg($htmlPath) . " " . escapeshellarg($pdfPath) . " 2>&1";
-
-        $output = [];
-        $exitCode = 0;
-        exec($cmd, $output, $exitCode);
-
-        // Remove temp HTML
-        @unlink($htmlPath);
-
-        if ($exitCode !== 0 || !file_exists($pdfPath)) {
-            die("wkhtmltopdf failed (exit=$exitCode):\n" . implode("\n", $output));
-        }
-
-        // Download
-        header("Content-Type: application/pdf");
-        header("Cache-Control: private");
-        header("Content-Disposition: attachment; filename=\"$fileName.pdf\"");
-        header("Content-Description: Global Precious Metals CRM Data");
-
-        if (ob_get_length()) {
-            ob_clean();
-        }
-        flush();
-
-        readfile($pdfPath);
-
-        // Cleanup
-        @unlink($pdfPath);
+        $pdf->Output($fileName . '.pdf', 'D');
         exit;
     }
 
