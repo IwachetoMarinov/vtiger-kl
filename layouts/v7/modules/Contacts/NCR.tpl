@@ -287,7 +287,7 @@
 
                                 {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
 
-                                    {foreach item=item from=$targetRows}
+                                    {foreach item=item from=$targetRows name=rowloop}
 
                                         <tr>
                                             <td>
