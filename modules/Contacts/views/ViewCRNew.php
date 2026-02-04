@@ -81,7 +81,6 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             @mkdir($tmpDir, 0775, true);
         }
         if (!is_writable($tmpDir)) {
-            // fallback to system temp
             $tmpDir = rtrim(sys_get_temp_dir(), '/') . '/vtiger_pdf/';
             if (!is_dir($tmpDir)) {
                 @mkdir($tmpDir, 0775, true);
@@ -95,12 +94,12 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $basePdfPath  = $tmpDir . $fileName . '_base.pdf';
         $finalPdfPath = $tmpDir . $fileName . '.pdf';
 
-        // ---- (1) Render your HTML template to PDF (pretty layout) ----
+        // (1) HTML -> PDF (keeps your exact template)
         if (@file_put_contents($htmlPath, $html) === false) {
             die('Cannot write HTML file: ' . $htmlPath);
         }
 
-        // LOCK page size/zoom so coordinates are stable
+        // IMPORTANT: lock output so it’s stable
         $cmd = "wkhtmltopdf --enable-local-file-access "
             . "--page-size A4 --dpi 96 --zoom 1 "
             . "--margin-top 0 --margin-right 0 --margin-bottom 0 --margin-left 0 "
@@ -110,98 +109,104 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $out = [];
         $code = 0;
         exec($cmd, $out, $code);
-
         @unlink($htmlPath);
 
         if ($code !== 0 || !file_exists($basePdfPath)) {
             die("wkhtmltopdf failed (exit=$code):\n" . implode("\n", $out));
         }
 
-        // ---- (2) Overlay REAL editable fields (AcroForm) on top of the PDF ----
-        // FPDI + TCPDF
+        // (2) Import the rendered PDF and overlay form fields
         $pdf = new \setasign\Fpdi\Tcpdf\Fpdi();
         $pdf->SetAutoPageBreak(false);
         $pdf->SetMargins(0, 0, 0);
 
         $pageCount = $pdf->setSourceFile($basePdfPath);
-        if ($pageCount < 1) {
-            @unlink($basePdfPath);
-            die('Base PDF has no pages: ' . $basePdfPath);
-        }
-
         $tplId = $pdf->importPage(1);
         $size  = $pdf->getTemplateSize($tplId);
 
-        // Create page with EXACT imported size (prevents scaling mismatch)
+        // Create page EXACTLY like template size (prevents scaling mismatch)
         $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
         $pdf->useTemplate($tplId, 0, 0, $size['width'], $size['height']);
 
-        // ---- Field tuning (adjust these numbers once) ----
-        // Insets make fields look "inside" cells
-        $insetX = 1.0;
-        $insetY = 0.8;
-        $fieldH = 5.2;
+        // DEBUG GRID MODE (call with &debug=1)
+        $debug = (string)$request->get('debug') === '1';
+        if ($debug) {
+            $pdf->SetFont('helvetica', '', 6);
 
-        // City/Location field (X/Y tuned for your template)
-        $pdf->SetXY(60, 92);
-        $pdf->TextField('city_location', 120, 6, ['border' => 0]);
+            // vertical lines every 10mm
+            for ($x = 0; $x <= 210; $x += 10) {
+                $pdf->Line($x, 0, $x, 297, ['width' => 0.1, 'color' => [180, 180, 180]]);
+                $pdf->Text($x + 0.5, 1, (string)$x);
+            }
+            // horizontal lines every 10mm
+            for ($y = 0; $y <= 297; $y += 10) {
+                $pdf->Line(0, $y, 210, $y, ['width' => 0.1, 'color' => [180, 180, 180]]);
+                $pdf->Text(1, $y + 0.5, (string)$y);
+            }
+        }
 
-        // Reference field (optional)
-        $pdf->SetXY(70, 113);
-        $pdf->TextField('reference', 120, 6, ['border' => 0]);
+        // ---- Field appearance: FIX "??????" issue ----
+        $fieldStyle = [
+            'border'   => 0,
+            'font'     => 'helvetica',   // important
+            'fontsize' => 9,             // important
+            'textcolor' => [0, 0, 0],
+        ];
 
-        // Table fields (10 rows) - tuned for your screenshot
-        $startY  = 130;  // first row Y
-        $rowStep = 7.5;  // distance between rows
+        // ---- COORDINATES (you will adjust ONCE using debug grid) ----
+        // IMPORTANT: remove fields you don’t want (your screenshot shows extra long fields)
+        // I’m keeping ONLY the table fields here (1..10) + collection_date.
+        // After alignment is perfect, we can add city/reference if you want.
 
-        $xQty    = 22;
-        $wQty    = 18;
-        $xDesc   = 42;
-        $wDesc   = 95;
-        $xSerial = 138;
-        $wSerial = 42;
-        $xFine   = 181;
-        $wFine   = 22;
+        $insetX = 0.8;
+        $insetY = 0.9;
+        $fieldH = 5.0;
+
+        // TABLE: set these using debug grid so row 1 sits exactly in the first blank row
+        $startY  = 137.0;   // <-- adjust
+        $rowStep = 7.6;     // <-- adjust
+
+        // Columns: adjust these to match your table
+        $xQty    = 20.5;
+        $wQty    = 16.5;
+        $xDesc   = 37.5;
+        $wDesc   = 92.0;
+        $xSerial = 130.5;
+        $wSerial = 40.0;
+        $xFine   = 171.5;
+        $wFine   = 22.0;
 
         for ($i = 1; $i <= 10; $i++) {
             $y = $startY + ($i - 1) * $rowStep;
 
             $pdf->SetXY($xQty + $insetX, $y + $insetY);
-            $pdf->TextField("qty_$i", $wQty - 2 * $insetX, $fieldH, ['border' => 0]);
+            $pdf->TextField("qty_$i", $wQty - 2 * $insetX, $fieldH, $fieldStyle);
 
             $pdf->SetXY($xDesc + $insetX, $y + $insetY);
-            $pdf->TextField("desc_$i", $wDesc - 2 * $insetX, $fieldH, ['border' => 0]);
+            $pdf->TextField("desc_$i", $wDesc - 2 * $insetX, $fieldH, $fieldStyle);
 
             $pdf->SetXY($xSerial + $insetX, $y + $insetY);
-            $pdf->TextField("serial_$i", $wSerial - 2 * $insetX, $fieldH, ['border' => 0]);
+            $pdf->TextField("serial_$i", $wSerial - 2 * $insetX, $fieldH, $fieldStyle);
 
             $pdf->SetXY($xFine + $insetX, $y + $insetY);
-            $pdf->TextField("fine_$i", $wFine - 2 * $insetX, $fieldH, ['border' => 0]);
+            $pdf->TextField("fine_$i", $wFine - 2 * $insetX, $fieldH, $fieldStyle);
         }
 
-        // Collection date
-        $pdf->SetXY(110, 250);
-        $pdf->TextField('collection_date', 70, 6, ['border' => 0]);
+        // Collection date (adjust with debug grid)
+        $pdf->SetXY(112.0, 254.0);  // <-- adjust
+        $pdf->TextField('collection_date', 70, 6, $fieldStyle);
 
-        // Save final PDF
+        // Save final
         $pdf->Output($finalPdfPath, 'F');
-
         @unlink($basePdfPath);
 
-        if (!file_exists($finalPdfPath)) {
-            die('Final PDF was not created: ' . $finalPdfPath);
-        }
-
-        // ---- Download ----
         header("Content-Type: application/pdf");
         header("Cache-Control: private");
         header("Content-Disposition: attachment; filename=\"$fileName.pdf\"");
-
         if (ob_get_length()) {
             ob_clean();
         }
         flush();
-
         readfile($finalPdfPath);
         @unlink($finalPdfPath);
         exit;
