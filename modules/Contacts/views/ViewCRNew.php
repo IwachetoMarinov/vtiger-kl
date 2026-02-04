@@ -63,124 +63,111 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
 
     function downloadPDF($html, Vtiger_Request $request)
     {
+        global $root_directory;
+
+        require_once $root_directory . 'vendor/autoload.php';
+
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
 
         $year = date('Y');
         $docNoParts = explode('/', (string)$request->get('docNo'));
-        $docNoLastPart = end($docNoParts);
-        if (!$docNoLastPart) {
-            $docNoLastPart = 'NO-DOCNO';
-        }
-
+        $docNoLastPart = end($docNoParts) ?: 'NO-DOCNO';
         $template_name = "CR";
+
         $fileName = $clientID . '-' . $template_name . '-' . $year . '-' . $docNoLastPart . '-' . $template_name;
 
-        // Create PDF
-        $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
-        $pdf->SetCreator('vTiger');
-        $pdf->SetAuthor('Global Precious Metals CRM');
-        $pdf->SetTitle('Collection Request');
+        // Writable temp dir
+        $tmpDir = rtrim($root_directory, '/') . '/storage/';
+        if (!is_dir($tmpDir)) @mkdir($tmpDir, 0775, true);
+        if (!is_writable($tmpDir)) die('Temp dir not writable: ' . $tmpDir);
 
-        // margins similar to your wkhtmltopdf
-        $pdf->SetMargins(10, 10, 10);
-        $pdf->SetAutoPageBreak(true, 10);
+        $htmlPath = $tmpDir . $fileName . '.html';
+        $basePdfPath = $tmpDir . $fileName . '_base.pdf';
+        $finalPdfPath = $tmpDir . $fileName . '.pdf';
+
+        // 1) HTML -> PDF (keeps your exact template)
+        file_put_contents($htmlPath, $html);
+
+        $cmd = "wkhtmltopdf --enable-local-file-access -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking "
+            . escapeshellarg($htmlPath) . " " . escapeshellarg($basePdfPath) . " 2>&1";
+
+        $out = [];
+        $code = 0;
+        exec($cmd, $out, $code);
+
+        @unlink($htmlPath);
+
+        if ($code !== 0 || !file_exists($basePdfPath)) {
+            die("wkhtmltopdf failed (exit=$code):\n" . implode("\n", $out));
+        }
+
+        // 2) Overlay fillable fields onto the generated PDF
+        $pdf = new \setasign\Fpdi\Tcpdf\Fpdi('P', 'mm', 'A4');
+        $pdf->SetAutoPageBreak(false);
+        $pdf->SetMargins(0, 0, 0);
         $pdf->AddPage();
 
-        // Title
-        $pdf->SetFont('helvetica', 'B', 11);
-        $pdf->Cell(0, 6, 'COLLECTION REQUEST', 0, 1, 'R');
-        $pdf->Ln(3);
+        $pageCount = $pdf->setSourceFile($basePdfPath);
+        $tplId = $pdf->importPage(1);
+        $pdf->useTemplate($tplId, 0, 0, 210, 297);
 
-        // Header table (REFERENCE / CUSTOMER / ORDER)
-        $pdf->SetFont('helvetica', 'B', 9);
-        $pdf->SetFillColor(200, 180, 120); // gold-ish like your template
-        $w1 = 60;
-        $w2 = 60;
-        $w3 = 60;
-        $h = 7;
+        // IMPORTANT: these coordinates MUST match your template.
+        // I’m giving you working defaults close to your screenshot.
+        // You will adjust X/Y once and it's done forever.
 
-        $pdf->Cell($w1, $h, 'REFERENCE', 1, 0, 'C', true);
-        $pdf->Cell($w2, $h, 'CUSTOMER',  1, 0, 'C', true);
-        $pdf->Cell($w3, $h, 'ORDER',     1, 1, 'C', true);
+        // City/Location field (approx)
+        $pdf->SetXY(60, 92);
+        $pdf->TextField('city_location', 120, 7, ['border' => 0]);
 
-        $pdf->SetFont('helvetica', '', 9);
-        $pdf->Cell($w1, 8, '',     1, 0, 'C', false);
-        $pdf->Cell($w2, 8, $clientID ?: '', 1, 0, 'C', false);
-        $pdf->Cell($w3, 8, 'COLLECTION',    1, 1, 'C', false);
-        $pdf->Ln(4);
+        // Table fields - 10 rows
+        $startY = 118;   // top of first row inputs
+        $rowH   = 7.5;   // distance between rows
+        $xQty   = 22;
+        $wQty   = 18;
 
-        // Intro + City/Location field
-        $pdf->SetFont('helvetica', '', 10);
-        $pdf->MultiCell(0, 6, 'I/We hereby wish to collect the Stored Metal detailed below at the following location:', 0, 'L', false, 1);
-        $pdf->Ln(1);
+        $xDesc  = 42;
+        $wDesc  = 95;
 
-        $pdf->SetFont('helvetica', 'B', 9);
-        $pdf->Cell(35, 6, 'CITY/LOCATION', 0, 0);
-        $pdf->SetFont('helvetica', '', 9);
-        $pdf->TextField('city_location', 120, 6, ['border' => 1, 'value' => '']);
-        $pdf->Ln(10);
+        $xSerial = 138;
+        $wSerial = 42;
 
-        // Items table header
-        $pdf->SetFont('helvetica', 'B', 9);
-        $pdf->SetFillColor(200, 180, 120);
-        $colQty = 18;
-        $colDesc = 105;
-        $colSerial = 40;
-        $colFine = 27;
-        $rowH = 8;
-
-        $pdf->Cell($colQty,   $rowH, 'QTY',           1, 0, 'C', true);
-        $pdf->Cell($colDesc,  $rowH, 'DESCRIPTION',   1, 0, 'C', true);
-        $pdf->Cell($colSerial, $rowH, 'SERIAL NUMBERS', 1, 0, 'C', true);
-        $pdf->Cell($colFine,  $rowH, 'FINE OZ',       1, 1, 'C', true);
-
-        // 10 rows of REAL editable fields (AcroForm)
-        $pdf->SetFont('helvetica', '', 9);
+        $xFine  = 181;
+        $wFine  = 22;
 
         for ($i = 1; $i <= 10; $i++) {
-            $x = $pdf->GetX();
-            $y = $pdf->GetY();
+            $y = $startY + ($i - 1) * $rowH;
 
-            // draw row cells
-            $pdf->Cell($colQty,   $rowH, '', 1, 0);
-            $pdf->Cell($colDesc,  $rowH, '', 1, 0);
-            $pdf->Cell($colSerial, $rowH, '', 1, 0);
-            $pdf->Cell($colFine,  $rowH, '', 1, 1);
+            $pdf->SetXY($xQty, $y);
+            $pdf->TextField("qty_$i", $wQty, 6, ['border' => 0]);
 
-            // add form fields on top (border=0 because the cell already has border)
-            $insetX = 1.2;
-            $insetY = 1.2;
-            $pdf->SetXY($x + $insetX, $y + $insetY);
-            $pdf->TextField("qty_$i", $colQty - 2 * $insetX, $rowH - 2 * $insetY, ['border' => 0]);
+            $pdf->SetXY($xDesc, $y);
+            $pdf->TextField("desc_$i", $wDesc, 6, ['border' => 0]);
 
-            $pdf->SetXY($x + $colQty + $insetX, $y + $insetY);
-            $pdf->TextField("desc_$i", $colDesc - 2 * $insetX, $rowH - 2 * $insetY, ['border' => 0]);
+            $pdf->SetXY($xSerial, $y);
+            $pdf->TextField("serial_$i", $wSerial, 6, ['border' => 0]);
 
-            $pdf->SetXY($x + $colQty + $colDesc + $insetX, $y + $insetY);
-            $pdf->TextField("serial_$i", $colSerial - 2 * $insetX, $rowH - 2 * $insetY, ['border' => 0]);
-
-            $pdf->SetXY($x + $colQty + $colDesc + $colSerial + $insetX, $y + $insetY);
-            $pdf->TextField("fine_$i", $colFine - 2 * $insetX, $rowH - 2 * $insetY, ['border' => 0]);
+            $pdf->SetXY($xFine, $y);
+            $pdf->TextField("fine_$i", $wFine, 6, ['border' => 0]);
         }
 
-        $pdf->Ln(5);
+        // Collection date field (approx)
+        $pdf->SetXY(110, 205);
+        $pdf->TextField('collection_date', 70, 7, ['border' => 0]);
 
-        // Collection date field
-        $pdf->SetFont('helvetica', '', 10);
-        $pdf->Cell(85, 6, 'I/We would like the Collection to take place on:', 0, 0);
-        $pdf->TextField('collection_date', 70, 6, ['border' => 1, 'value' => '']);
-        $pdf->Ln(10);
+        // Save final
+        $pdf->Output($finalPdfPath, 'F');
 
-        // IMPORTANT: output directly (no saving, no readfile)
-        while (ob_get_level()) {
-            ob_end_clean();
-        }
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="' . $fileName . '.pdf"');
-        header('Cache-Control: private');
+        @unlink($basePdfPath);
 
-        $pdf->Output($fileName . '.pdf', 'D');
+        // Download
+        header("Content-Type: application/pdf");
+        header("Cache-Control: private");
+        header("Content-Disposition: attachment; filename=\"$fileName.pdf\"");
+        if (ob_get_length()) ob_clean();
+        flush();
+        readfile($finalPdfPath);
+        @unlink($finalPdfPath);
         exit;
     }
 
