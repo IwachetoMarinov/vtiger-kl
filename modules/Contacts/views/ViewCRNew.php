@@ -163,7 +163,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $fieldH = 5.0;
 
         // TABLE: set these using debug grid so row 1 sits exactly in the first blank row
-        $startY  = 108.0;   // <-- adjust
+        $startY  = 111.0;   // <-- adjust
         $rowStep = 7.45;     // <-- adjust
         // Columns: adjust these to match your table
         $xQty    = 20.5;
