@@ -89,8 +89,15 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         // 1) HTML -> PDF (keeps your exact template)
         file_put_contents($htmlPath, $html);
 
-        $cmd = "wkhtmltopdf --enable-local-file-access -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking "
+        // $cmd = "wkhtmltopdf --enable-local-file-access -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking "
+        //     . escapeshellarg($htmlPath) . " " . escapeshellarg($basePdfPath) . " 2>&1";
+
+        $cmd = "wkhtmltopdf --enable-local-file-access "
+            . "--page-size A4 --dpi 96 --zoom 1 "
+            . "--margin-top 10mm --margin-right 10mm --margin-bottom 10mm --margin-left 10mm "
+            . "--disable-smart-shrinking "
             . escapeshellarg($htmlPath) . " " . escapeshellarg($basePdfPath) . " 2>&1";
+
 
         $out = [];
         $code = 0;
