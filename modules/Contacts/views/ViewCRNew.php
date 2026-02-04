@@ -60,8 +60,6 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
 
     public function postProcess(Vtiger_Request $request) {}
 
-
-
     function downloadPDF($html, Vtiger_Request $request)
     {
         global $root_directory;
@@ -70,74 +68,60 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $clientID = $recordModel->get('cf_898');
 
         $year = date('Y');
-        $docNoParts = explode('/', $request->get('docNo'));
+
+        // Get last part of docNo after last '/'
+        $docNoParts = explode('/', (string)$request->get('docNo'));
         $docNoLastPart = end($docNoParts);
+
         $template_name = "CR";
+        $fileName = $clientID . '-' . $template_name . '-' . $year . '-' . $docNoLastPart . '-' . $template_name;
 
-        $fileName = $clientID . '-' . $template_name . '-' . $year . '-' . $docNoLastPart;
-
-        // ---- TCPDF ----
-        $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
-        $pdf->SetCreator('vTiger');
-        $pdf->SetMargins(8, 8, 8);
-        $pdf->SetAutoPageBreak(true, 8);
-        $pdf->AddPage();
-
-        $pdf->SetFont('helvetica', '', 9);
-
-        // Title
-        $pdf->Cell(0, 6, 'COLLECTION REQUEST', 0, 1, 'R');
-        $pdf->Ln(4);
-
-        // === TABLE HEADER ===
-        $pdf->SetFont('helvetica', 'B', 9);
-        $pdf->Cell(15, 8, 'QTY', 1);
-        $pdf->Cell(110, 8, 'DESCRIPTION', 1);
-        $pdf->Cell(35, 8, 'SERIAL NUMBERS', 1);
-        $pdf->Cell(25, 8, 'FINE OZ', 1);
-        $pdf->Ln();
-
-        $pdf->SetFont('helvetica', '', 9);
-
-        // === 10 EDITABLE ROWS ===
-        for ($i = 1; $i <= 10; $i++) {
-            $y = $pdf->GetY();
-            $x = $pdf->GetX();
-
-            $pdf->Cell(15, 8, '', 1);
-            $pdf->Cell(110, 8, '', 1);
-            $pdf->Cell(35, 8, '', 1);
-            $pdf->Cell(25, 8, '', 1);
-            $pdf->Ln();
-
-            // Inputs inside cells
-            $pdf->SetXY($x + 1, $y + 1);
-            $pdf->TextField("qty_$i", 13, 6, ['border' => 0]);
-
-            $pdf->SetXY($x + 16, $y + 1);
-            $pdf->TextField("desc_$i", 108, 6, ['border' => 0]);
-
-            $pdf->SetXY($x + 126, $y + 1);
-            $pdf->TextField("serial_$i", 33, 6, ['border' => 0]);
-
-            $pdf->SetXY($x + 161, $y + 1);
-            $pdf->TextField("fine_$i", 23, 6, ['border' => 0]);
+        // IMPORTANT: write temp files into a writable folder (vTiger storage)
+        $tmpDir = $root_directory . 'storage/'; // or 'cache/'
+        if (!is_dir($tmpDir)) {
+            @mkdir($tmpDir, 0775, true);
         }
 
-        // Output
-        $pdfPath = $root_directory . $fileName . '.pdf';
-        $pdf->Output($pdfPath, 'F');
+        $htmlPath = $tmpDir . $fileName . '.html';
+        $pdfPath  = $tmpDir . $fileName . '.pdf';
 
+        // Write HTML
+        if (file_put_contents($htmlPath, $html) === false) {
+            die('Cannot write HTML file: ' . $htmlPath);
+        }
+
+        // Generate PDF
+        $cmd = "wkhtmltopdf --enable-local-file-access -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking "
+            . escapeshellarg($htmlPath) . " " . escapeshellarg($pdfPath) . " 2>&1";
+
+        $output = [];
+        $exitCode = 0;
+        exec($cmd, $output, $exitCode);
+
+        // Remove temp HTML
+        @unlink($htmlPath);
+
+        if ($exitCode !== 0 || !file_exists($pdfPath)) {
+            die("wkhtmltopdf failed (exit=$exitCode):\n" . implode("\n", $output));
+        }
+
+        // Download
         header("Content-Type: application/pdf");
-        header("Content-Disposition: attachment; filename=$fileName.pdf");
         header("Cache-Control: private");
-        ob_clean();
+        header("Content-Disposition: attachment; filename=\"$fileName.pdf\"");
+        header("Content-Description: Global Precious Metals CRM Data");
+
+        if (ob_get_length()) {
+            ob_clean();
+        }
         flush();
+
         readfile($pdfPath);
-        unlink($pdfPath);
+
+        // Cleanup
+        @unlink($pdfPath);
         exit;
     }
-
 
     // function downloadPDF($html, Vtiger_Request $request)
     // {
