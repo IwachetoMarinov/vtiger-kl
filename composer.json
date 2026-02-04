@@ -23,7 +23,7 @@
         "smarty/smarty": "^4.3",
         "dg/rss-php": "^1.5",
         "ezyang/htmlpurifier": "^4.16",
-        "tecnickcom/tcpdf": "^6.6",
+        "tecnickcom/tcpdf": "^6.10",
         "monolog/monolog": "^3.5",
         "league/oauth2-client": "^2.7",
         "phpmailer/phpmailer": "^6.9",
