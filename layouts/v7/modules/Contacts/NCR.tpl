@@ -417,7 +417,9 @@
                 </div>
 
                 <div style="margin-top: 3mm;" class="bottom-container">
-                    <div class="signed-item"></div>
+                    <div class="signed-item">
+                        <span>Signed by: </span>
+                    </div>
                     <div class="behalf-item">
                         <span>Date: </span>
                     </div>
@@ -425,21 +427,21 @@
 
                 <div style="margin-top: 3mm;" class="bottom-container">
                     <div class="signed-item">
-                        <span>Signed by: </span>
+                        <span>Signature: </span>
                     </div>
                     <div class="behalf-item">
                         <span>On behalf of:</span>
                     </div>
                 </div>
 
-                <div style="margin-top: 3mm;" class="bottom-container">
+                {* <div style="margin-top: 3mm;" class="bottom-container">
                     <div class="bottom-container-item">
                         <div style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 50px;background-color:#dce6f9;">
                         </div>
                         <p>Signature</p>
                     </div>
                     <div class="bottom-container-item"></div>
-                </div>
+                </div> *}
             </div>
         </div>
 
@@ -469,7 +471,7 @@
             const passportNumberInput = document.querySelector('input[name="passport_number"]');
             const companyInput = document.querySelector('input[name="company_input"]');
             const holdingPassportInput = document.querySelector('input[name="holding_passport_number"]');
-            
+
             if (companyInput && companyInput.value.trim() !== '') {
                 url.searchParams.set('companyInput', companyInput.value.trim());
             } else {
