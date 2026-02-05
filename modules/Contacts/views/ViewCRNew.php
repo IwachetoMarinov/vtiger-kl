@@ -281,33 +281,25 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         }
 
         // ---- 4 INPUTS UNDER THE TABLE (markers 1..4) ----
-        $w = 40.0;   // 40mm like your CSS
+        $w = 40.0;
         $h = 6.0;
 
-        $xLeft  = 60.0;   // left underline start
-        $xRight = 102.0;  // right underline start
+        // Optional: tiny nudge if you want them to sit lower on the dotted line
+        $dx = 0.0;
+        $dy = 0.0;   // try 0.7 if you want them slightly lower
 
-        $y1 = 215.0;          // marker 1 (collection_date line)
-        $line = 7.0;          // line spacing
-        $y2 = $y1 + 1 * $line;  // marker 2 (passport_number line)
-        $y3 = $y1 + 2 * $line;  // marker 3 (company_input line)
-        $y4 = $y1 + 2 * $line;  // marker 4 is on SAME row as company but on right side
+        $pdf->SetXY(60.0 + $dx, 215.0 + $dy);
+        $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => (string)$request->get('collection_date')]);
 
-        // 1) collection_date (marker 1)
-        $pdf->SetXY($xLeft, $y1);
-        $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => $collection]);
+        $pdf->SetXY(60.0 + $dx, 222.0 + $dy);
+        $pdf->TextField('passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('passport_number')]);
 
-        // 2) passport_number (marker 2)
-        $pdf->SetXY($xLeft, $y2);
-        $pdf->TextField('passport_number', $w, $h, $fieldStyle, ['v' => $passport_number]);
+        $pdf->SetXY(60.0 + $dx, 229.0 + $dy);
+        $pdf->TextField('company_input', $w, $h, $fieldStyle, ['v' => (string)$request->get('company_input')]);
 
-        // 3) company_input (marker 3)
-        $pdf->SetXY($xLeft, $y3);
-        $pdf->TextField('company_input', $w, $h, $fieldStyle, ['v' => $company_input]);
+        $pdf->SetXY(102.0 + $dx, 229.0 + $dy);
+        $pdf->TextField('holding_passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('holding_passport_number')]);
 
-        // 4) holding_passport_number (marker 4) RIGHT SIDE, same row as company
-        $pdf->SetXY($xRight, $y4);
-        $pdf->TextField('holding_passport_number', $w, $h, $fieldStyle, ['v' => $holding_passport_number]);
 
         // Save final
         $pdf->Output($finalPdfPath, 'F');
