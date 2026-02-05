@@ -25,6 +25,12 @@
             margin: 0px
         }
 
+        body {
+            font-family: 'Open Sans';
+            font-size: 10pt;
+            color: #666;
+        }
+
         .printAreaContainer {
             height: 297mm;
             width: 210mm;
@@ -202,15 +208,15 @@
             <div class="full-width">
                 <table class="print-tbl">
                     <tr>
-                        <td style="height: 28mm;">
+                        <td>
                             {if isset($smarty.request.PDFDownload) && $smarty.request.PDFDownload eq true}
                                 <img src="file:///var/www/html/layouts/v7/modules/Contacts/resources/gpm-new-logo.png"
-                                    style="max-height: 100%; float:left;width: 192px;" />
+                                    style="max-height: 100%; float:left;width: 196px;" />
                             {else}
                                 <img src='layouts/v7/modules/Contacts/resources/gpm-new-logo.png'
-                                    style="max-height: 100%; float:left;width: 192px;" />
+                                    style="max-height: 100%; float:left;width: 196px;" />
                             {/if}
-                            <div style="font-size: 11pt;margin-top: 20mm; float:right;">
+                            <div style="font-size: 11pt;margin-top: 27mm; float:right;">
                                 <span>From: {$RECORD_MODEL->get('cf_898')}</span>
                             </div>
                         </td>
