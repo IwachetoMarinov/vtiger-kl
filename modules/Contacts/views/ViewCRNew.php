@@ -60,10 +60,6 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
 
     public function postProcess(Vtiger_Request $request) {}
 
-
-
-
-
     // function downloadPDF($html, Vtiger_Request $request)
     // {
     //     global $root_directory;

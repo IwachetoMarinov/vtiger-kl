@@ -250,16 +250,32 @@
             display: flex;
         }
 
+        .editable-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 2mm;
+        }
+
+        .editable-label {
+            /* flex: 1; */
+        }
+
         .custom-editable-input {
             border: none;
             possition: relative;
             padding-bottom: 1mm;
-            width: 100%;
+            /* width: 100%; */
+            flex: 1;
+            min-width: 40mm;
             border-bottom: 1px dotted #000;
         }
 
         .custom-editable-input:focus {
             outline: none;
+        }
+
+        .full-width {
+            width: 100%;
         }
     </style>
 </head>
@@ -438,13 +454,8 @@
 
             <!-- SERIALS BOX -->
             <div class="serials-box">
-                If applicable, please specify the serial numbers of the items to be sold:
-                <div style="margin-top: 2mm;">
-                    .............................................................................................................................................................................
-                </div>
-                {* <input type="text" name="serials" value="{$SERIALS|default:''}"
-                    style="width: 100%; border: 0; border-bottom: 1px solid #000; font-size: 12pt; padding: 2mm;" /> *}
-
+                <p>If applicable, please specify the serial numbers of the items to be sold:</p>
+                <input type="text" name="serial_numbers" class="custom-editable-input full-width" />
             </div>
 
             <!-- SECTION 3 -->
@@ -452,21 +463,21 @@
                 If the metal to be sold is not currently in storage with GPM, please specify the
                 exact pick-up location and the details of the person authorised to release the metal to GPM (if
                 applicable, IC/Passport number):
-                <div style="margin-top:2mm;">
-                    Pick-up location:
-                    <span>................................................................................................................................</span>
+                <div style="margin-top:2mm;" class="editable-input-wrapper">
+                    <p class="editable-label">Pick-up location:</p>
+                    <input type="text" name="pick_up_location" class="custom-editable-input" />
                 </div>
 
-                <div style="margin-top:2mm;">
+                <div style="margin-top:3mm;" class="editable-input-wrapper">
                     <span>Authorised person: Full name:</span>
-                    <span>..................................................................... </span>
+                    <input type="text" name="authorised_person_name" class="custom-editable-input" />
                     <span> IC/Passport No:</span>
-                    <span>..............</span>
+                    <input type="text" name="authorised_person_id" class="custom-editable-input" />
                 </div>
             </div>
 
             <!-- SECTION 4 -->
-            <div class="additional-section bolder-element">
+            <div class="additional-section bolder-element ">
                 <strong>3.</strong> I/We acknowledge that:
                 <div class="indent">
                     - GPM shall quote a sale price, which is to be agreed and confirmed in writing (e.g. email, telafax)
@@ -486,25 +497,28 @@
             <!-- BANK DETAILS -->
             <div class="details-container">
                 <div class="bank-details">
-                    <div class="bank-row">
-                        Bank Name: <span
-                            class="long-line">...........................................................................................................................................</span>
+                    <div class="bank-row editable-input-wrapper">
+                        <p class="editable-label"> Bank Name:</p>
+                        <input type="text" name="bank_name" class="custom-editable-input" />
                     </div>
-                    <div class="bank-row">
-                        Bank Address: <span
-                            class="long-line">........................................................................................................................................</span>
+
+                    <div class="bank-row editable-input-wrapper" style="margin-top: 2mm;">
+                        <p class="editable-label"> Bank Address:</p>
+                        <input type="text" name="bank_address" class="custom-editable-input" />
                     </div>
-                    <div class="bank-row">
-                        Swift Code: <span
-                            class="line">.....................................................................</span>
-                        &nbsp;&nbsp;&nbsp;
-                        Swift Code: <span class="line">...............................................</span>
+
+                    <div class="bank-row editable-input-wrapper" style="margin-top: 2mm;">
+                        <p class="editable-label"> Bank Code:</p>
+                        <input type="text" name="bank_code" class="custom-editable-input" />
+                        <p class="editable-label"> Swift Code:</p>
+                        <input type="text" name="swift_code" class="custom-editable-input" />
                     </div>
-                    <div class="bank-row">
-                        Account No: <span
-                            class="line">...................................................................</span>
-                        &nbsp;&nbsp;&nbsp;
-                        Account Currency: <span class="line">...................................</span>
+
+                    <div class="bank-row editable-input-wrapper" style="margin-top: 2mm;">
+                        <p class="editable-label"> Account No:</p>
+                        <input type="text" name="account_no" class="custom-editable-input" />
+                        <p class="editable-label"> Account Currency:</p>
+                        <input type="text" name="account_currency" class="custom-editable-input" />
                     </div>
                 </div>
 
@@ -574,6 +588,15 @@
             } else {
                 url.searchParams.delete('clientName');
             }
+
+            // Get all custom-editable-input values and append to URL as query parameters
+            document.querySelectorAll('.custom-editable-input').forEach(input => {
+                if (input.name) {
+                    url.searchParams.set(input.name, input.value);
+                } else {
+                    url.searchParams.delete(input.name);
+                }
+            });
 
             this.href = url.toString();
         });

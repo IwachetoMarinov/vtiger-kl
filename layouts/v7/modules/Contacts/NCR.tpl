@@ -172,7 +172,6 @@
 
         .editable-input {
             border: none;
-            width: 100%;
             width: 40mm;
             min-width: 40mm;
             border-bottom: 1px dotted #000;

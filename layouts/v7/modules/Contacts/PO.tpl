@@ -688,7 +688,6 @@
                         </div>
 
                         <div style="margin-top:10mm;">
-                            <div class="signature-line">...............................................</div><br>
                             Signature
                         </div>
                     </div>
