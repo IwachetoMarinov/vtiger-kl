@@ -170,7 +170,6 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->SetAutoPageBreak(false);
         $pdf->SetMargins(0, 0, 0);
 
-        $pageCount = $pdf->setSourceFile($basePdfPath);
         $tplId = $pdf->importPage(1);
         $size  = $pdf->getTemplateSize($tplId);
 
@@ -253,14 +252,18 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $pdf->TextField("qty_$i", $wQty - 2 * $insetX, $fieldH, $fieldStyle);
 
             $pdf->SetXY($xDesc + $insetX, $y + $insetY);
-            // $pdf->TextField("desc_$i", $wDesc - 2 * $insetX, $descH, $fieldStyle);
             $pdf->TextField(
                 "desc_$i",
                 $wDesc - 2 * $insetX,
                 $descH,
                 $fieldStyle + [
                     'multiline' => true,
-                    'linebreak' => true
+                    'linebreak' => true,
+                    'padding'   => 0,
+                    'style'     => [
+                        'margin' => [0, 0, 0, 0],
+                        'padding' => [0, 0, 0, 0],
+                    ],
                 ]
             );
 
@@ -284,7 +287,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->TextField('total_oz', 35, 5.5, $fieldStyle);
 
         // ---- EXTRA INPUTS (VALUES FROM REQUEST) ----
-        $w = 30.0;
+        $w = 29.0;
         $h = 5.7;
 
         // Optional: tiny nudge if you want them to sit lower on the dotted line
@@ -294,13 +297,13 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->SetXY(63.0 + $dx, 223.0 + $dy);
         $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => (string)$request->get('collectionDateInput')]);
 
-        $pdf->SetXY(5.0 + $dx, 235.0 + $dy);
+        $pdf->SetXY(10.0 + $dx, 235.0 + $dy);
         $pdf->TextField('passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('passportNumberInput')]);
 
-        $pdf->SetXY(83.5 + $dx, 241.0 + $dy);
+        $pdf->SetXY(83.5 + $dx, 243.0 + $dy);
         $pdf->TextField('company_input', $w, $h, $fieldStyle, ['v' => (string)$request->get('companyInput')]);
 
-        $pdf->SetXY(5.0 + $dx, 248.0 + $dy);
+        $pdf->SetXY(10.0 + $dx, 248.0 + $dy);
         $pdf->TextField('holding_passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
 
 
