@@ -101,6 +101,11 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
     {
         global $root_directory;
 
+        $company = (string)$request->get('companyInput');
+        $passport = (string)$request->get('passportNumberInput');
+        $holding_passport = (string)$request->get('holdingPassportInput');
+        $collection_date = (string)$request->get('collectionDateInput');
+
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
 
@@ -281,6 +286,49 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
 
         $pdf->SetXY(118.0, $yTotals);
         $pdf->TextField('total_oz', 35, 5.5, $fieldStyle);
+
+        // ---- EXTRA INPUTS (VALUES FROM REQUEST) ----
+
+        // Company
+        $pdf->SetXY(60.0, 222.0);  // adjust Y once
+        $pdf->TextField(
+            'company_input',
+            40,
+            6,
+            $fieldStyle,
+            ['v' => $company]
+        );
+
+        // Passport number
+        $pdf->SetXY(60.0, 229.0);
+        $pdf->TextField(
+            'passport_number',
+            40,
+            6,
+            $fieldStyle,
+            ['v' => $passport]
+        );
+
+        // Holding passport number
+        $pdf->SetXY(100.0, 236.0);
+        $pdf->TextField(
+            'holding_passport_number',
+            40,
+            6,
+            $fieldStyle,
+            ['v' => $holding_passport]
+        );
+
+        // Collection date
+        $pdf->SetXY(60.0, 215.0);
+        $pdf->TextField(
+            'collection_date',
+            40,
+            6,
+            $fieldStyle,
+            ['v' => $collection_date]
+        );
+
 
         // Save final
         $pdf->Output($finalPdfPath, 'F');

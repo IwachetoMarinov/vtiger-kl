@@ -159,6 +159,29 @@
             accent-color: #000;
         }
 
+        .editable-input-wrapper {
+            margin-top: 3mm;
+            display: flex;
+            align-items: center;
+            gap: 2mm;
+        }
+
+        .editable-input-wrapper--nested {
+            flex-wrap: wrap;
+        }
+
+        .editable-input {
+            border: none;
+            width: 100%;
+            width: 40mm;
+            min-width: 40mm;
+            border-bottom: 1px dotted #000;
+        }
+
+        .editable-input:focus {
+            outline: none;
+        }
+
         @media print {
 
             @page {
@@ -340,8 +363,8 @@
 
                 </table>
 
-                <div style="margin-top: 3mm;">I/We would like the Collection to take place on:
-                    <span>...................</span>
+                <div class="editable-input-wrapper">I/We would like the Collection to take place on:
+                    <input type="text" name="collection_date" class="editable-input" />
                 </div>
 
                 <div style="margin-top: 3mm;">
@@ -355,10 +378,13 @@
                     {/if}
                     <span>I/We will personally collect the Stored Metal at the Storage Facility and will be holding
                         ID/Passport number</span>
-                    <span> .......................</span>
+                </div>
+                <div>
+                    <input type="text" name="passport_number" class="editable-input" />
                 </div>
 
-                <div style="margin-top: 3mm;">
+
+                <div class="editable-input-wrapper editable-input-wrapper--nested">
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                         <input type="checkbox" name="company_option">
                     {else}
@@ -369,11 +395,12 @@
                     {/if}
 
                     <span>I/We hereby authorise Mr/Mrs/Representatives of the company </span>
-                    <span> .......................</span>
+                    <input type="text" name="company_input" class="editable-input" />
                     (<span>holding ID/Passport number</span>
-                    <span> .......................</span>)
+                    <input type="text" name="holding_passport_number" class="editable-input" />)
                     <span> to collect the Stored Metal on my/our behalf. This
-                        authorisation is only valid for the collection of the Stored Metal specified above and shall not be
+                        authorisation is only valid for the collection of the Stored Metal specified above and shall not
+                        be
                         extended
                         to any other services covered under the Customer Metal Agreement.</span>
                 </div>
@@ -435,6 +462,39 @@
                 url.searchParams.set('idOption', "1");
             } else {
                 url.searchParams.delete('idOption');
+            }
+
+            // check for new inputs and append to URL if needed
+            const companyInput = document.querySelector('input[name="company_input"]');
+
+            const holdingPassportInput = document.querySelector('input[name="holding_passport_number"]');
+
+            const collectionDateInput = document.querySelector('input[name="collection_date"]');
+
+            const passportNumberInput = document.querySelector('input[name="passport_number"]');
+
+            if (companyInput && companyInput.value.trim() !== '') {
+                url.searchParams.set('companyInput', companyInput.value.trim());
+            } else {
+                url.searchParams.delete('companyInput');
+            }
+
+            if (holdingPassportInput && holdingPassportInput.value.trim() !== '') {
+                url.searchParams.set('holdingPassportInput', holdingPassportInput.value.trim());
+            } else {
+                url.searchParams.delete('holdingPassportInput');
+            }
+
+            if (collectionDateInput && collectionDateInput.value.trim() !== '') {
+                url.searchParams.set('collectionDateInput', collectionDateInput.value.trim());
+            } else {
+                url.searchParams.delete('collectionDateInput');
+            }
+
+            if (passportNumberInput && passportNumberInput.value.trim() !== '') {
+                url.searchParams.set('passportNumberInput', passportNumberInput.value.trim());
+            } else {
+                url.searchParams.delete('passportNumberInput');
             }
 
             this.href = url.toString();
