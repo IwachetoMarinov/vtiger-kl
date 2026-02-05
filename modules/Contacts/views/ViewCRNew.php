@@ -61,6 +61,42 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
     public function postProcess(Vtiger_Request $request) {}
 
 
+
+
+
+    // function downloadPDF($html, Vtiger_Request $request)
+    // {
+    //     global $root_directory;
+    //     $recordModel = $this->record->getRecord();
+    //     $clientID = $recordModel->get('cf_898');
+
+    //     $year = date('Y');
+    //     // Get last part of docNo after last '/'
+    //     $docNoParts = explode('/', $request->get('docNo'));
+    //     $docNoLastPart = end($docNoParts);
+    //     $template_name = "CR";
+
+    //     $fileName = $clientID . '-' . $template_name . '-' . $year . '-' . $docNoLastPart . '-' . $template_name;
+
+    //     $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
+    //     fwrite($handle, $html);
+    //     fclose($handle);
+
+    //     exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $root_directory . "$fileName.html " . $root_directory . "$fileName.pdf");
+    //     unlink($root_directory . $fileName . '.html');
+
+    //     header("Content-type: application/pdf");
+    //     header("Cache-Control: private");
+    //     header("Content-Disposition: attachment; filename=$fileName.pdf");
+    //     header("Content-Description: Global Precious Metals CRM Data");
+    //     ob_clean();
+    //     flush();
+    //     readfile($root_directory . "$fileName.pdf");
+    //     unlink($root_directory . "$fileName.pdf");
+    //     exit;
+    // }
+
+
     function downloadPDF($html, Vtiger_Request $request)
     {
         global $root_directory;
@@ -168,13 +204,20 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         ];
 
         // ---- COORDINATES ----
-        $insetX = 0.8;
-        $insetY = 0.9;
+        // insetX/insetY = inner padding INSIDE each PDF form field (mm). Bigger => field becomes narrower/shorter.
+        // fieldH        = height of each field (mm). Bigger => taller input box.
+        $insetX = 1.2;   // ↓ increase to DECREASE width (try 1.2 or 1.5)
+        $insetY = 0.9;   // vertical inner padding
         $fieldH = 5.0;
 
-        $startY  = 112.0;  // adjust
-        $rowStep = 7.4;    // adjust
+        // startY  = Y position of row #1 (mm from top).
+        // rowStep = distance between rows (mm). Bigger => MORE space between rows. Smaller => tighter.
+        $startY  = 112.0;  // keep unless row1 shifts
+        $rowStep = 7.8;    // ↑ increase a bit for more spacing (try 7.8 or 8.0)
 
+        // Column X positions (mm from left edge of page) and widths (mm).
+        // To DECREASE a column width: reduce w*.
+        // To keep right edge aligned, also adjust x* if needed.
         $xQty    = 19.0;
         $wQty    = 18.0;
         $xDesc   = 37.0;
@@ -182,7 +225,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $xSerial = 131.0;
         $wSerial = 38.0;
         $xFine   = 169.0;
-        $wFine   = 19.0;
+        $wFine   = 17.0;
 
         // ------------------------------------------------------------------
         // (B) Create fields dynamically (names match your Smarty template)
@@ -223,37 +266,4 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         @unlink($finalPdfPath);
         exit;
     }
-
-
-    // function downloadPDF($html, Vtiger_Request $request)
-    // {
-    //     global $root_directory;
-    //     $recordModel = $this->record->getRecord();
-    //     $clientID = $recordModel->get('cf_898');
-
-    //     $year = date('Y');
-    //     // Get last part of docNo after last '/'
-    //     $docNoParts = explode('/', $request->get('docNo'));
-    //     $docNoLastPart = end($docNoParts);
-    //     $template_name = "CR";
-
-    //     $fileName = $clientID . '-' . $template_name . '-' . $year . '-' . $docNoLastPart . '-' . $template_name;
-
-    //     $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
-    //     fwrite($handle, $html);
-    //     fclose($handle);
-
-    //     exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $root_directory . "$fileName.html " . $root_directory . "$fileName.pdf");
-    //     unlink($root_directory . $fileName . '.html');
-
-    //     header("Content-type: application/pdf");
-    //     header("Cache-Control: private");
-    //     header("Content-Disposition: attachment; filename=$fileName.pdf");
-    //     header("Content-Description: Global Precious Metals CRM Data");
-    //     ob_clean();
-    //     flush();
-    //     readfile($root_directory . "$fileName.pdf");
-    //     unlink($root_directory . "$fileName.pdf");
-    //     exit;
-    // }
 }
