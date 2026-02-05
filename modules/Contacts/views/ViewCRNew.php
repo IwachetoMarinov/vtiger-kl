@@ -209,12 +209,12 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $insetX = 0.7;   // ↓ increase to DECREASE width (try 1.2 or 1.5)
         $insetY = 0.88;   // vertical inner padding
         $fieldH = 5.0;          // normal fields
-        $descH  = 10.0;         // taller textarea-like field (adjust)
+        $descH  = 9.6;         // taller textarea-like field (adjust)
 
         // ---- ROW POSITION ----
         $startY  = 112.0;
         // $rowStep = 7.0;
-        $rowStep = 12.0;  // must be >= descH + some padding
+        $rowStep = 11.8;  // must be >= descH + some padding
 
         // ---- TABLE GEOMETRY ----
         // Left edge of table (matches your current alignment)
