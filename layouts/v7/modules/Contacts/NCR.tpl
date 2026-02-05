@@ -285,68 +285,33 @@
                                     <th style="width:15%;text-align:center">FINE OZ.</th>
                                 </tr>
 
-                                {if isset($smarty.request.PDFDownload) && $smarty.request.PDFDownload eq true}
+                                {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
 
                                     {foreach item=item from=$targetRows name=rowloop}
+
                                         <tr>
-                                            <td style="padding:0; height:24px;">
-                                                <input type="text" name="qty_{$smarty.foreach.rowloop.iteration}" style="
-                display:block;
-                width:100%;
-                height:24px;
-                border:0;
-                margin:0;
-                padding:0 4px;
-                box-sizing:border-box;
-                text-align:center;
-                background:transparent;
-            " />
+                                            <td>
+                                                <input type="text" name="qty_{$smarty.foreach.rowloop.iteration}"
+                                                    style="width:100%; border:0;" />
                                             </td>
-
-                                            <td style="padding:0; height:24px;">
-                                                <input type="text" name="desc_{$smarty.foreach.rowloop.iteration}" style="
-                display:block;
-                width:100%;
-                height:24px;
-                border:0;
-                margin:0;
-                padding:0 4px;
-                box-sizing:border-box;
-                background:transparent;
-            " />
+                                            <td>
+                                                <input type="text" name="desc_{$smarty.foreach.rowloop.iteration}"
+                                                    style="width:100%; border:0;" />
                                             </td>
-
-                                            <td style="padding:0; height:24px;">
-                                                <input type="text" name="serial_{$smarty.foreach.rowloop.iteration}" style="
-                display:block;
-                width:100%;
-                height:24px;
-                border:0;
-                margin:0;
-                padding:0 4px;
-                box-sizing:border-box;
-                background:transparent;
-            " />
+                                            <td>
+                                                <input type="text" name="serial_{$smarty.foreach.rowloop.iteration}"
+                                                    style="width:100%; border:0;" />
                                             </td>
-
-                                            <td style="padding:0; height:24px; text-align:right;">
-                                                <input type="text" name="fine_oz_{$smarty.foreach.rowloop.iteration}" style="
-                display:block;
-                width:100%;
-                height:24px;
-                border:0;
-                margin:0;
-                padding:0 4px;
-                box-sizing:border-box;
-                text-align:right;
-                background:transparent;
-            " />
+                                            <td style="text-align:right;">
+                                                <input type="text" name="fine_oz_{$smarty.foreach.rowloop.iteration}"
+                                                    style="width:100%; border:0; text-align:right;" />
                                             </td>
                                         </tr>
+
                                     {/foreach}
 
-
                                 {/if}
+
                                 {if $PAGES eq $page}
                                     <tr>
                                         <td style="width:100%;" colspan="4">
