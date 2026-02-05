@@ -279,10 +279,10 @@
 
                             <table class="activity-tbl">
                                 <tr>
-                                    <th style="width:10%;">QTY</th>
-                                    <th style="width:50%;">DESCRIPTION</th>
-                                    <th style="width:25%;">SERIAL NUMBERS</th>
-                                    <th style="width:15%;text-align:center">FINE OZ.</th>
+                                    <th style="width:5%;">QTY</th>
+                                    <th style="width:65%;">DESCRIPTION</th>
+                                    <th style="width:20%;">SERIAL NUMBERS</th>
+                                    <th style="width:10%;text-align:center">FINE OZ.</th>
                                 </tr>
 
                                 {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}

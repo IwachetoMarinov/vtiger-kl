@@ -210,25 +210,35 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $insetY = 0.9;   // vertical inner padding
         $fieldH = 5.0;
 
-        // startY  = Y position of row #1 (mm from top).
-        // rowStep = distance between rows (mm). Bigger => MORE space between rows. Smaller => tighter.
-        $startY  = 112.0;  // keep unless row1 shifts
-        $rowStep = 7.0;    // ↑ increase a bit for more spacing (try 7.8 or 8.0)
+        // ---- ROW POSITION ----
+        $startY  = 112.0;
+        $rowStep = 7.0;
 
-        // Column X positions (mm from left edge of page) and widths (mm).
-        // To DECREASE a column width: reduce w*.
-        // To keep right edge aligned, also adjust x* if needed.
-        $xQty    = 8.0;
-        $wQty    = 14.0;
+        // ---- TABLE GEOMETRY ----
+        // Left edge of table (matches your current alignment)
+        $xTable = 8.0;
 
-        $xDesc   = $xQty + $wQty + 1;
-        $wDesc   = 78.0;
+        // Total usable table width in PDF (keep as-is or tweak slightly)
+        $wTable = 146.0;
 
+        // ---- COLUMN RATIOS (SUM = 100%) ----
+        $ratioQty    = 0.05;
+        $ratioDesc   = 0.65;
+        $ratioSerial = 0.20;
+        $ratioFine   = 0.10;
+
+        // ---- COMPUTED WIDTHS ----
+        $wQty    = $wTable * $ratioQty;      // 7.30 mm
+        $wDesc   = $wTable * $ratioDesc;     // 94.90 mm
+        $wSerial = $wTable * $ratioSerial;   // 29.20 mm
+        $wFine   = $wTable * $ratioFine;     // 14.60 mm
+
+        // ---- COLUMN START POSITIONS ----
+        $xQty    = $xTable;
+        $xDesc   = $xQty + $wQty;
         $xSerial = $xDesc + $wDesc;
-        $wSerial = 34.0;
-
         $xFine   = $xSerial + $wSerial;
-        $wFine   = 19.0;
+
 
         // ------------------------------------------------------------------
         // (B) Create fields dynamically (names match your Smarty template)
