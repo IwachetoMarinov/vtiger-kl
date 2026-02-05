@@ -110,7 +110,9 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->SetMargins(0, 0, 0);
         $pdf->SetAutoPageBreak(false);
 
-        $tplId = $pdf->importPage(1, '/MediaBox');
+        // ✅ REQUIRED
+        $pageCount = $pdf->setSourceFile($basePdfPath);
+        $tplId = $pdf->importPage(1);
         $size  = $pdf->getTemplateSize($tplId);
 
         $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
