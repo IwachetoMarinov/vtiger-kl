@@ -206,7 +206,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         // ---- COORDINATES ----
         // insetX/insetY = inner padding INSIDE each PDF form field (mm). Bigger => field becomes narrower/shorter.
         // fieldH        = height of each field (mm). Bigger => taller input box.
-        $insetX = 0.8;   // ↓ increase to DECREASE width (try 1.2 or 1.5)
+        $insetX = 0.95;   // ↓ increase to DECREASE width (try 1.2 or 1.5)
         $insetY = 0.88;   // vertical inner padding
         $fieldH = 5.0;          // normal fields
         $descH  = 9.6;         // taller textarea-like field (adjust)
