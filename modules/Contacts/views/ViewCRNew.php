@@ -99,7 +99,6 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             die('Cannot write HTML file: ' . $htmlPath);
         }
 
-        // IMPORTANT: lock output so it’s stable
         $cmd = "wkhtmltopdf --enable-local-file-access "
             . "--page-size A4 --dpi 96 --zoom 1 "
             . "--margin-top 0 --margin-right 0 --margin-bottom 0 --margin-left 0 "
@@ -114,6 +113,21 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         if ($code !== 0 || !file_exists($basePdfPath)) {
             die("wkhtmltopdf failed (exit=$code):\n" . implode("\n", $out));
         }
+
+        // ------------------------------------------------------------------
+        // (A) DYNAMIC ROW COUNT - infer from HTML field names qty_1..qty_N
+        // ------------------------------------------------------------------
+        $rowCount = 0;
+
+        // match: name="qty_12" or name='qty_12'
+        if (preg_match_all('/name\s*=\s*["\']qty_(\d+)["\']/', (string)$html, $m)) {
+            $nums = array_map('intval', $m[1]);
+            $rowCount = $nums ? max($nums) : 0;
+        }
+
+        // Safety: never create insane amounts of fields
+        $MAX_ROWS = 30; // adjust if you want more
+        $rowCount = max(0, min($rowCount, $MAX_ROWS));
 
         // (2) Import the rendered PDF and overlay form fields
         $pdf = new \setasign\Fpdi\Tcpdf\Fpdi();
@@ -145,37 +159,35 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             }
         }
 
-        // ---- Field appearance: FIX "??????" issue ----
+        // ---- Field appearance ----
         $fieldStyle = [
-            'border'   => 0,
-            'font'     => 'helvetica',   // important
-            'fontsize' => 9,             // important
+            'border'    => 0,
+            'font'      => 'helvetica',
+            'fontsize'  => 9,
             'textcolor' => [0, 0, 0],
         ];
 
-        // ---- COORDINATES (you will adjust ONCE using debug grid) ----
-        // IMPORTANT: remove fields you don’t want (your screenshot shows extra long fields)
-        // I’m keeping ONLY the table fields here (1..10) + collection_date.
-        // After alignment is perfect, we can add city/reference if you want.
-
+        // ---- COORDINATES ----
         $insetX = 0.8;
         $insetY = 0.9;
         $fieldH = 5.0;
 
-        // TABLE: set these using debug grid so row 1 sits exactly in the first blank row
-        $startY  = 111.0;   // <-- adjust
-        $rowStep = 7.4;     // <-- adjust
-        // Columns: adjust these to match your table
-        $xQty  = 19.0;
-        $wQty  = 18.0;   // move left + slightly wider
-        $xDesc = 37.0;
-        $wDesc = 94.0;   // tiny widen
-        $xSerial = 131.0;
-        $wSerial = 38.0; // tiny adjust
-        $xFine = 169.0;
-        $wFine = 19.0;   // move left + reduce width so it stays inside cell
+        $startY  = 112.0;  // adjust
+        $rowStep = 7.4;    // adjust
 
-        for ($i = 1; $i <= 10; $i++) {
+        $xQty    = 19.0;
+        $wQty    = 18.0;
+        $xDesc   = 37.0;
+        $wDesc   = 94.0;
+        $xSerial = 131.0;
+        $wSerial = 38.0;
+        $xFine   = 169.0;
+        $wFine   = 19.0;
+
+        // ------------------------------------------------------------------
+        // (B) Create fields dynamically (names match your Smarty template)
+        // ------------------------------------------------------------------
+        for ($i = 1; $i <= $rowCount; $i++) {
             $y = $startY + ($i - 1) * $rowStep;
 
             $pdf->SetXY($xQty + $insetX, $y + $insetY);
@@ -187,12 +199,13 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $pdf->SetXY($xSerial + $insetX, $y + $insetY);
             $pdf->TextField("serial_$i", $wSerial - 2 * $insetX, $fieldH, $fieldStyle);
 
+            // IMPORTANT: your tpl uses fine_oz_#
             $pdf->SetXY($xFine + $insetX, $y + $insetY);
-            $pdf->TextField("fine_$i", $wFine - 2 * $insetX, $fieldH, $fieldStyle);
+            $pdf->TextField("fine_oz_$i", $wFine - 2 * $insetX, $fieldH, $fieldStyle);
         }
 
         // Collection date (adjust with debug grid)
-        $pdf->SetXY(112.0, 254.0);  // <-- adjust
+        $pdf->SetXY(112.0, 254.0);  // adjust
         $pdf->TextField('collection_date', 70, 6, $fieldStyle);
 
         // Save final
@@ -210,6 +223,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         @unlink($finalPdfPath);
         exit;
     }
+
 
     // function downloadPDF($html, Vtiger_Request $request)
     // {
