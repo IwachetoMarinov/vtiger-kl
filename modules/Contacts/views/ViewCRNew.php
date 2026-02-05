@@ -222,13 +222,13 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $wQty    = 14.0;
 
         $xDesc   = 22.0;
-        $wDesc   = 78.0;
+        $wDesc   = 74.0;
 
-        $xSerial = 100.0;
-        $wSerial = 33;
+        $xSerial = 96.0;
+        $wSerial = 36.0;
 
-        $xFine   = 133.0;
-        $wFine   = 16.0;
+        $xFine   = 132.0;
+        $wFine   = 19.0;
 
         // ------------------------------------------------------------------
         // (B) Create fields dynamically (names match your Smarty template)
