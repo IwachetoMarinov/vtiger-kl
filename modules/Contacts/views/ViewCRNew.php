@@ -199,7 +199,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $fieldStyle = [
             'border'    => 0,
             'font'      => 'helvetica',
-            'fontsize'  => 9,
+            'fontsize'  => 8,
             'textcolor' => [0, 0, 0],
         ];
 
@@ -221,14 +221,14 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $xQty    = 8.0;
         $wQty    = 14.0;
 
-        $xDesc   = 23.0;
-        $wDesc   = 74.0;
+        $xDesc   = $xQty + $wQty + 1;
+        $wDesc   = 78.0;
 
-        $xSerial = 96.0;
-        $wSerial = 36.0;
+        $xSerial = $xDesc + $wDesc;
+        $wSerial = 34.0;
 
-        $xFine   = 132.0;
-        $wFine   = 21.0;
+        $xFine   = $xSerial + $wSerial;
+        $wFine   = 19.0;
 
         // ------------------------------------------------------------------
         // (B) Create fields dynamically (names match your Smarty template)
