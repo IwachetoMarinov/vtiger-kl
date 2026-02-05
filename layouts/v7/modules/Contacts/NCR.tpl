@@ -384,8 +384,7 @@
                     original passport(s) will need to be presented prior to Collection at the Storage Facility</p>
 
                 <div style="margin-top: 3mm;">This Collection Order is subject to and governed by the terms and conditions
-                    of the Customer Metal Agreement
-                    executed and entered into by and between me/us and {if isset($COMPANY)}
+                    of the Customer Metal Agreement executed and entered into by and between me/us and {if isset($COMPANY)}
                         <span style="text-transform: capitalize;">{$COMPANY->get('company_name')}</span>
                     {/if}
                 </div>
@@ -408,8 +407,7 @@
 
                 <div style="margin-top: 3mm;" class="bottom-container">
                     <div class="bottom-container-item">
-                        <div
-                            style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 50px;background-color:#dce6f9;">
+                        <div style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 50px;background-color:#dce6f9;">
                         </div>
                         <p>Signature</p>
                     </div>
