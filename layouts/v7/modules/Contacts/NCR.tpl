@@ -285,33 +285,20 @@
                                     <th style="width:15%;text-align:center">FINE OZ.</th>
                                 </tr>
 
-                                {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
+                                {if isset($smarty.request.PDFDownload) && $smarty.request.PDFDownload eq true}
+
+                                    <input type="hidden" name="rows_count" value="{$targetRows|@count}">
 
                                     {foreach item=item from=$targetRows name=rowloop}
-
                                         <tr>
-                                            <td>
-                                                <input type="text" name="qty_{$smarty.foreach.rowloop.iteration}"
-                                                    style="width:100%; border:0;" />
-                                            </td>
-                                            <td>
-                                                <input type="text" name="desc_{$smarty.foreach.rowloop.iteration}"
-                                                    style="width:100%; border:0;" />
-                                            </td>
-                                            <td>
-                                                <input type="text" name="serial_{$smarty.foreach.rowloop.iteration}"
-                                                    style="width:100%; border:0;" />
-                                            </td>
-                                            <td style="text-align:right;">
-                                                <input type="text" name="fine_oz_{$smarty.foreach.rowloop.iteration}"
-                                                    style="width:100%; border:0; text-align:right;" />
-                                            </td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td style="text-align:right;">&nbsp;</td>
                                         </tr>
-
                                     {/foreach}
 
                                 {/if}
-
                                 {if $PAGES eq $page}
                                     <tr>
                                         <td style="width:100%;" colspan="4">
