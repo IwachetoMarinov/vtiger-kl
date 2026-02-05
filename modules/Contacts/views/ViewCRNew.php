@@ -254,7 +254,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $pdf->SetXY($xDesc + $insetX, $y + $insetY);
             $pdf->TextField(
                 "desc_$i",
-                $wDesc - 2 * $insetX,
+                $wDesc - 2 * 0.3,
                 $descH,
                 $fieldStyle + [
                     'multiline' => true,
