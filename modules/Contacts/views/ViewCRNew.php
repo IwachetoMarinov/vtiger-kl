@@ -101,11 +101,6 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
     {
         global $root_directory;
 
-        $company_input = (string)$request->get('companyInput');
-        $passport_number = (string)$request->get('passportNumberInput');
-        $holding_passport_number = (string)$request->get('holdingPassportInput');
-        $collection = (string)$request->get('collectionDateInput');
-
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
 
@@ -183,25 +178,22 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
         $pdf->useTemplate($tplId, 0, 0, $size['width'], $size['height']);
 
-        function mark($pdf, $x, $y, $label)
-        {
-            $pdf->SetFont('helvetica', '', 7);
-            $pdf->Line($x - 2, $y, $x + 2, $y);     // small crosshair
-            $pdf->Line($x, $y - 2, $x, $y + 2);
-            $pdf->Text($x + 2.5, $y - 1.5, $label . " ($x,$y)");
-        }
-
 
         // DEBUG GRID MODE (call with &debug=1)
         $debug = (string)$request->get('debug') === '1';
         if ($debug) {
-            mark($pdf, 60.0, 222.0, 'company');
+            $pdf->SetFont('helvetica', '', 6);
 
-            mark($pdf, 60.0, 229.0, 'passport');
-
-            mark($pdf, 100.0, 236.0, 'holding_passport');
-
-            mark($pdf, 60.0, 215.0, 'collection_date');
+            // vertical lines every 10mm
+            for ($x = 0; $x <= 210; $x += 10) {
+                $pdf->Line($x, 0, $x, 297, ['width' => 0.1, 'color' => [180, 180, 180]]);
+                $pdf->Text($x + 0.5, 1, (string)$x);
+            }
+            // horizontal lines every 10mm
+            for ($y = 0; $y <= 297; $y += 10) {
+                $pdf->Line(0, $y, 210, $y, ['width' => 0.1, 'color' => [180, 180, 180]]);
+                $pdf->Text(1, $y + 0.5, (string)$y);
+            }
         }
 
         // ---- Field appearance ----
@@ -280,7 +272,18 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $pdf->TextField("fine_oz_$i", $wFine - 2 * $insetX, $fieldH, $fieldStyle);
         }
 
-        // ---- 4 INPUTS UNDER THE TABLE (markers 1..4) ----
+        // Collection date (adjust with debug grid)
+        // $pdf->SetXY(112.0, 254.0);  // adjust
+        // $pdf->TextField('collection_date', 70, 6, $fieldStyle);
+        $yTotals = 215;   // adjust here
+
+        $pdf->SetXY(8.0, $yTotals);
+        $pdf->TextField('total_value', 35, 5.5, $fieldStyle);
+
+        $pdf->SetXY(118.0, $yTotals);
+        $pdf->TextField('total_oz', 35, 5.5, $fieldStyle);
+
+        // ---- EXTRA INPUTS (VALUES FROM REQUEST) ----
         $w = 40.0;
         $h = 6.0;
 
