@@ -218,17 +218,17 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         // Column X positions (mm from left edge of page) and widths (mm).
         // To DECREASE a column width: reduce w*.
         // To keep right edge aligned, also adjust x* if needed.
-        $xQty    = 11.0;
+        $xQty    = 9.0;
         $wQty    = 15.0;
 
-        $xDesc   = 26.0;
-        $wDesc   = 87.0;
+        $xDesc   = 24.0;
+        $wDesc   = 83.0;
 
-        $xSerial = 113.0;
-        $wSerial = 32.0;
+        $xSerial = 107.0;
+        $wSerial = 31;
 
-        $xFine   = 146.0;
-        $wFine   = 13.0;
+        $xFine   = 138.0;
+        $wFine   = 14.0;
 
         // ------------------------------------------------------------------
         // (B) Create fields dynamically (names match your Smarty template)
