@@ -207,7 +207,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         // insetX/insetY = inner padding INSIDE each PDF form field (mm). Bigger => field becomes narrower/shorter.
         // fieldH        = height of each field (mm). Bigger => taller input box.
         $insetX = 0.7;   // ↓ increase to DECREASE width (try 1.2 or 1.5)
-        $insetY = 0.9;   // vertical inner padding
+        $insetY = 0.88;   // vertical inner padding
         $fieldH = 5.0;          // normal fields
         $descH  = 10.0;         // taller textarea-like field (adjust)
 
@@ -252,7 +252,16 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $pdf->TextField("qty_$i", $wQty - 2 * $insetX, $fieldH, $fieldStyle);
 
             $pdf->SetXY($xDesc + $insetX, $y + $insetY);
-            $pdf->TextField("desc_$i", $wDesc - 2 * $insetX, $descH, $fieldStyle);
+            // $pdf->TextField("desc_$i", $wDesc - 2 * $insetX, $descH, $fieldStyle);
+            $pdf->TextField(
+                "desc_$i",
+                $wDesc - 2 * $insetX,
+                $descH,
+                $fieldStyle + [
+                    'multiline' => true,
+                    'linebreak' => true
+                ]
+            );
 
             $pdf->SetXY($xSerial + $insetX, $y + $insetY);
             $pdf->TextField("serial_$i", $wSerial - 2 * $insetX, $fieldH, $fieldStyle);
