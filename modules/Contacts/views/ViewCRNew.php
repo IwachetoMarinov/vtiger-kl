@@ -206,14 +206,14 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         // ---- COORDINATES ----
         // insetX/insetY = inner padding INSIDE each PDF form field (mm). Bigger => field becomes narrower/shorter.
         // fieldH        = height of each field (mm). Bigger => taller input box.
-        $insetX = 1.2;   // ↓ increase to DECREASE width (try 1.2 or 1.5)
+        $insetX = 0.7;   // ↓ increase to DECREASE width (try 1.2 or 1.5)
         $insetY = 0.9;   // vertical inner padding
         $fieldH = 5.0;
 
         // startY  = Y position of row #1 (mm from top).
         // rowStep = distance between rows (mm). Bigger => MORE space between rows. Smaller => tighter.
         $startY  = 112.0;  // keep unless row1 shifts
-        $rowStep = 7.8;    // ↑ increase a bit for more spacing (try 7.8 or 8.0)
+        $rowStep = 7.2;    // ↑ increase a bit for more spacing (try 7.8 or 8.0)
 
         // Column X positions (mm from left edge of page) and widths (mm).
         // To DECREASE a column width: reduce w*.
