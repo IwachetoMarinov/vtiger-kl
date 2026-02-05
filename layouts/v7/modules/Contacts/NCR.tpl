@@ -271,7 +271,7 @@
 
                 {assign var="location" value=$ERP_DOCUMENT.barItems[0]->warehouse}
 
-                <div style="margin-top: 5mm;">I/We hereby wish to collect the Stored Metal detailed below at the following
+                <div style="margin-top: 3mm;">I/We hereby wish to collect the Stored Metal detailed below at the following
                     location:
                     <p style="font-style: italic;font-weight: 600;">{$location}</p>
                 </div>
@@ -383,21 +383,21 @@
                     passport of the person(s) who will collect the Stored Metal. The
                     original passport(s) will need to be presented prior to Collection at the Storage Facility</p>
 
-                <div style="margin-top: 5mm;">This Collection Order is subject to and governed by the terms and conditions
+                <div style="margin-top: 3mm;">This Collection Order is subject to and governed by the terms and conditions
                     of the Customer Metal Agreement
                     executed and entered into by and between me/us and {if isset($COMPANY)}
                         <span style="text-transform: capitalize;">{$COMPANY->get('company_name')}</span>
                     {/if}
                 </div>
 
-                <div style="margin-top: 5mm;" class="bottom-container">
+                <div style="margin-top: 3mm;" class="bottom-container">
                     <div class="signed-item"></div>
                     <div class="behalf-item">
                         <span>Date: </span>
                     </div>
                 </div>
 
-                <div style="margin-top: 5mm;" class="bottom-container">
+                <div style="margin-top: 3mm;" class="bottom-container">
                     <div class="signed-item">
                         <span>Signed by: </span>
                     </div>
@@ -406,7 +406,7 @@
                     </div>
                 </div>
 
-                <div style="margin-top: 5mm;" class="bottom-container">
+                <div style="margin-top: 3mm;" class="bottom-container">
                     <div class="bottom-container-item">
                         <div
                             style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 100px;background-color:#dce6f9;">
