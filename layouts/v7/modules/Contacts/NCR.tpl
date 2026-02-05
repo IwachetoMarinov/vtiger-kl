@@ -409,7 +409,7 @@
                 <div style="margin-top: 3mm;" class="bottom-container">
                     <div class="bottom-container-item">
                         <div
-                            style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 100px;background-color:#dce6f9;">
+                            style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 50px;background-color:#dce6f9;">
                         </div>
                         <p>Signature</p>
                     </div>
