@@ -197,13 +197,26 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $debug = (string)$request->get('debug') === '1';
         if ($debug) {
             $pdf->SetFont('helvetica', '', 6);
-            for ($x = 0; $x <= 210; $x += 10) {
-                $pdf->Line($x, 0, $x, 297, ['width' => 0.1, 'color' => [180, 180, 180]]);
-                $pdf->Text($x + 0.5, 1, (string)$x);
+
+            $pageW = $pdf->getPageWidth();
+            $pageH = $pdf->getPageHeight();
+
+            // Major grid every 10mm
+            for ($x = 0; $x <= $pageW; $x += 10) {
+                $pdf->Line($x, 0, $x, $pageH, ['width' => 0.1, 'color' => [180, 180, 180]]);
+                $pdf->Text($x + 0.5, 1, (string)$x); // x labels at top
             }
-            for ($y = 0; $y <= 297; $y += 10) {
-                $pdf->Line(0, $y, 210, $y, ['width' => 0.1, 'color' => [180, 180, 180]]);
-                $pdf->Text(1, $y + 0.5, (string)$y);
+            for ($y = 0; $y <= $pageH; $y += 10) {
+                $pdf->Line(0, $y, $pageW, $y, ['width' => 0.1, 'color' => [180, 180, 180]]);
+                $pdf->Text(1, $y + 0.5, (string)$y); // y labels at left
+            }
+
+            // Optional: minor grid every 5mm (lighter)
+            for ($x = 0; $x <= $pageW; $x += 5) {
+                $pdf->Line($x, 0, $x, $pageH, ['width' => 0.05, 'color' => [220, 220, 220]]);
+            }
+            for ($y = 0; $y <= $pageH; $y += 5) {
+                $pdf->Line(0, $y, $pageW, $y, ['width' => 0.05, 'color' => [220, 220, 220]]);
             }
         }
 
