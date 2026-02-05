@@ -315,8 +315,16 @@
                                 {if $PAGES eq $page}
                                     <tr>
                                         <td style="width:100%;" colspan="4">
-                                            <strong>{number_format($total_value,0)} </strong>
-                                            <strong style="float: right;">{number_format($total_oz,4)}</strong>
+                                            {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
+                                                <input type="text" name="total_value"
+                                                    style="width:35mm; border:0; font-weight:bold;" />
+
+                                                <input type="text" name="total_oz"
+                                                    style="width:35mm; border:0; font-weight:bold; float:right; text-align:right;" />
+                                            {else}
+                                                <strong>{number_format($total_value,0)} </strong>
+                                                <strong style="float: right;">{number_format($total_oz,4)}</strong>
+                                            {/if}
                                         </td>
                                     </tr>
                                 {/if}

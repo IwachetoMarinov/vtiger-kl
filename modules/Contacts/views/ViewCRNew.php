@@ -214,7 +214,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         // ---- ROW POSITION ----
         $startY  = 112.0;
         // $rowStep = 7.0;
-        $rowStep = 11.8;  // must be >= descH + some padding
+        $rowStep = 11.7;  // must be >= descH + some padding
 
         // ---- TABLE GEOMETRY ----
         // Left edge of table (matches your current alignment)
@@ -272,8 +272,18 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         }
 
         // Collection date (adjust with debug grid)
-        $pdf->SetXY(112.0, 254.0);  // adjust
-        $pdf->TextField('collection_date', 70, 6, $fieldStyle);
+        // $pdf->SetXY(112.0, 254.0);  // adjust
+        // $pdf->TextField('collection_date', 70, 6, $fieldStyle);
+
+        $yTotals = 198.0;   // <-- adjust to the totals row line
+
+        // Left total (total_value)
+        $pdf->SetXY(8.0, $yTotals);
+        $pdf->TextField('total_value', 35, 6, $fieldStyle);
+
+        // Right total (total_oz)  (right aligned box)
+        $pdf->SetXY(118.0, $yTotals);
+        $pdf->TextField('total_oz', 35, 6, $fieldStyle);
 
         // Save final
         $pdf->Output($finalPdfPath, 'F');
