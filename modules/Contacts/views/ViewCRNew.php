@@ -275,15 +275,13 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         // $pdf->SetXY(112.0, 254.0);  // adjust
         // $pdf->TextField('collection_date', 70, 6, $fieldStyle);
 
-        $yTotals = 198.0;   // <-- adjust to the totals row line
+        $$yTotals = 214.0;
 
-        // Left total (total_value)
         $pdf->SetXY(8.0, $yTotals);
-        $pdf->TextField('total_value', 35, 6, $fieldStyle);
+        $pdf->TextField('total_value', 50, 7, $fieldStyle + ['border' => 1]);
 
-        // Right total (total_oz)  (right aligned box)
-        $pdf->SetXY(118.0, $yTotals);
-        $pdf->TextField('total_oz', 35, 6, $fieldStyle);
+        $pdf->SetXY(103.0, $yTotals);
+        $pdf->TextField('total_oz', 50, 7, $fieldStyle + ['border' => 1]);
 
         // Save final
         $pdf->Output($finalPdfPath, 'F');
