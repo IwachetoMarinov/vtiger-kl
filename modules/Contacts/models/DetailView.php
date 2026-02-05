@@ -64,7 +64,7 @@ class Contacts_DetailView_Model extends Accounts_DetailView_Model
             $basicActionLink = array(
                 'linktype' => 'DETAILVIEWBASIC',
                 'linklabel' => 'Create CR',
-                'linkurl' => 'index.php?module=' . $moduleName . '&view=ViewCR&record=' . $recordId,
+                'linkurl' => 'index.php?module=' . $moduleName . '&view=ViewCRNew&record=' . $recordId,
                 'linkicon' => '',
                 'linktarget' => '_blank',
             );
