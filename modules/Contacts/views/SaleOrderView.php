@@ -233,10 +233,10 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         // In your screenshot the dotted line starts shortly after the left margin on that "serials" line.
         $x = 18.0;     // <-- adjust
         $y = 63.0;     // <-- adjust
-        $w = 170.0;    // width across dotted line
+        $w = 130.0;    // width across dotted line
         $h = 5.7;
 
-        $pdf->SetXY($x, $y);
+        $pdf->SetXY(32, 171.0); // A4 coords are in mm
         $pdf->TextField(
             'serial_numbers',
             $w,
