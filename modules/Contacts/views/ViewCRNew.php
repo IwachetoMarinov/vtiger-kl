@@ -199,7 +199,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $fieldStyle = [
             'border'    => 0,
             'font'      => 'helvetica',
-            'fontsize'  => 8,
+            'fontsize'  => 7,
             'textcolor' => [0, 0, 0],
         ];
 

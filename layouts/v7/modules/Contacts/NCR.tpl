@@ -30,7 +30,7 @@
             width: 210mm;
             border: 1px solid #fff;
             margin: auto;
-            padding: 10mm 10mm;
+            padding: 6mm;
             position: relative;
         }
 
