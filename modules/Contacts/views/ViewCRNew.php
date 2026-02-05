@@ -291,16 +291,16 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $dx = 0.0;
         $dy = 0.0;   // try 0.7 if you want them slightly lower
 
-        $pdf->SetXY(62.0 + $dx, 222.0 + $dy);
+        $pdf->SetXY(64.0 + $dx, 223.0 + $dy);
         $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => (string)$request->get('passport_number')]);
 
-        $pdf->SetXY(20.0 + $dx, 234.0 + $dy);
+        $pdf->SetXY(2.0 + $dx, 235.0 + $dy);
         $pdf->TextField('passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('passport_number')]);
 
-        $pdf->SetXY(20.0 + $dx, 249.0 + $dy);
+        $pdf->SetXY(82.0 + $dx, 240.0 + $dy);
         $pdf->TextField('company_input', $w, $h, $fieldStyle, ['v' => (string)$request->get('company_input')]);
 
-        $pdf->SetXY(82.0 + $dx, 249.0 + $dy);
+        $pdf->SetXY(2.0 + $dx, 247.0 + $dy);
         $pdf->TextField('holding_passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('holding_passport_number')]);
 
 
