@@ -450,7 +450,7 @@
             <!-- SECTION 3 -->
             <div class="additional-section">
                 If the metal to be sold is not currently in storage with GPM, please specify the
-                exact pack-up location and the details of the person authorised to release the metal to GPM (if
+                exact pick-up location and the details of the person authorised to release the metal to GPM (if
                 applicable, IC/Passport number):
                 <div style="margin-top:2mm;">
                     Pick-up location:
