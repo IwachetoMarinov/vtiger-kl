@@ -45,7 +45,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $viewer->assign('COMPANY', $companyRecord);
         $viewer->assign('ERP_DOCUMENT', $erpData);
         $viewer->assign('ID_OPTION', $request->get('idOption') ?? null);
-        $viewer->assign('COMPANY_OPTION', $request->get('companyOption') ?? null);
+        $viewer->assign('COMPANY_OPTION', $request->get('companyName') ?? null);
         $viewer->assign('DOCNO', $request->get('docNo'));
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));
         $viewer->assign('hideCustomerInfo', $request->get('hideCustomerInfo'));

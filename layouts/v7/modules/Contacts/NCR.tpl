@@ -178,6 +178,18 @@
             border-bottom: 1px dotted #000;
         }
 
+        .custom-checkbox {
+            font-size: 3.5mm;
+            border: 1px solid #000;
+            padding: 2px 2px;
+            display: inline-block;
+            height: 5mm;
+            width: 5mm;
+            line-height: 3.5mm;
+            display: inline-block;
+            margin-bottom: 0.8mm;
+        }
+
         .editable-input:focus {
             outline: none;
         }
@@ -372,8 +384,7 @@
                         <input type="checkbox" name="id_option">
                     {else}
                         {if isset($ID_OPTION) && $ID_OPTION eq 1}
-                            <span
-                                style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                            <span class="custom-checkbox">✔</span>
                         {/if}
                     {/if}
                     <span>I/We will personally collect the Stored Metal at the Storage Facility and will be holding
@@ -389,8 +400,7 @@
                         <input type="checkbox" name="company_option">
                     {else}
                         {if isset($COMPANY_OPTION) && $COMPANY_OPTION eq 1}
-                            <span
-                                style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                            <span class="custom-checkbox">✔</span>
                         {/if}
                     {/if}
 
