@@ -292,46 +292,55 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->TextField('total_oz', 35, 5.5, $fieldStyle);
 
         // ---- EXTRA INPUTS (VALUES FROM REQUEST) ----
+        // ---- PARAGRAPH BLOCK BASELINE ----
+        $yBlock = 215.0;   // top line: "Collection to take place on:"
+        $line   = 7.0;     // vertical line spacing (matches your debug)
+        $yCollection = $yBlock + 0 * $line;
+        $yCompany    = $yBlock + 1 * $line;
+        $yPassport   = $yBlock + 2 * $line;
+        $yHolding    = $yBlock + 3 * $line;
+
+
+        // Collection date
+        $pdf->SetXY(60.0, $yCollection);
+        $pdf->TextField(
+            'collectionDateInput',
+            40,
+            6,
+            $fieldStyle,
+            ['v' => $collection_date]
+        );
 
         // Company
-        $pdf->SetXY(60.0, 222.0);  // adjust Y once
+        $pdf->SetXY(60.0, $yCompany);
         $pdf->TextField(
-            'company_input',
+            'companyInput',
             40,
             6,
             $fieldStyle,
             ['v' => $company]
         );
 
-        // Passport number
-        $pdf->SetXY(60.0, 229.0);
+        // Passport
+        $pdf->SetXY(60.0, $yPassport);
         $pdf->TextField(
-            'passport_number',
+            'passportNumberInput',
             40,
             6,
             $fieldStyle,
             ['v' => $passport]
         );
 
-        // Holding passport number
-        $pdf->SetXY(100.0, 236.0);
+        // Holding passport (right side)
+        $pdf->SetXY(100.0, $yHolding);
         $pdf->TextField(
-            'holding_passport_number',
+            'holdingPassportInput',
             40,
             6,
             $fieldStyle,
             ['v' => $holding_passport]
         );
 
-        // Collection date
-        $pdf->SetXY(60.0, 215.0);
-        $pdf->TextField(
-            'collection_date',
-            40,
-            6,
-            $fieldStyle,
-            ['v' => $collection_date]
-        );
 
 
         // Save final
