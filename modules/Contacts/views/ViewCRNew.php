@@ -274,14 +274,13 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         // Collection date (adjust with debug grid)
         // $pdf->SetXY(112.0, 254.0);  // adjust
         // $pdf->TextField('collection_date', 70, 6, $fieldStyle);
-        $yTotals = 230.0;   // adjust here
+        $yTotals = 229.5;   // adjust here
 
         $pdf->SetXY(8.0, $yTotals);
-        $pdf->TextField('total_value', 35, 6, $fieldStyle);
+        $pdf->TextField('total_value', 35, 5.5, $fieldStyle);
 
         $pdf->SetXY(118.0, $yTotals);
-        $pdf->TextField('total_oz', 35, 6, $fieldStyle);
-
+        $pdf->TextField('total_oz', 35, 5.5, $fieldStyle);
 
         // Save final
         $pdf->Output($finalPdfPath, 'F');
