@@ -284,24 +284,24 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->TextField('total_oz', 35, 5.5, $fieldStyle);
 
         // ---- EXTRA INPUTS (VALUES FROM REQUEST) ----
-        $w = 40.0;
-        $h = 6.0;
+        $w = 30.0;
+        $h = 5.7;
 
         // Optional: tiny nudge if you want them to sit lower on the dotted line
         $dx = 0.0;
         $dy = 0.0;   // try 0.7 if you want them slightly lower
 
-        $pdf->SetXY(64.0 + $dx, 223.0 + $dy);
-        $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => (string)$request->get('passport_number')]);
+        $pdf->SetXY(63.0 + $dx, 223.0 + $dy);
+        $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => (string)$request->get('collectionDateInput')]);
 
-        $pdf->SetXY(2.0 + $dx, 235.0 + $dy);
-        $pdf->TextField('passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('passport_number')]);
+        $pdf->SetXY(5.0 + $dx, 235.0 + $dy);
+        $pdf->TextField('passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('passportNumberInput')]);
 
         $pdf->SetXY(82.0 + $dx, 240.0 + $dy);
-        $pdf->TextField('company_input', $w, $h, $fieldStyle, ['v' => (string)$request->get('company_input')]);
+        $pdf->TextField('company_input', $w, $h, $fieldStyle, ['v' => (string)$request->get('companyInput')]);
 
-        $pdf->SetXY(2.0 + $dx, 247.0 + $dy);
-        $pdf->TextField('holding_passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('holding_passport_number')]);
+        $pdf->SetXY(5.0 + $dx, 247.0 + $dy);
+        $pdf->TextField('holding_passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
 
 
         // Save final

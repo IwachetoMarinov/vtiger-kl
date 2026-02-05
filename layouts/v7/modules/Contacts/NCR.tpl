@@ -465,14 +465,11 @@
             }
 
             // check for new inputs and append to URL if needed
-            const companyInput = document.querySelector('input[name="company_input"]');
-
-            const holdingPassportInput = document.querySelector('input[name="holding_passport_number"]');
-
             const collectionDateInput = document.querySelector('input[name="collection_date"]');
-
             const passportNumberInput = document.querySelector('input[name="passport_number"]');
-
+            const companyInput = document.querySelector('input[name="company_input"]');
+            const holdingPassportInput = document.querySelector('input[name="holding_passport_number"]');
+            
             if (companyInput && companyInput.value.trim() !== '') {
                 url.searchParams.set('companyInput', companyInput.value.trim());
             } else {
