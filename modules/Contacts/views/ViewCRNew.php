@@ -75,49 +75,91 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
 
         $fileName = $clientID . '-' . $template_name . '-' . $year . '-' . $docNoLastPart . '-' . $template_name;
 
+        // ---- Writable temp dir ----
         $tmpDir = rtrim($root_directory, '/') . '/storage/';
-        if (!is_dir($tmpDir)) @mkdir($tmpDir, 0775, true);
+        if (!is_dir($tmpDir)) {
+            @mkdir($tmpDir, 0775, true);
+        }
         if (!is_writable($tmpDir)) {
             $tmpDir = rtrim(sys_get_temp_dir(), '/') . '/vtiger_pdf/';
-            if (!is_dir($tmpDir)) @mkdir($tmpDir, 0775, true);
+            if (!is_dir($tmpDir)) {
+                @mkdir($tmpDir, 0775, true);
+            }
         }
-        if (!is_writable($tmpDir)) die('Temp dir not writable');
+        if (!is_dir($tmpDir) || !is_writable($tmpDir)) {
+            die('Temp directory not writable: ' . $tmpDir);
+        }
 
         $htmlPath     = $tmpDir . $fileName . '.html';
         $basePdfPath  = $tmpDir . $fileName . '_base.pdf';
         $finalPdfPath = $tmpDir . $fileName . '.pdf';
 
-        file_put_contents($htmlPath, $html);
+        // (1) HTML -> PDF (keeps your exact template)
+        if (@file_put_contents($htmlPath, $html) === false) {
+            die('Cannot write HTML file: ' . $htmlPath);
+        }
 
         $cmd = "wkhtmltopdf --enable-local-file-access "
             . "--page-size A4 --dpi 96 --zoom 1 "
             . "--margin-top 0 --margin-right 0 --margin-bottom 0 --margin-left 0 "
             . "--disable-smart-shrinking "
-            . escapeshellarg($htmlPath) . " "
-            . escapeshellarg($basePdfPath) . " 2>&1";
+            . escapeshellarg($htmlPath) . " " . escapeshellarg($basePdfPath) . " 2>&1";
 
+        $out = [];
+        $code = 0;
         exec($cmd, $out, $code);
         @unlink($htmlPath);
 
         if ($code !== 0 || !file_exists($basePdfPath)) {
-            die("wkhtmltopdf failed");
+            die("wkhtmltopdf failed (exit=$code):\n" . implode("\n", $out));
         }
 
-        $rowCount = (int)$request->get('rows_count');
-        $rowCount = max(0, min($rowCount, 20));
+        // ------------------------------------------------------------------
+        // (A) DYNAMIC ROW COUNT - infer from HTML field names qty_1..qty_N
+        // ------------------------------------------------------------------
+        $rowCount = 0;
 
+        // match: name="qty_12" or name='qty_12'
+        if (preg_match_all('/name\s*=\s*["\']qty_(\d+)["\']/', (string)$html, $m)) {
+            $nums = array_map('intval', $m[1]);
+            $rowCount = $nums ? max($nums) : 0;
+        }
+
+        // Safety: never create insane amounts of fields
+        $MAX_ROWS = 30; // adjust if you want more
+        $rowCount = max(0, min($rowCount, $MAX_ROWS));
+
+        // (2) Import the rendered PDF and overlay form fields
         $pdf = new \setasign\Fpdi\Tcpdf\Fpdi();
-        $pdf->SetMargins(0, 0, 0);
         $pdf->SetAutoPageBreak(false);
+        $pdf->SetMargins(0, 0, 0);
 
-        // ✅ REQUIRED
         $pageCount = $pdf->setSourceFile($basePdfPath);
         $tplId = $pdf->importPage(1);
         $size  = $pdf->getTemplateSize($tplId);
 
+        // Create page EXACTLY like template size (prevents scaling mismatch)
         $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
-        $pdf->useTemplate($tplId);
+        $pdf->useTemplate($tplId, 0, 0, $size['width'], $size['height']);
 
+        // DEBUG GRID MODE (call with &debug=1)
+        $debug = (string)$request->get('debug') === '1';
+        if ($debug) {
+            $pdf->SetFont('helvetica', '', 6);
+
+            // vertical lines every 10mm
+            for ($x = 0; $x <= 210; $x += 10) {
+                $pdf->Line($x, 0, $x, 297, ['width' => 0.1, 'color' => [180, 180, 180]]);
+                $pdf->Text($x + 0.5, 1, (string)$x);
+            }
+            // horizontal lines every 10mm
+            for ($y = 0; $y <= 297; $y += 10) {
+                $pdf->Line(0, $y, 210, $y, ['width' => 0.1, 'color' => [180, 180, 180]]);
+                $pdf->Text(1, $y + 0.5, (string)$y);
+            }
+        }
+
+        // ---- Field appearance ----
         $fieldStyle = [
             'border'    => 0,
             'font'      => 'helvetica',
@@ -125,9 +167,13 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             'textcolor' => [0, 0, 0],
         ];
 
-        $startY  = 112.0;
-        $rowStep = 7.4;
-        $fieldH  = 5.0;
+        // ---- COORDINATES ----
+        $insetX = 0.8;
+        $insetY = 0.9;
+        $fieldH = 5.0;
+
+        $startY  = 112.0;  // adjust
+        $rowStep = 7.4;    // adjust
 
         $xQty    = 19.0;
         $wQty    = 18.0;
@@ -138,31 +184,40 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $xFine   = 169.0;
         $wFine   = 19.0;
 
+        // ------------------------------------------------------------------
+        // (B) Create fields dynamically (names match your Smarty template)
+        // ------------------------------------------------------------------
         for ($i = 1; $i <= $rowCount; $i++) {
             $y = $startY + ($i - 1) * $rowStep;
 
-            $pdf->SetXY($xQty, $y);
-            $pdf->TextField("qty_$i", $wQty, $fieldH, $fieldStyle);
+            $pdf->SetXY($xQty + $insetX, $y + $insetY);
+            $pdf->TextField("qty_$i", $wQty - 2 * $insetX, $fieldH, $fieldStyle);
 
-            $pdf->SetXY($xDesc, $y);
-            $pdf->TextField("desc_$i", $wDesc, $fieldH, $fieldStyle);
+            $pdf->SetXY($xDesc + $insetX, $y + $insetY);
+            $pdf->TextField("desc_$i", $wDesc - 2 * $insetX, $fieldH, $fieldStyle);
 
-            $pdf->SetXY($xSerial, $y);
-            $pdf->TextField("serial_$i", $wSerial, $fieldH, $fieldStyle);
+            $pdf->SetXY($xSerial + $insetX, $y + $insetY);
+            $pdf->TextField("serial_$i", $wSerial - 2 * $insetX, $fieldH, $fieldStyle);
 
-            $pdf->SetXY($xFine, $y);
-            $pdf->TextField("fine_oz_$i", $wFine, $fieldH, $fieldStyle);
+            // IMPORTANT: your tpl uses fine_oz_#
+            $pdf->SetXY($xFine + $insetX, $y + $insetY);
+            $pdf->TextField("fine_oz_$i", $wFine - 2 * $insetX, $fieldH, $fieldStyle);
         }
 
-        $pdf->SetXY(112.0, 254.0);
+        // Collection date (adjust with debug grid)
+        $pdf->SetXY(112.0, 254.0);  // adjust
         $pdf->TextField('collection_date', 70, 6, $fieldStyle);
 
+        // Save final
         $pdf->Output($finalPdfPath, 'F');
         @unlink($basePdfPath);
 
         header("Content-Type: application/pdf");
+        header("Cache-Control: private");
         header("Content-Disposition: attachment; filename=\"$fileName.pdf\"");
-        if (ob_get_length()) ob_clean();
+        if (ob_get_length()) {
+            ob_clean();
+        }
         flush();
         readfile($finalPdfPath);
         @unlink($finalPdfPath);
