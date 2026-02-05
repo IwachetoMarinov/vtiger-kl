@@ -294,9 +294,9 @@
                                                 <input type="text" name="qty_{$smarty.foreach.rowloop.iteration}"
                                                     style="width:100%; border:0;" />
                                             </td>
-                                            <td>
-                                                <input type="text" name="desc_{$smarty.foreach.rowloop.iteration}"
-                                                    style="width:100%; border:0;" />
+                                            <td style="height:12mm; vertical-align:top;">
+                                                <textarea name="desc_{$smarty.foreach.rowloop.iteration}"
+                                                    style="width:100%; height:12mm; border:0; resize:none; overflow:hidden;"></textarea>
                                             </td>
                                             <td>
                                                 <input type="text" name="serial_{$smarty.foreach.rowloop.iteration}"
