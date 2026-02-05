@@ -101,10 +101,10 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
     {
         global $root_directory;
 
-        $company = (string)$request->get('companyInput');
-        $passport = (string)$request->get('passportNumberInput');
-        $holding_passport = (string)$request->get('holdingPassportInput');
-        $collection_date = (string)$request->get('collectionDateInput');
+        $company_input = (string)$request->get('companyInput');
+        $passport_number = (string)$request->get('passportNumberInput');
+        $holding_passport_number = (string)$request->get('holdingPassportInput');
+        $collection = (string)$request->get('collectionDateInput');
 
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
@@ -280,68 +280,34 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $pdf->TextField("fine_oz_$i", $wFine - 2 * $insetX, $fieldH, $fieldStyle);
         }
 
-        // Collection date (adjust with debug grid)
-        // $pdf->SetXY(112.0, 254.0);  // adjust
-        // $pdf->TextField('collection_date', 70, 6, $fieldStyle);
-        $yTotals = 215;   // adjust here
+        // ---- 4 INPUTS UNDER THE TABLE (markers 1..4) ----
+        $w = 40.0;   // 40mm like your CSS
+        $h = 6.0;
 
-        $pdf->SetXY(8.0, $yTotals);
-        $pdf->TextField('total_value', 35, 5.5, $fieldStyle);
+        $xLeft  = 60.0;   // left underline start
+        $xRight = 102.0;  // right underline start
 
-        $pdf->SetXY(118.0, $yTotals);
-        $pdf->TextField('total_oz', 35, 5.5, $fieldStyle);
+        $y1 = 215.0;          // marker 1 (collection_date line)
+        $line = 7.0;          // line spacing
+        $y2 = $y1 + 1 * $line;  // marker 2 (passport_number line)
+        $y3 = $y1 + 2 * $line;  // marker 3 (company_input line)
+        $y4 = $y1 + 2 * $line;  // marker 4 is on SAME row as company but on right side
 
-        // ---- EXTRA INPUTS (VALUES FROM REQUEST) ----
-        // ---- PARAGRAPH BLOCK BASELINE ----
-        $yBlock = 215.0;   // top line: "Collection to take place on:"
-        $line   = 7.0;     // vertical line spacing (matches your debug)
-        $yCollection = $yBlock + 0 * $line;
-        $yCompany    = $yBlock + 1 * $line;
-        $yPassport   = $yBlock + 2 * $line;
-        $yHolding    = $yBlock + 3 * $line;
+        // 1) collection_date (marker 1)
+        $pdf->SetXY($xLeft, $y1);
+        $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => $collection]);
 
+        // 2) passport_number (marker 2)
+        $pdf->SetXY($xLeft, $y2);
+        $pdf->TextField('passport_number', $w, $h, $fieldStyle, ['v' => $passport_number]);
 
-        // Collection date
-        $pdf->SetXY(60.0, $yCollection);
-        $pdf->TextField(
-            'collectionDateInput',
-            40,
-            6,
-            $fieldStyle,
-            ['v' => $collection_date]
-        );
+        // 3) company_input (marker 3)
+        $pdf->SetXY($xLeft, $y3);
+        $pdf->TextField('company_input', $w, $h, $fieldStyle, ['v' => $company_input]);
 
-        // Company
-        $pdf->SetXY(60.0, $yCompany);
-        $pdf->TextField(
-            'companyInput',
-            40,
-            6,
-            $fieldStyle,
-            ['v' => $company]
-        );
-
-        // Passport
-        $pdf->SetXY(60.0, $yPassport);
-        $pdf->TextField(
-            'passportNumberInput',
-            40,
-            6,
-            $fieldStyle,
-            ['v' => $passport]
-        );
-
-        // Holding passport (right side)
-        $pdf->SetXY(100.0, $yHolding);
-        $pdf->TextField(
-            'holdingPassportInput',
-            40,
-            6,
-            $fieldStyle,
-            ['v' => $holding_passport]
-        );
-
-
+        // 4) holding_passport_number (marker 4) RIGHT SIDE, same row as company
+        $pdf->SetXY($xRight, $y4);
+        $pdf->TextField('holding_passport_number', $w, $h, $fieldStyle, ['v' => $holding_passport_number]);
 
         // Save final
         $pdf->Output($finalPdfPath, 'F');
