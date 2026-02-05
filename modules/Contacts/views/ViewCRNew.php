@@ -212,7 +212,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $descH  = 9.6;         // taller textarea-like field (adjust)
 
         // ---- ROW POSITION ----
-        $startY  = 98.0;
+        $startY  = 97.0;
         // $rowStep = 7.0;
         $rowStep = 11.7;  // must be >= descH + some padding
 
@@ -274,7 +274,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         // Collection date (adjust with debug grid)
         // $pdf->SetXY(112.0, 254.0);  // adjust
         // $pdf->TextField('collection_date', 70, 6, $fieldStyle);
-        $yTotals = 217.5;   // adjust here
+        $yTotals = 215;   // adjust here
 
         $pdf->SetXY(8.0, $yTotals);
         $pdf->TextField('total_value', 35, 5.5, $fieldStyle);

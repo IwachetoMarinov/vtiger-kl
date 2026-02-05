@@ -340,11 +340,11 @@
 
                 </table>
 
-                <div style="margin-top: 6mm;">I/We would like the Collection to take place on:
+                <div style="margin-top: 3mm;">I/We would like the Collection to take place on:
                     <span>...................</span>
                 </div>
 
-                <div style="margin-top: 4mm;">
+                <div style="margin-top: 3mm;">
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                         <input type="checkbox" name="id_option">
                     {else}
@@ -358,7 +358,7 @@
                     <span> .......................</span>
                 </div>
 
-                <div style="margin-top: 4mm;">
+                <div style="margin-top: 3mm;">
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                         <input type="checkbox" name="company_option">
                     {else}
@@ -379,7 +379,7 @@
                 </div>
 
 
-                <p style="margin-top: 4mm;font-style: italic;font-weight: bold;">I/We hereby enclose a photocopy of the
+                <p style="margin-top: 3mm;font-style: italic;font-weight: bold;">I/We hereby enclose a photocopy of the
                     passport of the person(s) who will collect the Stored Metal. The
                     original passport(s) will need to be presented prior to Collection at the Storage Facility</p>
 
