@@ -170,6 +170,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->SetAutoPageBreak(false);
         $pdf->SetMargins(0, 0, 0);
 
+        $pageCount = $pdf->setSourceFile($basePdfPath);
         $tplId = $pdf->importPage(1);
         $size  = $pdf->getTemplateSize($tplId);
 
@@ -252,6 +253,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $pdf->TextField("qty_$i", $wQty - 2 * $insetX, $fieldH, $fieldStyle);
 
             $pdf->SetXY($xDesc + $insetX, $y + $insetY);
+            // $pdf->TextField("desc_$i", $wDesc - 2 * $insetX, $descH, $fieldStyle);
             $pdf->TextField(
                 "desc_$i",
                 $wDesc - 2 * 0.3,
