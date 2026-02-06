@@ -277,17 +277,47 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $x = 18.0;
         $y = 63.0;
         $h = 5.5;
-        $serial_input_widthw = 143.0;
 
-        // Serial numbers field
-        $pdf->SetXY(32, 141.0); // A4 coords are in mm
+        // currency input  field
+        $pdf->SetXY(62, 131.0); // A4 coords are in mm
         $pdf->TextField(
             'currency',
-            $serial_input_widthw,
+            38,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('currency')]
         );
+
+        // location input field
+        $pdf->SetXY(102, 143.0);
+        $pdf->TextField(
+            'location',
+            38,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('location')]
+        );
+
+        // address input field
+        $pdf->SetXY(72, 151.0);
+        $pdf->TextField(
+            'address',
+            75,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('address')]
+        );
+
+        // country input field
+        $pdf->SetXY(52, 170.0);
+        $pdf->TextField(
+            'country',
+            42,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('country')]
+        );
+
         // ---- Save final ----
         $pdf->Output($finalPdfPath, 'F');
         @unlink($basePdfPath);

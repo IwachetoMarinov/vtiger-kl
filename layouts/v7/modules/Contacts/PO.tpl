@@ -329,7 +329,7 @@
             <li style="float:right">
                 <a id="downloadBtn"
                     style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
-                    href="index.php?module=Contacts&view=PurchaseOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}&debug=1">
+                    href="index.php?module=Contacts&view=PurchaseOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
                     Download
                 </a>
             </li>
@@ -565,7 +565,7 @@
                         {/if}
                     {/if}
                     <span>deliver the above metal to:</span>
-                    <span> <input type="text" name="address" class="custom-editable-input" /> </span>
+                    <span> <input type="text" name="address" style="width: 75mm;" class="custom-editable-input" /> </span>
                     <span style="font-style: italic;">(Please specify full address)</span>
                 </div>
             </div>
