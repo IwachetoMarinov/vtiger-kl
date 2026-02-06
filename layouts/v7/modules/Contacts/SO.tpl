@@ -299,7 +299,11 @@
         <table class="header-table" style="margin-bottom: 1mm;">
             <tr>
                 <td class="logo">
-                    <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
+                    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                        <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
+                    {else}
+                        <img src="file:///var/www/html/layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
+                    {/if}
                 </td>
                 <td class="title"></td>
                 <td style="width:25mm;"></td>
