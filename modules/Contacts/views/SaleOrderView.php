@@ -233,11 +233,11 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         // In your screenshot the dotted line starts shortly after the left margin on that "serials" line.
         $x = 18.0;     // <-- adjust
         $y = 63.0;     // <-- adjust
-        $serial_input_widthw = 142.0;    // width across dotted line
+        $serial_input_widthw = 143.0;    // width across dotted line
         $h = 5.5;
 
         // Serial numbers field
-        $pdf->SetXY(31, 155.0); // A4 coords are in mm
+        $pdf->SetXY(32, 153.5); // A4 coords are in mm
         $pdf->TextField(
             'serial_numbers',
             $serial_input_widthw,
@@ -246,14 +246,74 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
             ['v' => (string)$request->get('serial_numbers')]
         );
 
-        // Repeat on page 2 if exists
-        $pdf->SetXY(50, 175.0); // A4 coords are in mm
+        // Pick up location field (added as example of second field, adjust coords as needed)
+        $pdf->SetXY(52, 173.5); // A4 coords are in mm
         $pdf->TextField(
             'pick_up_location',
-            135.0,
+            130.0,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('pick_up_location')]
+        );
+
+        // authorised_person_name input
+        $pdf->SetXY(52, 181.5); // A4 coords are in mm
+        $pdf->TextField(
+            'authorised_person_name',
+            43,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('authorised_person_name')]
+        );
+
+        // authorised_person_id input
+        $pdf->SetXY(75, 181.5); // A4 coords are in mm
+        $pdf->TextField(
+            'authorised_person_id',
+            40,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('authorised_person_id')]
+        );
+
+        // bank_name input
+        $pdf->SetXY(52, 221.5); // A4 coords are in mm
+        $pdf->TextField(
+            'bank_name',
+            130,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('bank_name')]
+        );
+
+        // bank_address input
+        $pdf->SetXY(55, 229.5); // A4 coords are in mm
+        $pdf->TextField(
+            'bank_address',
+            130,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('bank_address')]
+        );
+
+        // bank_code input
+        $pdf->SetXY(52, 235.5); // A4 coords are in mm
+        $pdf->TextField(
+            'bank_code',
+            52,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('bank_code')]
+        );
+
+        // swift_code input
+        $pdf->SetXY(123, 235.5); // A4 coords are in mm
+        $pdf->TextField(
+            'swift_code',
+            55,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('swift_code')]
         );
 
         // ---- Save final ----
