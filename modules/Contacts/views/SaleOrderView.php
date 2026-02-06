@@ -237,7 +237,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $h = 5.7;
 
         // Serial numbers field
-        $pdf->SetXY(32, 155.0); // A4 coords are in mm
+        $pdf->SetXY(31, 160.0); // A4 coords are in mm
         $pdf->TextField(
             'serial_numbers',
             $w,
@@ -247,7 +247,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // Repeat on page 2 if exists
-        $pdf->SetXY(57, 173.0); // A4 coords are in mm
+        $pdf->SetXY(54, 160.0); // A4 coords are in mm
         $pdf->TextField(
             'pick_up_location',
             $w,
