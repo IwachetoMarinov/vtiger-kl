@@ -247,17 +247,17 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // Pick up location field (added as example of second field, adjust coords as needed)
-        $pdf->SetXY(52, 173.5); // A4 coords are in mm
+        $pdf->SetXY(53.5, 172.0); // A4 coords are in mm
         $pdf->TextField(
             'pick_up_location',
-            130.0,
+            127.0,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('pick_up_location')]
         );
 
         // authorised_person_name input
-        $pdf->SetXY(52, 181.5); // A4 coords are in mm
+        $pdf->SetXY(74, 181.5); // A4 coords are in mm
         $pdf->TextField(
             'authorised_person_name',
             43,
@@ -267,7 +267,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // authorised_person_id input
-        $pdf->SetXY(75, 181.5); // A4 coords are in mm
+        $pdf->SetXY(141.5, 181.5); // A4 coords are in mm
         $pdf->TextField(
             'authorised_person_id',
             40,
@@ -277,17 +277,17 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // bank_name input
-        $pdf->SetXY(52, 221.5); // A4 coords are in mm
+        $pdf->SetXY(52, 219.0); // A4 coords are in mm
         $pdf->TextField(
             'bank_name',
-            130,
+            128,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('bank_name')]
         );
 
         // bank_address input
-        $pdf->SetXY(55, 229.5); // A4 coords are in mm
+        $pdf->SetXY(55, 225.5); // A4 coords are in mm
         $pdf->TextField(
             'bank_address',
             130,
@@ -297,7 +297,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // bank_code input
-        $pdf->SetXY(52, 235.5); // A4 coords are in mm
+        $pdf->SetXY(52, 232.5); // A4 coords are in mm
         $pdf->TextField(
             'bank_code',
             52,
@@ -307,13 +307,33 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // swift_code input
-        $pdf->SetXY(123, 235.5); // A4 coords are in mm
+        $pdf->SetXY(122, 232.5); // A4 coords are in mm
         $pdf->TextField(
             'swift_code',
             55,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('swift_code')]
+        );
+
+        // account_no input
+        $pdf->SetXY(52, 237.0); // A4 coords are in mm
+        $pdf->TextField(
+            'account_no',
+            47,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('account_no')]
+        );
+
+        // account_currency input
+        $pdf->SetXY(126, 237.5); // A4 coords are in mm
+        $pdf->TextField(
+            'account_currency',
+            47,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('account_currency')]
         );
 
         // ---- Save final ----
