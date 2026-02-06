@@ -233,24 +233,24 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         // In your screenshot the dotted line starts shortly after the left margin on that "serials" line.
         $x = 18.0;     // <-- adjust
         $y = 63.0;     // <-- adjust
-        $w = 142.0;    // width across dotted line
-        $h = 5.7;
+        $serial_input_widthw = 142.0;    // width across dotted line
+        $h = 5.5;
 
         // Serial numbers field
-        $pdf->SetXY(31, 160.0); // A4 coords are in mm
+        $pdf->SetXY(31, 155.0); // A4 coords are in mm
         $pdf->TextField(
             'serial_numbers',
-            $w,
+            $serial_input_widthw,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('serial_numbers')]
         );
 
         // Repeat on page 2 if exists
-        $pdf->SetXY(54, 160.0); // A4 coords are in mm
+        $pdf->SetXY(50, 175.0); // A4 coords are in mm
         $pdf->TextField(
             'pick_up_location',
-            $w,
+            135.0,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('pick_up_location')]
