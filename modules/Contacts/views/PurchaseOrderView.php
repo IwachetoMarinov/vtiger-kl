@@ -279,40 +279,40 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $h = 5.5;
 
         // currency input  field
-        $pdf->SetXY(62, 131.0); // A4 coords are in mm
+        $pdf->SetXY(60.5, 131.0); // A4 coords are in mm
         $pdf->TextField(
             'currency',
-            38,
+            38.5,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('currency')]
         );
 
         // location input field
-        $pdf->SetXY(102, 143.0);
+        $pdf->SetXY(100, 144.5);
         $pdf->TextField(
             'location',
-            38,
+            40,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('location')]
         );
 
         // address input field
-        $pdf->SetXY(72, 151.0);
+        $pdf->SetXY(69, 152.0);
         $pdf->TextField(
             'address',
-            75,
+            55,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('address')]
         );
 
         // country input field
-        $pdf->SetXY(52, 170.0);
+        $pdf->SetXY(50, 170.0);
         $pdf->TextField(
             'country',
-            42,
+            43,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('country')]
