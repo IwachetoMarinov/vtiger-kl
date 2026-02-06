@@ -256,15 +256,10 @@
             gap: 2mm;
         }
 
-        .editable-label {
-            /* flex: 1; */
-        }
-
         .custom-editable-input {
             border: none;
             possition: relative;
             padding-bottom: 1mm;
-            /* width: 100%; */
             flex: 1;
             min-width: 40mm;
             border-bottom: 1px dotted #000;

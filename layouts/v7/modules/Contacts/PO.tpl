@@ -61,7 +61,7 @@
         }
 
         .logo {
-           width: 52mm;
+            width: 52mm;
         }
 
         .title {
@@ -284,6 +284,29 @@
         .bank-item {
             margin-bottom: 1mm;
         }
+
+        .editable-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 2mm;
+        }
+
+        .custom-editable-input {
+            border: none;
+            possition: relative;
+            padding-bottom: 1mm;
+            flex: 1;
+            min-width: 40mm;
+            border-bottom: 1px dotted #000;
+        }
+
+        .custom-editable-input:focus {
+            outline: none;
+        }
+
+        .full-width {
+            width: 100%;
+        }
     </style>
 
 
@@ -306,7 +329,7 @@
             <li style="float:right">
                 <a id="downloadBtn"
                     style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
-                    href="index.php?module=Contacts&view=PurchaseOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
+                    href="index.php?module=Contacts&view=PurchaseOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}&debug=1">
                     Download
                 </a>
             </li>
@@ -349,7 +372,11 @@
         <table class="header-table ">
             <tr>
                 <td class="logo">
-                    <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
+                    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                        <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
+                    {else}
+                        <img src="file:///var/www/html/layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
+                    {/if}
                 </td>
                 <td class="title"></td>
                 <td style="width:25mm;"></td>
@@ -506,7 +533,7 @@
                     {/if}
                 </span>
                 <span>
-                    .................................................................................
+                    <input type="text" name="currency" class="custom-editable-input" />
                     <span style="font-style: italic;"> (the “Purchase Amount”)</span>
                 </span>
             </div>
@@ -524,7 +551,7 @@
                         {/if}
                     {/if}
                     <span>deliver & store the above metal in a facility located in:</span>
-                    <span> ...........................</span>
+                    <span> <input type="text" name="location" class="custom-editable-input" /> </span>
                     <span style="font-style: italic;">(Please specify country)</span>
                 </div>
 
@@ -538,7 +565,7 @@
                         {/if}
                     {/if}
                     <span>deliver the above metal to:</span>
-                    <span> ....................................................................</span>
+                    <span> <input type="text" name="address" class="custom-editable-input" /> </span>
                     <span style="font-style: italic;">(Please specify full address)</span>
                 </div>
             </div>
@@ -551,7 +578,8 @@
                     <div>(a) <span class="bolder-element">from the following jurisdiction:</span></div>
 
                     <div style="padding-left: 5mm; margin-top: 2mm;">Country:
-                        <span>..............................................................................................................................................</span>
+                        <span> <input type="text" name="country" style="width: 60mm;"
+                                class="custom-editable-input" /></span>
                     </div>
 
                     <div style="margin:1.5mm 0;">(b) <span class="bolder-element">to GPM’s bank account </span>as
@@ -726,9 +754,6 @@
                 checked = "2";
             }
 
-            console.log("checked:", checked);
-
-
             const url = new URL(this.href);
             if (checked) url.searchParams.set('pricing_option', checked);
             else url.searchParams.delete('pricing_option');
@@ -744,6 +769,15 @@
             } else {
                 url.searchParams.delete('addressOption');
             }
+
+            // Get all custom-editable-input values and append to URL as query parameters
+            document.querySelectorAll('.custom-editable-input').forEach(input => {
+                if (input.name) {
+                    url.searchParams.set(input.name, input.value);
+                } else {
+                    url.searchParams.delete(input.name);
+                }
+            });
 
             this.href = url.toString();
         });
