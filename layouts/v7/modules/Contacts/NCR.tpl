@@ -25,12 +25,18 @@
             margin: 0px
         }
 
+        body {
+            font-family: 'Open Sans';
+            font-size: 10pt;
+            color: #666;
+        }
+
         .printAreaContainer {
             height: 297mm;
             width: 210mm;
             border: 1px solid #fff;
             margin: auto;
-            padding: 10mm 10mm;
+            padding: 6mm;
             position: relative;
         }
 
@@ -153,6 +159,40 @@
             accent-color: #000;
         }
 
+        .editable-input-wrapper {
+            margin-top: 3mm;
+            display: flex;
+            align-items: center;
+            gap: 2mm;
+        }
+
+        .editable-input-wrapper--nested {
+            flex-wrap: wrap;
+        }
+
+        .editable-input {
+            border: none;
+            width: 40mm;
+            min-width: 40mm;
+            border-bottom: 1px dotted #000;
+        }
+
+        .custom-checkbox {
+            font-size: 3.5mm;
+            border: 1px solid #000;
+            padding: 2px 2px;
+            display: inline-block;
+            height: 5mm;
+            width: 5mm;
+            line-height: 3.5mm;
+            display: inline-block;
+            margin-bottom: 0.8mm;
+        }
+
+        .editable-input:focus {
+            outline: none;
+        }
+
         @media print {
 
             @page {
@@ -202,15 +242,15 @@
             <div class="full-width">
                 <table class="print-tbl">
                     <tr>
-                        <td style="height: 28mm;">
+                        <td>
                             {if isset($smarty.request.PDFDownload) && $smarty.request.PDFDownload eq true}
                                 <img src="file:///var/www/html/layouts/v7/modules/Contacts/resources/gpm-new-logo.png"
-                                    style="max-height: 100%; float:left;width: 192px;" />
+                                    style="max-height: 100%; float:left;width: 196px;" />
                             {else}
                                 <img src='layouts/v7/modules/Contacts/resources/gpm-new-logo.png'
-                                    style="max-height: 100%; float:left;width: 192px;" />
+                                    style="max-height: 100%; float:left;width: 196px;" />
                             {/if}
-                            <div style="font-size: 11pt;margin-top: 20mm; float:right;">
+                            <div style="font-size: 11pt;margin-top: 27mm; float:right;">
                                 <span>From: {$RECORD_MODEL->get('cf_898')}</span>
                             </div>
                         </td>
@@ -265,7 +305,7 @@
 
                 {assign var="location" value=$ERP_DOCUMENT.barItems[0]->warehouse}
 
-                <div style="margin-top: 5mm;">I/We hereby wish to collect the Stored Metal detailed below at the following
+                <div style="margin-top: 3mm;">I/We hereby wish to collect the Stored Metal detailed below at the following
                     location:
                     <p style="font-style: italic;font-weight: 600;">{$location}</p>
                 </div>
@@ -279,10 +319,10 @@
 
                             <table class="activity-tbl">
                                 <tr>
-                                    <th style="width:10%;">QTY</th>
-                                    <th style="width:50%;">DESCRIPTION</th>
-                                    <th style="width:25%;">SERIAL NUMBERS</th>
-                                    <th style="width:15%;text-align:center">FINE OZ.</th>
+                                    <th style="width:5%;">QTY</th>
+                                    <th style="width:65%;">DESCRIPTION</th>
+                                    <th style="width:20%;">SERIAL NUMBERS</th>
+                                    <th style="width:10%;text-align:center">FINE OZ.</th>
                                 </tr>
 
                                 {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
@@ -294,9 +334,9 @@
                                                 <input type="text" name="qty_{$smarty.foreach.rowloop.iteration}"
                                                     style="width:100%; border:0;" />
                                             </td>
-                                            <td>
-                                                <input type="text" name="desc_{$smarty.foreach.rowloop.iteration}"
-                                                    style="width:100%; border:0;" />
+                                            <td style="height:12mm; vertical-align:top;">
+                                                <textarea name="desc_{$smarty.foreach.rowloop.iteration}"
+                                                    style="width:100%; height:12mm; border:0; resize:none; overflow:hidden;"></textarea>
                                             </td>
                                             <td>
                                                 <input type="text" name="serial_{$smarty.foreach.rowloop.iteration}"
@@ -315,8 +355,16 @@
                                 {if $PAGES eq $page}
                                     <tr>
                                         <td style="width:100%;" colspan="4">
-                                            <strong>{number_format($total_value,0)} </strong>
-                                            <strong style="float: right;">{number_format($total_oz,4)}</strong>
+                                            {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
+                                                <input type="text" name="total_value"
+                                                    style="width:35mm; border:0; font-weight:bold;" />
+
+                                                <input type="text" name="total_oz"
+                                                    style="width:35mm; border:0; font-weight:bold; float:right; text-align:right;" />
+                                            {else}
+                                                <strong>{number_format($total_value,0)} </strong>
+                                                <strong style="float: right;">{number_format($total_oz,4)}</strong>
+                                            {/if}
                                         </td>
                                     </tr>
                                 {/if}
@@ -326,81 +374,83 @@
 
                 </table>
 
-                <div style="margin-top: 6mm;">I/We would like the Collection to take place on:
-                    <span>...................</span>
+                <div class="editable-input-wrapper">I/We would like the Collection to take place on:
+                    <input type="text" name="collection_date" class="editable-input" />
                 </div>
 
-                <div style="margin-top: 4mm;">
+                <div style="margin-top: 3mm;">
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                         <input type="checkbox" name="id_option">
                     {else}
                         {if isset($ID_OPTION) && $ID_OPTION eq 1}
-                            <span
-                                style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                            <span class="custom-checkbox">✔</span>
                         {/if}
                     {/if}
                     <span>I/We will personally collect the Stored Metal at the Storage Facility and will be holding
                         ID/Passport number</span>
-                    <span> .......................</span>
+                </div>
+                <div>
+                    <input type="text" name="passport_number" class="editable-input" />
                 </div>
 
-                <div style="margin-top: 4mm;">
+
+                <div class="editable-input-wrapper editable-input-wrapper--nested">
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                         <input type="checkbox" name="company_option">
                     {else}
                         {if isset($COMPANY_OPTION) && $COMPANY_OPTION eq 1}
-                            <span
-                                style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                            <span class="custom-checkbox">✔</span>
                         {/if}
                     {/if}
 
                     <span>I/We hereby authorise Mr/Mrs/Representatives of the company </span>
-                    <span> .......................</span>
+                    <input type="text" name="company_input" class="editable-input" />
                     (<span>holding ID/Passport number</span>
-                    <span> .......................</span>)
+                    <input type="text" name="holding_passport_number" class="editable-input" />)
                     <span> to collect the Stored Metal on my/our behalf. This
-                        authorisation is only valid for the collection of the Stored Metal specified above and shall not be
+                        authorisation is only valid for the collection of the Stored Metal specified above and shall not
+                        be
                         extended
                         to any other services covered under the Customer Metal Agreement.</span>
                 </div>
 
 
-                <p style="margin-top: 4mm;font-style: italic;font-weight: bold;">I/We hereby enclose a photocopy of the
+                <p style="margin-top: 3mm;font-style: italic;font-weight: bold;">I/We hereby enclose a photocopy of the
                     passport of the person(s) who will collect the Stored Metal. The
                     original passport(s) will need to be presented prior to Collection at the Storage Facility</p>
 
-                <div style="margin-top: 5mm;">This Collection Order is subject to and governed by the terms and conditions
-                    of the Customer Metal Agreement
-                    executed and entered into by and between me/us and {if isset($COMPANY)}
+                <div style="margin-top: 3mm;">This Collection Order is subject to and governed by the terms and conditions
+                    of the Customer Metal Agreement executed and entered into by and between me/us and {if isset($COMPANY)}
                         <span style="text-transform: capitalize;">{$COMPANY->get('company_name')}</span>
                     {/if}
                 </div>
 
-                <div style="margin-top: 5mm;" class="bottom-container">
-                    <div class="signed-item"></div>
+                <div style="margin-top: 3mm;" class="bottom-container">
+                    <div class="signed-item">
+                        <span>Signed by: </span>
+                    </div>
                     <div class="behalf-item">
                         <span>Date: </span>
                     </div>
                 </div>
 
-                <div style="margin-top: 5mm;" class="bottom-container">
+                <div style="margin-top: 3mm;" class="bottom-container">
                     <div class="signed-item">
-                        <span>Signed by: </span>
+                        <span>Signature: </span>
                     </div>
                     <div class="behalf-item">
                         <span>On behalf of:</span>
                     </div>
                 </div>
 
-                <div style="margin-top: 5mm;" class="bottom-container">
+                {* <div style="margin-top: 3mm;" class="bottom-container">
                     <div class="bottom-container-item">
-                        <div
-                            style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 100px;background-color:#dce6f9;">
+                        <div style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 50px;background-color:#dce6f9;">
                         </div>
                         <p>Signature</p>
                     </div>
                     <div class="bottom-container-item"></div>
-                </div>
+                </div> *}
             </div>
         </div>
 
@@ -423,6 +473,36 @@
                 url.searchParams.set('idOption', "1");
             } else {
                 url.searchParams.delete('idOption');
+            }
+
+            // check for new inputs and append to URL if needed
+            const collectionDateInput = document.querySelector('input[name="collection_date"]');
+            const passportNumberInput = document.querySelector('input[name="passport_number"]');
+            const companyInput = document.querySelector('input[name="company_input"]');
+            const holdingPassportInput = document.querySelector('input[name="holding_passport_number"]');
+
+            if (companyInput && companyInput.value.trim() !== '') {
+                url.searchParams.set('companyInput', companyInput.value.trim());
+            } else {
+                url.searchParams.delete('companyInput');
+            }
+
+            if (holdingPassportInput && holdingPassportInput.value.trim() !== '') {
+                url.searchParams.set('holdingPassportInput', holdingPassportInput.value.trim());
+            } else {
+                url.searchParams.delete('holdingPassportInput');
+            }
+
+            if (collectionDateInput && collectionDateInput.value.trim() !== '') {
+                url.searchParams.set('collectionDateInput', collectionDateInput.value.trim());
+            } else {
+                url.searchParams.delete('collectionDateInput');
+            }
+
+            if (passportNumberInput && passportNumberInput.value.trim() !== '') {
+                url.searchParams.set('passportNumberInput', passportNumberInput.value.trim());
+            } else {
+                url.searchParams.delete('passportNumberInput');
             }
 
             this.href = url.toString();

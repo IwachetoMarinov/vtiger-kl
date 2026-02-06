@@ -45,7 +45,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $viewer->assign('COMPANY', $companyRecord);
         $viewer->assign('ERP_DOCUMENT', $erpData);
         $viewer->assign('ID_OPTION', $request->get('idOption') ?? null);
-        $viewer->assign('COMPANY_OPTION', $request->get('companyOption') ?? null);
+        $viewer->assign('COMPANY_OPTION', $request->get('companyName') ?? null);
         $viewer->assign('DOCNO', $request->get('docNo'));
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));
         $viewer->assign('hideCustomerInfo', $request->get('hideCustomerInfo'));
@@ -59,10 +59,6 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
     }
 
     public function postProcess(Vtiger_Request $request) {}
-
-
-
-
 
     // function downloadPDF($html, Vtiger_Request $request)
     // {
@@ -178,6 +174,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
         $pdf->useTemplate($tplId, 0, 0, $size['width'], $size['height']);
 
+
         // DEBUG GRID MODE (call with &debug=1)
         $debug = (string)$request->get('debug') === '1';
         if ($debug) {
@@ -199,36 +196,48 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $fieldStyle = [
             'border'    => 0,
             'font'      => 'helvetica',
-            'fontsize'  => 9,
+            'fontsize'  => 7,
             'textcolor' => [0, 0, 0],
         ];
 
         // ---- COORDINATES ----
         // insetX/insetY = inner padding INSIDE each PDF form field (mm). Bigger => field becomes narrower/shorter.
         // fieldH        = height of each field (mm). Bigger => taller input box.
-        $insetX = 0.7;   // ↓ increase to DECREASE width (try 1.2 or 1.5)
-        $insetY = 0.9;   // vertical inner padding
-        $fieldH = 5.0;
+        $insetX = 1.1;   // ↓ increase to DECREASE width (try 1.2 or 1.5)
+        $insetY = 0.88;   // vertical inner padding
+        $fieldH = 5.0;          // normal fields
+        $descH  = 9.6;         // taller textarea-like field (adjust)
 
-        // startY  = Y position of row #1 (mm from top).
-        // rowStep = distance between rows (mm). Bigger => MORE space between rows. Smaller => tighter.
-        $startY  = 112.0;  // keep unless row1 shifts
-        $rowStep = 7.0;    // ↑ increase a bit for more spacing (try 7.8 or 8.0)
+        // ---- ROW POSITION ----
+        $startY  = 97.0;
+        // $rowStep = 7.0;
+        $rowStep = 11.7;  // must be >= descH + some padding
 
-        // Column X positions (mm from left edge of page) and widths (mm).
-        // To DECREASE a column width: reduce w*.
-        // To keep right edge aligned, also adjust x* if needed.
-        $xQty    = 8.0;
-        $wQty    = 14.0;
+        // ---- TABLE GEOMETRY ----
+        // Left edge of table (matches your current alignment)
+        $xTable = 6.0;
 
-        $xDesc   = 23.0;
-        $wDesc   = 74.0;
+        // Total usable table width in PDF (keep as-is or tweak slightly)
+        $wTable = 150.5;
 
-        $xSerial = 96.0;
-        $wSerial = 36.0;
+        // ---- COLUMN RATIOS (SUM = 100%) ----
+        $ratioQty    = 0.05;
+        $ratioDesc   = 0.65;
+        $ratioSerial = 0.20;
+        $ratioFine   = 0.10;
 
-        $xFine   = 132.0;
-        $wFine   = 21.0;
+        // ---- COMPUTED WIDTHS ----
+        $wQty    = $wTable * $ratioQty;      // 7.30 mm
+        $wDesc   = $wTable * $ratioDesc;     // 94.90 mm
+        $wSerial = $wTable * $ratioSerial;   // 29.20 mm
+        $wFine   = $wTable * $ratioFine;     // 14.60 mm
+
+        // ---- COLUMN START POSITIONS ----
+        $xQty    = $xTable;
+        $xDesc   = $xQty + $wQty;
+        $xSerial = $xDesc + $wDesc;
+        $xFine   = $xSerial + $wSerial;
+
 
         // ------------------------------------------------------------------
         // (B) Create fields dynamically (names match your Smarty template)
@@ -240,7 +249,21 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $pdf->TextField("qty_$i", $wQty - 2 * $insetX, $fieldH, $fieldStyle);
 
             $pdf->SetXY($xDesc + $insetX, $y + $insetY);
-            $pdf->TextField("desc_$i", $wDesc - 2 * $insetX, $fieldH, $fieldStyle);
+            // $pdf->TextField("desc_$i", $wDesc - 2 * $insetX, $descH, $fieldStyle);
+            $pdf->TextField(
+                "desc_$i",
+                $wDesc - 2 * 0.3,
+                $descH,
+                $fieldStyle + [
+                    'multiline' => true,
+                    'linebreak' => true,
+                    'padding'   => 0,
+                    'style'     => [
+                        'margin' => [0, 0, 0, 0],
+                        'padding' => [0, 0, 0, 0],
+                    ],
+                ]
+            );
 
             $pdf->SetXY($xSerial + $insetX, $y + $insetY);
             $pdf->TextField("serial_$i", $wSerial - 2 * $insetX, $fieldH, $fieldStyle);
@@ -251,8 +274,36 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         }
 
         // Collection date (adjust with debug grid)
-        $pdf->SetXY(112.0, 254.0);  // adjust
-        $pdf->TextField('collection_date', 70, 6, $fieldStyle);
+        // $pdf->SetXY(112.0, 254.0);  // adjust
+        // $pdf->TextField('collection_date', 70, 6, $fieldStyle);
+        $yTotals = 215;   // adjust here
+
+        $pdf->SetXY(8.0, $yTotals);
+        $pdf->TextField('total_value', 35, 5.5, $fieldStyle);
+
+        $pdf->SetXY(118.0, $yTotals);
+        $pdf->TextField('total_oz', 35, 5.5, $fieldStyle);
+
+        // ---- EXTRA INPUTS (VALUES FROM REQUEST) ----
+        $w = 29.0;
+        $h = 5.7;
+
+        // Optional: tiny nudge if you want them to sit lower on the dotted line
+        $dx = 0.0;
+        $dy = 0.0;   // try 0.7 if you want them slightly lower
+
+        $pdf->SetXY(63.0 + $dx, 223.0 + $dy);
+        $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => (string)$request->get('collectionDateInput')]);
+
+        $pdf->SetXY(10.0 + $dx, 235.0 + $dy);
+        $pdf->TextField('passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('passportNumberInput')]);
+
+        $pdf->SetXY(83.5 + $dx, 243.0 + $dy);
+        $pdf->TextField('company_input', $w, $h, $fieldStyle, ['v' => (string)$request->get('companyInput')]);
+
+        $pdf->SetXY(10.0 + $dx, 248.0 + $dy);
+        $pdf->TextField('holding_passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
+
 
         // Save final
         $pdf->Output($finalPdfPath, 'F');

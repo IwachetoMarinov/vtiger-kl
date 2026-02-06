@@ -304,7 +304,12 @@
                     </div>
                     <div class="bottom-container-item">
                         <span>On behalf of:</span>
-                        <span style="font-weight: 700;">Global Precious Metals Pte Ltd</span>
+
+                        {if isset($COMPANY)}
+                            <span style="font-weight: 700; text-transform: capitalize;">
+                                {$COMPANY->get('company_name')}
+                            </span>
+                        {/if}
                     </div>
                 </div>
 
