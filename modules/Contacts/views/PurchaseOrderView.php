@@ -159,7 +159,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         return $data;
     }
 
-    protected
+
     /**
      * HTML -> PDF via wkhtmltopdf, then overlay ONE PDF form field (serial_numbers),
      * and download.
@@ -169,7 +169,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
      *
      * Use &debug=1 to draw a grid and adjust coordinates.
      */
-    function downloadPDF($html, Vtiger_Request $request)
+    protected function downloadPDF($html, Vtiger_Request $request)
     {
         global $root_directory;
 
@@ -289,7 +289,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // location input field
-        $pdf->SetXY(98, 145.25);
+        $pdf->SetXY(98, 145.4);
         $pdf->TextField(
             'location',
             40,

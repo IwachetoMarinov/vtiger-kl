@@ -53,7 +53,7 @@
             margin-bottom: 1mm;
         }
 
-         .table-heading {
+        .table-heading {
             margin-bottom: 4mm;
         }
 
@@ -289,6 +289,29 @@
         .custom-country-input:focus {
             outline: none;
         }
+
+        .editable-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 2mm;
+        }
+
+        .custom-editable-input {
+            border: none;
+            possition: relative;
+            padding-bottom: 1mm;
+            flex: 1;
+            min-width: 40mm;
+            border-bottom: 1px dotted #000;
+        }
+
+        .custom-editable-input:focus {
+            outline: none;
+        }
+
+        .full-width {
+            width: 100%;
+        }
     </style>
 </head>
 
@@ -351,7 +374,11 @@
         <table>
             <tr>
                 <td class="logo">
-                    <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
+                    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                        <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
+                    {else}
+                        <img src="file:///var/www/html/layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
+                    {/if}
                 </td>
                 <td class="title"></td>
                 <td style="width:25mm;"></td>
@@ -504,24 +531,24 @@
                 Description of the precious metals <span style="font-style: italic;">(Please specify type, refiner,
                     serial numbers, fineness):</span>
                 <div style="margin-top: 2mm;">
-                    .............................................................................................................................................................................
+                    <input type="text" name="description" class="custom-editable-input full-width" />
                 </div>
             </div>
 
             <!-- SECTION 3 -->
             <div class="additional-section" style="margin-left:2mm;">
-                <div style="margin-top:2mm;">
+                <div style="margin-top:1mm;">
                     From <span style="font-style: italic;">(Please specify pick-up location):</span>
-                    .........................................................................................................
-                    <span
-                        style="display: inline-block; margin-top:2mm;">.............................................................................................................................................................................</span>
+                    <div style="margin-top: 2mm;">
+                        <input type="text" name="from_location" class="custom-editable-input full-width" />
+                    </div>
                 </div>
 
-                <div style="margin-top:2mm;">
+                <div style="margin-top:3mm;">
                     To <span style="font-style: italic;">(Please specify delivery location):</span>
-                    .............................................................................................................
-                    <span
-                        style="display: inline-block; margin-top:2mm;">.............................................................................................................................................................................</span>
+                    <div style="margin-top: 2mm;">
+                        <input type="text" name="to_location" class="custom-editable-input full-width" />
+                    </div>
                 </div>
 
                 <div style="margin-top:2mm;">
@@ -581,7 +608,7 @@
                                 <div class="custom-country">
                                     <input class="country-checkbox" type="checkbox" name="5">
                                     <div>
-                                        Other country or location (Please specify): 
+                                        Other country or location (Please specify):
                                         <input type="text" class="custom-country-input" value="{$CUSTOM_COUNTRY|default:''}"
                                             style="width:60mm; margin-left:2mm;" />
                                     </div>
@@ -616,8 +643,8 @@
                 <div style="margin-left: 2mm;">
                     <p class="bolder-element">(a) from the following jurisdiction:</p>
                     <div style="margin-left: 5mm; margin-top:2mm; font-weight: normal;">
-                        Country:
-                        .........................................................................................................................................................
+                        <span> Country:</span>
+                        <input type="text" name="country" class="custom-editable-input" />
                     </div>
                 </div>
 
@@ -628,7 +655,7 @@
                         {if $SELECTED_BANK}
                             {assign var=iban value=$SELECTED_BANK->get('iban_no')|lower|replace:' ':''}
                             {assign var=bank_routing_no value=$SELECTED_BANK->get('bank_routing_no')|lower|replace:' ':''}
-                            
+
                             {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
                                 <input type="hidden" class="selected-bank" value="{$SELECTED_BANK->getId()}">
                             {/if}
@@ -684,7 +711,7 @@
                                 style="font-style: italic;">{$RECORD_MODEL->get('mailingcountry')}</span></div>
                         <div class="signature-section-right">
                             {* Today date *}
-                            Date: 
+                            Date:
                         </div>
                     </div>
 
@@ -765,6 +792,14 @@
                     url.searchParams.set('customCountry', customInput.value || '');
                 }
             }
+
+            document.querySelectorAll('.custom-editable-input').forEach(input => {
+                if (input.name) {
+                    url.searchParams.set(input.name, input.value);
+                } else {
+                    url.searchParams.delete(input.name);
+                }
+            });
 
             this.href = url.toString();
         });
