@@ -274,7 +274,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         $full_width = 140.0;
 
         // description input  field
-        $pdf->SetXY(60.5, 128.0); // A4 coords are in mm
+        $pdf->SetXY(32, 128.0); // A4 coords are in mm
         $pdf->TextField(
             'description',
             $full_width,
@@ -284,7 +284,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // from_location input field
-        $pdf->SetXY(98, 143.0);
+        $pdf->SetXY(32, 143.0);
         $pdf->TextField(
             'from_location',
             $full_width,
@@ -294,7 +294,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // to_location input field
-        $pdf->SetXY(68, 154.0);
+        $pdf->SetXY(32, 154.0);
         $pdf->TextField(
             'to_location',
             $full_width,
@@ -304,10 +304,10 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // country input field
-        $pdf->SetXY(47, 190.5);
+        $pdf->SetXY(47, 193.5);
         $pdf->TextField(
             'country',
-            45,
+            42,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('country')]
