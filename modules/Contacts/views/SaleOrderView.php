@@ -235,7 +235,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $serial_input_widthw = 145.0;
 
         // Serial numbers field
-        $pdf->SetXY(32, 152.0);
+        $pdf->SetXY(32, 149.0);
         $pdf->TextField(
             'serial_numbers',
             $serial_input_widthw,
@@ -245,7 +245,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // Pick up location field (added as example of second field, adjust coords as needed)
-        $pdf->SetXY(53.5, 161.5);
+        $pdf->SetXY(53.5, 168.5);
         $pdf->TextField(
             'pick_up_location',
             127.0,
@@ -255,7 +255,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // authorised_person_name input
-        $pdf->SetXY(74, 169.0);
+        $pdf->SetXY(74, 176.0);
         $pdf->TextField(
             'authorised_person_name',
             41,
@@ -265,7 +265,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // authorised_person_id input
-        $pdf->SetXY(138, 169.0);
+        $pdf->SetXY(138, 176.0);
         $pdf->TextField(
             'authorised_person_id',
             41,
@@ -275,7 +275,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // bank_name input
-        $pdf->SetXY(52, 206.0);
+        $pdf->SetXY(52, 213.0);
         $pdf->TextField(
             'bank_name',
             128,
@@ -285,7 +285,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // bank_address input
-        $pdf->SetXY(55, 213.0);
+        $pdf->SetXY(55, 220.0);
         $pdf->TextField(
             'bank_address',
             127,
@@ -295,7 +295,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // bank_code input
-        $pdf->SetXY(52, 220.5);
+        $pdf->SetXY(52, 227.5);
         $pdf->TextField(
             'bank_code',
             51,
@@ -305,7 +305,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // swift_code input
-        $pdf->SetXY(122, 220.5);
+        $pdf->SetXY(122, 227.5);
         $pdf->TextField(
             'swift_code',
             55,
@@ -315,7 +315,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // account_no input
-        $pdf->SetXY(52, 226.0);
+        $pdf->SetXY(52, 234.0);
         $pdf->TextField(
             'account_no',
             47,
@@ -325,7 +325,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // account_currency input
-        $pdf->SetXY(126, 226.0);
+        $pdf->SetXY(126, 234.0);
         $pdf->TextField(
             'account_currency',
             49,
@@ -335,7 +335,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // place_input input
-        $pdf->SetXY(43, 238.5);
+        $pdf->SetXY(43, 245.5);
         $pdf->TextField(
             'place_input',
             43,
@@ -345,7 +345,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // signed_by input
-        $pdf->SetXY(111, 238.5);
+        $pdf->SetXY(111, 245.5);
         $pdf->TextField(
             'signed_by',
             63,
@@ -355,7 +355,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(43, 246.8);
+        $pdf->SetXY(43, 253.8);
         $pdf->TextField(
             'date_input',
             43,
@@ -365,7 +365,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // on_behalf_of input
-        $pdf->SetXY(115, 246.8);
+        $pdf->SetXY(115, 253.8);
         $pdf->TextField(
             'on_behalf_of',
             60,
@@ -375,10 +375,10 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // ---- METALS TABLE CONFIG (ADJUSTED) ----
-        $startX = 48.0;     // first numeric column (1000oz)
-        $startY = 116.0;    // Gold row Y
-        $cellW  = 15.0;     // column width
-        $cellH  = 7.0;      // row height
+        $startX = 49.5;   // was ~48.0
+        $startY = 117.2;  // was ~116.0
+        $cellW  = 13.2;   // was ~15
+        $cellH  = 6.0;    // was ~7
 
         $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
         $weightCount = 9;   // 1000oz ... Other
@@ -388,7 +388,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         ];
 
         $fieldOptsBase = [
-            'da' => '/Helv 6 Tf 0 g',
+            'da' => '/Helv 5.5 Tf 0 g',   // smaller font
         ];
 
         // ---- METALS TABLE FIELDS ----
