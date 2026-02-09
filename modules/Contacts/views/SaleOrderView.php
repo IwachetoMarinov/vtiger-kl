@@ -268,7 +268,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $pdf->SetXY(138, 169.0);
         $pdf->TextField(
             'authorised_person_id',
-            40.5,
+            41,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('authorised_person_id')]

@@ -283,7 +283,7 @@
             <li style="float:right">
                 <a id="downloadBtn"
                     style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
-                    href="index.php?module=Contacts&view=SaleOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
+                    href="index.php?module=Contacts&view=SaleOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}&debug=1">
                     Download
                 </a>
             </li>
@@ -526,44 +526,25 @@
                 <!-- SIGNATURE SECTION -->
                 <div class="signature-section">
                     <div class="signature-section-item">
-                        <div class="signature-section-left">Place: <span class="line"
-                                style="font-style: italic;">{$RECORD_MODEL->get('mailingcountry')}</span></div>
-                        <div class="signature-section-right">
-                            Date: <span class="line">................................</span>
-                        </div>
-                    </div>
-
-                    {assign var="ON_BEHALF_OF" value=""}
-                    {assign var="SIGNED_BY" value=""}
-
-                    {if isset($CLIENT_TYPE) }
-
-                        {if $CLIENT_TYPE == 'Corporate Entity' || $CLIENT_TYPE == 'Trust'  || $CLIENT_TYPE == 'Foundation' }
-                            {assign var="ON_BEHALF_OF" value="{$RECORD_MODEL->get('lastname')}"}
-
-                        {else if $CLIENT_TYPE == 'Individual' || $CLIENT_TYPE == 'Sole Proprietor' }
-                            {assign var="SIGNED_BY" value="{$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}"}
-                        {/if}
-
-                    {/if}
-
-                    <div class="signature-section-item">
                         <div class="signature-section-left">
-                            Signed by: <span class="long-line" style="font-style: italic;">
-                                {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-                                    <input type="text" style="border:none;width:40mm; padding:1mm;margin:0;"
-                                        class="input-name" value="{$SIGNED_BY}" />
-                                {else}
-                                    {if isset($CLIENT_NAME) && !empty($CLIENT_NAME) && $CLIENT_NAME neq ''}
-                                        {$CLIENT_NAME}
-                                    {else}
-                                        {$SIGNED_BY}
-                                    {/if}
-                                {/if}
-                            </span>
+                            <div class="editable-input-wrapper">
+                                <span> Place:</span> <input type="text" name="place_input"
+                                    class="custom-editable-input" />
+                            </div>
+                            <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                                <span>Date:</span> <input type="text" name="date_input" class="custom-editable-input" />
+                            </div>
                         </div>
+
                         <div class="signature-section-right">
-                            On behalf of: <span class="line">{$ON_BEHALF_OF}</span>
+                            <div class="editable-input-wrapper">
+                                <span> Signed by: </span>
+                                <input type="text" name="signed_by" class="custom-editable-input" />
+                            </div>
+                            <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                                <span> On behalf of:</span>
+                                <input type="text" name="on_behalf_of" class="custom-editable-input" />
+                            </div>
                         </div>
                     </div>
 
@@ -572,7 +553,6 @@
                         Signature
                     </div>
                 </div>
-            </div>
 
         </section>
     </div>
