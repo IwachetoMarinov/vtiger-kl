@@ -295,13 +295,13 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->SetXY(63.0 + $dx, 223.0 + $dy);
         $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => (string)$request->get('collectionDateInput')]);
 
-        $pdf->SetXY(10.0 + $dx, 235.0 + $dy);
+        $pdf->SetXY(7 + $dx, 235.0 + $dy);
         $pdf->TextField('passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('passportNumberInput')]);
 
         $pdf->SetXY(83.5 + $dx, 243.0 + $dy);
         $pdf->TextField('company_input', $w, $h, $fieldStyle, ['v' => (string)$request->get('companyInput')]);
 
-        $pdf->SetXY(10.0 + $dx, 248.0 + $dy);
+        $pdf->SetXY(7 + $dx, 248.0 + $dy);
         $pdf->TextField('holding_passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
 
 

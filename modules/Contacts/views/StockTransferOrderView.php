@@ -304,7 +304,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // country input field
-        $pdf->SetXY(47, 194.0);
+        $pdf->SetXY(47, 189.0);
         $pdf->TextField(
             'country',
             41,
