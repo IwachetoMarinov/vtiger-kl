@@ -8,9 +8,10 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model {
+class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model
+{
 
-	STATIC $logoSupportedFormats = array('jpeg', 'jpg', 'png', 'gif', 'pjpeg', 'x-png');
+	static $logoSupportedFormats = array('jpeg', 'jpg', 'png', 'gif', 'pjpeg', 'x-png');
 
 	var $baseTable = 'vtiger_organizationdetails';
 	var $baseIndex = 'organization_id';
@@ -30,7 +31,8 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 		'phone' => 'text',
 		'fax' => 'text',
 		'website' => 'text',
-		'vatid' => 'text' 
+		'vatid' => 'text',
+		'email' => 'text',
 	);
 
 	var $companyBasicFields = array(
@@ -44,7 +46,8 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 		'country' => 'text',
 		'phone' => 'text',
 		'fax' => 'text',
-		'vatid' => 'text'
+		'vatid' => 'text',
+		'email' => 'text',
 	);
 
 	var $companySocialLinks = array(
@@ -55,7 +58,8 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 	 * Function to get Edit view Url
 	 * @return <String> Url
 	 */
-	public function getEditViewUrl() {
+	public function getEditViewUrl()
+	{
 		return 'index.php?module=Vtiger&parent=Settings&view=CompanyDetailsEdit';
 	}
 
@@ -63,7 +67,8 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 	 * Function to get CompanyDetails Menu item
 	 * @return menu item Model
 	 */
-	public function getMenuItem() {
+	public function getMenuItem()
+	{
 		$menuItem = Settings_Vtiger_MenuItem_Model::getInstance('LBL_COMPANY_DETAILS');
 		return $menuItem;
 	}
@@ -72,16 +77,18 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 	 * Function to get Index view Url
 	 * @return <String> URL
 	 */
-	public function getIndexViewUrl() {
+	public function getIndexViewUrl()
+	{
 		$menuItem = $this->getMenuItem();
-		return 'index.php?module=Vtiger&parent=Settings&view=CompanyDetails&block='.$menuItem->get('blockid').'&fieldid='.$menuItem->get('fieldid');
+		return 'index.php?module=Vtiger&parent=Settings&view=CompanyDetails&block=' . $menuItem->get('blockid') . '&fieldid=' . $menuItem->get('fieldid');
 	}
 
 	/**
 	 * Function to get fields
 	 * @return <Array>
 	 */
-	public function getFields() {
+	public function getFields()
+	{
 		return $this->fields;
 	}
 
@@ -89,14 +96,15 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 	 * Function to get Logo path to display
 	 * @return <String> path
 	 */
-	public function getLogoPath() {
+	public function getLogoPath()
+	{
 		$logoPath = $this->logoPath;
 		$handler = @opendir($logoPath);
 		$logoName = decode_html($this->get('logoname'));
 		$logoPath = Vtiger_Functions::getLogoPublicURL($logoName);
 		if ($logoName && $handler) {
 			while ($file = readdir($handler)) {
-				if($logoName === $file && in_array(str_replace('.', '', strtolower(substr($file, -4))), self::$logoSupportedFormats) && $file != "." && $file!= "..") {
+				if ($logoName === $file && in_array(str_replace('.', '', strtolower(substr($file, -4))), self::$logoSupportedFormats) && $file != "." && $file != "..") {
 					closedir($handler);
 					return $logoPath;
 				}
@@ -108,17 +116,19 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 	/**
 	 * Function to save the logoinfo
 	 */
-	public function saveLogo($logoName) {
-		$uploadDir = vglobal('root_directory'). '/' .$this->logoPath;
-		$logoName = $uploadDir.$logoName;
+	public function saveLogo($logoName)
+	{
+		$uploadDir = vglobal('root_directory') . '/' . $this->logoPath;
+		$logoName = $uploadDir . $logoName;
 		move_uploaded_file($_FILES["logo"]["tmp_name"], $logoName);
-		copy($logoName, $uploadDir.'application.ico');
+		copy($logoName, $uploadDir . 'application.ico');
 	}
 
 	/**
 	 * Function to save the Company details
 	 */
-	public function save() {
+	public function save()
+	{
 		$db = PearDatabase::getInstance();
 		$id = $this->get('id');
 		$fieldsList = $this->getFields();
@@ -143,7 +153,7 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 			foreach ($fieldsList as $fieldName => $fieldType) {
 				$query .= " $fieldName,";
 			}
-			$query .= " organization_id) VALUES (". generateQuestionMarks($params). ", ?)";
+			$query .= " organization_id) VALUES (" . generateQuestionMarks($params) . ", ?)";
 
 			array_push($params, $db->getUniqueID($this->baseTable));
 		}
@@ -154,7 +164,8 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model 
 	 * Function to get the instance of Company details module model
 	 * @return <Settings_Vtiger_CompanyDetais_Model> $moduleModel
 	 */
-	public static function getInstance($name = '') {
+	public static function getInstance($name = '')
+	{
 		$moduleModel = new self();
 		$db = PearDatabase::getInstance();
 
