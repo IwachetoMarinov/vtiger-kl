@@ -245,7 +245,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // Pick up location field (added as example of second field, adjust coords as needed)
-        $pdf->SetXY(53.5, 168.5);
+        $pdf->SetXY(53.5, 168.0);
         $pdf->TextField(
             'pick_up_location',
             127.0,
@@ -265,7 +265,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // authorised_person_id input
-        $pdf->SetXY(138, 175.75);
+        $pdf->SetXY(138, 175.6);
         $pdf->TextField(
             'authorised_person_id',
             41,
@@ -375,8 +375,8 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // ---- METALS TABLE CONFIG (ADJUSTED) ----
-        $startX = 60.5;   // was ~48.0
-        $startY = 117.2;  // was ~116.0
+        $startX = 58.5;   // was ~48.0
+        $startY = 115.2;  // was ~116.0
         $cellW  = 13.2;   // was ~15
         $cellH  = 6.0;    // was ~7
 
