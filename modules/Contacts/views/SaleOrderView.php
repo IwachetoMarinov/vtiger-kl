@@ -235,7 +235,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $serial_input_widthw = 143.0;
 
         // Serial numbers field
-        $pdf->SetXY(32, 141.0); 
+        $pdf->SetXY(32, 142.0); 
         $pdf->TextField(
             'serial_numbers',
             $serial_input_widthw,
@@ -245,7 +245,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // Pick up location field (added as example of second field, adjust coords as needed)
-        $pdf->SetXY(53.5, 159.5);
+        $pdf->SetXY(53.5, 161.5);
         $pdf->TextField(
             'pick_up_location',
             127.0,
@@ -255,7 +255,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // authorised_person_name input
-        $pdf->SetXY(74, 168.0);
+        $pdf->SetXY(74, 169.0);
         $pdf->TextField(
             'authorised_person_name',
             41,
@@ -265,7 +265,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // authorised_person_id input
-        $pdf->SetXY(139, 168.0);
+        $pdf->SetXY(139, 169.0);
         $pdf->TextField(
             'authorised_person_id',
             39.5,
@@ -275,7 +275,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // bank_name input
-        $pdf->SetXY(52, 205.0);
+        $pdf->SetXY(52, 206.0);
         $pdf->TextField(
             'bank_name',
             128,
@@ -285,7 +285,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // bank_address input
-        $pdf->SetXY(55, 212.0);
+        $pdf->SetXY(55, 213.0);
         $pdf->TextField(
             'bank_address',
             127,
@@ -295,7 +295,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // bank_code input
-        $pdf->SetXY(52, 219.2);
+        $pdf->SetXY(52, 220.5);
         $pdf->TextField(
             'bank_code',
             51,
@@ -305,7 +305,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // swift_code input
-        $pdf->SetXY(122, 219.2);
+        $pdf->SetXY(122, 220.5);
         $pdf->TextField(
             'swift_code',
             55,
