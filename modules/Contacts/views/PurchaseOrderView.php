@@ -17,9 +17,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
     {
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
-        // Client type
         $client_type = $recordModel->get('cf_927');
-
         $pricingOption = $request->get('pricing_option');
 
         $allBankAccounts = [];
@@ -40,10 +38,6 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
 
         $selectedBank = null;
         if (!empty($bankAccountId)) $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
-
-        // echo "<pre>";
-        // var_dump($selectedBank);
-        // echo "</pre>";
 
         if (empty($selectedBank)) {
             // fallback dummy object to prevent template fatal
@@ -248,11 +242,11 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             // Major grid every 10mm
             for ($x = 0; $x <= $pageW; $x += 10) {
                 $pdf->Line($x, 0, $x, $pageH, ['width' => 0.1, 'color' => [180, 180, 180]]);
-                $pdf->Text($x + 0.5, 1, (string)$x); // x labels at top
+                $pdf->Text($x + 0.5, 1, (string)$x);
             }
             for ($y = 0; $y <= $pageH; $y += 10) {
                 $pdf->Line(0, $y, $pageW, $y, ['width' => 0.1, 'color' => [180, 180, 180]]);
-                $pdf->Text(1, $y + 0.5, (string)$y); // y labels at left
+                $pdf->Text(1, $y + 0.5, (string)$y);
             }
 
             // Optional: minor grid every 5mm (lighter)
@@ -273,13 +267,12 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         ];
 
         // ---- ONLY ONE INPUT: serial_numbers ----
-        // Adjust X/Y using debug grid:
         $x = 18.0;
         $y = 63.0;
         $h = 5.5;
 
         // currency input  field
-        $pdf->SetXY(60.5, 131.0); // A4 coords are in mm
+        $pdf->SetXY(60.5, 131.0); 
         $pdf->TextField(
             'currency',
             38.5,

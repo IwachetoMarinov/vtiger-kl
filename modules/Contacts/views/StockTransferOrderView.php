@@ -242,11 +242,11 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
             // Major grid every 10mm
             for ($x = 0; $x <= $pageW; $x += 10) {
                 $pdf->Line($x, 0, $x, $pageH, ['width' => 0.1, 'color' => [180, 180, 180]]);
-                $pdf->Text($x + 0.5, 1, (string)$x); // x labels at top
+                $pdf->Text($x + 0.5, 1, (string)$x);
             }
             for ($y = 0; $y <= $pageH; $y += 10) {
                 $pdf->Line(0, $y, $pageW, $y, ['width' => 0.1, 'color' => [180, 180, 180]]);
-                $pdf->Text(1, $y + 0.5, (string)$y); // y labels at left
+                $pdf->Text(1, $y + 0.5, (string)$y);
             }
 
             // Optional: minor grid every 5mm (lighter)
@@ -267,14 +267,13 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         ];
 
         // ---- ONLY ONE INPUT: serial_numbers ----
-        // Adjust X/Y using debug grid:
         $x = 18.0;
         $y = 63.0;
         $h = 5.5;
         $full_width = 145.0;
 
         // description input  field
-        $pdf->SetXY(32, 127.5); // A4 coords are in mm
+        $pdf->SetXY(32, 127.5);
         $pdf->TextField(
             'description',
             $full_width,

@@ -174,7 +174,6 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
         $pdf->useTemplate($tplId, 0, 0, $size['width'], $size['height']);
 
-
         // DEBUG GRID MODE (call with &debug=1)
         $debug = (string)$request->get('debug') === '1';
         if ($debug) {
@@ -210,11 +209,9 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
 
         // ---- ROW POSITION ----
         $startY  = 97.0;
-        // $rowStep = 7.0;
-        $rowStep = 11.7;  // must be >= descH + some padding
+        $rowStep = 11.7;
 
         // ---- TABLE GEOMETRY ----
-        // Left edge of table (matches your current alignment)
         $xTable = 6.0;
 
         // Total usable table width in PDF (keep as-is or tweak slightly)
@@ -227,10 +224,10 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $ratioFine   = 0.10;
 
         // ---- COMPUTED WIDTHS ----
-        $wQty    = $wTable * $ratioQty;      // 7.30 mm
-        $wDesc   = $wTable * $ratioDesc;     // 94.90 mm
-        $wSerial = $wTable * $ratioSerial;   // 29.20 mm
-        $wFine   = $wTable * $ratioFine;     // 14.60 mm
+        $wQty    = $wTable * $ratioQty;
+        $wDesc   = $wTable * $ratioDesc;
+        $wSerial = $wTable * $ratioSerial;
+        $wFine   = $wTable * $ratioFine;
 
         // ---- COLUMN START POSITIONS ----
         $xQty    = $xTable;
@@ -273,10 +270,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $pdf->TextField("fine_oz_$i", $wFine - 2 * $insetX, $fieldH, $fieldStyle);
         }
 
-        // Collection date (adjust with debug grid)
-        // $pdf->SetXY(112.0, 254.0);  // adjust
-        // $pdf->TextField('collection_date', 70, 6, $fieldStyle);
-        $yTotals = 215;   // adjust here
+        $yTotals = 215;
 
         $pdf->SetXY(8.0, $yTotals);
         $pdf->TextField('total_value', 35, 5.5, $fieldStyle);
@@ -284,24 +278,22 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->SetXY(118.0, $yTotals);
         $pdf->TextField('total_oz', 35, 5.5, $fieldStyle);
 
-        // ---- EXTRA INPUTS (VALUES FROM REQUEST) ----
         $w = 29.0;
         $h = 5.7;
 
-        // Optional: tiny nudge if you want them to sit lower on the dotted line
         $dx = 0.0;
-        $dy = 0.0;   // try 0.7 if you want them slightly lower
+        $dy = 0.0;
 
         $pdf->SetXY(63.0 + $dx, 223.0 + $dy);
         $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => (string)$request->get('collectionDateInput')]);
 
-        $pdf->SetXY(7 + $dx, 235.0 + $dy);
+        $pdf->SetXY(5.5 + $dx, 235.0 + $dy);
         $pdf->TextField('passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('passportNumberInput')]);
 
         $pdf->SetXY(83.5 + $dx, 243.0 + $dy);
         $pdf->TextField('company_input', $w, $h, $fieldStyle, ['v' => (string)$request->get('companyInput')]);
 
-        $pdf->SetXY(7 + $dx, 248.0 + $dy);
+        $pdf->SetXY(5.5 + $dx, 248.0 + $dy);
         $pdf->TextField('holding_passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
 
 

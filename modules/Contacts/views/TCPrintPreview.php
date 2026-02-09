@@ -58,13 +58,9 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         $nextPageBudget  = 14;
 
         // How many characters roughly fit in one wrapped line in your DESCRIPTION column.
-        // (Adjust if needed; 55–75 is typical depending on font/column width)
-        // $charsPerLine = 150;  // Up to 4 items fit on first page with this
-        $charsPerLine = 202;  // Up to 5 items fit on first page with this
-        // $charsPerLine = 65;  // Up to 2 items fit on first page with this
+        $charsPerLine = 202;
 
         // Every extra wrapped line consumes extra "row units"
-        // 1 unit = normal row height. Each extra line adds 1 unit.
         $pages = [];
         $budget = $firstPageBudget;
         $used = 0;
@@ -72,7 +68,7 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
 
         foreach ($barItems as $item) {
             $desc  = isset($item->itemDescription) ? $item->itemDescription : '';
-            // use serialNumbers if you have it, otherwise join serials
+
             $serialText = '';
             if (!empty($item->serialNumbers)) {
                 $serialText = $item->serialNumbers;
@@ -87,7 +83,6 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
             $lines = max(1, (int)ceil($len / $charsPerLine));
 
             // Convert lines -> "row units":
-            // normal rows ~ 1 unit; each extra wrapped line adds 1 unit
             $units = 1 + ($lines - 1);
 
             // If this item doesn't fit on current page, close page and start a new one
