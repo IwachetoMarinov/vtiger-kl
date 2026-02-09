@@ -465,7 +465,7 @@
                         {if isset($COMPANY)}
                             {if !empty($COMPANY->get('company_fax'))} <p>Fax no: <span
                                     style="font-style: italic;">{$COMPANY->get('company_fax')}</span> or</p> {/if}
-                            <p>Email:<span style="font-style: italic;"> {$COMPANY->get('company_website')}</span></p>
+                            <p>Email:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
                         {/if}
                     </div>
                 </div>

@@ -212,7 +212,7 @@
                                         {$COMPANY->get('company_reg_no')})<br>{/if}
                                         {$COMPANY->get('company_address')}<br>
                                         T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                                        {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                                        {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('email')}<br>
                                     {/if}
                                 </div>
                             </div>

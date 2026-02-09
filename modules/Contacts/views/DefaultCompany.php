@@ -36,7 +36,7 @@ class Contacts_DefaultCompany_View
             'company_fax'      => $org['fax'] ?? '',
             'company_website'  => $org['website'] ?? '',
             'vat_id'           => $org['vatid'] ?? '',
-            'company_email'    => $org['email1'] ?? '',
+            'email'    => $org['email'] ?? '',
         ]);
 
         return $companyDetails;
