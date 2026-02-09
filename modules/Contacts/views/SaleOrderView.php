@@ -345,17 +345,17 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // signed_by input
-        $pdf->SetXY(110, 238.5);
+        $pdf->SetXY(111, 238.5);
         $pdf->TextField(
             'signed_by',
-            60,
+            63,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('signed_by')]
         );
 
         // date_input input
-        $pdf->SetXY(43, 246.5);
+        $pdf->SetXY(43, 246.8);
         $pdf->TextField(
             'date_input',
             43,
@@ -365,7 +365,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // on_behalf_of input
-        $pdf->SetXY(113, 246.5);
+        $pdf->SetXY(115, 246.8);
         $pdf->TextField(
             'on_behalf_of',
             60,
@@ -373,6 +373,55 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
             $fieldStyle,
             ['v' => (string)$request->get('on_behalf_of')]
         );
+
+        // ---- METALS TABLE CONFIG ----
+        $startX = 36.0;     // first input column X
+        $startY = 83.5;     // first metal row Y
+        $cellW  = 16.8;     // width of one column
+        $cellH  = 6.0;      // height of one row
+
+        $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
+        $weightCount = 9;   // 1000oz ... Other
+
+
+        $fieldStyle = [
+            'border' => 0,
+        ];
+
+        $fieldOptsBase = [
+            'da' => '/Helv 6 Tf 0 g',
+        ];
+
+        // ---- METALS TABLE FIELDS ----
+        for ($mi = 0; $mi < $metalCount; $mi++) {
+
+            $y = $startY + ($mi * $cellH);
+
+            for ($wi = 0; $wi < $weightCount; $wi++) {
+
+                $x = $startX + ($wi * $cellW);
+
+                $fieldName = "metal_{$mi}_weight_{$wi}";
+                $value     = (string) $request->get($fieldName);
+
+                // Skip empty cells (optional but recommended)
+                if ($value === '') {
+                    continue;
+                }
+
+                $pdf->SetXY($x, $y);
+                $pdf->TextField(
+                    $fieldName,
+                    $cellW,
+                    $cellH,
+                    $fieldStyle,
+                    array_merge($fieldOptsBase, [
+                        'v' => $value,
+                    ])
+                );
+            }
+        }
+
 
         // ---- Save final ----
         $pdf->Output($finalPdfPath, 'F');

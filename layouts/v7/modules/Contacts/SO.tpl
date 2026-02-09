@@ -267,6 +267,10 @@
             border-bottom: 1px dotted #000;
         }
 
+        .custom-editable-table-input {
+            min-width: auto;
+        }
+
         .custom-editable-input:focus {
             outline: none;
         }
@@ -443,15 +447,22 @@
                     {/foreach}
                 </tr>
 
-                {foreach from=$metals item=m}
+                {foreach from=$metals item=m key=mi}
                     <tr>
                         <td class="metal-row-label">{$m}</td>
-                        {foreach from=$weights item=w}
-                            <td></td>
+
+                        {foreach from=$weights item=w key=wi}
+                            <td>
+                                <input type="text" class="custom-editable-input custom-editable-table-input"
+                                    name="metal_{$mi}_weight_{$wi}"
+                                    value="{$smarty.get["metal_`$mi`_weight_`$wi`"]|default:''|escape:'html'}"
+                                    style="width:100%; border:0; outline:none; background:transparent;" />
+                            </td>
                         {/foreach}
                     </tr>
                 {/foreach}
             </table>
+
 
             <!-- SERIALS BOX -->
             <div class="serials-box">
@@ -572,11 +583,11 @@
 
             // Get all custom-editable-input values and append to URL as query parameters
             document.querySelectorAll('.custom-editable-input').forEach(input => {
-                if (input.name) {
-                    url.searchParams.set(input.name, input.value);
-                } else {
-                    url.searchParams.delete(input.name);
-                }
+                if (!input.name) return;
+
+                const val = (input.value ?? '').trim();
+                if (val) url.searchParams.set(input.name, val);
+                else url.searchParams.delete(input.name);
             });
 
             this.href = url.toString();
