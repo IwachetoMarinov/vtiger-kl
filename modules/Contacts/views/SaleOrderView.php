@@ -255,7 +255,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // authorised_person_name input
-        $pdf->SetXY(74, 176.0);
+        $pdf->SetXY(74, 175.75);
         $pdf->TextField(
             'authorised_person_name',
             41,
@@ -265,7 +265,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // authorised_person_id input
-        $pdf->SetXY(138, 176.0);
+        $pdf->SetXY(138, 175.75);
         $pdf->TextField(
             'authorised_person_id',
             41,
@@ -295,7 +295,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // bank_code input
-        $pdf->SetXY(52, 227.5);
+        $pdf->SetXY(52, 227.0);
         $pdf->TextField(
             'bank_code',
             51,
@@ -305,7 +305,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // swift_code input
-        $pdf->SetXY(122, 227.5);
+        $pdf->SetXY(122, 227.0);
         $pdf->TextField(
             'swift_code',
             55,
@@ -375,7 +375,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // ---- METALS TABLE CONFIG (ADJUSTED) ----
-        $startX = 49.5;   // was ~48.0
+        $startX = 60.5;   // was ~48.0
         $startY = 117.2;  // was ~116.0
         $cellW  = 13.2;   // was ~15
         $cellH  = 6.0;    // was ~7
