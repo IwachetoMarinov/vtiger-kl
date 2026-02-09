@@ -31,6 +31,8 @@
         body {
             font-family: 'Open Sans';
             font-size: 11pt;
+            /* font-size: 9pt; */
+            color: #666;
         }
 
         .printAreaContainer {
@@ -56,7 +58,7 @@
 
         .title {
             text-align: center;
-            font-size: 14pt;
+            font-size: 13pt;
             font-weight: bold;
             padding-top: 3mm;
         }
