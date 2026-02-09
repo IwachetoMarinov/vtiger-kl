@@ -208,7 +208,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
             }
             for ($y = 0; $y <= $pageH; $y += 10) {
                 $pdf->Line(0, $y, $pageW, $y, ['width' => 0.1, 'color' => [180, 180, 180]]);
-                $pdf->Text(1, $y + 0.5, (string)$y); 
+                $pdf->Text(1, $y + 0.5, (string)$y);
             }
 
             // Optional: minor grid every 5mm (lighter)
@@ -235,7 +235,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $serial_input_widthw = 143.0;
 
         // Serial numbers field
-        $pdf->SetXY(32, 142.0); 
+        $pdf->SetXY(32, 142.0);
         $pdf->TextField(
             'serial_numbers',
             $serial_input_widthw,
@@ -335,40 +335,40 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // place_input input
-        $pdf->SetXY(45, 238.0);
+        $pdf->SetXY(43, 238.5);
         $pdf->TextField(
             'place_input',
-            40,
+            43,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('place_input')]
         );
 
-        // date_input input
-        $pdf->SetXY(108, 238.0);
-        $pdf->TextField(
-            'date_input',
-            55,
-            $h,
-            $fieldStyle,
-            ['v' => (string)$request->get('date_input')]
-        );
-
         // signed_by input
-        $pdf->SetXY(45, 245.0);
+        $pdf->SetXY(110, 238.5);
         $pdf->TextField(
             'signed_by',
-            40,
+            60,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('signed_by')]
         );
 
+        // date_input input
+        $pdf->SetXY(43, 246.5);
+        $pdf->TextField(
+            'date_input',
+            43,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('date_input')]
+        );
+
         // on_behalf_of input
-        $pdf->SetXY(112, 245.0);
+        $pdf->SetXY(113, 246.5);
         $pdf->TextField(
             'on_behalf_of',
-            53,
+            60,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('on_behalf_of')]
