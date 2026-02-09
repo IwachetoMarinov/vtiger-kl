@@ -315,7 +315,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // account_no input
-        $pdf->SetXY(52, 225.0);
+        $pdf->SetXY(52, 226.0);
         $pdf->TextField(
             'account_no',
             47,
@@ -325,13 +325,53 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // account_currency input
-        $pdf->SetXY(126, 225.0);
+        $pdf->SetXY(126, 226.0);
         $pdf->TextField(
             'account_currency',
             49,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('account_currency')]
+        );
+
+        // place_input input
+        $pdf->SetXY(45, 238.0);
+        $pdf->TextField(
+            'place_input',
+            40,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('place_input')]
+        );
+
+        // date_input input
+        $pdf->SetXY(108, 238.0);
+        $pdf->TextField(
+            'date_input',
+            55,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('date_input')]
+        );
+
+        // signed_by input
+        $pdf->SetXY(45, 245.0);
+        $pdf->TextField(
+            'signed_by',
+            40,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('signed_by')]
+        );
+
+        // on_behalf_of input
+        $pdf->SetXY(112, 245.0);
+        $pdf->TextField(
+            'on_behalf_of',
+            53,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('on_behalf_of')]
         );
 
         // ---- Save final ----
