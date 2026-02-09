@@ -383,6 +383,12 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
         $weightCount = 9;   // 1000oz ... Other
 
+        $offsetX = 0.6;   // move inside cell (right)
+        $offsetY = 0.6;   // move inside cell (down)
+
+        $fieldW  = $cellW - 1.2; // leave padding both sides
+        $fieldH  = $cellH - 1.2;
+
         $fieldStyle = [
             'border' => 0,
         ];
@@ -393,28 +399,22 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
 
         // ---- METALS TABLE FIELDS ----
         for ($mi = 0; $mi < $metalCount; $mi++) {
-
-            $y = $startY + ($mi * $cellH);
-
             for ($wi = 0; $wi < $weightCount; $wi++) {
 
-                $x = $startX + ($wi * $cellW);
-
                 $fieldName = "metal_{$mi}_weight_{$wi}";
-                $value     = (string) $request->get($fieldName);
+                $value     = (string)($request->get($fieldName) ?? '');
 
-                if ($value === '') {
-                    continue;
-                }
+                $x = $startX + ($wi * $cellW) + $offsetX;
+                $y = $startY + ($mi * $cellH) + $offsetY;
 
                 $pdf->SetXY($x, $y);
                 $pdf->TextField(
                     $fieldName,
-                    $cellW,
-                    $cellH,
+                    $fieldW,
+                    $fieldH,
                     $fieldStyle,
                     array_merge($fieldOptsBase, [
-                        'v' => $value,
+                        'v' => $value, // blank allowed
                     ])
                 );
             }
