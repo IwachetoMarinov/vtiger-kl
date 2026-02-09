@@ -232,10 +232,10 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $x = 18.0;
         $y = 63.0;
         $h = 5.5;
-        $serial_input_widthw = 143.0;
+        $serial_input_widthw = 145.0;
 
         // Serial numbers field
-        $pdf->SetXY(32, 142.0);
+        $pdf->SetXY(32, 152.0);
         $pdf->TextField(
             'serial_numbers',
             $serial_input_widthw,
@@ -374,15 +374,14 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
             ['v' => (string)$request->get('on_behalf_of')]
         );
 
-        // ---- METALS TABLE CONFIG ----
-        $startX = 36.0;     // first input column X
-        $startY = 83.5;     // first metal row Y
-        $cellW  = 16.8;     // width of one column
-        $cellH  = 6.0;      // height of one row
+        // ---- METALS TABLE CONFIG (ADJUSTED) ----
+        $startX = 48.0;     // first numeric column (1000oz)
+        $startY = 116.0;    // Gold row Y
+        $cellW  = 15.0;     // column width
+        $cellH  = 7.0;      // row height
 
         $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
         $weightCount = 9;   // 1000oz ... Other
-
 
         $fieldStyle = [
             'border' => 0,
@@ -404,7 +403,6 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
                 $fieldName = "metal_{$mi}_weight_{$wi}";
                 $value     = (string) $request->get($fieldName);
 
-                // Skip empty cells (optional but recommended)
                 if ($value === '') {
                     continue;
                 }
