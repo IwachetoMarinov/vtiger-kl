@@ -555,10 +555,11 @@
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                         <input type="checkbox" name="country_option">
                     {else}
-                        {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION neq ''}
-                            <span
-                                style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
-                        {/if}
+
+                        <span
+                            style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">
+                            {if isset($COUNTRY_OPTION) &&  $COUNTRY_OPTION eq '1'} ✔{/if}
+                        </span>
                     {/if}
                     <span>deliver & store the above metal in a facility located in:</span>
                     <span> <input type="text" name="location" class="custom-editable-input" /> </span>
@@ -569,10 +570,10 @@
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                         <input type="checkbox" name="address_option">
                     {else}
-                        {if isset($ADDRESS_OPTION) && $ADDRESS_OPTION neq ''}
-                            <span
-                                style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
-                        {/if}
+                        <span
+                            style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">
+                            {if isset($ADDRESS_OPTION) && $ADDRESS_OPTION eq '1'}✔{/if}
+                        </span>
                     {/if}
                     <span>deliver the above metal to:</span>
                     <span> <input type="text" name="address" style="width: 75mm;" class="custom-editable-input" />
