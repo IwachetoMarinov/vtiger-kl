@@ -525,12 +525,11 @@
                         <td class="metal-row-label">{$m}</td>
 
                         {foreach from=$weights item=w key=wi}
-                            <td style="height: 27.3px;">
+                            <td>
                                 {* Show only if is not download *}
                                 {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                     <input type="text" class="custom-editable-input custom-editable-table-input"
                                         name="metal_{$mi}_weight_{$wi}"
-                                        value="{$smarty.get["metal_`$mi`_weight_`$wi`"]|default:''|escape:'html'}"
                                         style="width:100%; border:0; outline:none; background:transparent;" />
                                 {/if}
                             </td>
