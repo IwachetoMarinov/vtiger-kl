@@ -261,9 +261,10 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         // ---- Field appearance ----
         $fieldStyle = [
             'border'    => 0,
-            'font'      => 'helvetica',
-            'fontsize'  => 8,
-            'textcolor' => [0, 0, 0],
+        ];
+
+        $defaultFieldOptsBase = [
+            'da' => '/Helv 6.5 Tf 0 g',
         ];
 
         // ---- ONLY ONE INPUT: serial_numbers ----
@@ -278,7 +279,11 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             38.5,
             $h,
             $fieldStyle,
-            ['v' => (string)$request->get('currency')]
+            array_merge(
+                $defaultFieldOptsBase,
+                ['v' => (string)$request->get('currency')]
+            ),
+
         );
 
         // location input field
@@ -288,7 +293,10 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             40,
             $h,
             $fieldStyle,
-            ['v' => (string)$request->get('location')]
+            array_merge(
+                $defaultFieldOptsBase,
+                ['v' => (string)$request->get('location')]
+            )
         );
 
         // address input field
@@ -298,7 +306,10 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             55,
             $h,
             $fieldStyle,
-            ['v' => (string)$request->get('address')]
+            array_merge(
+                $defaultFieldOptsBase,
+                ['v' => (string)$request->get('address')]
+            )
         );
 
         // country input field
@@ -308,7 +319,10 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             45,
             $h,
             $fieldStyle,
-            ['v' => (string)$request->get('country')]
+            array_merge(
+                $defaultFieldOptsBase,
+                ['v' => (string)$request->get('country')]
+            )
         );
 
         // place_input input
@@ -318,7 +332,10 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             45,
             $h,
             $fieldStyle,
-            ['v' => (string)$request->get('place_input')]
+            array_merge(
+                $defaultFieldOptsBase,
+                ['v' => (string)$request->get('place_input')]
+            )
         );
 
         // signed_by input
@@ -328,7 +345,10 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             65,
             $h,
             $fieldStyle,
-            ['v' => (string)$request->get('signed_by')]
+            array_merge(
+                $defaultFieldOptsBase,
+                ['v' => (string)$request->get('signed_by')]
+            )
         );
 
         // date_input input
@@ -338,7 +358,10 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             45,
             $h,
             $fieldStyle,
-            ['v' => (string)$request->get('date_input')]
+            array_merge(
+                $defaultFieldOptsBase,
+                ['v' => (string)$request->get('date_input')]
+            )
         );
 
         // on_behalf_of input
@@ -348,7 +371,10 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             62,
             $h,
             $fieldStyle,
-            ['v' => (string)$request->get('on_behalf_of')]
+            array_merge(
+                $defaultFieldOptsBase,
+                ['v' => (string)$request->get('on_behalf_of')]
+            )
         );
 
         // ---- METALS TABLE CONFIG (ADJUSTED) ----
