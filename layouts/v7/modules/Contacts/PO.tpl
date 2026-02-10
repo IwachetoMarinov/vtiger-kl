@@ -182,6 +182,7 @@
         /* Signature Section */
         .signature-section {
             margin-top: 8mm;
+            padding: 0 4mm;
         }
 
         .signature-line {
@@ -691,47 +692,35 @@
                 </div>
 
                 <!-- SIGNATURE SECTION -->
-                <div class="details-container">
-                    <div class="signature-section">
-                        <div class="signature-section-item">
-                            <div class="signature-section-left">Place: <span class="line"
-                                    style="font-style: italic;">{$RECORD_MODEL->get('mailingcountry')}</span></div>
-                            <div class="signature-section-right">
-                                Date:
+                <div class="signature-section">
+                    <div class="signature-section-item">
+                        <div class="signature-section-left">
+                            <div class="editable-input-wrapper">
+                                <span> Place:</span> <input type="text" name="place_input"
+                                    class="custom-editable-input" />
+                            </div>
+                            <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                                <span>Date:</span> <input type="text" name="date_input" class="custom-editable-input" />
                             </div>
                         </div>
 
-                        {assign var="ON_BEHALF_OF" value=""}
-                        {assign var="SIGNED_BY" value=""}
-
-                        {if isset($CLIENT_TYPE) }
-
-                            {if $CLIENT_TYPE == 'Corporate Entity' || $CLIENT_TYPE == 'Trust'  || $CLIENT_TYPE == 'Foundation' }
-                                {assign var="ON_BEHALF_OF" value="{$RECORD_MODEL->get('lastname')}"}
-
-                            {else if $CLIENT_TYPE == 'Individual' || $CLIENT_TYPE == 'Sole Proprietor' }
-                                {assign var="SIGNED_BY" value="{$RECORD_MODEL->get('firstname')}
-                        {$RECORD_MODEL->get('lastname')}"}
-                            {/if}
-
-                        {/if}
-
-                        <div class="signature-section-item">
-                            <div class="signature-section-left">
-                                Signed by: <span class="long-line" style="font-style: italic;">
-                                    {$SIGNED_BY}</span>
+                        <div class="signature-section-right">
+                            <div class="editable-input-wrapper">
+                                <span> Signed by: </span>
+                                <input type="text" name="signed_by" class="custom-editable-input" />
                             </div>
-                            <div class="signature-section-right">
-                                On behalf of: <span class="line">{$ON_BEHALF_OF}</span>
+                            <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                                <span> On behalf of:</span>
+                                <input type="text" name="on_behalf_of" class="custom-editable-input" />
                             </div>
-                        </div>
-
-                        <div style="margin-top:10mm;">
-                            Signature
                         </div>
                     </div>
-                </div>
 
+                    <div style="margin-top:10mm;">
+                        <div class="signature-line">...............................................</div><br>
+                        Signature
+                    </div>
+                </div>
             </div>
 
         </section>

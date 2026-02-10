@@ -272,7 +272,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $h = 5.5;
 
         // currency input  field
-        $pdf->SetXY(60, 136.0);
+        $pdf->SetXY(60, 140.0);
         $pdf->TextField(
             'currency',
             38.5,
@@ -282,7 +282,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // location input field
-        $pdf->SetXY(102, 153.4);
+        $pdf->SetXY(102, 154.5);
         $pdf->TextField(
             'location',
             40,
@@ -292,7 +292,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // address input field
-        $pdf->SetXY(71, 162.3);
+        $pdf->SetXY(71.5, 161.3);
         $pdf->TextField(
             'address',
             55,
@@ -302,7 +302,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // country input field
-        $pdf->SetXY(49, 174.5);
+        $pdf->SetXY(49, 177.0);
         $pdf->TextField(
             'country',
             45,
@@ -311,11 +311,51 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             ['v' => (string)$request->get('country')]
         );
 
+        // place_input input
+        $pdf->SetXY(43, 245.5);
+        $pdf->TextField(
+            'place_input',
+            45,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('place_input')]
+        );
+
+        // signed_by input
+        $pdf->SetXY(111, 245.5);
+        $pdf->TextField(
+            'signed_by',
+            65,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('signed_by')]
+        );
+
+        // date_input input
+        $pdf->SetXY(43, 253.8);
+        $pdf->TextField(
+            'date_input',
+            45,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('date_input')]
+        );
+
+        // on_behalf_of input
+        $pdf->SetXY(115, 253.8);
+        $pdf->TextField(
+            'on_behalf_of',
+            62,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('on_behalf_of')]
+        );
+
         // ---- METALS TABLE CONFIG (ADJUSTED) ----
         $startX = 57.3;   // was ~48.0
         $startY = 110.2;  // was ~116.0
-        $cellW  = 13.55;   // was ~15
-        $cellH  = 6.65;    // was ~7
+        $cellW  = 13.57;   // was ~15
+        $cellH  = 6.68;    // was ~7
 
         $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
         $weightCount = 9;   // 1000oz ... Other
