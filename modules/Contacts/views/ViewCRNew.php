@@ -298,7 +298,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $dx = 0.0;
         $dy = 0.0;
 
-        $pdf->SetXY(6.5 + $dx, 70.0 + $dy);
+        $pdf->SetXY(6.5 + $dx, 69.5 + $dy);
         $pdf->TextField('reference', 40, $h, $fieldStyle, ['v' => (string)$request->get('reference')]);
 
         $pdf->SetXY(63.0 + $dx, 218.0 + $dy);
