@@ -237,18 +237,28 @@
             width: 100%;
         }
 
-        @media print {
+        html,
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 210mm;
+            height: 297mm;
+        }
 
-            @page {
-                size: A4;
-                margin: 0;
-            }
+        @page {
+            size: A4;
+            margin: 0;
+        }
 
-            html,
-            body {
-                width: 210mm;
-                height: 297mm;
-            }
+        .printAreaContainer {
+            width: 210mm;
+            height: 297mm;
+            margin: 0 auto !important;
+            /* true centering */
+            padding: 6mm;
+            position: relative;
+            left: 0;
+            right: 0;
         }
     </style>
 </head>
