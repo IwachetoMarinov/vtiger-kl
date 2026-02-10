@@ -320,47 +320,47 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
 
         // Signature section fields (place_input, signed_by, date_input, on_behalf_of)
         // place_input input
-        $pdf->SetXY(43, 257.0);
+        $pdf->SetXY(40, 257.0);
         $pdf->TextField(
             'place_input',
-            45,
+            48,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('place_input')]
         );
 
         // signed_by input
-        $pdf->SetXY(111, 257.0);
+        $pdf->SetXY(108, 257.0);
         $pdf->TextField(
             'signed_by',
-            65,
+            70,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('signed_by')]
         );
 
         // date_input input
-        $pdf->SetXY(43, 265.0);
+        $pdf->SetXY(40, 265.0);
         $pdf->TextField(
             'date_input',
-            45,
+            48,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('date_input')]
         );
 
         // on_behalf_of input
-        $pdf->SetXY(115, 265.0);
+        $pdf->SetXY(112, 265.0);
         $pdf->TextField(
             'on_behalf_of',
-            62,
+            67,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('on_behalf_of')]
         );
 
         // ---- METALS TABLE CONFIG (ADJUSTED) ----
-        $startX = 58.0;   // was ~48.0
+        $startX = 57.5;   // was ~48.0
         $startY = 102.0;  // was ~116.0
         $cellW  = 13.57;   // was ~15
         $cellH  = 6.7;    // was ~7
