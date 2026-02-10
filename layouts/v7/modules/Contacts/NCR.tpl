@@ -257,7 +257,7 @@
                 {else}
                     <a id="downloadBtn"
                         style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
-                        href="index.php?module=Contacts&view=ViewCRNew&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
+                        href="index.php?module=Contacts&view=ViewCRNew&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}&debug=1">
                         Download
                     </a>
                 {/if}
