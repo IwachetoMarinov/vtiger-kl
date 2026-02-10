@@ -37,6 +37,7 @@
             border: 1px solid #fff;
             margin: auto;
             padding: 6mm;
+            padding-top: 2mm;
             position: relative;
         }
 
@@ -305,7 +306,7 @@
                         <td style="height: 20mm;text-align: left">
                             <div style="max-width:50%">
                                 {if isset($COMPANY)}
-                                    <div style="margin-top: 10mm;">To:
+                                    <div style="margin-top: 4mm;">To:
                                         <span style="font-weight: 700; text-transform: capitalize;">
                                             {$COMPANY->get('company_name')}
                                         </span>

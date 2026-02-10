@@ -166,6 +166,16 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->SetAutoPageBreak(false);
         $pdf->SetMargins(0, 0, 0);
 
+        // Ensure TCPDF sets up font resources for AcroForm
+        $pdf->SetFont('helvetica', '', 6.5);
+
+        // Set global default form appearance (creates /F1 in /AcroForm /DR)
+        $pdf->setFormDefaultProp([
+            'font' => 'helvetica',
+            'fontsize' => 6.8,
+            'textcolor' => [0, 0, 0],
+        ]);
+
         $pageCount = $pdf->setSourceFile($basePdfPath);
         $tplId = $pdf->importPage(1);
         $size  = $pdf->getTemplateSize($tplId);
@@ -201,12 +211,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         }
 
         // ---- Field appearance ----
-        $fieldStyle = [
-            'border'    => 0,
-            'font'      => 'helvetica',
-            'fontsize'  => 7,
-            'textcolor' => [0, 0, 0],
-        ];
+        $fieldStyle = ['border'    => 0,];
 
         // ---- COORDINATES ----
         // insetX/insetY = inner padding INSIDE each PDF form field (mm). Bigger => field becomes narrower/shorter.
@@ -217,7 +222,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $descH  = 9.6;         // taller textarea-like field (adjust)
 
         // ---- ROW POSITION ----
-        $startY  = 97.0;
+        $startY  = 99.0;
         $rowStep = 11.7;
 
         // ---- TABLE GEOMETRY ----
@@ -279,7 +284,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $pdf->TextField("fine_oz_$i", $wFine - 2 * $insetX, $fieldH, $fieldStyle);
         }
 
-        $yTotals = 215;
+        $yTotals = 217;
 
         $pdf->SetXY(8.0, $yTotals);
         $pdf->TextField('total_value', 35, 5.5, $fieldStyle);
@@ -293,16 +298,16 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $dx = 0.0;
         $dy = 0.0;
 
-        $pdf->SetXY(63.0 + $dx, 223.0 + $dy);
+        $pdf->SetXY(63.0 + $dx, 225.0 + $dy);
         $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => (string)$request->get('collectionDateInput')]);
 
-        $pdf->SetXY(5.5 + $dx, 235.0 + $dy);
+        $pdf->SetXY(5.5 + $dx, 237.0 + $dy);
         $pdf->TextField('passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('passportNumberInput')]);
 
-        $pdf->SetXY(83.5 + $dx, 243.0 + $dy);
+        $pdf->SetXY(83.5 + $dx, 245.0 + $dy);
         $pdf->TextField('company_input', $w, $h, $fieldStyle, ['v' => (string)$request->get('companyInput')]);
 
-        $pdf->SetXY(5.5 + $dx, 248.0 + $dy);
+        $pdf->SetXY(5.5 + $dx, 250.0 + $dy);
         $pdf->TextField('holding_passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
 
 
