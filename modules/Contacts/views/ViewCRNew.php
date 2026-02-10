@@ -222,7 +222,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $descH  = 9.6;         // taller textarea-like field (adjust)
 
         // ---- ROW POSITION ----
-        $startY  = 99.0;
+        $startY  = 89.0;
         $rowStep = 11.7;
 
         // ---- TABLE GEOMETRY ----
@@ -298,7 +298,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $dx = 0.0;
         $dy = 0.0;
 
-        $pdf->SetXY(23.0 + $dx, 225.0 + $dy);
+        $pdf->SetXY(5.0 + $dx, 70.0 + $dy);
         $pdf->TextField('reference', $w, $h, $fieldStyle, ['v' => (string)$request->get('reference')]);
 
         $pdf->SetXY(63.0 + $dx, 225.0 + $dy);
