@@ -272,7 +272,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $h = 5.5;
 
         // currency input  field
-        $pdf->SetXY(60.5, 126.0);
+        $pdf->SetXY(60, 136.0);
         $pdf->TextField(
             'currency',
             38.5,
@@ -282,7 +282,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // location input field
-        $pdf->SetXY(102, 148.4);
+        $pdf->SetXY(102, 153.4);
         $pdf->TextField(
             'location',
             40,
@@ -292,7 +292,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // address input field
-        $pdf->SetXY(68, 157.3);
+        $pdf->SetXY(71, 162.3);
         $pdf->TextField(
             'address',
             55,
@@ -302,7 +302,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // country input field
-        $pdf->SetXY(49, 169.5);
+        $pdf->SetXY(49, 174.5);
         $pdf->TextField(
             'country',
             45,
@@ -312,10 +312,10 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // ---- METALS TABLE CONFIG (ADJUSTED) ----
-        $startX = 57.5;   // was ~48.0
+        $startX = 57.3;   // was ~48.0
         $startY = 110.2;  // was ~116.0
-        $cellW  = 13.6;   // was ~15
-        $cellH  = 6.6;    // was ~7
+        $cellW  = 13.55;   // was ~15
+        $cellH  = 6.65;    // was ~7
 
         $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
         $weightCount = 9;   // 1000oz ... Other
