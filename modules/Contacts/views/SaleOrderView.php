@@ -288,7 +288,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $pdf->SetXY(55, 220.0);
         $pdf->TextField(
             'bank_address',
-            127,
+            124,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('bank_address')]
@@ -338,7 +338,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $pdf->SetXY(43, 245.5);
         $pdf->TextField(
             'place_input',
-            43,
+            45,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('place_input')]
@@ -348,7 +348,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $pdf->SetXY(111, 245.5);
         $pdf->TextField(
             'signed_by',
-            63,
+            65,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('signed_by')]
@@ -358,7 +358,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $pdf->SetXY(43, 253.8);
         $pdf->TextField(
             'date_input',
-            43,
+            45,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('date_input')]
@@ -368,17 +368,17 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $pdf->SetXY(115, 253.8);
         $pdf->TextField(
             'on_behalf_of',
-            60,
+            62,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('on_behalf_of')]
         );
 
         // ---- METALS TABLE CONFIG (ADJUSTED) ----
-        $startX = 58.5;   // was ~48.0
+        $startX = 58.0;   // was ~48.0
         $startY = 115.2;  // was ~116.0
-        $cellW  = 13.2;   // was ~15
-        $cellH  = 6.0;    // was ~7
+        $cellW  = 13.5;   // was ~15
+        $cellH  = 6.3;    // was ~7
 
         $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
         $weightCount = 9;   // 1000oz ... Other
