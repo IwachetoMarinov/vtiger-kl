@@ -302,7 +302,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // country input field
-        $pdf->SetXY(49, 177.0);
+        $pdf->SetXY(49, 177.5);
         $pdf->TextField(
             'country',
             45,
@@ -312,7 +312,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // place_input input
-        $pdf->SetXY(43, 245.5);
+        $pdf->SetXY(43, 252.5);
         $pdf->TextField(
             'place_input',
             45,
@@ -322,7 +322,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // signed_by input
-        $pdf->SetXY(111, 245.5);
+        $pdf->SetXY(111, 252.5);
         $pdf->TextField(
             'signed_by',
             65,
@@ -332,7 +332,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(43, 253.8);
+        $pdf->SetXY(43, 260.8);
         $pdf->TextField(
             'date_input',
             45,
@@ -342,7 +342,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // on_behalf_of input
-        $pdf->SetXY(115, 253.8);
+        $pdf->SetXY(115, 260.8);
         $pdf->TextField(
             'on_behalf_of',
             62,
