@@ -272,6 +272,9 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $y = 63.0;
         $h = 5.5;
 
+
+        $pdf->setNeedAppearances(true);
+
         // currency input  field
         $pdf->SetXY(60, 140.0);
         $pdf->TextField(
@@ -424,6 +427,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         }
 
         // ---- Save final ----
+
         $pdf->Output($finalPdfPath, 'F');
         @unlink($basePdfPath);
 
