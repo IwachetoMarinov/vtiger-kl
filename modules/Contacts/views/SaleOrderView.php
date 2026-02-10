@@ -268,7 +268,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $pdf->SetXY(138, 175.6);
         $pdf->TextField(
             'authorised_person_id',
-            41,
+            41.5,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('authorised_person_id')]
@@ -378,7 +378,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $startX = 58.0;   // was ~48.0
         $startY = 115.2;  // was ~116.0
         $cellW  = 13.5;   // was ~15
-        $cellH  = 6.5;    // was ~7
+        $cellH  = 6.6;    // was ~7
 
         $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
         $weightCount = 9;   // 1000oz ... Other

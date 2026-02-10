@@ -307,6 +307,10 @@
         .full-width {
             width: 100%;
         }
+
+        .custom-editable-table-input {
+            min-width: auto;
+        }
     </style>
 
 
@@ -329,7 +333,7 @@
             <li style="float:right">
                 <a id="downloadBtn"
                     style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
-                    href="index.php?module=Contacts&view=PurchaseOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
+                    href="index.php?module=Contacts&view=PurchaseOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}&debug=1">
                     Download
                 </a>
             </li>
@@ -515,11 +519,17 @@
                     {/foreach}
                 </tr>
 
-                {foreach from=$metals item=m}
+                {foreach from=$metals item=m key=mi}
                     <tr>
                         <td class="metal-row-label">{$m}</td>
-                        {foreach from=$weights item=w}
-                            <td></td>
+
+                        {foreach from=$weights item=w key=wi}
+                            <td>
+                                <input type="text" class="custom-editable-input custom-editable-table-input"
+                                    name="metal_{$mi}_weight_{$wi}"
+                                    value="{$smarty.get["metal_`$mi`_weight_`$wi`"]|default:''|escape:'html'}"
+                                    style="width:100%; border:0; outline:none; background:transparent;" />
+                            </td>
                         {/foreach}
                     </tr>
                 {/foreach}
@@ -565,7 +575,8 @@
                         {/if}
                     {/if}
                     <span>deliver the above metal to:</span>
-                    <span> <input type="text" name="address" style="width: 75mm;" class="custom-editable-input" /> </span>
+                    <span> <input type="text" name="address" style="width: 75mm;" class="custom-editable-input" />
+                    </span>
                     <span style="font-style: italic;">(Please specify full address)</span>
                 </div>
             </div>
@@ -772,11 +783,11 @@
 
             // Get all custom-editable-input values and append to URL as query parameters
             document.querySelectorAll('.custom-editable-input').forEach(input => {
-                if (input.name) {
-                    url.searchParams.set(input.name, input.value);
-                } else {
-                    url.searchParams.delete(input.name);
-                }
+                if (!input.name) return;
+
+                const val = (input.value ?? '').trim();
+                if (val) url.searchParams.set(input.name, val);
+                else url.searchParams.delete(input.name);
             });
 
             this.href = url.toString();

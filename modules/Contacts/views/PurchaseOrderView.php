@@ -272,7 +272,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $h = 5.5;
 
         // currency input  field
-        $pdf->SetXY(60.5, 131.0); 
+        $pdf->SetXY(60.5, 131.0);
         $pdf->TextField(
             'currency',
             38.5,
@@ -310,6 +310,52 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             $fieldStyle,
             ['v' => (string)$request->get('country')]
         );
+
+        // ---- METALS TABLE CONFIG (ADJUSTED) ----
+        $startX = 58.0;   // was ~48.0
+        $startY = 115.2;  // was ~116.0
+        $cellW  = 13.5;   // was ~15
+        $cellH  = 6.6;    // was ~7
+
+        $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
+        $weightCount = 9;   // 1000oz ... Other
+
+        $offsetX = 0.6;   // move inside cell (right)
+        $offsetY = 0.6;   // move inside cell (down)
+
+        $fieldW  = $cellW - 1.2; // leave padding both sides
+        $fieldH  = $cellH - 1.2;
+
+        $fieldStyle = [
+            'border' => 0,
+        ];
+
+        $fieldOptsBase = [
+            'da' => '/Helv 5.5 Tf 0 g',   // smaller font
+        ];
+
+        // ---- METALS TABLE FIELDS ----
+        for ($mi = 0; $mi < $metalCount; $mi++) {
+            for ($wi = 0; $wi < $weightCount; $wi++) {
+
+                $fieldName = "metal_{$mi}_weight_{$wi}";
+                $value     = (string)($request->get($fieldName) ?? '');
+
+                $x = $startX + ($wi * $cellW) + $offsetX;
+                $y = $startY + ($mi * $cellH) + $offsetY;
+
+                $pdf->SetXY($x, $y);
+                $pdf->TextField(
+                    $fieldName,
+                    $fieldW,
+                    $fieldH,
+                    $fieldStyle,
+                    array_merge($fieldOptsBase, [
+                        'v' => $value, // blank allowed
+                    ])
+                );
+            }
+        }
 
         // ---- Save final ----
         $pdf->Output($finalPdfPath, 'F');
