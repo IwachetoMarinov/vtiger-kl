@@ -420,7 +420,7 @@
             </div>
             <div>
                 <input type="text" name="passport_number" class="editable-input"
-                    {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}style="margin-top: 1.5mm;"
+                    {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}style="display: inline-block; margin-top: 2.5mm;"
                     {/if} />
             </div>
 
@@ -436,7 +436,7 @@
                 <input type="text" name="company_input" class="editable-input" />
                 (<span>holding ID/Passport number</span>
                 <input type="text" name="holding_passport_number" class="editable-input"
-                    {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}style="margin-top: 1.5mm;"
+                    {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}style="display: inline-block; margin-top: 2.5mm;"
                     {/if} />)
                 <span> to collect the Stored Metal on my/our behalf. This
                     authorisation is only valid for the collection of the Stored Metal specified above and shall not
