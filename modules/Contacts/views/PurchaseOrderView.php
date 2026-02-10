@@ -153,6 +153,28 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         return $data;
     }
 
+    function tcpdfEnableNeedAppearances($pdf): void
+    {
+        // If method exists (newer TCPDF)
+        if (method_exists($pdf, 'setNeedAppearances')) {
+            $pdf->setNeedAppearances(true);
+            return;
+        }
+
+        // Fallback: set protected property "needappearances" via Reflection
+        try {
+            $ref = new ReflectionClass($pdf);
+            if ($ref->hasProperty('needappearances')) {
+                $prop = $ref->getProperty('needappearances');
+                $prop->setAccessible(true);
+                $prop->setValue($pdf, true);
+            }
+        } catch (\Throwable $e) {
+            // If this fails, you’ll still get the old behavior.
+        }
+    }
+
+
 
     /**
      * HTML -> PDF via wkhtmltopdf, then overlay ONE PDF form field (serial_numbers),
@@ -223,6 +245,18 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $pdf->SetMargins(0, 0, 0);
 
         $pageCount = $pdf->setSourceFile($basePdfPath);
+
+        // IMPORTANT: force viewer to regenerate appearances
+        $this->tcpdfEnableNeedAppearances($pdf);
+
+        // Optional: set a global default for form fields
+        if (method_exists($pdf, 'setFormDefaultProp')) {
+            $pdf->setFormDefaultProp([
+                'font' => 'helvetica',
+                'fontsize' => 6.5,
+                'textcolor' => [0, 0, 0],
+            ]);
+        }
 
         // page 1 only (your screenshot section is page 1)
         $tplId = $pdf->importPage(1);
@@ -364,17 +398,19 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             )
         );
 
-        // on_behalf_of input
+        $on_behalf_of_value = (string)$request->get('on_behalf_of');
+
         $pdf->SetXY(112, 264.0);
         $pdf->TextField(
             'on_behalf_of',
             62,
             $h,
-            $fieldStyle,
-            array_merge(
-                $defaultFieldOptsBase,
-                ['v' => (string)$request->get('on_behalf_of'), 'da' => '/Helv 6.5 Tf 0 g']
-            )
+            ['border' => 0],
+            array_merge($defaultFieldOptsBase, [
+                'v'  => $on_behalf_of_value,
+                'dv' => $on_behalf_of_value,
+                'da' => '/Helv 6.5 Tf 0 g',
+            ])
         );
 
         // ---- METALS TABLE CONFIG (ADJUSTED) ----
