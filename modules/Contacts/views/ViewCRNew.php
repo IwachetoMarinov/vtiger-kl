@@ -234,7 +234,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $rowStep = 11.7;
 
         // ---- TABLE GEOMETRY ----
-        $xTable = 6.0;
+        $xTable = 26.0;
 
         // Total usable table width in PDF (keep as-is or tweak slightly)
         $wTable = 150.5;
@@ -306,24 +306,24 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $dx = 0.0;
         $dy = 0.0;
 
-        $pdf->SetXY(6.5 + $dx, 69.5 + $dy);
+        $pdf->SetXY(26.5 + $dx, 69.5 + $dy);
         $pdf->TextField('reference', 40, $h, $fieldStyle, ['v' => (string)$request->get('reference')]);
 
-        $pdf->SetXY(63.0 + $dx, 218.0 + $dy);
+        $pdf->SetXY(83.0 + $dx, 218.0 + $dy);
         $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => (string)$request->get('collectionDateInput')]);
 
         $pdf->SetXY(5.5 + $dx, 231.0 + $dy);
         $pdf->TextField('passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('passportNumberInput')]);
 
-        $pdf->SetXY(85.5 + $dx, 239.0 + $dy);
+        $pdf->SetXY(105.5 + $dx, 239.0 + $dy);
         $pdf->TextField('company_input', $w, $h, $fieldStyle, ['v' => (string)$request->get('companyInput')]);
 
-        $pdf->SetXY(5.5 + $dx, 244.0 + $dy);
+        $pdf->SetXY(25.5 + $dx, 244.0 + $dy);
         $pdf->TextField('holding_passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
 
         // Signature section fields (place_input, signed_by, date_input, on_behalf_of)
         // place_input input
-        $pdf->SetXY(21, 280.0);
+        $pdf->SetXY(41, 280.0);
         $pdf->TextField(
             'place_input',
             48,
@@ -333,7 +333,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         );
 
         // signed_by input
-        $pdf->SetXY(88, 280.0);
+        $pdf->SetXY(108, 280.0);
         $pdf->TextField(
             'signed_by',
             70,
@@ -343,7 +343,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(21, 289.5);
+        $pdf->SetXY(41, 289.5);
         $pdf->TextField(
             'date_input',
             48,
@@ -353,7 +353,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         );
 
         // on_behalf_of input
-        $pdf->SetXY(92, 289.5);
+        $pdf->SetXY(112, 289.5);
         $pdf->TextField(
             'on_behalf_of',
             67,
