@@ -36,7 +36,8 @@
             width: 210mm;
             height: 297mm;
             margin: auto;
-            padding: 6mm;
+            padding: 4.5mm;
+            padding-top: 2mm;
         }
 
         .bottom-container {
@@ -46,12 +47,6 @@
 
         .bottom-container-item {
             flex: 1;
-        }
-
-        .printAreaContainer * {
-            box-sizing: border-box;
-            font-family: 'Open Sans';
-            color: #666;
         }
 
         .printAreaContainer .header-logo {
