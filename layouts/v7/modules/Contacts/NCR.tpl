@@ -269,7 +269,7 @@
                 {else}
                     <a id="downloadBtn"
                         style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
-                        href="index.php?module=Contacts&view=ViewCRNew&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
+                        href="index.php?module=Contacts&view=ViewCRNew&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}&debug=1">
                         Download
                     </a>
                 {/if}
@@ -561,6 +561,14 @@
             } else {
                 url.searchParams.delete('passportNumberInput');
             }
+            // Get all custom-editable-input values and append to URL as query parameters
+            document.querySelectorAll('.custom-editable-input').forEach(input => {
+                if (!input.name) return;
+
+                const val = (input.value ?? '').trim();
+                if (val) url.searchParams.set(input.name, val);
+                else url.searchParams.delete(input.name);
+            });
 
             this.href = url.toString();
         });

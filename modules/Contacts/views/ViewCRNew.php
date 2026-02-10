@@ -298,6 +298,9 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $dx = 0.0;
         $dy = 0.0;
 
+        $pdf->SetXY(23.0 + $dx, 225.0 + $dy);
+        $pdf->TextField('reference', $w, $h, $fieldStyle, ['v' => (string)$request->get('reference')]);
+
         $pdf->SetXY(63.0 + $dx, 225.0 + $dy);
         $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => (string)$request->get('collectionDateInput')]);
 
@@ -309,6 +312,47 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
 
         $pdf->SetXY(5.5 + $dx, 250.0 + $dy);
         $pdf->TextField('holding_passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
+
+        // Signature section fields (place_input, signed_by, date_input, on_behalf_of)
+        // place_input input
+        $pdf->SetXY(41, 268.0);
+        $pdf->TextField(
+            'place_input',
+            48,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('place_input')]
+        );
+
+        // signed_by input
+        $pdf->SetXY(108, 268.0);
+        $pdf->TextField(
+            'signed_by',
+            70,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('signed_by')]
+        );
+
+        // date_input input
+        $pdf->SetXY(41, 276.0);
+        $pdf->TextField(
+            'date_input',
+            48,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('date_input')]
+        );
+
+        // on_behalf_of input
+        $pdf->SetXY(112, 276.0);
+        $pdf->TextField(
+            'on_behalf_of',
+            67,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('on_behalf_of')]
+        );
 
 
         // Save final
