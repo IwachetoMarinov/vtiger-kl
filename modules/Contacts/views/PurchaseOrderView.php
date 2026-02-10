@@ -282,7 +282,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // location input field
-        $pdf->SetXY(102, 154.5);
+        $pdf->SetXY(98, 154.5);
         $pdf->TextField(
             'location',
             40,
@@ -332,7 +332,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(43, 263.8);
+        $pdf->SetXY(43, 264.0);
         $pdf->TextField(
             'date_input',
             45,
@@ -342,7 +342,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // on_behalf_of input
-        $pdf->SetXY(115, 263.8);
+        $pdf->SetXY(115, 264.0);
         $pdf->TextField(
             'on_behalf_of',
             62,
