@@ -292,7 +292,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // address input field
-        $pdf->SetXY(71.5, 161.3);
+        $pdf->SetXY(72, 161.3);
         $pdf->TextField(
             'address',
             55,
