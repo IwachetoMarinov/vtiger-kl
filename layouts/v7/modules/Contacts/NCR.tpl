@@ -193,6 +193,52 @@
             outline: none;
         }
 
+        /* Signature Section */
+        .signature-section {
+            margin-top: 2mm;
+            padding: 0 4mm;
+        }
+
+        .signature-section-item {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4mm;
+        }
+
+        .signature-section-left {
+            width: 40%;
+        }
+
+        .signature-section-right {
+            width: 57%;
+        }
+
+        .custom-editable-input {
+            border: none;
+            possition: relative;
+            padding-bottom: 1mm;
+            flex: 1;
+            min-width: 40mm;
+            border-bottom: 1px dotted #000;
+        }
+
+        .custom-editable-input:focus {
+            outline: none;
+        }
+
+        .full-width {
+            width: 100%;
+        }
+
+        .custom-editable-table-input {
+            min-width: auto;
+        }
+
+        .input-without-border {
+            border: none;
+            width: 100%;
+        }
+
         @media print {
 
             @page {
@@ -216,7 +262,7 @@
                 {if isset($smarty.request.tableName) && $smarty.request.tableName neq ''}
                     <a id="downloadBtn"
                         style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
-                        href="index.php?module=Contacts&view=ViewCRNew&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&tableName={$smarty.request.tableName}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
+                        href="index.php?module=Contacts&view=ViewCRNew&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&tableName={$smarty.request.tableName}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}&debug=1">
                         Download
                     </a>
                 {else}
@@ -293,7 +339,10 @@
                                     <th style="width:30%; text-align:center;">ORDER</th>
                                 </tr>
                                 <tr>
-                                    <td style="height:18px; text-align:center;">{$smarty.request.docNo}</td>
+                                    <td style="height:18px; text-align:center;">
+                                        <input type="text" name="reference"
+                                            class="custom-editable-input input-without-border" />
+                                    </td>
                                     <td style="height:18px; text-align:center;">{$RECORD_MODEL->get('cf_898')}</td>
                                     <td style="height:18px; text-align:center;">COLLECTION</td>
                                 </tr>
@@ -425,21 +474,28 @@
                     {/if}
                 </div>
 
-                <div style="margin-top: 3mm;" class="bottom-container">
-                    <div class="signed-item">
-                        <span>Signed by: </span>
-                    </div>
-                    <div class="behalf-item">
-                        <span>Date: </span>
-                    </div>
-                </div>
+                <!-- SIGNATURE SECTION -->
+                <div class="signature-section">
+                    <div class="signature-section-item">
+                        <div class="signature-section-left">
+                            <div class="editable-input-wrapper">
+                                <span> Place:</span> <input type="text" name="place_input" class="custom-editable-input" />
+                            </div>
+                            <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                                <span>Date:</span> <input type="text" name="date_input" class="custom-editable-input" />
+                            </div>
+                        </div>
 
-                <div style="margin-top: 3mm;" class="bottom-container">
-                    <div class="signed-item">
-                        <span>Signature: </span>
-                    </div>
-                    <div class="behalf-item">
-                        <span>On behalf of:</span>
+                        <div class="signature-section-right">
+                            <div class="editable-input-wrapper">
+                                <span> Signed by: </span>
+                                <input type="text" name="signed_by" class="custom-editable-input" />
+                            </div>
+                            <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                                <span> On behalf of:</span>
+                                <input type="text" name="on_behalf_of" class="custom-editable-input" />
+                            </div>
+                        </div>
                     </div>
                 </div>
 
