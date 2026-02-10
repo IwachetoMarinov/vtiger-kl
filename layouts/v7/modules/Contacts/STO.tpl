@@ -189,6 +189,7 @@
         /* Signature Section */
         .signature-section {
             margin-top: 2mm;
+            padding: 0 4mm;
         }
 
         .signature-section-item {
@@ -311,6 +312,10 @@
 
         .full-width {
             width: 100%;
+        }
+
+        .custom-editable-table-input {
+            min-width: auto;
         }
     </style>
 </head>
@@ -516,11 +521,16 @@
                     {/foreach}
                 </tr>
 
-                {foreach from=$metals item=m}
+                {foreach from=$metals item=m key=mi}
                     <tr>
                         <td class="metal-row-label">{$m}</td>
-                        {foreach from=$weights item=w}
-                            <td></td>
+
+                        {foreach from=$weights item=w key=wi}
+                            <td>
+                                <input type="text" class="custom-editable-input custom-editable-table-input"
+                                    name="metal_{$mi}_weight_{$wi}"
+                                    style="width:100%; border:0; outline:none; background:transparent;" />
+                            </td>
                         {/foreach}
                     </tr>
                 {/foreach}
@@ -703,44 +713,33 @@
                 </div>
             </div>
 
-            <!-- SIGNATURE SECTION -->
-            <div class="details-container" style="margin-left: 2mm;">
+                <!-- SIGNATURE SECTION -->
                 <div class="signature-section">
                     <div class="signature-section-item">
-                        <div class="signature-section-left">Place: <span class="line"
-                                style="font-style: italic;">{$RECORD_MODEL->get('mailingcountry')}</span></div>
-                        <div class="signature-section-right">
-                            {* Today date *}
-                            Date:
-                        </div>
-                    </div>
-
-                    {assign var="ON_BEHALF_OF" value=""}
-                    {assign var="SIGNED_BY" value=""}
-
-                    {if isset($CLIENT_TYPE) }
-
-                        {if $CLIENT_TYPE == 'Corporate Entity' || $CLIENT_TYPE == 'Trust'  || $CLIENT_TYPE == 'Foundation' }
-                            {assign var="ON_BEHALF_OF" value="{$RECORD_MODEL->get('lastname')}"}
-
-                        {else if $CLIENT_TYPE == 'Individual' || $CLIENT_TYPE == 'Sole Proprietor' }
-                            {assign var="SIGNED_BY" value="{$RECORD_MODEL->get('firstname')}
-                    {$RECORD_MODEL->get('lastname')}"}
-                        {/if}
-
-                    {/if}
-
-                    <div class="signature-section-item">
                         <div class="signature-section-left">
-                            Signed by: <span class="long-line" style="font-style: italic;">
-                                {$SIGNED_BY}</span>
+                            <div class="editable-input-wrapper">
+                                <span> Place:</span> <input type="text" name="place_input"
+                                    class="custom-editable-input" />
+                            </div>
+                            <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                                <span>Date:</span> <input type="text" name="date_input" class="custom-editable-input" />
+                            </div>
                         </div>
+
                         <div class="signature-section-right">
-                            On behalf of: <span class="line">{$ON_BEHALF_OF}</span>
+                            <div class="editable-input-wrapper">
+                                <span> Signed by: </span>
+                                <input type="text" name="signed_by" class="custom-editable-input" />
+                            </div>
+                            <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                                <span> On behalf of:</span>
+                                <input type="text" name="on_behalf_of" class="custom-editable-input" />
+                            </div>
                         </div>
                     </div>
 
-                    <div style="margin-top:6mm;">
+                    <div style="margin-top:10mm;">
+                        <div class="signature-line">...............................................</div><br>
                         Signature
                     </div>
                 </div>
@@ -793,12 +792,13 @@
                 }
             }
 
+            // Get all custom-editable-input values and append to URL as query parameters
             document.querySelectorAll('.custom-editable-input').forEach(input => {
-                if (input.name) {
-                    url.searchParams.set(input.name, input.value);
-                } else {
-                    url.searchParams.delete(input.name);
-                }
+                if (!input.name) return;
+
+                const val = (input.value ?? '').trim();
+                if (val) url.searchParams.set(input.name, val);
+                else url.searchParams.delete(input.name);
             });
 
             this.href = url.toString();

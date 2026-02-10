@@ -222,6 +222,16 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         $pdf->SetAutoPageBreak(false);
         $pdf->SetMargins(0, 0, 0);
 
+        // Ensure TCPDF sets up font resources for AcroForm
+        $pdf->SetFont('helvetica', '', 6.5);
+
+        // Set global default form appearance (creates /F1 in /AcroForm /DR)
+        $pdf->setFormDefaultProp([
+            'font' => 'helvetica',
+            'fontsize' => 6.8,
+            'textcolor' => [0, 0, 0],
+        ]);
+
         $pageCount = $pdf->setSourceFile($basePdfPath);
 
         // page 1 only (your screenshot section is page 1)
@@ -259,12 +269,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         }
 
         // ---- Field appearance ----
-        $fieldStyle = [
-            'border'    => 0,
-            'font'      => 'helvetica',
-            'fontsize'  => 8,
-            'textcolor' => [0, 0, 0],
-        ];
+        $fieldStyle = ['border'    => 0,];
 
         // ---- ONLY ONE INPUT: serial_numbers ----
         $x = 18.0;
@@ -311,6 +316,94 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
             $fieldStyle,
             ['v' => (string)$request->get('country')]
         );
+
+
+        // Signature section fields (place_input, signed_by, date_input, on_behalf_of)
+        // place_input input
+        $pdf->SetXY(43, 245.5);
+        $pdf->TextField(
+            'place_input',
+            45,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('place_input')]
+        );
+
+        // signed_by input
+        $pdf->SetXY(111, 245.5);
+        $pdf->TextField(
+            'signed_by',
+            65,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('signed_by')]
+        );
+
+        // date_input input
+        $pdf->SetXY(43, 253.8);
+        $pdf->TextField(
+            'date_input',
+            45,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('date_input')]
+        );
+
+        // on_behalf_of input
+        $pdf->SetXY(115, 253.8);
+        $pdf->TextField(
+            'on_behalf_of',
+            62,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('on_behalf_of')]
+        );
+
+        // ---- METALS TABLE CONFIG (ADJUSTED) ----
+        $startX = 57.3;   // was ~48.0
+        $startY = 110.5;  // was ~116.0
+        $cellW  = 13.57;   // was ~15
+        $cellH  = 6.7;    // was ~7
+
+        $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
+        $weightCount = 9;   // 1000oz ... Other
+
+        $offsetX = 0.6;   // move inside cell (right)
+        $offsetY = 0.6;   // move inside cell (down)
+
+        $fieldW  = $cellW - 1.2; // leave padding both sides
+        $fieldH  = $cellH - 1.2;
+
+        $fieldStyle = [
+            'border' => 0,
+        ];
+
+        $fieldOptsBase = [
+            'da' => '/Helv 5.5 Tf 0 g',   // smaller font
+        ];
+
+        // ---- METALS TABLE FIELDS ----
+        for ($mi = 0; $mi < $metalCount; $mi++) {
+            for ($wi = 0; $wi < $weightCount; $wi++) {
+
+                $fieldName = "metal_{$mi}_weight_{$wi}";
+                $value     = (string)($request->get($fieldName) ?? '');
+
+                $x = $startX + ($wi * $cellW) + $offsetX;
+                $y = $startY + ($mi * $cellH) + $offsetY;
+
+                $pdf->SetXY($x, $y);
+                $pdf->TextField(
+                    $fieldName,
+                    $fieldW,
+                    $fieldH,
+                    $fieldStyle,
+                    array_merge($fieldOptsBase, [
+                        'v' => $value, // blank allowed
+                    ])
+                );
+            }
+        }
 
         // ---- Save final ----
         $pdf->Output($finalPdfPath, 'F');

@@ -228,7 +228,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         // Set global default form appearance (creates /F1 in /AcroForm /DR)
         $pdf->setFormDefaultProp([
             'font' => 'helvetica',
-            'fontsize' => 6.5,
+            'fontsize' => 6.8,
             'textcolor' => [0, 0, 0],
         ]);
 
@@ -428,8 +428,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             }
         }
 
-        // ---- Save final ----
-
+        // ---- Save final --
         $pdf->Output($finalPdfPath, 'F');
         @unlink($basePdfPath);
 
