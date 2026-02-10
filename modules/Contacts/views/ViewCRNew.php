@@ -307,7 +307,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->SetXY(5.5 + $dx, 231.0 + $dy);
         $pdf->TextField('passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('passportNumberInput')]);
 
-        $pdf->SetXY(83.5 + $dx, 239.0 + $dy);
+        $pdf->SetXY(85.5 + $dx, 239.0 + $dy);
         $pdf->TextField('company_input', $w, $h, $fieldStyle, ['v' => (string)$request->get('companyInput')]);
 
         $pdf->SetXY(5.5 + $dx, 244.0 + $dy);
@@ -335,7 +335,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(21, 289.0);
+        $pdf->SetXY(21, 289.5);
         $pdf->TextField(
             'date_input',
             48,
@@ -345,7 +345,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         );
 
         // on_behalf_of input
-        $pdf->SetXY(92, 289.0);
+        $pdf->SetXY(92, 289.5);
         $pdf->TextField(
             'on_behalf_of',
             67,
