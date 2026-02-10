@@ -22,7 +22,8 @@
 
         * {
             box-sizing: border-box;
-            margin: 0px
+            margin: 0;
+            padding: 0;
         }
 
         body {
@@ -31,27 +32,11 @@
             color: #666;
         }
 
-        /* .printAreaContainer {
+        .printAreaContainer {
             width: 210mm;
             height: 297mm;
             margin: auto;
             padding: 6mm;
-        } */
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        .printAreaContainer {
-            width: 198mm;
-            /* 210 - 6 - 6 */
-            min-height: 297mm;
-            margin-left: 6mm;
-            /* explicit positioning */
-            margin-right: 6mm;
-            padding: 0;
-            /* padding moved into width */
         }
 
         .bottom-container {
@@ -67,10 +52,6 @@
             box-sizing: border-box;
             font-family: 'Open Sans';
             color: #666;
-        }
-
-        .printAreaContainer .full-width {
-            width: 100%;
         }
 
         .printAreaContainer .header-logo {
