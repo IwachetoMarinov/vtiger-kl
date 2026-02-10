@@ -272,9 +272,6 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $y = 63.0;
         $h = 5.5;
 
-
-        $pdf->setNeedAppearances(true);
-
         // currency input  field
         $pdf->SetXY(60, 140.0);
         $pdf->TextField(
@@ -284,7 +281,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             $fieldStyle,
             array_merge(
                 $defaultFieldOptsBase,
-                ['v' => (string)$request->get('currency')]
+                ['v' => (string)$request->get('currency'), 'da' => '/Helv 6.5 Tf 0 g']
             ),
 
         );
@@ -298,7 +295,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             $fieldStyle,
             array_merge(
                 $defaultFieldOptsBase,
-                ['v' => (string)$request->get('location')]
+                ['v' => (string)$request->get('location'), 'da' => '/Helv 6.5 Tf 0 g']
             )
         );
 
@@ -311,7 +308,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             $fieldStyle,
             array_merge(
                 $defaultFieldOptsBase,
-                ['v' => (string)$request->get('address')]
+                ['v' => (string)$request->get('address'), 'da' => '/Helv 6.5 Tf 0 g']
             )
         );
 
@@ -324,7 +321,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             $fieldStyle,
             array_merge(
                 $defaultFieldOptsBase,
-                ['v' => (string)$request->get('country')]
+                ['v' => (string)$request->get('country'), 'da' => '/Helv 6.5 Tf 0 g']
             )
         );
 
@@ -337,7 +334,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             $fieldStyle,
             array_merge(
                 $defaultFieldOptsBase,
-                ['v' => (string)$request->get('place_input')]
+                ['v' => (string)$request->get('place_input'), 'da' => '/Helv 6.5 Tf 0 g']
             )
         );
 
@@ -350,7 +347,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             $fieldStyle,
             array_merge(
                 $defaultFieldOptsBase,
-                ['v' => (string)$request->get('signed_by')]
+                ['v' => (string)$request->get('signed_by'), 'da' => '/Helv 6.5 Tf 0 g']
             )
         );
 
@@ -363,7 +360,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             $fieldStyle,
             array_merge(
                 $defaultFieldOptsBase,
-                ['v' => (string)$request->get('date_input')]
+                ['v' => (string)$request->get('date_input'), 'da' => '/Helv 6.5 Tf 0 g']
             )
         );
 
@@ -376,7 +373,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             $fieldStyle,
             array_merge(
                 $defaultFieldOptsBase,
-                ['v' => (string)$request->get('on_behalf_of')]
+                ['v' => (string)$request->get('on_behalf_of'), 'da' => '/Helv 6.5 Tf 0 g']
             )
         );
 
