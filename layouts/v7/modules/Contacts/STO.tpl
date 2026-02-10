@@ -634,20 +634,20 @@
 
                     <div>
                         <div>
-                            {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-                                <div class="custom-country">
+                            <div class="custom-country">
+                                {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                     <input class="country-checkbox" type="checkbox" name="5">
                                     <div>
                                         Other country or location (Please specify):
                                         <input type="text" class="custom-country-input" value="{$CUSTOM_COUNTRY|default:''}"
                                             style="width:60mm; margin-left:2mm;" />
                                     </div>
-                                </div>
-                            {else}
-                                <span
-                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 5}checked{/if}"></span>
-                                <span class="pdf-checkbox-label">{$CUSTOM_COUNTRY|default:''}</span>
-                            {/if}
+                                {else}
+                                    <span
+                                        class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 5}checked{/if}"></span>
+                                    <span class="pdf-checkbox-label">{$CUSTOM_COUNTRY|default:''}</span>
+                                {/if}
+                            </div>
                         </div>
                     </div>
                 </div>
