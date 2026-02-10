@@ -284,7 +284,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $pdf->TextField("fine_oz_$i", $wFine - 2 * $insetX, $fieldH, $fieldStyle);
         }
 
-        $yTotals = 210;
+        $yTotals = 209;
 
         $pdf->SetXY(8.0, $yTotals);
         $pdf->TextField('total_value', 35, 5.5, $fieldStyle);
@@ -304,18 +304,18 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->SetXY(63.0 + $dx, 218.0 + $dy);
         $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => (string)$request->get('collectionDateInput')]);
 
-        $pdf->SetXY(5.5 + $dx, 230.0 + $dy);
+        $pdf->SetXY(5.5 + $dx, 231.0 + $dy);
         $pdf->TextField('passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('passportNumberInput')]);
 
-        $pdf->SetXY(83.5 + $dx, 238.0 + $dy);
+        $pdf->SetXY(83.5 + $dx, 239.0 + $dy);
         $pdf->TextField('company_input', $w, $h, $fieldStyle, ['v' => (string)$request->get('companyInput')]);
 
-        $pdf->SetXY(5.5 + $dx, 243.0 + $dy);
+        $pdf->SetXY(5.5 + $dx, 244.0 + $dy);
         $pdf->TextField('holding_passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
 
         // Signature section fields (place_input, signed_by, date_input, on_behalf_of)
         // place_input input
-        $pdf->SetXY(41, 278.0);
+        $pdf->SetXY(21, 280.0);
         $pdf->TextField(
             'place_input',
             48,
@@ -325,7 +325,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         );
 
         // signed_by input
-        $pdf->SetXY(108, 278.0);
+        $pdf->SetXY(88, 280.0);
         $pdf->TextField(
             'signed_by',
             70,
@@ -335,7 +335,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(41, 286.0);
+        $pdf->SetXY(21, 289.0);
         $pdf->TextField(
             'date_input',
             48,
@@ -345,7 +345,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         );
 
         // on_behalf_of input
-        $pdf->SetXY(112, 286.0);
+        $pdf->SetXY(92, 289.0);
         $pdf->TextField(
             'on_behalf_of',
             67,
