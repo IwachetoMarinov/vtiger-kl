@@ -405,8 +405,6 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             )
         );
 
-        $on_behalf_of_value = (string)$request->get('on_behalf_of');
-
         $pdf->SetXY(112, 264.0);
         $pdf->TextField(
             'on_behalf_of',
@@ -414,8 +412,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             $h,
             $fieldStyle,
             array_merge($defaultFieldOptsBase, [
-                'v'  => $on_behalf_of_value,
-                'dv' => $on_behalf_of_value,
+                'v'  => (string)$request->get('on_behalf_of'),
             ])
         );
 
