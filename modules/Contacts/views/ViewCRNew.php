@@ -237,7 +237,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $xTable = 27.5;
 
         // Total usable table width in PDF (keep as-is or tweak slightly)
-        $wTable = 152.0;
+        $wTable = 155.0;
 
         // ---- COLUMN RATIOS (SUM = 100%) ----
         $ratioQty    = 0.05;
