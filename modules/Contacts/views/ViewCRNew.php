@@ -224,7 +224,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         // ---- COORDINATES ----
         // insetX/insetY = inner padding INSIDE each PDF form field (mm). Bigger => field becomes narrower/shorter.
         // fieldH        = height of each field (mm). Bigger => taller input box.
-        $insetX = 1.2;   // ↓ increase to DECREASE width (try 1.2 or 1.5)
+        $insetX = 1.3;   // ↓ increase to DECREASE width (try 1.2 or 1.5)
         $insetY = 0.88;   // vertical inner padding
         $fieldH = 5.0;          // normal fields
         $descH  = 9.6;         // taller textarea-like field (adjust)
@@ -237,7 +237,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $xTable = 27.5;
 
         // Total usable table width in PDF (keep as-is or tweak slightly)
-        $wTable = 151.0;
+        $wTable = 152.0;
 
         // ---- COLUMN RATIOS (SUM = 100%) ----
         $ratioQty    = 0.05;
@@ -268,7 +268,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $pdf->TextField("qty_$i", $wQty - 2 * $insetX, $fieldH, $fieldStyle);
 
             $pdf->SetXY($xDesc + $insetX, $y + $insetY);
-            // $pdf->TextField("desc_$i", $wDesc - 2 * $insetX, $descH, $fieldStyle);
+           
             $pdf->TextField(
                 "desc_$i",
                 $wDesc - 2 * 0.3,
