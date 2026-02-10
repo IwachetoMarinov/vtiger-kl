@@ -323,7 +323,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
 
         // Signature section fields (place_input, signed_by, date_input, on_behalf_of)
         // place_input input
-        $pdf->SetXY(40, 273.0);
+        $pdf->SetXY(40, 274.0);
         $pdf->TextField(
             'place_input',
             48,
@@ -333,7 +333,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         );
 
         // signed_by input
-        $pdf->SetXY(109, 273.0);
+        $pdf->SetXY(109, 274.0);
         $pdf->TextField(
             'signed_by',
             70,
@@ -343,7 +343,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(40, 281.5);
+        $pdf->SetXY(40, 282.5);
         $pdf->TextField(
             'date_input',
             48,
@@ -353,7 +353,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         );
 
         // on_behalf_of input
-        $pdf->SetXY(113, 281.5);
+        $pdf->SetXY(113, 282.5);
         $pdf->TextField(
             'on_behalf_of',
             67,
