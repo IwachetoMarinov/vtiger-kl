@@ -292,7 +292,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // address input field
-        $pdf->SetXY(71.5, 161.3);
+        $pdf->SetXY(68.5, 161.3);
         $pdf->TextField(
             'address',
             55,
@@ -312,7 +312,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // place_input input
-        $pdf->SetXY(43, 252.5);
+        $pdf->SetXY(43, 255.5);
         $pdf->TextField(
             'place_input',
             45,
@@ -322,7 +322,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // signed_by input
-        $pdf->SetXY(111, 252.5);
+        $pdf->SetXY(111, 255.5);
         $pdf->TextField(
             'signed_by',
             65,
@@ -332,7 +332,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(43, 260.8);
+        $pdf->SetXY(43, 263.8);
         $pdf->TextField(
             'date_input',
             45,
@@ -342,7 +342,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // on_behalf_of input
-        $pdf->SetXY(115, 260.8);
+        $pdf->SetXY(115, 263.8);
         $pdf->TextField(
             'on_behalf_of',
             62,
@@ -355,7 +355,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $startX = 57.3;   // was ~48.0
         $startY = 110.2;  // was ~116.0
         $cellW  = 13.57;   // was ~15
-        $cellH  = 6.68;    // was ~7
+        $cellH  = 6.7;    // was ~7
 
         $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
         $weightCount = 9;   // 1000oz ... Other
