@@ -333,7 +333,7 @@
             content: "";
             position: absolute;
             left: 1.2mm;
-            top: 0.8mm;
+            top: 0.2mm;
             width: 1.6mm;
             height: 2.8mm;
             border-right: 0.6mm solid #000;
@@ -344,6 +344,7 @@
         .pdf-checkbox-label {
             display: inline-block;
             vertical-align: middle;
+            margin-right: 5mm;
         }
     </style>
 </head>
@@ -645,7 +646,7 @@
                                 {else}
                                     <span
                                         class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 5}checked{/if}"></span>
-                                    <span class="pdf-checkbox-label">{$CUSTOM_COUNTRY|default:''}</span>
+                                    <span class="pdf-checkbox-label">Other country or location (Please specify): {$CUSTOM_COUNTRY|default:''}</span>
                                 {/if}
                             </div>
                         </div>
