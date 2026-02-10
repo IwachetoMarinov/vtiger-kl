@@ -153,28 +153,6 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         return $data;
     }
 
-    function tcpdfEnableNeedAppearances($pdf): void
-    {
-        // If method exists (newer TCPDF)
-        if (method_exists($pdf, 'setNeedAppearances')) {
-            $pdf->setNeedAppearances(true);
-            return;
-        }
-
-        // Fallback: set protected property "needappearances" via Reflection
-        try {
-            $ref = new ReflectionClass($pdf);
-            if ($ref->hasProperty('needappearances')) {
-                $prop = $ref->getProperty('needappearances');
-                $prop->setAccessible(true);
-                $prop->setValue($pdf, true);
-            }
-        } catch (\Throwable $e) {
-            // If this fails, you’ll still get the old behavior.
-        }
-    }
-
-
 
     /**
      * HTML -> PDF via wkhtmltopdf, then overlay ONE PDF form field (serial_numbers),
@@ -256,18 +234,6 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
 
         $pageCount = $pdf->setSourceFile($basePdfPath);
 
-        // IMPORTANT: force viewer to regenerate appearances
-        // $this->tcpdfEnableNeedAppearances($pdf);
-
-        // Optional: set a global default for form fields
-        // if (method_exists($pdf, 'setFormDefaultProp')) {
-        //     $pdf->setFormDefaultProp([
-        //         'font' => 'helvetica',
-        //         'fontsize' => 6.5,
-        //         'textcolor' => [0, 0, 0],
-        //     ]);
-        // }
-
         // page 1 only (your screenshot section is page 1)
         $tplId = $pdf->importPage(1);
         $size  = $pdf->getTemplateSize($tplId);
@@ -306,7 +272,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $fieldStyle = ['border' => 0];
 
         // IMPORTANT: use /F1 in DA
-        $defaultFieldOptsBase = ['da' => '/F1 6.5 Tf 0 g',];
+        $defaultFieldOptsBase = ['da' => '/F1 6.8 Tf 0 g',];
 
         // ---- ONLY ONE INPUT: serial_numbers ----
         $x = 18.0;

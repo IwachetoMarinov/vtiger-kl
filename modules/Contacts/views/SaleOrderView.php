@@ -184,6 +184,16 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $pdf->SetAutoPageBreak(false);
         $pdf->SetMargins(0, 0, 0);
 
+        // Ensure TCPDF sets up font resources for AcroForm
+        $pdf->SetFont('helvetica', '', 6.5);
+
+        // Set global default form appearance (creates /F1 in /AcroForm /DR)
+        $pdf->setFormDefaultProp([
+            'font' => 'helvetica',
+            'fontsize' => 6.5,
+            'textcolor' => [0, 0, 0],
+        ]);
+
         $pageCount = $pdf->setSourceFile($basePdfPath);
 
         // page 1 only (your screenshot section is page 1)
@@ -221,12 +231,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         }
 
         // ---- Field appearance ----
-        $fieldStyle = [
-            'border'    => 0,
-            'font'      => 'helvetica',
-            'fontsize'  => 6,
-            'textcolor' => [0, 0, 0],
-        ];
+        $fieldStyle = ['border'    => 0,];
 
         // ---- ONLY ONE INPUT: serial_numbers ----
         $x = 18.0;
@@ -278,7 +283,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $pdf->SetXY(52, 213.0);
         $pdf->TextField(
             'bank_name',
-            128,
+            125,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('bank_name')]
@@ -288,7 +293,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         $pdf->SetXY(55, 220.0);
         $pdf->TextField(
             'bank_address',
-            124,
+            120,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('bank_address')]
