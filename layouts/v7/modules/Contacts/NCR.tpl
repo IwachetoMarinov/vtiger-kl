@@ -31,11 +31,27 @@
             color: #666;
         }
 
-        .printAreaContainer {
+        /* .printAreaContainer {
             width: 210mm;
             height: 297mm;
             margin: auto;
             padding: 6mm;
+        } */
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .printAreaContainer {
+            width: 198mm;
+            /* 210 - 6 - 6 */
+            min-height: 297mm;
+            margin-left: 6mm;
+            /* explicit positioning */
+            margin-right: 6mm;
+            padding: 0;
+            /* padding moved into width */
         }
 
         .bottom-container {
@@ -237,28 +253,12 @@
             width: 100%;
         }
 
-        html,
-        body {
-            margin: 0 !important;
-            padding: 0 !important;
-            width: 210mm;
-            height: 297mm;
-        }
+        @media print {
 
-        @page {
-            size: A4;
-            margin: 0;
-        }
-
-        .printAreaContainer {
-            width: 210mm;
-            height: 297mm;
-            margin: 0 auto !important;
-            /* true centering */
-            padding: 6mm;
-            position: relative;
-            left: 0;
-            right: 0;
+            @page {
+                size: A4;
+                margin: 0;
+            }
         }
     </style>
 </head>

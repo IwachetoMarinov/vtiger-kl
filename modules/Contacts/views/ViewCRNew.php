@@ -131,11 +131,19 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             die('Cannot write HTML file: ' . $htmlPath);
         }
 
+        // $cmd = "wkhtmltopdf --enable-local-file-access "
+        //     . "--page-size A4 --dpi 96 --zoom 1 "
+        //     . "--margin-top 0 --margin-right 0 --margin-bottom 0 --margin-left 0 "
+        //     . "--disable-smart-shrinking "
+        //     . escapeshellarg($htmlPath) . " " . escapeshellarg($basePdfPath) . " 2>&1";
+
         $cmd = "wkhtmltopdf --enable-local-file-access "
             . "--page-size A4 --dpi 96 --zoom 1 "
+            . "--print-media-type "
             . "--margin-top 0 --margin-right 0 --margin-bottom 0 --margin-left 0 "
             . "--disable-smart-shrinking "
             . escapeshellarg($htmlPath) . " " . escapeshellarg($basePdfPath) . " 2>&1";
+
 
         $out = [];
         $code = 0;
