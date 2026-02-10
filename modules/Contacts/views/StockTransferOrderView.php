@@ -320,7 +320,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
 
         // Signature section fields (place_input, signed_by, date_input, on_behalf_of)
         // place_input input
-        $pdf->SetXY(40, 257.0);
+        $pdf->SetXY(41, 257.0);
         $pdf->TextField(
             'place_input',
             48,
@@ -340,7 +340,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(40, 265.0);
+        $pdf->SetXY(41, 265.0);
         $pdf->TextField(
             'date_input',
             48,
