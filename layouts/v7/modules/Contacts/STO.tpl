@@ -570,44 +570,44 @@
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="1"> Singapore
                             {else}
-                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 1}
-                                    <span
-                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
-                                    <span style="display: inline-block; margin-left:2mm;">Singapore</span>
-                                {/if}
+                                <span
+                                    style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">
+                                    {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 1}✔{/if}
+                                </span>
+                                <span style="display: inline-block; margin-left:2mm;">Singapore</span>
                             {/if}
                         </div>
                         <div>
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="2"> Switzerland
                             {else}
-                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 2}
-                                    <span
-                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
-                                    <span style="display: inline-block; margin-left:2mm;">Switzerland</span>
-                                {/if}
+                                <span
+                                    style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">
+                                    {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 2}✔{/if}
+                                </span>
+                                <span style="display: inline-block; margin-left:2mm;">Switzerland</span>
                             {/if}
                         </div>
                         <div>
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="3"> Hong Kong
                             {else}
-                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 3}
-                                    <span
-                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
-                                    <span style="display: inline-block; margin-left:2mm;">Hong Kong</span>
-                                {/if}
+                                <span
+                                    style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">
+                                    {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 3}✔ {/if}
+                                </span>
+                                <span style="display: inline-block; margin-left:2mm;">Hong Kong</span>
                             {/if}
                         </div>
                         <div>
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="4"> Dubai
                             {else}
-                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 4}
-                                    <span
-                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
-                                    <span style="display: inline-block; margin-left:2mm;">Dubai</span>
-                                {/if}
+                                <span
+                                    style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">
+                                    {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 4}✔ {/if}
+                                </span>
+                                <span style="display: inline-block; margin-left:2mm;">Dubai</span>
                             {/if}
                         </div>
                     </div>
@@ -624,11 +624,11 @@
                                     </div>
                                 </div>
                             {else}
-                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 5}
-                                    <span
-                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
-                                    <span style="display: inline-block; margin-left:2mm;">{$CUSTOM_COUNTRY|default:''}</span>
-                                {/if}
+                                <span
+                                    style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">
+                                    {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 5}✔ {/if}
+                                </span>
+                                <span style="display: inline-block; margin-left:2mm;">{$CUSTOM_COUNTRY|default:''}</span>
                             {/if}
                         </div>
                     </div>
@@ -713,40 +713,39 @@
                 </div>
             </div>
 
-                <!-- SIGNATURE SECTION -->
-                <div class="signature-section">
-                    <div class="signature-section-item">
-                        <div class="signature-section-left">
-                            <div class="editable-input-wrapper">
-                                <span> Place:</span> <input type="text" name="place_input"
-                                    class="custom-editable-input" />
-                            </div>
-                            <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
-                                <span>Date:</span> <input type="text" name="date_input" class="custom-editable-input" />
-                            </div>
+            <!-- SIGNATURE SECTION -->
+            <div class="signature-section">
+                <div class="signature-section-item">
+                    <div class="signature-section-left">
+                        <div class="editable-input-wrapper">
+                            <span> Place:</span> <input type="text" name="place_input" class="custom-editable-input" />
                         </div>
-
-                        <div class="signature-section-right">
-                            <div class="editable-input-wrapper">
-                                <span> Signed by: </span>
-                                <input type="text" name="signed_by" class="custom-editable-input" />
-                            </div>
-                            <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
-                                <span> On behalf of:</span>
-                                <input type="text" name="on_behalf_of" class="custom-editable-input" />
-                            </div>
+                        <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                            <span>Date:</span> <input type="text" name="date_input" class="custom-editable-input" />
                         </div>
                     </div>
 
-                    <div style="margin-top:10mm;">
-                        <div class="signature-line">...............................................</div><br>
-                        Signature
+                    <div class="signature-section-right">
+                        <div class="editable-input-wrapper">
+                            <span> Signed by: </span>
+                            <input type="text" name="signed_by" class="custom-editable-input" />
+                        </div>
+                        <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                            <span> On behalf of:</span>
+                            <input type="text" name="on_behalf_of" class="custom-editable-input" />
+                        </div>
                     </div>
                 </div>
+
+                <div style="margin-top:10mm;">
+                    <div class="signature-line">...............................................</div><br>
+                    Signature
+                </div>
             </div>
+    </div>
 
 
-        </section>
+    </section>
     </div>
 
     <script>
