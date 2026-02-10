@@ -526,12 +526,9 @@
 
                         {foreach from=$weights item=w key=wi}
                             <td>
-                                {* Show only if is not download *}
-                                {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-                                    <input type="text" class="custom-editable-input custom-editable-table-input"
-                                        name="metal_{$mi}_weight_{$wi}"
-                                        style="width:100%; border:0; outline:none; background:transparent;" />
-                                {/if}
+                                <input type="text" class="custom-editable-input custom-editable-table-input"
+                                    name="metal_{$mi}_weight_{$wi}"
+                                    style="width:100%; border:0; outline:none; background:transparent;" />
                             </td>
                         {/foreach}
                     </tr>
