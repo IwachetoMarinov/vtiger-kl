@@ -244,19 +244,29 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $pdf->SetAutoPageBreak(false);
         $pdf->SetMargins(0, 0, 0);
 
+        // Ensure TCPDF sets up font resources for AcroForm
+        $pdf->SetFont('helvetica', '', 6.5);
+
+        // Set global default form appearance (creates /F1 in /AcroForm /DR)
+        $pdf->setFormDefaultProp([
+            'font' => 'helvetica',
+            'fontsize' => 6.5,
+            'textcolor' => [0, 0, 0],
+        ]);
+
         $pageCount = $pdf->setSourceFile($basePdfPath);
 
         // IMPORTANT: force viewer to regenerate appearances
-        $this->tcpdfEnableNeedAppearances($pdf);
+        // $this->tcpdfEnableNeedAppearances($pdf);
 
         // Optional: set a global default for form fields
-        if (method_exists($pdf, 'setFormDefaultProp')) {
-            $pdf->setFormDefaultProp([
-                'font' => 'helvetica',
-                'fontsize' => 6.5,
-                'textcolor' => [0, 0, 0],
-            ]);
-        }
+        // if (method_exists($pdf, 'setFormDefaultProp')) {
+        //     $pdf->setFormDefaultProp([
+        //         'font' => 'helvetica',
+        //         'fontsize' => 6.5,
+        //         'textcolor' => [0, 0, 0],
+        //     ]);
+        // }
 
         // page 1 only (your screenshot section is page 1)
         $tplId = $pdf->importPage(1);
@@ -293,13 +303,10 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         }
 
         // ---- Field appearance ----
-        $fieldStyle = [
-            'border'    => 0,
-        ];
+        $fieldStyle = ['border' => 0];
 
-        $defaultFieldOptsBase = [
-            'da' => '/Helv 6.5 Tf 0 g',
-        ];
+        // IMPORTANT: use /F1 in DA
+        $defaultFieldOptsBase = ['da' => '/F1 6.5 Tf 0 g',];
 
         // ---- ONLY ONE INPUT: serial_numbers ----
         $x = 18.0;
@@ -405,11 +412,10 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             'on_behalf_of',
             62,
             $h,
-            ['border' => 0],
+            $fieldStyle,
             array_merge($defaultFieldOptsBase, [
                 'v'  => $on_behalf_of_value,
                 'dv' => $on_behalf_of_value,
-                'da' => '/Helv 6.5 Tf 0 g',
             ])
         );
 
