@@ -317,6 +317,34 @@
         .custom-editable-table-input {
             min-width: auto;
         }
+
+        .pdf-checkbox {
+            display: inline-block;
+            width: 5mm;
+            height: 5mm;
+            border: 0.3mm solid #000;
+            vertical-align: middle;
+            position: relative;
+            margin-right: 2mm;
+            box-sizing: border-box;
+        }
+
+        .pdf-checkbox.checked::after {
+            content: "";
+            position: absolute;
+            left: 1.2mm;
+            top: 0.8mm;
+            width: 1.6mm;
+            height: 2.8mm;
+            border-right: 0.6mm solid #000;
+            border-bottom: 0.6mm solid #000;
+            transform: rotate(45deg);
+        }
+
+        .pdf-checkbox-label {
+            display: inline-block;
+            vertical-align: middle;
+        }
     </style>
 </head>
 
@@ -571,10 +599,8 @@
                                 <input class="country-checkbox" type="checkbox" name="1"> Singapore
                             {else}
                                 <span
-                                    style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">
-                                    {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 1}✔{/if}
-                                </span>
-                                <span style="display: inline-block; margin-left:2mm;">Singapore</span>
+                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 1}checked{/if}"></span>
+                                <span class="pdf-checkbox-label">Singapore</span>
                             {/if}
                         </div>
                         <div>
@@ -582,10 +608,8 @@
                                 <input class="country-checkbox" type="checkbox" name="2"> Switzerland
                             {else}
                                 <span
-                                    style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">
-                                    {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 2}✔{/if}
-                                </span>
-                                <span style="display: inline-block; margin-left:2mm;">Switzerland</span>
+                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 2}checked{/if}"></span>
+                                <span class="pdf-checkbox-label">Switzerland</span>
                             {/if}
                         </div>
                         <div>
@@ -593,10 +617,8 @@
                                 <input class="country-checkbox" type="checkbox" name="3"> Hong Kong
                             {else}
                                 <span
-                                    style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">
-                                    {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 3}✔ {/if}
-                                </span>
-                                <span style="display: inline-block; margin-left:2mm;">Hong Kong</span>
+                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 3}checked{/if}"></span>
+                                <span class="pdf-checkbox-label">Hong Kong</span>
                             {/if}
                         </div>
                         <div>
@@ -604,10 +626,8 @@
                                 <input class="country-checkbox" type="checkbox" name="4"> Dubai
                             {else}
                                 <span
-                                    style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">
-                                    {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 4}✔ {/if}
-                                </span>
-                                <span style="display: inline-block; margin-left:2mm;">Dubai</span>
+                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 4}checked{/if}"></span>
+                                <span class="pdf-checkbox-label">Dubai</span>
                             {/if}
                         </div>
                     </div>
@@ -625,10 +645,8 @@
                                 </div>
                             {else}
                                 <span
-                                    style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">
-                                    {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 5}✔ {/if}
-                                </span>
-                                <span style="display: inline-block; margin-left:2mm;">{$CUSTOM_COUNTRY|default:''}</span>
+                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 5}checked{/if}"></span>
+                                <span class="pdf-checkbox-label">{$CUSTOM_COUNTRY|default:''}</span>
                             {/if}
                         </div>
                     </div>
