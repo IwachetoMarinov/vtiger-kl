@@ -313,13 +313,13 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => (string)$request->get('collectionDateInput')]);
 
         $pdf->SetXY(27.0 + $dx, 193.5 + $dy);
-        $pdf->TextField('passport_number', $w, 5.4, $fieldStyle, ['v' => (string)$request->get('passportNumberInput')]);
+        $pdf->TextField('passport_number', $w, 5.0, $fieldStyle, ['v' => (string)$request->get('passportNumberInput')]);
 
         $pdf->SetXY(110.0 + $dx, 200.0 + $dy);
         $pdf->TextField('company_input', $w, $h, $fieldStyle, ['v' => (string)$request->get('companyInput')]);
 
         $pdf->SetXY(28.0 + $dx, 206.0 + $dy);
-        $pdf->TextField('holding_passport_number', $w, 5.4, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
+        $pdf->TextField('holding_passport_number', $w, 5.0, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
 
         // Signature section fields (place_input, signed_by, date_input, on_behalf_of)
         // place_input input

@@ -156,15 +156,15 @@
             gap: 2mm;
         }
 
-        .editable-input-wrapper--nested {
-            flex-wrap: wrap;
-        }
-
         .editable-input {
             border: none;
             width: 40mm;
             min-width: 40mm;
             border-bottom: 1px dotted #000;
+        }
+
+        .editable-full-input {
+            flex: 1;
         }
 
         .custom-checkbox {
@@ -425,25 +425,27 @@
             </div>
 
 
-            <div class="editable-input-wrapper editable-input-wrapper--nested">
+            <div class="editable-input-wrapper">
                 {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                     <input type="checkbox" name="company_option">
                 {else}
                     <span class="custom-checkbox"></span>
                 {/if}
-
                 <span>I/We hereby authorise Mr/Mrs/Representatives of the company </span>
-                <input type="text" name="company_input" class="editable-input" />
-                (<span>holding ID/Passport number</span>
-                <input type="text" name="holding_passport_number" class="editable-input"
-                    {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}style="display: inline-block; margin-top: 2mm;"
-                    {/if} />)
-                <span> to collect the Stored Metal on my/our behalf. This
-                    authorisation is only valid for the collection of the Stored Metal specified above and shall not
-                    be
-                    extended
-                    to any other services covered under the Customer Metal Agreement.</span>
+                <input type="text" name="company_input" class="editable-input editable-full-input" />
             </div>
+
+            <div class="editable-input-wrapper">
+                <span>holding ID/Passport number</span>
+                <input type="text" name="holding_passport_number" class="editable-input editable-full-input"
+                    {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}style="display: inline-block; margin-top: 2mm;"
+                    {/if} />
+            </div>
+            <p style="margin-top: 2mm;"> to collect the Stored Metal on my/our behalf. This
+                authorisation is only valid for the collection of the Stored Metal specified above and shall not
+                be
+                extended
+                to any other services covered under the Customer Metal Agreement.</p>
 
 
             <p style="margin-top: 2.5mm;font-style: italic;font-weight: bold;">I/We hereby enclose a photocopy of the
