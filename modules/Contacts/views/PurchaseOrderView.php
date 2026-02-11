@@ -431,7 +431,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         // Checkboxes
 
         $makeCheckbox = function ($name, $x, $y, $checked) use ($pdf) {
-            $size = 3.6; // slightly larger improves centering visually
+            $size = 3.4; // slightly larger improves centering visually
 
             $pdf->SetXY($x, $y);
 
@@ -465,8 +465,8 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $makeCheckbox('country_checked',  35, 154.5, $country_checked);
         $makeCheckbox('address_checked',  35, 161.3, $address_checked);
 
-        $makeCheckbox('pricing_option_1', 35, 225.0, $first_pricing_checked);
-        $makeCheckbox('pricing_option_2', 35, 233.5, $second_pricing_checked);
+        $makeCheckbox('pricing_option_1', 34, 226.0, $first_pricing_checked);
+        $makeCheckbox('pricing_option_2', 34, 233.5, $second_pricing_checked);
 
         // ---- Save final --
         $pdf->Output($finalPdfPath, 'F');
