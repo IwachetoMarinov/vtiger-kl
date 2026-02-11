@@ -386,7 +386,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $startX = 57.3;   // was ~48.0
         $startY = 111.0;  // was ~116.0
         $cellW  = 13.57;   // was ~15
-        $cellH  = 6.6;    // was ~7
+        $cellH  = 6.5;    // was ~7
 
         $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
         $weightCount = 9;   // 1000oz ... Other
@@ -434,47 +434,38 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
 
         $drawCheckbox = function ($name, $x, $y, $checked) use ($pdf) {
 
-            $size = 4.0;          // same as your previous size
-            $borderWidth = 0.25;
+            $size = 4.0;
 
-            // --- Draw square ---
+            // 1) Draw HTML-like square
             $pdf->SetDrawColor(0, 0, 0);
-            $pdf->SetLineWidth($borderWidth);
+            $pdf->SetLineWidth(0.25);
             $pdf->Rect($x, $y, $size, $size);
 
-            // --- Draw centered checkmark ---
+            // 2) Draw a nicer tick (thinner + better proportions)
             if ($checked) {
-                $pdf->SetLineWidth(0.45);
-
-                // proportional tick positioning (scales cleanly)
-                $pdf->Line(
-                    $x + $size * 0.20,
-                    $y + $size * 0.55,
-                    $x + $size * 0.40,
-                    $y + $size * 0.75
-                );
-
-                $pdf->Line(
-                    $x + $size * 0.40,
-                    $y + $size * 0.75,
-                    $x + $size * 0.80,
-                    $y + $size * 0.25
-                );
+                $pdf->SetLineWidth(0.35);
+                $pdf->Line($x + 0.9, $y + 2.1, $x + 1.7, $y + 2.9);
+                $pdf->Line($x + 1.7, $y + 2.9, $x + 3.2, $y + 1.0);
             }
 
-            // --- Real invisible checkbox field on top (keeps it editable) ---
+            // 3) Invisible real checkbox on top (click area only)
             $pdf->SetXY($x, $y);
             $pdf->CheckBox(
                 $name,
                 $size,
                 $checked,
-                ['border' => 0],                 // remove default ugly border
                 [
-                    'v'  => $checked ? 'Yes' : 'Off',
+                    'border' => 0,
+                    'fillColor' => [255, 255, 255],
+                ],
+                [
+                    'v' => $checked ? 'Yes' : 'Off',
                     'dv' => 'Off',
+                    'opacity' => 0, // <<< KEY: hides widget appearance (no ugly check)
                 ]
             );
         };
+
 
 
         // ===============================
@@ -491,11 +482,11 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         // Render them (your real positions)
         // ===============================
 
-        $drawCheckbox('country_checked',        35, 154.5, $country_checked);
-        $drawCheckbox('address_checked',        35, 161.3, $address_checked);
+        $drawCheckbox('country_checked',  35, 154.5, $country_checked);
+        $drawCheckbox('address_checked',  35, 161.3, $address_checked);
 
-        $drawCheckbox('pricing_option_1',       35, 225.0, $first_pricing_checked);
-        $drawCheckbox('pricing_option_2',       35, 233.5, $second_pricing_checked);
+        $drawCheckbox('pricing_option_1', 35, 225.0, $first_pricing_checked);
+        $drawCheckbox('pricing_option_2', 35, 233.5, $second_pricing_checked);
 
 
         // ---- Save final --
