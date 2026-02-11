@@ -78,31 +78,31 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
 
     public function postProcess(Vtiger_Request $request) {}
 
-    function downloadPDF($html, Vtiger_Request $request)
-    {
-        global $root_directory;
-        $recordModel = $this->record->getRecord();
-        $clientID = $recordModel->get('cf_898');
-        $year  = date('Y');
+    // function downloadPDF($html, Vtiger_Request $request)
+    // {
+    //     global $root_directory;
+    //     $recordModel = $this->record->getRecord();
+    //     $clientID = $recordModel->get('cf_898');
+    //     $year  = date('Y');
 
-        $fileName = $clientID . '-' . $year . "-STO";
-        $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
-        fwrite($handle, $html);
-        fclose($handle);
+    //     $fileName = $clientID . '-' . $year . "-STO";
+    //     $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
+    //     fwrite($handle, $html);
+    //     fclose($handle);
 
-        exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $root_directory . "$fileName.html " . $root_directory . "$fileName.pdf");
-        unlink($root_directory . $fileName . '.html');
+    //     exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $root_directory . "$fileName.html " . $root_directory . "$fileName.pdf");
+    //     unlink($root_directory . $fileName . '.html');
 
-        header("Content-type: application/pdf");
-        header("Cache-Control: private");
-        header("Content-Disposition: attachment; filename=$fileName.pdf");
-        header("Content-Description: Global Precious Metals CRM Data");
-        ob_clean();
-        flush();
-        readfile($root_directory . "$fileName.pdf");
-        unlink($root_directory . "$fileName.pdf");
-        exit;
-    }
+    //     header("Content-type: application/pdf");
+    //     header("Cache-Control: private");
+    //     header("Content-Disposition: attachment; filename=$fileName.pdf");
+    //     header("Content-Description: Global Precious Metals CRM Data");
+    //     ob_clean();
+    //     flush();
+    //     readfile($root_directory . "$fileName.pdf");
+    //     unlink($root_directory . "$fileName.pdf");
+    //     exit;
+    // }
 
     protected function getAssets()
     {
@@ -152,5 +152,282 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         }
 
         return $data;
+    }
+
+    /**
+     * HTML -> PDF via wkhtmltopdf, then overlay ONE PDF form field (serial_numbers),
+     * and download.
+     *
+     * Query param used:
+     *   serial_numbers
+     *
+     * Use &debug=1 to draw a grid and adjust coordinates.
+     */
+    protected function downloadPDF($html, Vtiger_Request $request)
+    {
+        global $root_directory;
+
+        $recordModel = $this->record->getRecord();
+
+        // ---- Safe filename ----
+        $clientID = preg_replace('/[^A-Za-z0-9_-]/', '', (string)$recordModel->get('cf_898'));
+        $year = date('Y');
+        $fileName = $clientID . '-' . $year . "-STO";
+
+        // ---- Writable temp dir ----
+        $tmpDir = rtrim((string)$root_directory, '/\\') . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR;
+        if (!is_dir($tmpDir)) {
+            @mkdir($tmpDir, 0775, true);
+        }
+        if (!is_writable($tmpDir)) {
+            $tmpDir = rtrim((string)sys_get_temp_dir(), '/\\') . DIRECTORY_SEPARATOR . 'vtiger_pdf' . DIRECTORY_SEPARATOR;
+            if (!is_dir($tmpDir)) {
+                @mkdir($tmpDir, 0775, true);
+            }
+        }
+        if (!is_dir($tmpDir) || !is_writable($tmpDir)) {
+            header("HTTP/1.1 500 Internal Server Error");
+            die('Temp directory not writable: ' . $tmpDir);
+        }
+
+        $htmlPath     = $tmpDir . $fileName . '.html';
+        $basePdfPath  = $tmpDir . $fileName . '_base.pdf';
+        $finalPdfPath = $tmpDir . $fileName . '.pdf';
+
+        // ---- Write HTML ----
+        if (@file_put_contents($htmlPath, $html) === false) {
+            header("HTTP/1.1 500 Internal Server Error");
+            die('Cannot write HTML file: ' . $htmlPath);
+        }
+
+        // ---- HTML -> PDF ----
+        $cmd = "wkhtmltopdf --enable-local-file-access "
+            . "--page-size A4 --dpi 96 --zoom 1 "
+            . "--margin-top 0 --margin-right 0 --margin-bottom 0 --margin-left 0 "
+            . "--disable-smart-shrinking "
+            . escapeshellarg($htmlPath) . " " . escapeshellarg($basePdfPath) . " 2>&1";
+
+        $out = [];
+        $code = 0;
+        exec($cmd, $out, $code);
+        @unlink($htmlPath);
+
+        if ($code !== 0 || !file_exists($basePdfPath) || filesize($basePdfPath) < 2000) {
+            header("HTTP/1.1 500 Internal Server Error");
+            die("wkhtmltopdf failed (exit=$code):\n" . implode("\n", $out));
+        }
+
+        // ---- Import base PDF and overlay ONE field ----
+        $pdf = new \setasign\Fpdi\Tcpdf\Fpdi();
+        $pdf->SetAutoPageBreak(false);
+        $pdf->SetMargins(0, 0, 0);
+
+        // Ensure TCPDF sets up font resources for AcroForm
+        $pdf->SetFont('helvetica', '', 6.5);
+
+        // Set global default form appearance (creates /F1 in /AcroForm /DR)
+        $pdf->setFormDefaultProp([
+            'font' => 'helvetica',
+            'fontsize' => 6.8,
+            'textcolor' => [0, 0, 0],
+        ]);
+
+        $pageCount = $pdf->setSourceFile($basePdfPath);
+
+        // page 1 only (your screenshot section is page 1)
+        $tplId = $pdf->importPage(1);
+        $size  = $pdf->getTemplateSize($tplId);
+
+        $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+        $pdf->useTemplate($tplId, 0, 0, $size['width'], $size['height']);
+
+        // ---- DEBUG GRID MODE (call with &debug=1) ----
+        $debug = (string)$request->get('debug') === '1';
+        if ($debug) {
+            $pdf->SetFont('helvetica', '', 6);
+
+            $pageW = $pdf->getPageWidth();
+            $pageH = $pdf->getPageHeight();
+
+            // Major grid every 10mm
+            for ($x = 0; $x <= $pageW; $x += 10) {
+                $pdf->Line($x, 0, $x, $pageH, ['width' => 0.1, 'color' => [180, 180, 180]]);
+                $pdf->Text($x + 0.5, 1, (string)$x);
+            }
+            for ($y = 0; $y <= $pageH; $y += 10) {
+                $pdf->Line(0, $y, $pageW, $y, ['width' => 0.1, 'color' => [180, 180, 180]]);
+                $pdf->Text(1, $y + 0.5, (string)$y);
+            }
+
+            // Optional: minor grid every 5mm (lighter)
+            for ($x = 0; $x <= $pageW; $x += 5) {
+                $pdf->Line($x, 0, $x, $pageH, ['width' => 0.05, 'color' => [220, 220, 220]]);
+            }
+            for ($y = 0; $y <= $pageH; $y += 5) {
+                $pdf->Line(0, $y, $pageW, $y, ['width' => 0.05, 'color' => [220, 220, 220]]);
+            }
+        }
+
+        // ---- Field appearance ----
+        $fieldStyle = ['border'    => 0,];
+
+        // ---- ONLY ONE INPUT: serial_numbers ----
+        $x = 18.0;
+        $y = 63.0;
+        $h = 5.5;
+        $full_width = 145.0;
+
+        // description input  field
+        $pdf->SetXY(32, 136.5);
+        $pdf->TextField(
+            'description',
+            $full_width,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('description')]
+        );
+
+        // from_location input field
+        $pdf->SetXY(32, 151.0);
+        $pdf->TextField(
+            'from_location',
+            $full_width,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('from_location')]
+        );
+
+        // to_location input field
+        $pdf->SetXY(32, 163.0);
+        $pdf->TextField(
+            'to_location',
+            $full_width,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('to_location')]
+        );
+
+        // country input field
+        $pdf->SetXY(47, 208.5);
+        $pdf->TextField(
+            'country',
+            41,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('country')]
+        );
+
+
+        // Signature section fields (place_input, signed_by, date_input, on_behalf_of)
+        // place_input input
+        $pdf->SetXY(41, 268.0);
+        $pdf->TextField(
+            'place_input',
+            48,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('place_input')]
+        );
+
+        // signed_by input
+        $pdf->SetXY(108, 268.0);
+        $pdf->TextField(
+            'signed_by',
+            70,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('signed_by')]
+        );
+
+        // date_input input
+        $pdf->SetXY(41, 276.0);
+        $pdf->TextField(
+            'date_input',
+            48,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('date_input')]
+        );
+
+        // on_behalf_of input
+        $pdf->SetXY(112, 276.0);
+        $pdf->TextField(
+            'on_behalf_of',
+            67,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('on_behalf_of')]
+        );
+
+        // ---- METALS TABLE CONFIG (ADJUSTED) ----
+        $startX = 57.5;   // was ~48.0
+        $startY = 102.0;  // was ~116.0
+        $cellW  = 13.57;   // was ~15
+        $cellH  = 6.7;    // was ~7
+
+        $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
+        $weightCount = 9;   // 1000oz ... Other
+
+        $offsetX = 0.6;   // move inside cell (right)
+        $offsetY = 0.6;   // move inside cell (down)
+
+        $fieldW  = $cellW - 1.2; // leave padding both sides
+        $fieldH  = $cellH - 1.2;
+
+        $fieldStyle = [
+            'border' => 0,
+        ];
+
+        $fieldOptsBase = [
+            'da' => '/Helv 5.5 Tf 0 g',   // smaller font
+        ];
+
+        // ---- METALS TABLE FIELDS ----
+        for ($mi = 0; $mi < $metalCount; $mi++) {
+            for ($wi = 0; $wi < $weightCount; $wi++) {
+
+                $fieldName = "metal_{$mi}_weight_{$wi}";
+                $value     = (string)($request->get($fieldName) ?? '');
+
+                $x = $startX + ($wi * $cellW) + $offsetX;
+                $y = $startY + ($mi * $cellH) + $offsetY;
+
+                $pdf->SetXY($x, $y);
+                $pdf->TextField(
+                    $fieldName,
+                    $fieldW,
+                    $fieldH,
+                    $fieldStyle,
+                    array_merge($fieldOptsBase, [
+                        'v' => $value, // blank allowed
+                    ])
+                );
+            }
+        }
+
+        // ---- Save final ----
+        $pdf->Output($finalPdfPath, 'F');
+        @unlink($basePdfPath);
+
+        // ---- Stream to browser ----
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        header('Content-Type: application/pdf');
+        header('Cache-Control: private');
+        header('Content-Disposition: attachment; filename="' . $fileName . '.pdf"');
+        header('Content-Length: ' . filesize($finalPdfPath));
+
+        $fp = fopen($finalPdfPath, 'rb');
+        if ($fp === false) {
+            header("HTTP/1.1 500 Internal Server Error");
+            die("Cannot open PDF for reading: {$finalPdfPath}");
+        }
+        fpassthru($fp);
+        fclose($fp);
+
+        @unlink($finalPdfPath);
+        exit;
     }
 }

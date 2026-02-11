@@ -53,7 +53,7 @@
             margin-bottom: 1mm;
         }
 
-         .table-heading {
+        .table-heading {
             margin-bottom: 4mm;
         }
 
@@ -189,6 +189,7 @@
         /* Signature Section */
         .signature-section {
             margin-top: 2mm;
+            padding: 0 4mm;
         }
 
         .signature-section-item {
@@ -289,6 +290,62 @@
         .custom-country-input:focus {
             outline: none;
         }
+
+        .editable-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 2mm;
+        }
+
+        .custom-editable-input {
+            border: none;
+            possition: relative;
+            padding-bottom: 1mm;
+            flex: 1;
+            min-width: 40mm;
+            border-bottom: 1px dotted #000;
+        }
+
+        .custom-editable-input:focus {
+            outline: none;
+        }
+
+        .full-width {
+            width: 100%;
+        }
+
+        .custom-editable-table-input {
+            min-width: auto;
+        }
+
+        .pdf-checkbox {
+            display: inline-block;
+            width: 5mm;
+            height: 5mm;
+            border: 0.3mm solid #000;
+            vertical-align: middle;
+            position: relative;
+            margin-right: 2mm;
+            box-sizing: border-box;
+        }
+
+        .pdf-checkbox.checked::after {
+            content: "";
+            position: absolute;
+            left: 1.2mm;
+            top: 0.2mm;
+            width: 1.6mm;
+            height: 2.8mm;
+            border-right: 0.6mm solid #000;
+            border-bottom: 0.6mm solid #000;
+            transform: rotate(45deg);
+        }
+
+        .pdf-checkbox-label {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 5mm;
+        }
     </style>
 </head>
 
@@ -351,7 +408,11 @@
         <table>
             <tr>
                 <td class="logo">
-                    <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
+                    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                        <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
+                    {else}
+                        <img src="file:///var/www/html/layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
+                    {/if}
                 </td>
                 <td class="title"></td>
                 <td style="width:25mm;"></td>
@@ -438,7 +499,7 @@
                         {if isset($COMPANY)}
                             {if !empty($COMPANY->get('company_fax'))} <p>Fax no: <span
                                     style="font-style: italic;">{$COMPANY->get('company_fax')}</span> or</p> {/if}
-                            <p>Email:<span style="font-style: italic;"> {$COMPANY->get('company_website')}</span></p>
+                            <p>Email:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
                         {/if}
                     </div>
                 </div>
@@ -489,11 +550,16 @@
                     {/foreach}
                 </tr>
 
-                {foreach from=$metals item=m}
+                {foreach from=$metals item=m key=mi}
                     <tr>
                         <td class="metal-row-label">{$m}</td>
-                        {foreach from=$weights item=w}
-                            <td></td>
+
+                        {foreach from=$weights item=w key=wi}
+                            <td>
+                                <input type="text" class="custom-editable-input custom-editable-table-input"
+                                    name="metal_{$mi}_weight_{$wi}"
+                                    style="width:100%; border:0; outline:none; background:transparent;" />
+                            </td>
                         {/foreach}
                     </tr>
                 {/foreach}
@@ -504,24 +570,24 @@
                 Description of the precious metals <span style="font-style: italic;">(Please specify type, refiner,
                     serial numbers, fineness):</span>
                 <div style="margin-top: 2mm;">
-                    .............................................................................................................................................................................
+                    <input type="text" name="description" class="custom-editable-input full-width" />
                 </div>
             </div>
 
             <!-- SECTION 3 -->
             <div class="additional-section" style="margin-left:2mm;">
-                <div style="margin-top:2mm;">
+                <div style="margin-top:1mm;">
                     From <span style="font-style: italic;">(Please specify pick-up location):</span>
-                    .........................................................................................................
-                    <span
-                        style="display: inline-block; margin-top:2mm;">.............................................................................................................................................................................</span>
+                    <div style="margin-top: 2mm;">
+                        <input type="text" name="from_location" class="custom-editable-input full-width" />
+                    </div>
                 </div>
 
-                <div style="margin-top:2mm;">
+                <div style="margin-top:3mm;">
                     To <span style="font-style: italic;">(Please specify delivery location):</span>
-                    .............................................................................................................
-                    <span
-                        style="display: inline-block; margin-top:2mm;">.............................................................................................................................................................................</span>
+                    <div style="margin-top: 2mm;">
+                        <input type="text" name="to_location" class="custom-editable-input full-width" />
+                    </div>
                 </div>
 
                 <div style="margin-top:2mm;">
@@ -533,66 +599,56 @@
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="1"> Singapore
                             {else}
-                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 1}
-                                    <span
-                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
-                                    <span style="display: inline-block; margin-left:2mm;">Singapore</span>
-                                {/if}
+                                <span
+                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 1}checked{/if}"></span>
+                                <span class="pdf-checkbox-label">Singapore</span>
                             {/if}
                         </div>
                         <div>
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="2"> Switzerland
                             {else}
-                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 2}
-                                    <span
-                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
-                                    <span style="display: inline-block; margin-left:2mm;">Switzerland</span>
-                                {/if}
+                                <span
+                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 2}checked{/if}"></span>
+                                <span class="pdf-checkbox-label">Switzerland</span>
                             {/if}
                         </div>
                         <div>
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="3"> Hong Kong
                             {else}
-                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 3}
-                                    <span
-                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
-                                    <span style="display: inline-block; margin-left:2mm;">Hong Kong</span>
-                                {/if}
+                                <span
+                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 3}checked{/if}"></span>
+                                <span class="pdf-checkbox-label">Hong Kong</span>
                             {/if}
                         </div>
                         <div>
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="4"> Dubai
                             {else}
-                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 4}
-                                    <span
-                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
-                                    <span style="display: inline-block; margin-left:2mm;">Dubai</span>
-                                {/if}
+                                <span
+                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 4}checked{/if}"></span>
+                                <span class="pdf-checkbox-label">Dubai</span>
                             {/if}
                         </div>
                     </div>
 
                     <div>
                         <div>
-                            {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-                                <div class="custom-country">
+                            <div class="custom-country">
+                                {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                     <input class="country-checkbox" type="checkbox" name="5">
                                     <div>
-                                        Other country or location (Please specify): 
+                                        Other country or location (Please specify):
                                         <input type="text" class="custom-country-input" value="{$CUSTOM_COUNTRY|default:''}"
                                             style="width:60mm; margin-left:2mm;" />
                                     </div>
-                                </div>
-                            {else}
-                                {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 5}
+                                {else}
                                     <span
-                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
-                                    <span style="display: inline-block; margin-left:2mm;">{$CUSTOM_COUNTRY|default:''}</span>
+                                        class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 5}checked{/if}"></span>
+                                    <span class="pdf-checkbox-label">Other country or location (Please specify): {$CUSTOM_COUNTRY|default:''}</span>
                                 {/if}
-                            {/if}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -616,8 +672,8 @@
                 <div style="margin-left: 2mm;">
                     <p class="bolder-element">(a) from the following jurisdiction:</p>
                     <div style="margin-left: 5mm; margin-top:2mm; font-weight: normal;">
-                        Country:
-                        .........................................................................................................................................................
+                        <span> Country:</span>
+                        <input type="text" name="country" class="custom-editable-input" />
                     </div>
                 </div>
 
@@ -628,7 +684,7 @@
                         {if $SELECTED_BANK}
                             {assign var=iban value=$SELECTED_BANK->get('iban_no')|lower|replace:' ':''}
                             {assign var=bank_routing_no value=$SELECTED_BANK->get('bank_routing_no')|lower|replace:' ':''}
-                            
+
                             {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
                                 <input type="hidden" class="selected-bank" value="{$SELECTED_BANK->getId()}">
                             {/if}
@@ -677,50 +733,38 @@
             </div>
 
             <!-- SIGNATURE SECTION -->
-            <div class="details-container" style="margin-left: 2mm;">
-                <div class="signature-section">
-                    <div class="signature-section-item">
-                        <div class="signature-section-left">Place: <span class="line"
-                                style="font-style: italic;">{$RECORD_MODEL->get('mailingcountry')}</span></div>
-                        <div class="signature-section-right">
-                            {* Today date *}
-                            Date: 
+            <div class="signature-section">
+                <div class="signature-section-item">
+                    <div class="signature-section-left">
+                        <div class="editable-input-wrapper">
+                            <span> Place:</span> <input type="text" name="place_input" class="custom-editable-input" />
+                        </div>
+                        <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                            <span>Date:</span> <input type="text" name="date_input" class="custom-editable-input" />
                         </div>
                     </div>
 
-                    {assign var="ON_BEHALF_OF" value=""}
-                    {assign var="SIGNED_BY" value=""}
-
-                    {if isset($CLIENT_TYPE) }
-
-                        {if $CLIENT_TYPE == 'Corporate Entity' || $CLIENT_TYPE == 'Trust'  || $CLIENT_TYPE == 'Foundation' }
-                            {assign var="ON_BEHALF_OF" value="{$RECORD_MODEL->get('lastname')}"}
-
-                        {else if $CLIENT_TYPE == 'Individual' || $CLIENT_TYPE == 'Sole Proprietor' }
-                            {assign var="SIGNED_BY" value="{$RECORD_MODEL->get('firstname')}
-                    {$RECORD_MODEL->get('lastname')}"}
-                        {/if}
-
-                    {/if}
-
-                    <div class="signature-section-item">
-                        <div class="signature-section-left">
-                            Signed by: <span class="long-line" style="font-style: italic;">
-                                {$SIGNED_BY}</span>
+                    <div class="signature-section-right">
+                        <div class="editable-input-wrapper">
+                            <span> Signed by: </span>
+                            <input type="text" name="signed_by" class="custom-editable-input" />
                         </div>
-                        <div class="signature-section-right">
-                            On behalf of: <span class="line">{$ON_BEHALF_OF}</span>
+                        <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                            <span> On behalf of:</span>
+                            <input type="text" name="on_behalf_of" class="custom-editable-input" />
                         </div>
-                    </div>
-
-                    <div style="margin-top:6mm;">
-                        Signature
                     </div>
                 </div>
+
+                <div style="margin-top:10mm;">
+                    <div class="signature-line">...............................................</div><br>
+                    Signature
+                </div>
             </div>
+    </div>
 
 
-        </section>
+    </section>
     </div>
 
     <script>
@@ -765,6 +809,15 @@
                     url.searchParams.set('customCountry', customInput.value || '');
                 }
             }
+
+            // Get all custom-editable-input values and append to URL as query parameters
+            document.querySelectorAll('.custom-editable-input').forEach(input => {
+                if (!input.name) return;
+
+                const val = (input.value ?? '').trim();
+                if (val) url.searchParams.set(input.name, val);
+                else url.searchParams.delete(input.name);
+            });
 
             this.href = url.toString();
         });

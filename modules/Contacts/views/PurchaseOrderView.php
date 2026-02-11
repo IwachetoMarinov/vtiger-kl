@@ -17,9 +17,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
     {
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
-        // Client type
         $client_type = $recordModel->get('cf_927');
-
         $pricingOption = $request->get('pricing_option');
 
         $allBankAccounts = [];
@@ -40,10 +38,6 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
 
         $selectedBank = null;
         if (!empty($bankAccountId)) $selectedBank = BankAccount_Record_Model::getInstanceById($bankAccountId);
-
-        // echo "<pre>";
-        // var_dump($selectedBank);
-        // echo "</pre>";
 
         if (empty($selectedBank)) {
             // fallback dummy object to prevent template fatal
@@ -159,7 +153,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         return $data;
     }
 
-    protected
+
     /**
      * HTML -> PDF via wkhtmltopdf, then overlay ONE PDF form field (serial_numbers),
      * and download.
@@ -169,7 +163,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
      *
      * Use &debug=1 to draw a grid and adjust coordinates.
      */
-    function downloadPDF($html, Vtiger_Request $request)
+    protected function downloadPDF($html, Vtiger_Request $request)
     {
         global $root_directory;
 
@@ -228,6 +222,16 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $pdf->SetAutoPageBreak(false);
         $pdf->SetMargins(0, 0, 0);
 
+        // Ensure TCPDF sets up font resources for AcroForm
+        $pdf->SetFont('helvetica', '', 6.5);
+
+        // Set global default form appearance (creates /F1 in /AcroForm /DR)
+        $pdf->setFormDefaultProp([
+            'font' => 'helvetica',
+            'fontsize' => 6.8,
+            'textcolor' => [0, 0, 0],
+        ]);
+
         $pageCount = $pdf->setSourceFile($basePdfPath);
 
         // page 1 only (your screenshot section is page 1)
@@ -248,11 +252,11 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             // Major grid every 10mm
             for ($x = 0; $x <= $pageW; $x += 10) {
                 $pdf->Line($x, 0, $x, $pageH, ['width' => 0.1, 'color' => [180, 180, 180]]);
-                $pdf->Text($x + 0.5, 1, (string)$x); // x labels at top
+                $pdf->Text($x + 0.5, 1, (string)$x);
             }
             for ($y = 0; $y <= $pageH; $y += 10) {
                 $pdf->Line(0, $y, $pageW, $y, ['width' => 0.1, 'color' => [180, 180, 180]]);
-                $pdf->Text(1, $y + 0.5, (string)$y); // y labels at left
+                $pdf->Text(1, $y + 0.5, (string)$y);
             }
 
             // Optional: minor grid every 5mm (lighter)
@@ -265,30 +269,166 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         }
 
         // ---- Field appearance ----
-        $fieldStyle = [
-            'border'    => 0,
-            'font'      => 'helvetica',
-            'fontsize'  => 8,
-            'textcolor' => [0, 0, 0],
-        ];
+        $fieldStyle = ['border' => 0];
+
+        // IMPORTANT: use /F1 in DA
+        $defaultFieldOptsBase = ['da' => '/F1 6.8 Tf 0 g',];
 
         // ---- ONLY ONE INPUT: serial_numbers ----
-        // Adjust X/Y using debug grid:
         $x = 18.0;
         $y = 63.0;
         $h = 5.5;
-        $serial_input_widthw = 143.0;
 
-        // Serial numbers field
-        $pdf->SetXY(32, 141.0); // A4 coords are in mm
+        // currency input  field
+        $pdf->SetXY(60, 140.0);
         $pdf->TextField(
             'currency',
-            $serial_input_widthw,
+            38.5,
             $h,
             $fieldStyle,
-            ['v' => (string)$request->get('currency')]
+            array_merge(
+                $defaultFieldOptsBase,
+                ['v' => (string)$request->get('currency'), 'da' => '/Helv 6.5 Tf 0 g']
+            ),
+
         );
-        // ---- Save final ----
+
+        // location input field
+        $pdf->SetXY(102, 154.5);
+        $pdf->TextField(
+            'location',
+            40,
+            $h,
+            $fieldStyle,
+            array_merge(
+                $defaultFieldOptsBase,
+                ['v' => (string)$request->get('location'), 'da' => '/Helv 6.5 Tf 0 g']
+            )
+        );
+
+        // address input field
+        $pdf->SetXY(72, 161.3);
+        $pdf->TextField(
+            'address',
+            55,
+            $h,
+            $fieldStyle,
+            array_merge(
+                $defaultFieldOptsBase,
+                ['v' => (string)$request->get('address'), 'da' => '/Helv 6.5 Tf 0 g']
+            )
+        );
+
+        // country input field
+        $pdf->SetXY(49, 177.5);
+        $pdf->TextField(
+            'country',
+            45,
+            $h,
+            $fieldStyle,
+            array_merge(
+                $defaultFieldOptsBase,
+                ['v' => (string)$request->get('country'), 'da' => '/Helv 6.5 Tf 0 g']
+            )
+        );
+
+        // place_input input
+        $pdf->SetXY(40, 255.5);
+        $pdf->TextField(
+            'place_input',
+            45,
+            $h,
+            $fieldStyle,
+            array_merge(
+                $defaultFieldOptsBase,
+                ['v' => (string)$request->get('place_input'), 'da' => '/Helv 6.5 Tf 0 g']
+            )
+        );
+
+        // signed_by input
+        $pdf->SetXY(109, 255.5);
+        $pdf->TextField(
+            'signed_by',
+            65,
+            $h,
+            $fieldStyle,
+            array_merge(
+                $defaultFieldOptsBase,
+                ['v' => (string)$request->get('signed_by'), 'da' => '/Helv 6.5 Tf 0 g']
+            )
+        );
+
+        // date_input input
+        $pdf->SetXY(40, 264.0);
+        $pdf->TextField(
+            'date_input',
+            45,
+            $h,
+            $fieldStyle,
+            array_merge(
+                $defaultFieldOptsBase,
+                ['v' => (string)$request->get('date_input'), 'da' => '/Helv 6.5 Tf 0 g']
+            )
+        );
+
+        $pdf->SetXY(112, 264.0);
+        $pdf->TextField(
+            'on_behalf_of',
+            62,
+            $h,
+            $fieldStyle,
+            array_merge($defaultFieldOptsBase, [
+                'v'  => (string)$request->get('on_behalf_of'),
+            ])
+        );
+
+        // ---- METALS TABLE CONFIG (ADJUSTED) ----
+        $startX = 57.3;   // was ~48.0
+        $startY = 110.5;  // was ~116.0
+        $cellW  = 13.57;   // was ~15
+        $cellH  = 6.7;    // was ~7
+
+        $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
+        $weightCount = 9;   // 1000oz ... Other
+
+        $offsetX = 0.6;   // move inside cell (right)
+        $offsetY = 0.6;   // move inside cell (down)
+
+        $fieldW  = $cellW - 1.2; // leave padding both sides
+        $fieldH  = $cellH - 1.2;
+
+        $fieldStyle = [
+            'border' => 0,
+        ];
+
+        $fieldOptsBase = [
+            'da' => '/Helv 5.5 Tf 0 g',   // smaller font
+        ];
+
+        // ---- METALS TABLE FIELDS ----
+        for ($mi = 0; $mi < $metalCount; $mi++) {
+            for ($wi = 0; $wi < $weightCount; $wi++) {
+
+                $fieldName = "metal_{$mi}_weight_{$wi}";
+                $value     = (string)($request->get($fieldName) ?? '');
+
+                $x = $startX + ($wi * $cellW) + $offsetX;
+                $y = $startY + ($mi * $cellH) + $offsetY;
+
+                $pdf->SetXY($x, $y);
+                $pdf->TextField(
+                    $fieldName,
+                    $fieldW,
+                    $fieldH,
+                    $fieldStyle,
+                    array_merge($fieldOptsBase, [
+                        'v' => $value, // blank allowed
+                    ])
+                );
+            }
+        }
+
+        // ---- Save final --
         $pdf->Output($finalPdfPath, 'F');
         @unlink($basePdfPath);
 

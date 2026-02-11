@@ -22,7 +22,8 @@
 
         * {
             box-sizing: border-box;
-            margin: 0px
+            margin: 0;
+            padding: 0;
         }
 
         body {
@@ -32,12 +33,11 @@
         }
 
         .printAreaContainer {
-            height: 297mm;
             width: 210mm;
-            border: 1px solid #fff;
+            height: 297mm;
             margin: auto;
-            padding: 6mm;
-            position: relative;
+            padding: 4.5mm;
+            padding-top: 2mm;
         }
 
         .bottom-container {
@@ -47,16 +47,6 @@
 
         .bottom-container-item {
             flex: 1;
-        }
-
-        .printAreaContainer * {
-            box-sizing: border-box;
-            font-family: 'Open Sans';
-            color: #666;
-        }
-
-        .printAreaContainer .full-width {
-            width: 100%;
         }
 
         .printAreaContainer .header-logo {
@@ -193,17 +183,57 @@
             outline: none;
         }
 
+        /* Signature Section */
+        .signature-section {
+            margin-top: 2mm;
+            padding: 0 4mm;
+        }
+
+        .signature-section-item {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1mm;
+        }
+
+        .signature-section-left {
+            width: 40%;
+        }
+
+        .signature-section-right {
+            width: 57%;
+        }
+
+        .custom-editable-input {
+            border: none;
+            possition: relative;
+            padding-bottom: 1mm;
+            flex: 1;
+            min-width: 40mm;
+            border-bottom: 1px dotted #000;
+        }
+
+        .custom-editable-input:focus {
+            outline: none;
+        }
+
+        .full-width {
+            width: 100%;
+        }
+
+        .custom-editable-table-input {
+            min-width: auto;
+        }
+
+        .input-without-border {
+            border: none;
+            width: 100%;
+        }
+
         @media print {
 
             @page {
                 size: A4;
                 margin: 0;
-            }
-
-            html,
-            body {
-                width: 210mm;
-                height: 297mm;
             }
         }
     </style>
@@ -239,211 +269,224 @@
             {assign var="end" value=($end+14)}
         {/if}
         <div class="printAreaContainer">
-            <div class="full-width">
-                <table class="print-tbl">
-                    <tr>
-                        <td>
-                            {if isset($smarty.request.PDFDownload) && $smarty.request.PDFDownload eq true}
-                                <img src="file:///var/www/html/layouts/v7/modules/Contacts/resources/gpm-new-logo.png"
-                                    style="max-height: 100%; float:left;width: 196px;" />
-                            {else}
-                                <img src='layouts/v7/modules/Contacts/resources/gpm-new-logo.png'
-                                    style="max-height: 100%; float:left;width: 196px;" />
-                            {/if}
-                            <div style="font-size: 11pt;margin-top: 27mm; float:right;">
-                                <span>From: {$RECORD_MODEL->get('cf_898')}</span>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="height: 20mm;text-align: left">
-                            <div style="max-width:50%">
-                                {if isset($COMPANY)}
-                                    <div style="margin-top: 10mm;">To:
-                                        <span style="font-weight: 700; text-transform: capitalize;">
-                                            {$COMPANY->get('company_name')}
-                                        </span>
-                                    </div>
-                                {/if}
-                                <div>
-                                    {if isset($COMPANY)}
-                                        {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
-                                        {$COMPANY->get('company_reg_no')})<br>{/if}
-                                        {$COMPANY->get('company_address')}<br>
-                                        T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                                        {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
-                                    {/if}
+            <table class="print-tbl">
+                <tr>
+                    <td>
+                        {if isset($smarty.request.PDFDownload) && $smarty.request.PDFDownload eq true}
+                            <img src="file:///var/www/html/layouts/v7/modules/Contacts/resources/gpm-new-logo.png"
+                                style="max-height: 100%; float:left;width: 196px;" />
+                        {else}
+                            <img src='layouts/v7/modules/Contacts/resources/gpm-new-logo.png'
+                                style="max-height: 100%; float:left;width: 196px;" />
+                        {/if}
+                        <div style="font-size: 11pt;margin-top: 27mm; float:right;">
+                            <span>From: {$RECORD_MODEL->get('cf_898')}</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="height: 20mm;text-align: left">
+                        <div style="max-width:50%">
+                            {if isset($COMPANY)}
+                                <div style="margin-top: 4mm;">To:
+                                    <span style="font-weight: 700; text-transform: capitalize;">
+                                        {$COMPANY->get('company_name')}
+                                    </span>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="height: 20mm; text-decoration: underline;text-align: right;">
-                            <strong>COLLECTION REQUEST</strong>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="2" style="padding:0; margin:0;">
-                            <table class="activity-tbl"
-                                style="width:85%; border-collapse:collapse; table-layout:fixed; margin-left:0;">
-                                <tr>
-                                    <th style="width:40%; text-align:center;">REFERENCE</th>
-                                    <th style="width:30%; text-align:center;">CUSTOMER</th>
-                                    <th style="width:30%; text-align:center;">ORDER</th>
-                                </tr>
-                                <tr>
-                                    <td style="height:18px; text-align:center;">{$smarty.request.docNo}</td>
-                                    <td style="height:18px; text-align:center;">{$RECORD_MODEL->get('cf_898')}</td>
-                                    <td style="height:18px; text-align:center;">COLLECTION</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-
-
-                {assign var="location" value=$ERP_DOCUMENT.barItems[0]->warehouse}
-
-                <div style="margin-top: 3mm;">I/We hereby wish to collect the Stored Metal detailed below at the following
-                    location:
-                    <p style="font-style: italic;font-weight: 600;">{$location}</p>
-                </div>
-
-                {assign var="targetRows" value=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
-
-                <table class="print-tbl" style="margin-top:5mm;">
-                    <tr>
-
-                        <td style="font-size: 9pt; vertical-align: top;">
-
-                            <table class="activity-tbl">
-                                <tr>
-                                    <th style="width:5%;">QTY</th>
-                                    <th style="width:65%;">DESCRIPTION</th>
-                                    <th style="width:20%;">SERIAL NUMBERS</th>
-                                    <th style="width:10%;text-align:center">FINE OZ.</th>
-                                </tr>
-
-                                {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
-
-                                    {foreach item=item from=$targetRows name=rowloop}
-
-                                        <tr>
-                                            <td>
-                                                <input type="text" name="qty_{$smarty.foreach.rowloop.iteration}"
-                                                    style="width:100%; border:0;" />
-                                            </td>
-                                            <td style="height:12mm; vertical-align:top;">
-                                                <textarea name="desc_{$smarty.foreach.rowloop.iteration}"
-                                                    style="width:100%; height:12mm; border:0; resize:none; overflow:hidden;"></textarea>
-                                            </td>
-                                            <td>
-                                                <input type="text" name="serial_{$smarty.foreach.rowloop.iteration}"
-                                                    style="width:100%; border:0;" />
-                                            </td>
-                                            <td style="text-align:right;">
-                                                <input type="text" name="fine_oz_{$smarty.foreach.rowloop.iteration}"
-                                                    style="width:100%; border:0; text-align:right;" />
-                                            </td>
-                                        </tr>
-
-                                    {/foreach}
-
+                            {/if}
+                            <div>
+                                {if isset($COMPANY)}
+                                    {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
+                                    {$COMPANY->get('company_reg_no')})<br>{/if}
+                                    {$COMPANY->get('company_address')}<br>
+                                    T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
+                                    {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('email')}<br>
                                 {/if}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="height: 20mm; text-decoration: underline;text-align: right;">
+                        <strong>COLLECTION REQUEST</strong>
+                    </td>
+                </tr>
 
-                                {if $PAGES eq $page}
+                <tr>
+                    <td colspan="2" style="padding:0; margin:0;">
+                        <table class="activity-tbl"
+                            style="width:85%; border-collapse:collapse; table-layout:fixed; margin-left:0;">
+                            <tr>
+                                <th style="width:40%; text-align:center;">REFERENCE</th>
+                                <th style="width:30%; text-align:center;">CUSTOMER</th>
+                                <th style="width:30%; text-align:center;">ORDER</th>
+                            </tr>
+                            <tr>
+                                <td style="height:18px; text-align:center;">
+                                    <input type="text" name="reference"
+                                        class="custom-editable-input input-without-border" />
+                                </td>
+                                <td style="height:18px; text-align:center;">{$RECORD_MODEL->get('cf_898')}</td>
+                                <td style="height:18px; text-align:center;">COLLECTION</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+
+            {assign var="location" value=$ERP_DOCUMENT.barItems[0]->warehouse}
+
+            <div style="margin-top: 3mm;">I/We hereby wish to collect the Stored Metal detailed below at the following
+                location:
+                <p style="font-style: italic;font-weight: 600;">{$location}</p>
+            </div>
+
+            {assign var="targetRows" value=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
+
+            <table class="print-tbl" style="margin-top:5mm;">
+                <tr>
+
+                    <td style="font-size: 9pt; vertical-align: top;">
+
+                        <table class="activity-tbl">
+                            <tr>
+                                <th style="width:5%;">QTY</th>
+                                <th style="width:65%;">DESCRIPTION</th>
+                                <th style="width:20%;">SERIAL NUMBERS</th>
+                                <th style="width:10%;text-align:center">FINE OZ.</th>
+                            </tr>
+
+                            {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
+
+                                {foreach item=item from=$targetRows name=rowloop}
+
                                     <tr>
-                                        <td style="width:100%;" colspan="4">
-                                            {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
-                                                <input type="text" name="total_value"
-                                                    style="width:35mm; border:0; font-weight:bold;" />
-
-                                                <input type="text" name="total_oz"
-                                                    style="width:35mm; border:0; font-weight:bold; float:right; text-align:right;" />
-                                            {else}
-                                                <strong>{number_format($total_value,0)} </strong>
-                                                <strong style="float: right;">{number_format($total_oz,4)}</strong>
-                                            {/if}
+                                        <td>
+                                            <input type="text" name="qty_{$smarty.foreach.rowloop.iteration}"
+                                                style="width:100%; border:0;" />
+                                        </td>
+                                        <td style="height:12mm; vertical-align:top;">
+                                            <textarea name="desc_{$smarty.foreach.rowloop.iteration}"
+                                                style="width:100%; height:12mm; border:0; resize:none; overflow:hidden;"></textarea>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="serial_{$smarty.foreach.rowloop.iteration}"
+                                                style="width:100%; border:0;" />
+                                        </td>
+                                        <td style="text-align:right;">
+                                            <input type="text" name="fine_oz_{$smarty.foreach.rowloop.iteration}"
+                                                style="width:100%; border:0; text-align:right;" />
                                         </td>
                                     </tr>
-                                {/if}
-                            </table>
-                        </td>
-                    </tr>
 
-                </table>
+                                {/foreach}
 
-                <div class="editable-input-wrapper">I/We would like the Collection to take place on:
-                    <input type="text" name="collection_date" class="editable-input" />
-                </div>
+                            {/if}
 
-                <div style="margin-top: 3mm;">
-                    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-                        <input type="checkbox" name="id_option">
-                    {else}
-                        {if isset($ID_OPTION) && $ID_OPTION eq 1}
-                            <span class="custom-checkbox">✔</span>
-                        {/if}
-                    {/if}
-                    <span>I/We will personally collect the Stored Metal at the Storage Facility and will be holding
-                        ID/Passport number</span>
-                </div>
-                <div>
-                    <input type="text" name="passport_number" class="editable-input" />
-                </div>
+                            {if $PAGES eq $page}
+                                <tr>
+                                    <td style="width:100%;" colspan="4">
+                                        {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
+                                            <input type="text" name="total_value" style="width:35mm; border:0; font-weight:bold;" />
 
+                                            <input type="text" name="total_oz"
+                                                style="width:35mm; border:0; font-weight:bold; float:right; text-align:right;" />
+                                        {else}
+                                            <strong>{number_format($total_value,0)} </strong>
+                                            <strong style="float: right;">{number_format($total_oz,4)}</strong>
+                                        {/if}
+                                    </td>
+                                </tr>
+                            {/if}
+                        </table>
+                    </td>
+                </tr>
 
-                <div class="editable-input-wrapper editable-input-wrapper--nested">
-                    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-                        <input type="checkbox" name="company_option">
-                    {else}
-                        {if isset($COMPANY_OPTION) && $COMPANY_OPTION eq 1}
-                            <span class="custom-checkbox">✔</span>
-                        {/if}
-                    {/if}
+            </table>
 
-                    <span>I/We hereby authorise Mr/Mrs/Representatives of the company </span>
-                    <input type="text" name="company_input" class="editable-input" />
-                    (<span>holding ID/Passport number</span>
-                    <input type="text" name="holding_passport_number" class="editable-input" />)
-                    <span> to collect the Stored Metal on my/our behalf. This
-                        authorisation is only valid for the collection of the Stored Metal specified above and shall not
-                        be
-                        extended
-                        to any other services covered under the Customer Metal Agreement.</span>
-                </div>
+            <div class="editable-input-wrapper">I/We would like the Collection to take place on:
+                <input type="text" name="collection_date" class="editable-input" />
+            </div>
+
+            <div style="margin-top: 3mm;">
+                {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                    <input type="checkbox" name="id_option">
+                {else}
+                    <span class="custom-checkbox">{if isset($ID_OPTION) && $ID_OPTION eq 1}✔{/if}</span>
+                {/if}
+                <span>I/We will personally collect the Stored Metal at the Storage Facility and will be holding
+                    ID/Passport number</span>
+            </div>
+            <div>
+                <input type="text" name="passport_number" class="editable-input"
+                    {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}style="display: inline-block; margin-top: 2mm;"
+                    {/if} />
+            </div>
 
 
-                <p style="margin-top: 3mm;font-style: italic;font-weight: bold;">I/We hereby enclose a photocopy of the
-                    passport of the person(s) who will collect the Stored Metal. The
-                    original passport(s) will need to be presented prior to Collection at the Storage Facility</p>
+            <div class="editable-input-wrapper editable-input-wrapper--nested">
+                {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                    <input type="checkbox" name="company_option">
+                {else}
+                    <span class="custom-checkbox">{if isset($COMPANY_OPTION) && $COMPANY_OPTION eq 1}✔{/if}</span>
+                {/if}
 
-                <div style="margin-top: 3mm;">This Collection Order is subject to and governed by the terms and conditions
-                    of the Customer Metal Agreement executed and entered into by and between me/us and {if isset($COMPANY)}
-                        <span style="text-transform: capitalize;">{$COMPANY->get('company_name')}</span>
-                    {/if}
-                </div>
+                <span>I/We hereby authorise Mr/Mrs/Representatives of the company </span>
+                <input type="text" name="company_input" class="editable-input" />
+                (<span>holding ID/Passport number</span>
+                <input type="text" name="holding_passport_number" class="editable-input"
+                    {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}style="display: inline-block; margin-top: 2mm;"
+                    {/if} />)
+                <span> to collect the Stored Metal on my/our behalf. This
+                    authorisation is only valid for the collection of the Stored Metal specified above and shall not
+                    be
+                    extended
+                    to any other services covered under the Customer Metal Agreement.</span>
+            </div>
 
-                <div style="margin-top: 3mm;" class="bottom-container">
-                    <div class="signed-item">
-                        <span>Signed by: </span>
+
+            <p style="margin-top: 3mm;font-style: italic;font-weight: bold;">I/We hereby enclose a photocopy of the
+                passport of the person(s) who will collect the Stored Metal. The
+                original passport(s) will need to be presented prior to Collection at the Storage Facility</p>
+
+            <div style="margin-top: 3mm;">This Collection Order is subject to and governed by the terms and conditions
+                of the Customer Metal Agreement executed and entered into by and between me/us and {if isset($COMPANY)}
+                    <span style="text-transform: capitalize;">{$COMPANY->get('company_name')}</span>
+                {/if}
+            </div>
+
+            <!-- SIGNATURE SECTION -->
+            <div class="signature-section">
+                <div class="signature-section-item">
+                    <div class="signature-section-left">
+                        <div class="editable-input-wrapper" style="margin-top: 1mm;">
+                            <span> Place:</span> <input type="text" name="place_input" class="custom-editable-input" />
+                        </div>
+                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
+                            <span>Date:</span> <input type="text" name="date_input" class="custom-editable-input" />
+                        </div>
                     </div>
-                    <div class="behalf-item">
-                        <span>Date: </span>
+
+                    <div class="signature-section-right">
+                        <div class="editable-input-wrapper" style="margin-top: 1mm;">
+                            <span> Signed by: </span>
+                            <input type="text" name="signed_by" class="custom-editable-input" />
+                        </div>
+                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
+                            <span> On behalf of:</span>
+                            <input type="text" name="on_behalf_of" class="custom-editable-input" />
+                        </div>
                     </div>
                 </div>
 
-                <div style="margin-top: 3mm;" class="bottom-container">
-                    <div class="signed-item">
-                        <span>Signature: </span>
-                    </div>
-                    <div class="behalf-item">
-                        <span>On behalf of:</span>
-                    </div>
+                <div style="margin-top:5mm;">
+                    <div>...............................................</div>
+                    <div>Signature</div>
                 </div>
+            </div>
 
-                {* <div style="margin-top: 3mm;" class="bottom-container">
+            {* <div style="margin-top: 3mm;" class="bottom-container">
                     <div class="bottom-container-item">
                         <div style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 50px;background-color:#dce6f9;">
                         </div>
@@ -451,7 +494,6 @@
                     </div>
                     <div class="bottom-container-item"></div>
                 </div> *}
-            </div>
         </div>
 
     {/for}
@@ -504,6 +546,14 @@
             } else {
                 url.searchParams.delete('passportNumberInput');
             }
+            // Get all custom-editable-input values and append to URL as query parameters
+            document.querySelectorAll('.custom-editable-input').forEach(input => {
+                if (!input.name) return;
+
+                const val = (input.value ?? '').trim();
+                if (val) url.searchParams.set(input.name, val);
+                else url.searchParams.delete(input.name);
+            });
 
             this.href = url.toString();
         });

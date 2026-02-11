@@ -1,7 +1,5 @@
 <?php
 
-// ini_set('display_errors', 1); error_reporting(E_ALL);
-
 include_once 'dbo_db/HoldingsDB.php';
 
 class Contacts_HoldingCertificate_View extends Vtiger_Index_View
@@ -30,10 +28,6 @@ class Contacts_HoldingCertificate_View extends Vtiger_Index_View
 
         $holdings = new dbo_db\HoldingsDB();
         $holdings_data = $holdings->getHoldingsData($clientID);
-
-        // echo "<pre>";
-        // var_dump($companyRecord);
-        // echo "</pre>";
 
         $viewer = new Vtiger_Viewer();
         $viewer->assign('RECORD_MODEL', $recordModel);

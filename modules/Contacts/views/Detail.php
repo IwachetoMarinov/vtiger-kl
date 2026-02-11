@@ -125,9 +125,6 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$years = array_reverse($years_array);
 
 		$viewer = $this->getViewer($request);
-		// echo "<pre>";
-		// print_r($activity_data);
-		// echo "</pre>";
 
 		// New order by document_date ascending/descending based on order_by param
 		if ($order_by === 'asc') {

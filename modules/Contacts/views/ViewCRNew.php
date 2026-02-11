@@ -131,11 +131,19 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             die('Cannot write HTML file: ' . $htmlPath);
         }
 
+        // $cmd = "wkhtmltopdf --enable-local-file-access "
+        //     . "--page-size A4 --dpi 96 --zoom 1 "
+        //     . "--margin-top 0 --margin-right 0 --margin-bottom 0 --margin-left 0 "
+        //     . "--disable-smart-shrinking "
+        //     . escapeshellarg($htmlPath) . " " . escapeshellarg($basePdfPath) . " 2>&1";
+
         $cmd = "wkhtmltopdf --enable-local-file-access "
             . "--page-size A4 --dpi 96 --zoom 1 "
+            . "--print-media-type "
             . "--margin-top 0 --margin-right 0 --margin-bottom 0 --margin-left 0 "
             . "--disable-smart-shrinking "
             . escapeshellarg($htmlPath) . " " . escapeshellarg($basePdfPath) . " 2>&1";
+
 
         $out = [];
         $code = 0;
@@ -166,6 +174,16 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->SetAutoPageBreak(false);
         $pdf->SetMargins(0, 0, 0);
 
+        // Ensure TCPDF sets up font resources for AcroForm
+        $pdf->SetFont('helvetica', '', 6.5);
+
+        // Set global default form appearance (creates /F1 in /AcroForm /DR)
+        $pdf->setFormDefaultProp([
+            'font' => 'helvetica',
+            'fontsize' => 6.8,
+            'textcolor' => [0, 0, 0],
+        ]);
+
         $pageCount = $pdf->setSourceFile($basePdfPath);
         $tplId = $pdf->importPage(1);
         $size  = $pdf->getTemplateSize($tplId);
@@ -174,51 +192,52 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
         $pdf->useTemplate($tplId, 0, 0, $size['width'], $size['height']);
 
-
         // DEBUG GRID MODE (call with &debug=1)
         $debug = (string)$request->get('debug') === '1';
         if ($debug) {
-            $pdf->SetFont('helvetica', '', 6);
 
-            // vertical lines every 10mm
-            for ($x = 0; $x <= 210; $x += 10) {
-                $pdf->Line($x, 0, $x, 297, ['width' => 0.1, 'color' => [180, 180, 180]]);
+            $pageW = $pdf->getPageWidth();
+            $pageH = $pdf->getPageHeight();
+
+            // Major grid every 10mm
+            for ($x = 0; $x <= $pageW; $x += 10) {
+                $pdf->Line($x, 0, $x, $pageH, ['width' => 0.1, 'color' => [180, 180, 180]]);
                 $pdf->Text($x + 0.5, 1, (string)$x);
             }
-            // horizontal lines every 10mm
-            for ($y = 0; $y <= 297; $y += 10) {
-                $pdf->Line(0, $y, 210, $y, ['width' => 0.1, 'color' => [180, 180, 180]]);
+            for ($y = 0; $y <= $pageH; $y += 10) {
+                $pdf->Line(0, $y, $pageW, $y, ['width' => 0.1, 'color' => [180, 180, 180]]);
                 $pdf->Text(1, $y + 0.5, (string)$y);
+            }
+
+            // Optional: minor grid every 5mm (lighter)
+            for ($x = 0; $x <= $pageW; $x += 5) {
+                $pdf->Line($x, 0, $x, $pageH, ['width' => 0.05, 'color' => [220, 220, 220]]);
+            }
+            for ($y = 0; $y <= $pageH; $y += 5) {
+                $pdf->Line(0, $y, $pageW, $y, ['width' => 0.05, 'color' => [220, 220, 220]]);
             }
         }
 
         // ---- Field appearance ----
-        $fieldStyle = [
-            'border'    => 0,
-            'font'      => 'helvetica',
-            'fontsize'  => 7,
-            'textcolor' => [0, 0, 0],
-        ];
+        $fieldStyle = ['border'    => 0,];
 
         // ---- COORDINATES ----
         // insetX/insetY = inner padding INSIDE each PDF form field (mm). Bigger => field becomes narrower/shorter.
         // fieldH        = height of each field (mm). Bigger => taller input box.
-        $insetX = 1.1;   // ↓ increase to DECREASE width (try 1.2 or 1.5)
+        $insetX = 1.3;   // ↓ increase to DECREASE width (try 1.2 or 1.5)
         $insetY = 0.88;   // vertical inner padding
         $fieldH = 5.0;          // normal fields
         $descH  = 9.6;         // taller textarea-like field (adjust)
 
         // ---- ROW POSITION ----
-        $startY  = 97.0;
-        // $rowStep = 7.0;
-        $rowStep = 11.7;  // must be >= descH + some padding
+        $startY  = 89.5;
+        $rowStep = 11.7;
 
         // ---- TABLE GEOMETRY ----
-        // Left edge of table (matches your current alignment)
-        $xTable = 6.0;
+        $xTable = 27.5;
 
         // Total usable table width in PDF (keep as-is or tweak slightly)
-        $wTable = 150.5;
+        $wTable = 155.0;
 
         // ---- COLUMN RATIOS (SUM = 100%) ----
         $ratioQty    = 0.05;
@@ -227,10 +246,10 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $ratioFine   = 0.10;
 
         // ---- COMPUTED WIDTHS ----
-        $wQty    = $wTable * $ratioQty;      // 7.30 mm
-        $wDesc   = $wTable * $ratioDesc;     // 94.90 mm
-        $wSerial = $wTable * $ratioSerial;   // 29.20 mm
-        $wFine   = $wTable * $ratioFine;     // 14.60 mm
+        $wQty    = $wTable * $ratioQty;
+        $wDesc   = $wTable * $ratioDesc;
+        $wSerial = $wTable * $ratioSerial;
+        $wFine   = $wTable * $ratioFine;
 
         // ---- COLUMN START POSITIONS ----
         $xQty    = $xTable;
@@ -249,7 +268,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $pdf->TextField("qty_$i", $wQty - 2 * $insetX, $fieldH, $fieldStyle);
 
             $pdf->SetXY($xDesc + $insetX, $y + $insetY);
-            // $pdf->TextField("desc_$i", $wDesc - 2 * $insetX, $descH, $fieldStyle);
+           
             $pdf->TextField(
                 "desc_$i",
                 $wDesc - 2 * 0.3,
@@ -273,36 +292,75 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $pdf->TextField("fine_oz_$i", $wFine - 2 * $insetX, $fieldH, $fieldStyle);
         }
 
-        // Collection date (adjust with debug grid)
-        // $pdf->SetXY(112.0, 254.0);  // adjust
-        // $pdf->TextField('collection_date', 70, 6, $fieldStyle);
-        $yTotals = 215;   // adjust here
+        $yTotals = 207;
 
-        $pdf->SetXY(8.0, $yTotals);
+        $pdf->SetXY(29.0, $yTotals);
         $pdf->TextField('total_value', 35, 5.5, $fieldStyle);
 
-        $pdf->SetXY(118.0, $yTotals);
+        $pdf->SetXY(142.0, $yTotals);
         $pdf->TextField('total_oz', 35, 5.5, $fieldStyle);
 
-        // ---- EXTRA INPUTS (VALUES FROM REQUEST) ----
         $w = 29.0;
         $h = 5.7;
 
-        // Optional: tiny nudge if you want them to sit lower on the dotted line
         $dx = 0.0;
-        $dy = 0.0;   // try 0.7 if you want them slightly lower
+        $dy = 0.0;
 
-        $pdf->SetXY(63.0 + $dx, 223.0 + $dy);
+        $pdf->SetXY(28.5 + $dx, 68.0 + $dy);
+        $pdf->TextField('reference', 40, $h, $fieldStyle, ['v' => (string)$request->get('reference')]);
+
+        $pdf->SetXY(86.0 + $dx, 214.0 + $dy);
         $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => (string)$request->get('collectionDateInput')]);
 
-        $pdf->SetXY(10.0 + $dx, 235.0 + $dy);
+        $pdf->SetXY(27.0 + $dx, 227.0 + $dy);
         $pdf->TextField('passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('passportNumberInput')]);
 
-        $pdf->SetXY(83.5 + $dx, 243.0 + $dy);
+        $pdf->SetXY(110.0 + $dx, 233.0 + $dy);
         $pdf->TextField('company_input', $w, $h, $fieldStyle, ['v' => (string)$request->get('companyInput')]);
 
-        $pdf->SetXY(10.0 + $dx, 248.0 + $dy);
+        $pdf->SetXY(28.0 + $dx, 239.0 + $dy);
         $pdf->TextField('holding_passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
+
+        // Signature section fields (place_input, signed_by, date_input, on_behalf_of)
+        // place_input input
+        $pdf->SetXY(40, 276.0);
+        $pdf->TextField(
+            'place_input',
+            48,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('place_input')]
+        );
+
+        // signed_by input
+        $pdf->SetXY(109, 276.0);
+        $pdf->TextField(
+            'signed_by',
+            70,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('signed_by')]
+        );
+
+        // date_input input
+        $pdf->SetXY(40, 284.5);
+        $pdf->TextField(
+            'date_input',
+            48,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('date_input')]
+        );
+
+        // on_behalf_of input
+        $pdf->SetXY(113, 284.5);
+        $pdf->TextField(
+            'on_behalf_of',
+            67,
+            $h,
+            $fieldStyle,
+            ['v' => (string)$request->get('on_behalf_of')]
+        );
 
 
         // Save final
