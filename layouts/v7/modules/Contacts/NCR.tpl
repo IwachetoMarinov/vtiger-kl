@@ -192,7 +192,7 @@
         .signature-section-item {
             display: flex;
             justify-content: space-between;
-            margin-top: 4mm;
+            margin-top: 1mm;
         }
 
         .signature-section-left {
@@ -460,24 +460,29 @@
             <div class="signature-section">
                 <div class="signature-section-item">
                     <div class="signature-section-left">
-                        <div class="editable-input-wrapper">
+                        <div class="editable-input-wrapper" style="margin-top: 1mm;">
                             <span> Place:</span> <input type="text" name="place_input" class="custom-editable-input" />
                         </div>
-                        <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
                             <span>Date:</span> <input type="text" name="date_input" class="custom-editable-input" />
                         </div>
                     </div>
 
                     <div class="signature-section-right">
-                        <div class="editable-input-wrapper">
+                        <div class="editable-input-wrapper" style="margin-top: 1mm;">
                             <span> Signed by: </span>
                             <input type="text" name="signed_by" class="custom-editable-input" />
                         </div>
-                        <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
                             <span> On behalf of:</span>
                             <input type="text" name="on_behalf_of" class="custom-editable-input" />
                         </div>
                     </div>
+                </div>
+
+                <div style="margin-top:5mm;">
+                    <div>...............................................</div>
+                    <div>Signature</div>
                 </div>
             </div>
 
