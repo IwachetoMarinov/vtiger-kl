@@ -198,6 +198,8 @@
         .company-data {
             display: flex;
             border: 1px solid #000;
+            max-height: 152.11px;
+            height: 152.11px;
         }
 
         .company-data-item {
@@ -384,13 +386,24 @@
                             {if isset($COMPANY)}
                                 {$COMPANY->get('company_address')}
                             {/if}
+                            <br />
+                            {if isset($COMPANY)}
+                                {if !empty($COMPANY->get('city'))}
+                                    {$COMPANY->get('city')},
+                                {/if}
+                                {$COMPANY->get('state')} {$COMPANY->get('code')}<br>
+                                {$COMPANY->get('country')}
+                            {/if}
                         </div>
                     </div>
                     <div class="number-container">
                         {if isset($COMPANY)}
-                            {if !empty($COMPANY->get('company_fax'))} <p>Fax no: <span
-                                    style="font-style: italic;">{$COMPANY->get('company_fax')}</span> or</p> {/if}
-                            <p>Email:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
+                            {if !empty($COMPANY->get('email'))}
+                                <p>EMAIL:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
+                            {/if}
+                            {if !empty($COMPANY->get('company_phone'))} <p>or PHONE: <span
+                                    style="font-style: italic;">{$COMPANY->get('company_phone')}</span> or</p> {/if}
+
                         {/if}
                     </div>
                 </div>
