@@ -280,7 +280,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $h = 5.5;
 
         // currency input  field
-        $pdf->SetXY(60, 140.0);
+        $pdf->SetXY(60, 138.0);
         $pdf->TextField(
             'currency',
             38.5,
@@ -294,7 +294,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // location input field
-        $pdf->SetXY(102, 154.5);
+        $pdf->SetXY(102, 152.5);
         $pdf->TextField(
             'location',
             40,
@@ -307,7 +307,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // address input field
-        $pdf->SetXY(72, 161.3);
+        $pdf->SetXY(72, 159.3);
         $pdf->TextField(
             'address',
             55,
@@ -320,7 +320,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // country input field
-        $pdf->SetXY(49, 177.5);
+        $pdf->SetXY(49, 175.5);
         $pdf->TextField(
             'country',
             45,
@@ -333,7 +333,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // place_input input
-        $pdf->SetXY(41, 255.5);
+        $pdf->SetXY(41, 253.5);
         $pdf->TextField(
             'place_input',
             45,
@@ -346,7 +346,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // signed_by input
-        $pdf->SetXY(109, 255.5);
+        $pdf->SetXY(109, 253.5);
         $pdf->TextField(
             'signed_by',
             65,
@@ -359,7 +359,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(41, 264.0);
+        $pdf->SetXY(41, 262.0);
         $pdf->TextField(
             'date_input',
             45,
@@ -371,7 +371,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             )
         );
 
-        $pdf->SetXY(112, 264.0);
+        $pdf->SetXY(112, 262.0);
         $pdf->TextField(
             'on_behalf_of',
             62,
@@ -384,9 +384,9 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
 
         // ---- METALS TABLE CONFIG (ADJUSTED) ----
         $startX = 57.3;   // was ~48.0
-        $startY = 110.5;  // was ~116.0
+        $startY = 111.0;  // was ~116.0
         $cellW  = 13.57;   // was ~15
-        $cellH  = 6.7;    // was ~7
+        $cellH  = 6.6;    // was ~7
 
         $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
         $weightCount = 9;   // 1000oz ... Other
@@ -434,28 +434,28 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $country_checked = (string)$request->get('countryOption') === '1';
         $address_checked = (string)$request->get('addressOption') === '1';
 
-        $pdf->SetXY(40, 154.5);
+        $pdf->SetXY(30, 154.5);
         $pdf->CheckBox(
             'country_checked',
             4,
             $country_checked
         );
 
-        $pdf->SetXY(40, 161.3);
+        $pdf->SetXY(30, 161.3);
         $pdf->CheckBox(
             'address_checked',
             4,
             $address_checked
         );
 
-        $pdf->SetXY(40,  205.5);
+        $pdf->SetXY(30,  217.5);
         $pdf->CheckBox(
             'pricing_option_1',
             4,
             $first_pricing_checked
         );
 
-        $pdf->SetXY(40,  215.5);
+        $pdf->SetXY(30,  227.5);
         $pdf->CheckBox(
             'pricing_option_2',
             4,

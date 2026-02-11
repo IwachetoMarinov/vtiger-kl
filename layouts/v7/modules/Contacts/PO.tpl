@@ -666,11 +666,8 @@
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input type="checkbox" name="pricing_option_one" class="checkbox-radio pricing-option-one"
                                     {if $PRICING_OPTION neq '2'}checked{/if}>
-                                {* <input type="radio" name="pricing_option" value="1" {if $PRICING_OPTION eq '1'}checked{/if}> *}
                             {else}
-                                {if $PRICING_OPTION neq '2'}
-                                    <span class="custom-checkbox"></span>
-                                {/if}
+                                <span class="custom-checkbox"></span>
                             {/if}
                             Pricing Option 1 (as defined in Clause 3.3.1)
                         </label>
@@ -681,11 +678,8 @@
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input type="checkbox" name="pricing_option_two" class="checkbox-radio pricing-option-two"
                                     {if $PRICING_OPTION eq '2'}checked{/if}>
-                                {* <input type="radio" name="pricing_option" value="2" {if $PRICING_OPTION eq '2'}checked{/if}> *}
                             {else}
-                                {if $PRICING_OPTION eq '2'}
-                                    <span class="custom-checkbox"></span>
-                                {/if}
+                                <span class="custom-checkbox"></span>
                             {/if}
                             Pricing Option 2 (as defined in Clause 3.3.2)
                         </label>
