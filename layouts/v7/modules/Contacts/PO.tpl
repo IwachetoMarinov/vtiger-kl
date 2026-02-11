@@ -68,7 +68,7 @@
             text-align: center;
             font-size: 13pt;
             font-weight: bold;
-            padding-top: 3mm;
+            padding-top: 2mm;
         }
 
         /* From / To Section */
@@ -143,9 +143,7 @@
 
         /* Serials Box */
         .serials-box {
-            /* min-height: 15mm; */
             padding: 2mm;
-            /* margin-bottom: 1mm; */
         }
 
         /* Additional Sections */
@@ -193,11 +191,13 @@
         .company-data {
             display: flex;
             border: 1px solid #000;
+            /* max-height: 183px; */
+            /* height: 183px; */
         }
 
         .company-data-item {
             width: 50%;
-            font-size: 10pt;
+            /* font-size: 10pt; */
             line-height: 1.2;
         }
 
@@ -231,7 +231,7 @@
 
         .main-table {
             border: 1px solid #000;
-            margin-top: 5mm;
+            margin-top: 3mm;
             padding: 3.5mm 2mm;
         }
 
@@ -294,8 +294,9 @@
 
         .custom-editable-input {
             border: none;
-            possition: relative;
-            padding-bottom: 1mm;
+            position: relative;
+            padding-bottom: 0.5mm;
+            padding-bottom: 0.5mm;
             flex: 1;
             min-width: 40mm;
             border-bottom: 1px dotted #000;
@@ -311,6 +312,16 @@
 
         .custom-editable-table-input {
             min-width: auto;
+        }
+
+        .custom-checkbox {
+            font-size: 3.5mm;
+            border: 1px solid transparent;
+            padding: 2px 2px;
+            display: inline-block;
+            height: 5mm;
+            width: 5mm;
+            line-height: 3.5mm;
         }
     </style>
 
@@ -462,13 +473,23 @@
                             {if isset($COMPANY)}
                                 {$COMPANY->get('company_address')}
                             {/if}
+                            <br />
+                            {if isset($COMPANY)}
+                                {if !empty($COMPANY->get('city'))}
+                                    {$COMPANY->get('city')},
+                                {/if}
+                                {$COMPANY->get('state')} {$COMPANY->get('code')}<br>
+                                {$COMPANY->get('country')}
+                            {/if}
                         </div>
                     </div>
                     <div class="number-container">
                         {if isset($COMPANY)}
-                            {if !empty($COMPANY->get('company_fax'))} <p>Fax no: <span
-                                    style="font-style: italic;">{$COMPANY->get('company_fax')}</span> or</p> {/if}
-                            <p>Email:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
+                            {if !empty($COMPANY->get('email'))}
+                                <p>EMAIL:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
+                            {/if}
+                            {if !empty($COMPANY->get('company_phone'))} <p>or PHONE: <span
+                                    style="font-style: italic;">{$COMPANY->get('company_phone')}</span> or</p> {/if}
                         {/if}
                     </div>
                 </div>
@@ -555,11 +576,7 @@
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                         <input type="checkbox" name="country_option">
                     {else}
-
-                        <span
-                            style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">
-                            {if isset($COUNTRY_OPTION) &&  $COUNTRY_OPTION eq '1'} ✔{/if}
-                        </span>
+                        <span class="custom-checkbox"></span>
                     {/if}
                     <span>deliver & store the above metal in a facility located in:</span>
                     <span> <input type="text" name="location" class="custom-editable-input" /> </span>
@@ -570,10 +587,7 @@
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                         <input type="checkbox" name="address_option">
                     {else}
-                        <span
-                            style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">
-                            {if isset($ADDRESS_OPTION) && $ADDRESS_OPTION eq '1'}✔{/if}
-                        </span>
+                        <span class="custom-checkbox"></span>
                     {/if}
                     <span>deliver the above metal to:</span>
                     <span> <input type="text" name="address" style="width: 75mm;" class="custom-editable-input" />
@@ -652,12 +666,8 @@
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input type="checkbox" name="pricing_option_one" class="checkbox-radio pricing-option-one"
                                     {if $PRICING_OPTION neq '2'}checked{/if}>
-                                {* <input type="radio" name="pricing_option" value="1" {if $PRICING_OPTION eq '1'}checked{/if}> *}
                             {else}
-                                {if $PRICING_OPTION neq '2'}
-                                    <span
-                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
-                                {/if}
+                                <span class="custom-checkbox"></span>
                             {/if}
                             Pricing Option 1 (as defined in Clause 3.3.1)
                         </label>
@@ -668,12 +678,8 @@
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input type="checkbox" name="pricing_option_two" class="checkbox-radio pricing-option-two"
                                     {if $PRICING_OPTION eq '2'}checked{/if}>
-                                {* <input type="radio" name="pricing_option" value="2" {if $PRICING_OPTION eq '2'}checked{/if}> *}
                             {else}
-                                {if $PRICING_OPTION eq '2'}
-                                    <span
-                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
-                                {/if}
+                                <span class="custom-checkbox"></span>
                             {/if}
                             Pricing Option 2 (as defined in Clause 3.3.2)
                         </label>

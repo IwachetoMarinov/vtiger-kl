@@ -280,7 +280,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $h = 5.5;
 
         // currency input  field
-        $pdf->SetXY(60, 140.0);
+        $pdf->SetXY(60, 138.0);
         $pdf->TextField(
             'currency',
             38.5,
@@ -294,7 +294,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // location input field
-        $pdf->SetXY(102, 154.5);
+        $pdf->SetXY(102, 152.5);
         $pdf->TextField(
             'location',
             40,
@@ -307,7 +307,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // address input field
-        $pdf->SetXY(72, 161.3);
+        $pdf->SetXY(72, 159.3);
         $pdf->TextField(
             'address',
             55,
@@ -320,7 +320,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // country input field
-        $pdf->SetXY(49, 177.5);
+        $pdf->SetXY(49, 175.5);
         $pdf->TextField(
             'country',
             45,
@@ -333,7 +333,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // place_input input
-        $pdf->SetXY(40, 255.5);
+        $pdf->SetXY(41, 254.5);
         $pdf->TextField(
             'place_input',
             45,
@@ -346,7 +346,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // signed_by input
-        $pdf->SetXY(109, 255.5);
+        $pdf->SetXY(109, 254.5);
         $pdf->TextField(
             'signed_by',
             65,
@@ -359,7 +359,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(40, 264.0);
+        $pdf->SetXY(41, 263.0);
         $pdf->TextField(
             'date_input',
             45,
@@ -371,7 +371,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             )
         );
 
-        $pdf->SetXY(112, 264.0);
+        $pdf->SetXY(112, 263.0);
         $pdf->TextField(
             'on_behalf_of',
             62,
@@ -384,15 +384,15 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
 
         // ---- METALS TABLE CONFIG (ADJUSTED) ----
         $startX = 57.3;   // was ~48.0
-        $startY = 110.5;  // was ~116.0
+        $startY = 111.0;  // was ~116.0
         $cellW  = 13.57;   // was ~15
-        $cellH  = 6.7;    // was ~7
+        $cellH  = 6.45;    // was ~7
 
         $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
         $weightCount = 9;   // 1000oz ... Other
 
         $offsetX = 0.6;   // move inside cell (right)
-        $offsetY = 0.6;   // move inside cell (down)
+        $offsetY = 0.45;   // move inside cell (down)
 
         $fieldW  = $cellW - 1.2; // leave padding both sides
         $fieldH  = $cellH - 1.2;
@@ -427,6 +427,45 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
                 );
             }
         }
+
+        // Checkboxes
+        // Drawn as actual AcroForm checkboxes, not just a ✓ character, to ensure proper alignment and consistent rendering across PDF viewers.
+        $makeCheckbox = function ($name, $x, $y, $checked) use ($pdf) {
+            $size = 3.4; // slightly larger improves centering visually
+
+            $pdf->SetXY($x, $y);
+
+            $pdf->CheckBox(
+                $name,
+                $size,
+                $checked,
+                [
+                    'border' => 1,
+                    'borderWidth' => 0.25,
+                    'borderColor' => [0, 0, 0],
+                    'fillColor' => [255, 255, 255],
+                ],
+                [
+                    'v'  => $checked ? 'Yes' : 'Off',
+                    'dv' => 'Off',
+
+                    // This helps many viewers render a proper centered ✓
+                    // ZapfDingbats check mark (AcroForm standard)
+                    'da' => '/ZaDb 10 Tf 0 g',
+                ]
+            );
+        };
+
+        $first_pricing_checked = (string)$request->get('pricing_option') === '1';
+        $second_pricing_checked = (string)$request->get('pricing_option') === '2';
+        $country_checked = (string)$request->get('countryOption') === '1';
+        $address_checked = (string)$request->get('addressOption') === '1';
+
+        $makeCheckbox('country_checked',  35, 154.5, $country_checked);
+        $makeCheckbox('address_checked',  35, 161.3, $address_checked);
+
+        $makeCheckbox('pricing_option_1', 34, 226.5, $first_pricing_checked);
+        $makeCheckbox('pricing_option_2', 34, 233.5, $second_pricing_checked);
 
         // ---- Save final --
         $pdf->Output($finalPdfPath, 'F');

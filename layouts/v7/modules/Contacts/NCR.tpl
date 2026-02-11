@@ -156,10 +156,6 @@
             gap: 2mm;
         }
 
-        .editable-input-wrapper--nested {
-            flex-wrap: wrap;
-        }
-
         .editable-input {
             border: none;
             width: 40mm;
@@ -167,9 +163,13 @@
             border-bottom: 1px dotted #000;
         }
 
+        .editable-full-input {
+            flex: 1;
+        }
+
         .custom-checkbox {
             font-size: 3.5mm;
-            border: 1px solid #000;
+            border: 1px solid transparent;
             padding: 2px 2px;
             display: inline-block;
             height: 5mm;
@@ -185,14 +185,14 @@
 
         /* Signature Section */
         .signature-section {
-            margin-top: 2mm;
+            margin-top: 5mm;
             padding: 0 4mm;
         }
 
         .signature-section-item {
             display: flex;
             justify-content: space-between;
-            margin-top: 1mm;
+            margin-top: 0;
         }
 
         .signature-section-left {
@@ -227,6 +227,10 @@
         .input-without-border {
             border: none;
             width: 100%;
+        }
+
+        .editable-input-wrapper-gap {
+            flex-wrap: wrap;
         }
 
         @media print {
@@ -342,7 +346,7 @@
                 <p style="font-style: italic;font-weight: 600;">{$location}</p>
             </div>
 
-            {assign var="targetRows" value=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
+            {assign var="targetRows" value=[0, 1, 2, 3, 4, 5, 6]}
 
             <table class="print-tbl" style="margin-top:5mm;">
                 <tr>
@@ -405,7 +409,7 @@
 
             </table>
 
-            <div class="editable-input-wrapper">I/We would like the Collection to take place on:
+            <div class="editable-input-wrapper" style="margin-top: 5mm;">I/We would like the Collection to take place on:
                 <input type="text" name="collection_date" class="editable-input" />
             </div>
 
@@ -413,7 +417,7 @@
                 {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                     <input type="checkbox" name="id_option">
                 {else}
-                    <span class="custom-checkbox">{if isset($ID_OPTION) && $ID_OPTION eq 1}✔{/if}</span>
+                    <span class="custom-checkbox"></span>
                 {/if}
                 <span>I/We will personally collect the Stored Metal at the Storage Facility and will be holding
                     ID/Passport number</span>
@@ -425,32 +429,34 @@
             </div>
 
 
-            <div class="editable-input-wrapper editable-input-wrapper--nested">
+            <div class="editable-input-wrapper">
                 {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                     <input type="checkbox" name="company_option">
                 {else}
-                    <span class="custom-checkbox">{if isset($COMPANY_OPTION) && $COMPANY_OPTION eq 1}✔{/if}</span>
+                    <span class="custom-checkbox"></span>
                 {/if}
-
                 <span>I/We hereby authorise Mr/Mrs/Representatives of the company </span>
-                <input type="text" name="company_input" class="editable-input" />
-                (<span>holding ID/Passport number</span>
-                <input type="text" name="holding_passport_number" class="editable-input"
-                    {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}style="display: inline-block; margin-top: 2mm;"
-                    {/if} />)
-                <span> to collect the Stored Metal on my/our behalf. This
-                    authorisation is only valid for the collection of the Stored Metal specified above and shall not
-                    be
-                    extended
-                    to any other services covered under the Customer Metal Agreement.</span>
+                <input type="text" name="company_input" class="editable-input editable-full-input" />
             </div>
 
+            <span style="display: inline-block; margin-top: 3mm;">
+                <span>holding ID/Passport number</span>
+                <input type="text" name="holding_passport_number" class="editable-input" style="padding:0 1mm;"
+                    {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}style="display: inline-block; margin-top: 2mm;"
+                    {/if} />
+                to collect the Stored Metal on my/our behalf. This
+                authorisation is only valid for the collection of the Stored Metal specified above and shall not
+                be
+                extended
+                to any other services covered under the Customer Metal Agreement
+            </span>
 
-            <p style="margin-top: 3mm;font-style: italic;font-weight: bold;">I/We hereby enclose a photocopy of the
+
+            <p style="margin-top: 2.5mm;font-style: italic;font-weight: bold;">I/We hereby enclose a photocopy of the
                 passport of the person(s) who will collect the Stored Metal. The
                 original passport(s) will need to be presented prior to Collection at the Storage Facility</p>
 
-            <div style="margin-top: 3mm;">This Collection Order is subject to and governed by the terms and conditions
+            <div style="margin-top: 2.5mm;">This Collection Order is subject to and governed by the terms and conditions
                 of the Customer Metal Agreement executed and entered into by and between me/us and {if isset($COMPANY)}
                     <span style="text-transform: capitalize;">{$COMPANY->get('company_name')}</span>
                 {/if}
@@ -460,7 +466,7 @@
             <div class="signature-section">
                 <div class="signature-section-item">
                     <div class="signature-section-left">
-                        <div class="editable-input-wrapper" style="margin-top: 1mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
                             <span> Place:</span> <input type="text" name="place_input" class="custom-editable-input" />
                         </div>
                         <div class="editable-input-wrapper" style="margin-top: 3mm;">
@@ -469,7 +475,7 @@
                     </div>
 
                     <div class="signature-section-right">
-                        <div class="editable-input-wrapper" style="margin-top: 1mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
                             <span> Signed by: </span>
                             <input type="text" name="signed_by" class="custom-editable-input" />
                         </div>
@@ -480,7 +486,7 @@
                     </div>
                 </div>
 
-                <div style="margin-top:5mm;">
+                <div style="margin-top:10mm;">
                     <div>...............................................</div>
                     <div>Signature</div>
                 </div>

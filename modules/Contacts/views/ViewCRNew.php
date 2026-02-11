@@ -240,7 +240,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $wTable = 155.0;
 
         // ---- COLUMN RATIOS (SUM = 100%) ----
-        $ratioQty    = 0.05;
+        $ratioQty    = 0.055;
         $ratioDesc   = 0.65;
         $ratioSerial = 0.20;
         $ratioFine   = 0.10;
@@ -268,7 +268,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $pdf->TextField("qty_$i", $wQty - 2 * $insetX, $fieldH, $fieldStyle);
 
             $pdf->SetXY($xDesc + $insetX, $y + $insetY);
-           
+
             $pdf->TextField(
                 "desc_$i",
                 $wDesc - 2 * 0.3,
@@ -292,7 +292,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $pdf->TextField("fine_oz_$i", $wFine - 2 * $insetX, $fieldH, $fieldStyle);
         }
 
-        $yTotals = 207;
+        $yTotals = 172.0;
 
         $pdf->SetXY(29.0, $yTotals);
         $pdf->TextField('total_value', 35, 5.5, $fieldStyle);
@@ -301,29 +301,29 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->TextField('total_oz', 35, 5.5, $fieldStyle);
 
         $w = 29.0;
-        $h = 5.7;
+        $h = 5.6;
 
         $dx = 0.0;
         $dy = 0.0;
 
-        $pdf->SetXY(28.5 + $dx, 68.0 + $dy);
+        $pdf->SetXY(33.5 + $dx, 68.2 + $dy);
         $pdf->TextField('reference', 40, $h, $fieldStyle, ['v' => (string)$request->get('reference')]);
 
-        $pdf->SetXY(86.0 + $dx, 214.0 + $dy);
+        $pdf->SetXY(86.0 + $dx, 180.0 + $dy);
         $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => (string)$request->get('collectionDateInput')]);
 
-        $pdf->SetXY(27.0 + $dx, 227.0 + $dy);
-        $pdf->TextField('passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('passportNumberInput')]);
+        $pdf->SetXY(27.0 + $dx, 194.0 + $dy);
+        $pdf->TextField('passport_number', $w, 5.0, $fieldStyle, ['v' => (string)$request->get('passportNumberInput')]);
 
-        $pdf->SetXY(110.0 + $dx, 233.0 + $dy);
-        $pdf->TextField('company_input', $w, $h, $fieldStyle, ['v' => (string)$request->get('companyInput')]);
+        $pdf->SetXY(111.0 + $dx, 200.0 + $dy);
+        $pdf->TextField('company_input', 70, $h, $fieldStyle, ['v' => (string)$request->get('companyInput')]);
 
-        $pdf->SetXY(28.0 + $dx, 239.0 + $dy);
-        $pdf->TextField('holding_passport_number', $w, $h, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
+        $pdf->SetXY(64.5 + $dx, 208.5 + $dy);
+        $pdf->TextField('holding_passport_number', $w, 5.0, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
 
         // Signature section fields (place_input, signed_by, date_input, on_behalf_of)
         // place_input input
-        $pdf->SetXY(40, 276.0);
+        $pdf->SetXY(38, 244.0);
         $pdf->TextField(
             'place_input',
             48,
@@ -333,7 +333,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         );
 
         // signed_by input
-        $pdf->SetXY(109, 276.0);
+        $pdf->SetXY(109, 244.0);
         $pdf->TextField(
             'signed_by',
             70,
@@ -343,7 +343,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(40, 284.5);
+        $pdf->SetXY(38, 251.3);
         $pdf->TextField(
             'date_input',
             48,
@@ -353,7 +353,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         );
 
         // on_behalf_of input
-        $pdf->SetXY(113, 284.5);
+        $pdf->SetXY(113, 251.3);
         $pdf->TextField(
             'on_behalf_of',
             67,
@@ -361,6 +361,36 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $fieldStyle,
             ['v' => (string)$request->get('on_behalf_of')]
         );
+
+        // Checkboxes
+        // Drawn as actual AcroForm checkboxes, not just a ✓ character, to ensure proper alignment and consistent rendering across PDF viewers.
+        $makeCheckbox = function ($name, $x, $y, $checked) use ($pdf) {
+            $size = 3.4;
+            $pdf->SetXY($x, $y);
+            $pdf->CheckBox(
+                $name,
+                $size,
+                $checked,
+                [
+                    'border' => 1,
+                    'borderWidth' => 0.25,
+                    'borderColor' => [0, 0, 0],
+                    'fillColor' => [255, 255, 255],
+                ],
+                [
+                    'v'  => $checked ? 'Yes' : 'Off',
+                    'dv' => 'Off',
+                    'da' => '/ZaDb 10 Tf 0 g',
+                ]
+            );
+        };
+
+
+        $company_checked = (string)$request->get('companyName') === '1';
+        $id_option_checked = (string)$request->get('idOption') === '1';
+
+        $makeCheckbox('company_checked',  27.6, 189.5, $company_checked);
+        $makeCheckbox('id_option_checked',  27.6, 201.3, $id_option_checked);
 
 
         // Save final
