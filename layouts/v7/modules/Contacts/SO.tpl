@@ -403,7 +403,6 @@
                             {/if}
                             {if !empty($COMPANY->get('company_phone'))} <p>or PHONE: <span
                                     style="font-style: italic;">{$COMPANY->get('company_phone')}</span> or</p> {/if}
-
                         {/if}
                     </div>
                 </div>

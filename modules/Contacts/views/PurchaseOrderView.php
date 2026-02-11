@@ -428,6 +428,24 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             }
         }
 
+        // Checkboxes
+        $first_priccing_checked = (string)$request->get('pricing_option') === '1';
+        $second_priccing_checked = (string)$request->get('pricing_option') === '2';
+
+        $pdf->SetXY(20, 154.5);
+        $pdf->CheckBox(
+            'pricing_option_1',
+            4,
+            $first_priccing_checked
+        );
+
+        $pdf->SetXY(20, 161.3);
+        $pdf->CheckBox(
+            'pricing_option_2',
+            4,
+            $second_priccing_checked
+        );
+
         // ---- Save final --
         $pdf->Output($finalPdfPath, 'F');
         @unlink($basePdfPath);

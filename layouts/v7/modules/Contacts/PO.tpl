@@ -294,8 +294,9 @@
 
         .custom-editable-input {
             border: none;
-            possition: relative;
-            padding-bottom: 1mm;
+            position: relative;
+            padding-bottom: 0.5mm;
+            padding-bottom: 0.5mm;
             flex: 1;
             min-width: 40mm;
             border-bottom: 1px dotted #000;
@@ -462,13 +463,23 @@
                             {if isset($COMPANY)}
                                 {$COMPANY->get('company_address')}
                             {/if}
+                            <br />
+                            {if isset($COMPANY)}
+                                {if !empty($COMPANY->get('city'))}
+                                    {$COMPANY->get('city')},
+                                {/if}
+                                {$COMPANY->get('state')} {$COMPANY->get('code')}<br>
+                                {$COMPANY->get('country')}
+                            {/if}
                         </div>
                     </div>
                     <div class="number-container">
                         {if isset($COMPANY)}
-                            {if !empty($COMPANY->get('company_fax'))} <p>Fax no: <span
-                                    style="font-style: italic;">{$COMPANY->get('company_fax')}</span> or</p> {/if}
-                            <p>Email:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
+                            {if !empty($COMPANY->get('email'))}
+                                <p>EMAIL:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
+                            {/if}
+                            {if !empty($COMPANY->get('company_phone'))} <p>or PHONE: <span
+                                    style="font-style: italic;">{$COMPANY->get('company_phone')}</span> or</p> {/if}
                         {/if}
                     </div>
                 </div>
