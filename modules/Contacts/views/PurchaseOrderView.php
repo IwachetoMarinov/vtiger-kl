@@ -392,7 +392,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $weightCount = 9;   // 1000oz ... Other
 
         $offsetX = 0.6;   // move inside cell (right)
-        $offsetY = 0.6;   // move inside cell (down)
+        $offsetY = 0.5;   // move inside cell (down)
 
         $fieldW  = $cellW - 1.2; // leave padding both sides
         $fieldH  = $cellH - 1.2;
@@ -434,28 +434,28 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $country_checked = (string)$request->get('countryOption') === '1';
         $address_checked = (string)$request->get('addressOption') === '1';
 
-        $pdf->SetXY(30, 154.5);
+        $pdf->SetXY(35, 154.5);
         $pdf->CheckBox(
             'country_checked',
             4,
             $country_checked
         );
 
-        $pdf->SetXY(30, 161.3);
+        $pdf->SetXY(35, 161.3);
         $pdf->CheckBox(
             'address_checked',
             4,
             $address_checked
         );
 
-        $pdf->SetXY(30,  217.5);
+        $pdf->SetXY(35,  222.5);
         $pdf->CheckBox(
             'pricing_option_1',
             4,
             $first_pricing_checked
         );
 
-        $pdf->SetXY(30,  227.5);
+        $pdf->SetXY(35,  232.5);
         $pdf->CheckBox(
             'pricing_option_2',
             4,
