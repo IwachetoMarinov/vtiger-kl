@@ -143,9 +143,7 @@
 
         /* Serials Box */
         .serials-box {
-            /* min-height: 15mm; */
             padding: 2mm;
-            /* margin-bottom: 1mm; */
         }
 
         /* Additional Sections */
@@ -193,13 +191,13 @@
         .company-data {
             display: flex;
             border: 1px solid #000;
-            max-height: 183px;
-            height: 183px;
+            /* max-height: 183px; */
+            /* height: 183px; */
         }
 
         .company-data-item {
             width: 50%;
-            font-size: 10pt;
+            /* font-size: 10pt; */
             line-height: 1.2;
         }
 
