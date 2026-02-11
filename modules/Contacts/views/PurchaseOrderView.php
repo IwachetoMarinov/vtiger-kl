@@ -428,39 +428,75 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             }
         }
 
-        // Checkboxes
-        $first_pricing_checked = (string)$request->get('pricing_option') === '1';
+        // ===============================
+        // CHECKBOXES (HTML-style + editable)
+        // ===============================
+
+        $drawCheckbox = function ($name, $x, $y, $checked) use ($pdf) {
+
+            $size = 4.0;          // same as your previous size
+            $borderWidth = 0.25;
+
+            // --- Draw square ---
+            $pdf->SetDrawColor(0, 0, 0);
+            $pdf->SetLineWidth($borderWidth);
+            $pdf->Rect($x, $y, $size, $size);
+
+            // --- Draw centered checkmark ---
+            if ($checked) {
+                $pdf->SetLineWidth(0.45);
+
+                // proportional tick positioning (scales cleanly)
+                $pdf->Line(
+                    $x + $size * 0.20,
+                    $y + $size * 0.55,
+                    $x + $size * 0.40,
+                    $y + $size * 0.75
+                );
+
+                $pdf->Line(
+                    $x + $size * 0.40,
+                    $y + $size * 0.75,
+                    $x + $size * 0.80,
+                    $y + $size * 0.25
+                );
+            }
+
+            // --- Real invisible checkbox field on top (keeps it editable) ---
+            $pdf->SetXY($x, $y);
+            $pdf->CheckBox(
+                $name,
+                $size,
+                $checked,
+                ['border' => 0],                 // remove default ugly border
+                [
+                    'v'  => $checked ? 'Yes' : 'Off',
+                    'dv' => 'Off',
+                ]
+            );
+        };
+
+
+        // ===============================
+        // Determine states
+        // ===============================
+
+        $first_pricing_checked  = (string)$request->get('pricing_option') === '1';
         $second_pricing_checked = (string)$request->get('pricing_option') === '2';
-        $country_checked = (string)$request->get('countryOption') === '1';
-        $address_checked = (string)$request->get('addressOption') === '1';
+        $country_checked        = (string)$request->get('countryOption') === '1';
+        $address_checked        = (string)$request->get('addressOption') === '1';
 
-        $pdf->SetXY(35, 154.5);
-        $pdf->CheckBox(
-            'country_checked',
-            4,
-            $country_checked
-        );
 
-        $pdf->SetXY(35, 161.3);
-        $pdf->CheckBox(
-            'address_checked',
-            4,
-            $address_checked
-        );
+        // ===============================
+        // Render them (your real positions)
+        // ===============================
 
-        $pdf->SetXY(35,  222.5);
-        $pdf->CheckBox(
-            'pricing_option_1',
-            4,
-            $first_pricing_checked
-        );
+        $drawCheckbox('country_checked',        35, 154.5, $country_checked);
+        $drawCheckbox('address_checked',        35, 161.3, $address_checked);
 
-        $pdf->SetXY(35,  232.5);
-        $pdf->CheckBox(
-            'pricing_option_2',
-            4,
-            $second_pricing_checked
-        );
+        $drawCheckbox('pricing_option_1',       35, 225.0, $first_pricing_checked);
+        $drawCheckbox('pricing_option_2',       35, 233.5, $second_pricing_checked);
+
 
         // ---- Save final --
         $pdf->Output($finalPdfPath, 'F');
