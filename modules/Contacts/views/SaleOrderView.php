@@ -180,7 +180,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // Pick up location field (added as example of second field, adjust coords as needed)
-        $pdf->SetXY(53.5, 166.0);
+        $pdf->SetXY(51.5, 166.0);
         $pdf->TextField(
             'pick_up_location',
             127.0,
@@ -190,27 +190,27 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // authorised_person_name input
-        $pdf->SetXY(74, 173.75);
+        $pdf->SetXY(70, 173.75);
         $pdf->TextField(
             'authorised_person_name',
-            41,
+            44,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('authorised_person_name')]
         );
 
         // authorised_person_id input
-        $pdf->SetXY(138, 173.75);
+        $pdf->SetXY(134, 173.75);
         $pdf->TextField(
             'authorised_person_id',
-            41.5,
+            44,
             $h,
             $fieldStyle,
             ['v' => (string)$request->get('authorised_person_id')]
         );
 
         // bank_name input
-        $pdf->SetXY(52, 203.0);
+        $pdf->SetXY(50, 203.0);
         $pdf->TextField(
             'bank_name',
             125,
@@ -220,7 +220,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // bank_address input
-        $pdf->SetXY(55, 210.0);
+        $pdf->SetXY(53, 210.0);
         $pdf->TextField(
             'bank_address',
             120,
@@ -230,7 +230,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // bank_code input
-        $pdf->SetXY(52, 217.0);
+        $pdf->SetXY(49, 217.0);
         $pdf->TextField(
             'bank_code',
             51,
@@ -240,7 +240,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // swift_code input
-        $pdf->SetXY(122, 217.0);
+        $pdf->SetXY(120, 217.0);
         $pdf->TextField(
             'swift_code',
             55,
@@ -250,7 +250,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // account_no input
-        $pdf->SetXY(52, 224.0);
+        $pdf->SetXY(49, 224.0);
         $pdf->TextField(
             'account_no',
             47,
@@ -260,7 +260,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // account_currency input
-        $pdf->SetXY(126, 224.0);
+        $pdf->SetXY(124, 224.0);
         $pdf->TextField(
             'account_currency',
             49,
@@ -270,7 +270,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // place_input input
-        $pdf->SetXY(43, 235.5);
+        $pdf->SetXY(41, 235.5);
         $pdf->TextField(
             'place_input',
             45,
@@ -280,7 +280,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // signed_by input
-        $pdf->SetXY(111, 235.5);
+        $pdf->SetXY(109, 235.5);
         $pdf->TextField(
             'signed_by',
             65,
@@ -290,7 +290,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(43, 243.8);
+        $pdf->SetXY(41, 243.8);
         $pdf->TextField(
             'date_input',
             45,
@@ -300,7 +300,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
         );
 
         // on_behalf_of input
-        $pdf->SetXY(115, 243.8);
+        $pdf->SetXY(113, 243.8);
         $pdf->TextField(
             'on_behalf_of',
             62,
