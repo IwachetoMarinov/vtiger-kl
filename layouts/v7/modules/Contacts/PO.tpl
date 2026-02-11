@@ -193,6 +193,8 @@
         .company-data {
             display: flex;
             border: 1px solid #000;
+            max-height: 183px;
+            height: 183px;
         }
 
         .company-data-item {
