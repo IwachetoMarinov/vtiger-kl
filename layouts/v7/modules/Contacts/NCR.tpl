@@ -192,7 +192,7 @@
         .signature-section-item {
             display: flex;
             justify-content: space-between;
-            margin-top: 1mm;
+            margin-top: 0;
         }
 
         .signature-section-left {
@@ -446,11 +446,11 @@
             </div>
 
 
-            <p style="margin-top: 3mm;font-style: italic;font-weight: bold;">I/We hereby enclose a photocopy of the
+            <p style="margin-top: 1.75mm;font-style: italic;font-weight: bold;">I/We hereby enclose a photocopy of the
                 passport of the person(s) who will collect the Stored Metal. The
                 original passport(s) will need to be presented prior to Collection at the Storage Facility</p>
 
-            <div style="margin-top: 3mm;">This Collection Order is subject to and governed by the terms and conditions
+            <div style="margin-top: 1.75mm;">This Collection Order is subject to and governed by the terms and conditions
                 of the Customer Metal Agreement executed and entered into by and between me/us and {if isset($COMPANY)}
                     <span style="text-transform: capitalize;">{$COMPANY->get('company_name')}</span>
                 {/if}
