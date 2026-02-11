@@ -429,38 +429,44 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         }
 
         // Checkboxes
+
+        $makeCheckbox = function ($name, $x, $y, $checked) use ($pdf) {
+            $size = 4.4; // slightly larger improves centering visually
+
+            $pdf->SetXY($x, $y);
+
+            $pdf->CheckBox(
+                $name,
+                $size,
+                $checked,
+                [
+                    'border' => 1,
+                    'borderWidth' => 0.25,
+                    'borderColor' => [0, 0, 0],
+                    'fillColor' => [255, 255, 255],
+                ],
+                [
+                    // IMPORTANT for consistent rendering
+                    'v'  => $checked ? 'Yes' : 'Off',
+                    'dv' => 'Off',
+
+                    // This helps many viewers render a proper centered ✓
+                    // ZapfDingbats check mark (AcroForm standard)
+                    'da' => '/ZaDb 10 Tf 0 g',
+                ]
+            );
+        };
+
         $first_pricing_checked = (string)$request->get('pricing_option') === '1';
         $second_pricing_checked = (string)$request->get('pricing_option') === '2';
         $country_checked = (string)$request->get('countryOption') === '1';
         $address_checked = (string)$request->get('addressOption') === '1';
 
-        $pdf->SetXY(35, 154.5);
-        $pdf->CheckBox(
-            'country_checked',
-            4,
-            $country_checked
-        );
+        $makeCheckbox('country_checked',  35, 154.5, $country_checked);
+        $makeCheckbox('address_checked',  35, 161.3, $address_checked);
 
-        $pdf->SetXY(35, 161.3);
-        $pdf->CheckBox(
-            'address_checked',
-            4,
-            $address_checked
-        );
-
-        $pdf->SetXY(35,  225.0);
-        $pdf->CheckBox(
-            'pricing_option_1',
-            4,
-            $first_pricing_checked
-        );
-
-        $pdf->SetXY(35,  233.5);
-        $pdf->CheckBox(
-            'pricing_option_2',
-            4,
-            $second_pricing_checked
-        );
+        $makeCheckbox('pricing_option_1', 35, 225.0, $first_pricing_checked);
+        $makeCheckbox('pricing_option_2', 35, 233.5, $second_pricing_checked);
 
         // ---- Save final --
         $pdf->Output($finalPdfPath, 'F');
