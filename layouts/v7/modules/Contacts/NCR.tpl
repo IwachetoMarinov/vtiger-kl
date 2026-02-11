@@ -229,6 +229,10 @@
             width: 100%;
         }
 
+        .editable-input-wrapper-gap {
+            flex-wrap: wrap;
+        }
+
         @media print {
 
             @page {
@@ -435,17 +439,17 @@
                 <input type="text" name="company_input" class="editable-input editable-full-input" />
             </div>
 
-            <div class="editable-input-wrapper">
+            <span style="display: inline-block; margin-top: 3mm;">
                 <span>holding ID/Passport number</span>
-                <input type="text" name="holding_passport_number" class="editable-input editable-full-input"
+                <input type="text" name="holding_passport_number" class="editable-input" style="padding:0 1mm;"
                     {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}style="display: inline-block; margin-top: 2mm;"
                     {/if} />
-            </div>
-            <p style="margin-top: 2mm;"> to collect the Stored Metal on my/our behalf. This
+                to collect the Stored Metal on my/our behalf. This
                 authorisation is only valid for the collection of the Stored Metal specified above and shall not
                 be
                 extended
-                to any other services covered under the Customer Metal Agreement.</p>
+                to any other services covered under the Customer Metal Agreement
+            </span>
 
 
             <p style="margin-top: 2.5mm;font-style: italic;font-weight: bold;">I/We hereby enclose a photocopy of the
