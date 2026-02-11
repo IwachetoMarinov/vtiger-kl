@@ -343,7 +343,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(40, 280.0);
+        $pdf->SetXY(40, 279.5);
         $pdf->TextField(
             'date_input',
             48,
@@ -353,7 +353,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         );
 
         // on_behalf_of input
-        $pdf->SetXY(113, 280.0);
+        $pdf->SetXY(113, 279.5);
         $pdf->TextField(
             'on_behalf_of',
             67,
