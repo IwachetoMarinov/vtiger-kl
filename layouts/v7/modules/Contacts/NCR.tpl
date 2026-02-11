@@ -169,7 +169,7 @@
 
         .custom-checkbox {
             font-size: 3.5mm;
-            border: 1px solid #000;
+            border: 1px solid transparent;
             padding: 2px 2px;
             display: inline-block;
             height: 5mm;
@@ -413,7 +413,7 @@
                 {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                     <input type="checkbox" name="id_option">
                 {else}
-                    <span class="custom-checkbox">{if isset($ID_OPTION) && $ID_OPTION eq 1}✔{/if}</span>
+                    <span class="custom-checkbox"></span>
                 {/if}
                 <span>I/We will personally collect the Stored Metal at the Storage Facility and will be holding
                     ID/Passport number</span>
@@ -429,7 +429,7 @@
                 {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                     <input type="checkbox" name="company_option">
                 {else}
-                    <span class="custom-checkbox">{if isset($COMPANY_OPTION) && $COMPANY_OPTION eq 1}✔{/if}</span>
+                    <span class="custom-checkbox"></span>
                 {/if}
 
                 <span>I/We hereby authorise Mr/Mrs/Representatives of the company </span>
