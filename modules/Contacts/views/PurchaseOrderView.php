@@ -431,7 +431,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         // Checkboxes
 
         $makeCheckbox = function ($name, $x, $y, $checked) use ($pdf) {
-            $size = 4.4; // slightly larger improves centering visually
+            $size = 3.6; // slightly larger improves centering visually
 
             $pdf->SetXY($x, $y);
 
