@@ -240,7 +240,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $wTable = 155.0;
 
         // ---- COLUMN RATIOS (SUM = 100%) ----
-        $ratioQty    = 0.05;
+        $ratioQty    = 0.055;
         $ratioDesc   = 0.65;
         $ratioSerial = 0.20;
         $ratioFine   = 0.10;
@@ -312,13 +312,13 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->SetXY(86.0 + $dx, 180.0 + $dy);
         $pdf->TextField('collection_date', $w, $h, $fieldStyle, ['v' => (string)$request->get('collectionDateInput')]);
 
-        $pdf->SetXY(27.0 + $dx, 193.5 + $dy);
+        $pdf->SetXY(27.0 + $dx, 194.0 + $dy);
         $pdf->TextField('passport_number', $w, 5.0, $fieldStyle, ['v' => (string)$request->get('passportNumberInput')]);
 
         $pdf->SetXY(111.0 + $dx, 200.0 + $dy);
         $pdf->TextField('company_input', 42, $h, $fieldStyle, ['v' => (string)$request->get('companyInput')]);
 
-        $pdf->SetXY(48.0 + $dx, 208.0 + $dy);
+        $pdf->SetXY(62.0 + $dx, 208.5 + $dy);
         $pdf->TextField('holding_passport_number', $w, 5.0, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
 
         // Signature section fields (place_input, signed_by, date_input, on_behalf_of)
