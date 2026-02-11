@@ -185,7 +185,7 @@
 
         /* Signature Section */
         .signature-section {
-            margin-top: 2mm;
+            margin-top: 5mm;
             padding: 0 4mm;
         }
 
@@ -405,7 +405,7 @@
 
             </table>
 
-            <div class="editable-input-wrapper">I/We would like the Collection to take place on:
+            <div class="editable-input-wrapper" style="margin-top: 5mm;">I/We would like the Collection to take place on:
                 <input type="text" name="collection_date" class="editable-input" />
             </div>
 
@@ -446,11 +446,11 @@
             </div>
 
 
-            <p style="margin-top: 1.75mm;font-style: italic;font-weight: bold;">I/We hereby enclose a photocopy of the
+            <p style="margin-top: 2.5mm;font-style: italic;font-weight: bold;">I/We hereby enclose a photocopy of the
                 passport of the person(s) who will collect the Stored Metal. The
                 original passport(s) will need to be presented prior to Collection at the Storage Facility</p>
 
-            <div style="margin-top: 1.75mm;">This Collection Order is subject to and governed by the terms and conditions
+            <div style="margin-top: 2.5mm;">This Collection Order is subject to and governed by the terms and conditions
                 of the Customer Metal Agreement executed and entered into by and between me/us and {if isset($COMPANY)}
                     <span style="text-transform: capitalize;">{$COMPANY->get('company_name')}</span>
                 {/if}
