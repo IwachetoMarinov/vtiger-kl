@@ -292,7 +292,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $pdf->TextField("fine_oz_$i", $wFine - 2 * $insetX, $fieldH, $fieldStyle);
         }
 
-        $yTotals = 207;
+        $yTotals = 174.0;
 
         $pdf->SetXY(29.0, $yTotals);
         $pdf->TextField('total_value', 35, 5.5, $fieldStyle);
@@ -306,7 +306,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $dx = 0.0;
         $dy = 0.0;
 
-        $pdf->SetXY(33.5 + $dx, 68.0 + $dy);
+        $pdf->SetXY(33.5 + $dx, 68.2 + $dy);
         $pdf->TextField('reference', 40, $h, $fieldStyle, ['v' => (string)$request->get('reference')]);
 
         $pdf->SetXY(86.0 + $dx, 214.0 + $dy);
@@ -361,6 +361,38 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $fieldStyle,
             ['v' => (string)$request->get('on_behalf_of')]
         );
+
+        // Checkboxes
+        // Drawn as actual AcroForm checkboxes, not just a ✓ character, to ensure proper alignment and consistent rendering across PDF viewers.
+        $makeCheckbox = function ($name, $x, $y, $checked) use ($pdf) {
+            $size = 3.4;
+
+            $pdf->SetXY($x, $y);
+
+            $pdf->CheckBox(
+                $name,
+                $size,
+                $checked,
+                [
+                    'border' => 1,
+                    'borderWidth' => 0.25,
+                    'borderColor' => [0, 0, 0],
+                    'fillColor' => [255, 255, 255],
+                ],
+                [
+                    'v'  => $checked ? 'Yes' : 'Off',
+                    'dv' => 'Off',
+                    'da' => '/ZaDb 10 Tf 0 g',
+                ]
+            );
+        };
+
+
+        $company_checked = (string)$request->get('companyName') === '1';
+        $id_option_checked = (string)$request->get('idOption') === '1';
+
+        $makeCheckbox('company_checked',  35, 188.5, $company_checked);
+        $makeCheckbox('id_option_checked',  35, 200.3, $id_option_checked);
 
 
         // Save final

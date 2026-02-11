@@ -429,7 +429,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         }
 
         // Checkboxes
-
+        // Drawn as actual AcroForm checkboxes, not just a ✓ character, to ensure proper alignment and consistent rendering across PDF viewers.
         $makeCheckbox = function ($name, $x, $y, $checked) use ($pdf) {
             $size = 3.4; // slightly larger improves centering visually
 
@@ -446,7 +446,6 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
                     'fillColor' => [255, 255, 255],
                 ],
                 [
-                    // IMPORTANT for consistent rendering
                     'v'  => $checked ? 'Yes' : 'Off',
                     'dv' => 'Off',
 

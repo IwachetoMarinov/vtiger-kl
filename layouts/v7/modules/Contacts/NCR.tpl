@@ -460,7 +460,7 @@
             <div class="signature-section">
                 <div class="signature-section-item">
                     <div class="signature-section-left">
-                        <div class="editable-input-wrapper" style="margin-top: 1mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
                             <span> Place:</span> <input type="text" name="place_input" class="custom-editable-input" />
                         </div>
                         <div class="editable-input-wrapper" style="margin-top: 3mm;">
@@ -469,7 +469,7 @@
                     </div>
 
                     <div class="signature-section-right">
-                        <div class="editable-input-wrapper" style="margin-top: 1mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
                             <span> Signed by: </span>
                             <input type="text" name="signed_by" class="custom-editable-input" />
                         </div>
