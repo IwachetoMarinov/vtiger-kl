@@ -30,7 +30,7 @@
 
         body {
             font-family: 'Open Sans';
-            font-size: 11pt;
+            font-size: 10pt;
             /* font-size: 9pt; */
             color: #666;
         }
@@ -289,7 +289,7 @@
             <li style="float:right">
                 <a id="downloadBtn"
                     style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
-                    href="index.php?module=Contacts&view=SaleOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
+                    href="index.php?module=Contacts&view=SaleOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}&debug=1">
                     Download
                 </a>
             </li>
