@@ -333,7 +333,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // place_input input
-        $pdf->SetXY(40, 255.5);
+        $pdf->SetXY(41, 255.5);
         $pdf->TextField(
             'place_input',
             45,
@@ -359,7 +359,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(40, 264.0);
+        $pdf->SetXY(41, 264.0);
         $pdf->TextField(
             'date_input',
             45,
@@ -429,21 +429,37 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         }
 
         // Checkboxes
-        $first_priccing_checked = (string)$request->get('pricing_option') === '1';
-        $second_priccing_checked = (string)$request->get('pricing_option') === '2';
+        $first_pricing_checked = (string)$request->get('pricing_option') === '1';
+        $second_pricing_checked = (string)$request->get('pricing_option') === '2';
+        $country_checked = (string)$request->get('countryOption') === '1';
+        $address_checked = (string)$request->get('addressOption') === '1';
 
-        $pdf->SetXY(20, 154.5);
+        $pdf->SetXY(40, 154.5);
+        $pdf->CheckBox(
+            'country_checked',
+            4,
+            $country_checked
+        );
+
+        $pdf->SetXY(40, 161.3);
+        $pdf->CheckBox(
+            'address_checked',
+            4,
+            $address_checked
+        );
+
+        $pdf->SetXY(40,  205.5);
         $pdf->CheckBox(
             'pricing_option_1',
             4,
-            $first_priccing_checked
+            $first_pricing_checked
         );
 
-        $pdf->SetXY(20, 161.3);
+        $pdf->SetXY(40,  215.5);
         $pdf->CheckBox(
             'pricing_option_2',
             4,
-            $second_priccing_checked
+            $second_pricing_checked
         );
 
         // ---- Save final --

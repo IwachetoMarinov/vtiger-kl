@@ -68,7 +68,7 @@
             text-align: center;
             font-size: 13pt;
             font-weight: bold;
-            padding-top: 3mm;
+            padding-top: 2mm;
         }
 
         /* From / To Section */
@@ -231,7 +231,7 @@
 
         .main-table {
             border: 1px solid #000;
-            margin-top: 5mm;
+            margin-top: 3mm;
             padding: 3.5mm 2mm;
         }
 
@@ -312,6 +312,16 @@
 
         .custom-editable-table-input {
             min-width: auto;
+        }
+
+        .custom-checkbox {
+            font-size: 3.5mm;
+            border: 1px solid transparent;
+            padding: 2px 2px;
+            display: inline-block;
+            height: 5mm;
+            width: 5mm;
+            line-height: 3.5mm;
         }
     </style>
 
@@ -566,11 +576,7 @@
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                         <input type="checkbox" name="country_option">
                     {else}
-
-                        <span
-                            style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">
-                            {if isset($COUNTRY_OPTION) &&  $COUNTRY_OPTION eq '1'} ✔{/if}
-                        </span>
+                        <span class="custom-checkbox"></span>
                     {/if}
                     <span>deliver & store the above metal in a facility located in:</span>
                     <span> <input type="text" name="location" class="custom-editable-input" /> </span>
@@ -581,10 +587,7 @@
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                         <input type="checkbox" name="address_option">
                     {else}
-                        <span
-                            style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">
-                            {if isset($ADDRESS_OPTION) && $ADDRESS_OPTION eq '1'}✔{/if}
-                        </span>
+                        <span class="custom-checkbox"></span>
                     {/if}
                     <span>deliver the above metal to:</span>
                     <span> <input type="text" name="address" style="width: 75mm;" class="custom-editable-input" />
@@ -666,8 +669,7 @@
                                 {* <input type="radio" name="pricing_option" value="1" {if $PRICING_OPTION eq '1'}checked{/if}> *}
                             {else}
                                 {if $PRICING_OPTION neq '2'}
-                                    <span
-                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                                    <span class="custom-checkbox"></span>
                                 {/if}
                             {/if}
                             Pricing Option 1 (as defined in Clause 3.3.1)
@@ -682,8 +684,7 @@
                                 {* <input type="radio" name="pricing_option" value="2" {if $PRICING_OPTION eq '2'}checked{/if}> *}
                             {else}
                                 {if $PRICING_OPTION eq '2'}
-                                    <span
-                                        style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                                    <span class="custom-checkbox"></span>
                                 {/if}
                             {/if}
                             Pricing Option 2 (as defined in Clause 3.3.2)
