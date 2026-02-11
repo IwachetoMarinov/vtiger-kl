@@ -342,7 +342,7 @@
                 <p style="font-style: italic;font-weight: 600;">{$location}</p>
             </div>
 
-            {assign var="targetRows" value=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
+            {assign var="targetRows" value=[0, 1, 2, 3, 4, 5, 6]}
 
             <table class="print-tbl" style="margin-top:5mm;">
                 <tr>
