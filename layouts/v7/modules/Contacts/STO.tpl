@@ -660,7 +660,7 @@
             </div>
 
             <!-- SECTION 3 -->
-            <div class="additional-section ">
+            <div class="additional-section" style="margin-bottom: 1mm;">
                 <div style="margin-bottom:2mm;" class="bolder-element">
                     3. I/We make the payment of the Shipping and Storage Fees:
                 </div>
@@ -720,7 +720,7 @@
 
 
             <!-- SECTION 2 -->
-            <div class="additional-section ">
+            <div class="additional-section" style="margin-top: 0;">
                 <div style="margin-bottom:2mm;" class="bolder-element">
                     4. This Shipment & Storage Order and any agreement with GPM resulting therefrom shall be subject to
                     and governed by the terms and conditions of the Customer Metal Agreement executed and entered into
