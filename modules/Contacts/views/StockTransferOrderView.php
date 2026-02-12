@@ -273,12 +273,12 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
 
         // ---- ONLY ONE INPUT: serial_numbers ----
         $x = 18.0;
-        $y = 68.0;
+        $y = 70.0;
         $h = 5.5;
         $full_width = 145.0;
 
         // description input  field
-        $pdf->SetXY(32, 141.5);
+        $pdf->SetXY(32, 142.5);
         $pdf->TextField(
             'description',
             $full_width,
@@ -288,7 +288,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // from_location input field
-        $pdf->SetXY(32, 156.0);
+        $pdf->SetXY(32, 157.0);
         $pdf->TextField(
             'from_location',
             $full_width,
@@ -298,7 +298,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // to_location input field
-        $pdf->SetXY(32, 168.0);
+        $pdf->SetXY(32, 169.0);
         $pdf->TextField(
             'to_location',
             $full_width,
@@ -308,7 +308,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // country input field
-        $pdf->SetXY(47, 213.5);
+        $pdf->SetXY(47, 214.5);
         $pdf->TextField(
             'country',
             41,
@@ -320,7 +320,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
 
         // Signature section fields (place_input, signed_by, date_input, on_behalf_of)
         // place_input input
-        $pdf->SetXY(41, 273.0);
+        $pdf->SetXY(41, 274.0);
         $pdf->TextField(
             'place_input',
             48,
@@ -330,7 +330,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // signed_by input
-        $pdf->SetXY(108, 273.0);
+        $pdf->SetXY(108, 274.0);
         $pdf->TextField(
             'signed_by',
             70,
@@ -340,7 +340,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(41, 281.0);
+        $pdf->SetXY(41, 282.0);
         $pdf->TextField(
             'date_input',
             48,
@@ -350,7 +350,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // on_behalf_of input
-        $pdf->SetXY(112, 281.0);
+        $pdf->SetXY(112, 282.0);
         $pdf->TextField(
             'on_behalf_of',
             67,
