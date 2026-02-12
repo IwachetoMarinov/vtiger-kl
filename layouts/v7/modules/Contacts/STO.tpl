@@ -188,7 +188,7 @@
 
         /* Signature Section */
         .signature-section {
-            margin-top: 2mm;
+            margin-top: 0.5mm;
             padding: 0 4mm;
         }
 
@@ -752,7 +752,7 @@
                     </div>
                 </div>
 
-                <div style="margin-top:10mm;">
+                <div style="margin-top:9mm;">
                     <div class="signature-line">...............................................</div><br>
                     Signature
                 </div>
