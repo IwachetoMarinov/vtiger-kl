@@ -392,7 +392,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $weightCount = 9;   // 1000oz ... Other
 
         $offsetX = 0.6;   // move inside cell (right)
-        $offsetY = 0.45;   // move inside cell (down)
+        $offsetY = 0.43;   // move inside cell (down)
 
         $fieldW  = $cellW - 1.2; // leave padding both sides
         $fieldH  = $cellH - 1.2;
