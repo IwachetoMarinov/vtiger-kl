@@ -325,9 +325,12 @@
                                     {* Build serial list safely *}
                                     {assign var="serials" value=$serials|cat:implode(',', $barItem->serials)|cat:','}
 
-                                    {* balanceAmount *}
-                                    {assign var="balanceAmount"
-                                            value=($barItem->spotPrice * $barItem->totalFineOz) * (1 + ($barItem->premium / 100))}
+                                    {* balanceAmount old way *}
+                                    {* {assign var="balanceAmount" value=($barItem->spotPrice * $barItem->totalFineOz) * (1 + ($barItem->premium / 100))} *}
+
+                                    {* balanceAmount NEW way *}
+                                    {assign var="balanceAmount" value=($barItem->totalItemAmount)}
+
                                     {assign var="calcTotal" value=$calcTotal+$balanceAmount}
 
                                     <tr>
