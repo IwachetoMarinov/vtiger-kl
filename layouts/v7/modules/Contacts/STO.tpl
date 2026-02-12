@@ -195,7 +195,7 @@
         .signature-section-item {
             display: flex;
             justify-content: space-between;
-            margin-top: 4mm;
+            margin-top: 2mm;
         }
 
         .signature-section-left {

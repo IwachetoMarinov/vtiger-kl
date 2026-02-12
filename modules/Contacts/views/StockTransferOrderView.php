@@ -288,7 +288,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // from_location input field
-        $pdf->SetXY(32, 155.5);
+        $pdf->SetXY(32, 155.0);
         $pdf->TextField(
             'from_location',
             $full_width,
@@ -308,7 +308,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // country input field
-        $pdf->SetXY(47, 213.0);
+        $pdf->SetXY(47, 210.0);
         $pdf->TextField(
             'country',
             41,
@@ -320,7 +320,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
 
         // Signature section fields (place_input, signed_by, date_input, on_behalf_of)
         // place_input input
-        $pdf->SetXY(41, 269.0);
+        $pdf->SetXY(41, 267.0);
         $pdf->TextField(
             'place_input',
             48,
@@ -330,7 +330,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // signed_by input
-        $pdf->SetXY(108, 269.0);
+        $pdf->SetXY(108, 267.0);
         $pdf->TextField(
             'signed_by',
             70,
@@ -340,7 +340,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(41, 277.0);
+        $pdf->SetXY(41, 275.0);
         $pdf->TextField(
             'date_input',
             48,
@@ -350,7 +350,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // on_behalf_of input
-        $pdf->SetXY(112, 277.0);
+        $pdf->SetXY(112, 275.0);
         $pdf->TextField(
             'on_behalf_of',
             67,
@@ -361,7 +361,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
 
         // ---- METALS TABLE CONFIG (ADJUSTED) ----
         $startX = 57.5;   // was ~48.0
-        $startY = 109.0;  // was ~116.0
+        $startY = 108.0;  // was ~116.0
         $cellW  = 13.57;   // was ~15
         $cellH  = 6.75;    // was ~7
 
@@ -439,11 +439,11 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         $is_dubai = (string)$request->get('countryOption') === '4';
         $is_other_country = (string)$request->get('countryOption') === '5';
 
-        $makeCheckbox('singapore_checked',  33.5, 179.3, $is_singapore);
-        $makeCheckbox('switzerland_checked',  55, 179.3, $is_switzerland);
-        $makeCheckbox('hongkong_checked',  78.5, 179.3, $is_hong_kong);
-        $makeCheckbox('dubai_checked',  100, 179.3, $is_dubai);
-        $makeCheckbox('other_checked',  33.5, 184.3, $is_other_country);
+        $makeCheckbox('singapore_checked',  33.5, 179.0, $is_singapore);
+        $makeCheckbox('switzerland_checked',  55, 179.0, $is_switzerland);
+        $makeCheckbox('hongkong_checked',  78.5, 179.0, $is_hong_kong);
+        $makeCheckbox('dubai_checked',  100, 179.0, $is_dubai);
+        $makeCheckbox('other_checked',  33.5, 184.0, $is_other_country);
 
         // ---- Save final ----
         $pdf->Output($finalPdfPath, 'F');
