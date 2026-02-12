@@ -361,9 +361,9 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
 
         // ---- METALS TABLE CONFIG (ADJUSTED) ----
         $startX = 57.5;   // was ~48.0
-        $startY = 107.0;  // was ~116.0
+        $startY = 100.0;  // was ~116.0
         $cellW  = 13.57;   // was ~15
-        $cellH  = 6.7;    // was ~7
+        $cellH  = 6.75;    // was ~7
 
         $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
         $weightCount = 9;   // 1000oz ... Other
