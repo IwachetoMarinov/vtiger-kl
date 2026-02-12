@@ -273,7 +273,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
 
         // ---- ONLY ONE INPUT: serial_numbers ----
         $x = 18.0;
-        $y = 70.0;
+        $y = 72.0;
         $h = 5.5;
         $full_width = 145.0;
 
@@ -308,7 +308,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // country input field
-        $pdf->SetXY(47, 214.5);
+        $pdf->SetXY(47, 215.0);
         $pdf->TextField(
             'country',
             41,
