@@ -151,7 +151,7 @@
 
         /* Additional Sections */
         .additional-section {
-            margin: 4mm 0;
+            margin: 2.5mm 0;
             line-height: 1.4;
         }
 
