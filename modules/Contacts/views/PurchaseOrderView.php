@@ -386,13 +386,13 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $startX = 57.3;   // was ~48.0
         $startY = 111.0;  // was ~116.0
         $cellW  = 13.57;   // was ~15
-        $cellH  = 6.35;    // was ~7
+        $cellH  = 6.25;    // was ~7
 
         $metalCount  = 4;   // Gold, Silver, Platinum, Palladium
         $weightCount = 9;   // 1000oz ... Other
 
         $offsetX = 0.6;   // move inside cell (right)
-        $offsetY = 0.43;   // move inside cell (down)
+        $offsetY = 0.33;   // move inside cell (down)
 
         $fieldW  = $cellW - 1.2; // leave padding both sides
         $fieldH  = $cellH - 1.2;
