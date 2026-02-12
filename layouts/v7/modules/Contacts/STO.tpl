@@ -735,7 +735,7 @@
                         <div class="editable-input-wrapper">
                             <span> Place:</span> <input type="text" name="place_input" class="custom-editable-input" />
                         </div>
-                        <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
                             <span>Date:</span> <input type="text" name="date_input" class="custom-editable-input" />
                         </div>
                     </div>
@@ -745,14 +745,14 @@
                             <span> Signed by: </span>
                             <input type="text" name="signed_by" class="custom-editable-input" />
                         </div>
-                        <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
                             <span> On behalf of:</span>
                             <input type="text" name="on_behalf_of" class="custom-editable-input" />
                         </div>
                     </div>
                 </div>
 
-                <div style="margin-top:9mm;">
+                <div style="margin-top:7.5mm;">
                     <div class="signature-line">...............................................</div><br>
                     Signature
                 </div>

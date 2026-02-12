@@ -340,7 +340,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // date_input input
-        $pdf->SetXY(41, 272.0);
+        $pdf->SetXY(41, 270.5);
         $pdf->TextField(
             'date_input',
             48,
@@ -350,7 +350,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         );
 
         // on_behalf_of input
-        $pdf->SetXY(112, 272.0);
+        $pdf->SetXY(112, 270.5);
         $pdf->TextField(
             'on_behalf_of',
             67,
