@@ -318,7 +318,7 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         $pdf->SetXY(111.0 + $dx, 200.0 + $dy);
         $pdf->TextField('company_input', 70, $h, $fieldStyle, ['v' => (string)$request->get('companyInput')]);
 
-        $pdf->SetXY(64.5 + $dx, 208.5 + $dy);
+        $pdf->SetXY(64.5 + $dx, 207.5 + $dy);
         $pdf->TextField('holding_passport_number', $w, 5.0, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
 
         // Signature section fields (place_input, signed_by, date_input, on_behalf_of)
