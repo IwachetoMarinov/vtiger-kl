@@ -262,7 +262,7 @@
 
         .custom-editable-input {
             border: none;
-            possition: relative;
+            position: relative;
             padding-bottom: 1mm;
             flex: 1;
             min-width: 40mm;

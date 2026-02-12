@@ -320,15 +320,14 @@
             min-width: auto;
         }
 
-        .pdf-checkbox {
+        .custom-checkbox {
+            font-size: 3.5mm;
+            border: 1px solid transparent;
+            padding: 2px 2px;
             display: inline-block;
-            width: 5mm;
             height: 5mm;
-            border: 0.3mm solid #000;
-            vertical-align: middle;
-            position: relative;
-            margin-right: 2mm;
-            box-sizing: border-box;
+            width: 5mm;
+            line-height: 3.5mm;
         }
 
         .pdf-checkbox.checked::after {
@@ -611,8 +610,7 @@
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="1"> Singapore
                             {else}
-                                <span
-                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 1}checked{/if}"></span>
+                                <span class="custom-checkbox"></span>
                                 <span class="pdf-checkbox-label">Singapore</span>
                             {/if}
                         </div>
@@ -620,8 +618,7 @@
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="2"> Switzerland
                             {else}
-                                <span
-                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 2}checked{/if}"></span>
+                                <span class="custom-checkbox"></span>
                                 <span class="pdf-checkbox-label">Switzerland</span>
                             {/if}
                         </div>
@@ -629,8 +626,7 @@
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="3"> Hong Kong
                             {else}
-                                <span
-                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 3}checked{/if}"></span>
+                                <span class="custom-checkbox"></span>
                                 <span class="pdf-checkbox-label">Hong Kong</span>
                             {/if}
                         </div>
@@ -638,8 +634,7 @@
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="4"> Dubai
                             {else}
-                                <span
-                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 4}checked{/if}"></span>
+                                <span class="custom-checkbox"></span>
                                 <span class="pdf-checkbox-label">Dubai</span>
                             {/if}
                         </div>
@@ -656,8 +651,7 @@
                                             style="width:60mm; margin-left:2mm;" />
                                     </div>
                                 {else}
-                                    <span
-                                        class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 5}checked{/if}"></span>
+                                    <span class="custom-checkbox"></span>
                                     <span class="pdf-checkbox-label">Other country or location (Please specify):
                                         {$CUSTOM_COUNTRY|default:''}</span>
                                 {/if}
