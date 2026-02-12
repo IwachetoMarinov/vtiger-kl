@@ -439,11 +439,11 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         $is_dubai = (string)$request->get('countryOption') === '4';
         $is_other_country = (string)$request->get('countryOption') === '5';
 
-        $makeCheckbox('singapore_checked',  35, 205.0, $is_singapore);
-        $makeCheckbox('switzerland_checked',  55, 205.0, $is_switzerland);
-        $makeCheckbox('hongkong_checked',  75, 205.0, $is_hong_kong);
-        $makeCheckbox('dubai_checked',  95, 205.0, $is_dubai);
-        $makeCheckbox('other_checked',  35, 215.0, $is_other_country);
+        $makeCheckbox('singapore_checked',  32, 179.0, $is_singapore);
+        $makeCheckbox('switzerland_checked',  55, 179.0, $is_switzerland);
+        $makeCheckbox('hongkong_checked',  80, 179.0, $is_hong_kong);
+        $makeCheckbox('dubai_checked',  102, 179.0, $is_dubai);
+        $makeCheckbox('other_checked',  32, 190.0, $is_other_country);
 
         // ---- Save final ----
         $pdf->Output($finalPdfPath, 'F');
