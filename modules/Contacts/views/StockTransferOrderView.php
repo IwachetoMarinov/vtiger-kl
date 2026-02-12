@@ -399,7 +399,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
                     $fieldH,
                     $fieldStyle,
                     array_merge($fieldOptsBase, [
-                        'v' => $value, // blank allowed
+                        'v' => $value,
                     ])
                 );
             }
@@ -408,7 +408,7 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         // Checkboxes
         // Drawn as actual AcroForm checkboxes, not just a ✓ character, to ensure proper alignment and consistent rendering across PDF viewers.
         $makeCheckbox = function ($name, $x, $y, $checked) use ($pdf) {
-            $size = 3.4; // slightly larger improves centering visually
+            $size = 3.4;
 
             $pdf->SetXY($x, $y);
 
@@ -425,9 +425,6 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
                 [
                     'v'  => $checked ? 'Yes' : 'Off',
                     'dv' => 'Off',
-
-                    // This helps many viewers render a proper centered ✓
-                    // ZapfDingbats check mark (AcroForm standard)
                     'da' => '/ZaDb 10 Tf 0 g',
                 ]
             );
@@ -439,11 +436,11 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
         $is_dubai = (string)$request->get('countryOption') === '4';
         $is_other_country = (string)$request->get('countryOption') === '5';
 
-        $makeCheckbox('singapore_checked',  33.5, 178.6, $is_singapore);
-        $makeCheckbox('switzerland_checked',  55, 178.6, $is_switzerland);
-        $makeCheckbox('hongkong_checked',  78.5, 178.6, $is_hong_kong);
-        $makeCheckbox('dubai_checked',  100, 178.6, $is_dubai);
-        $makeCheckbox('other_checked',  33.5, 183.6, $is_other_country);
+        $makeCheckbox('singapore_checked',  33.5, 178.5, $is_singapore);
+        $makeCheckbox('switzerland_checked',  55, 178.5, $is_switzerland);
+        $makeCheckbox('hongkong_checked',  78.5, 178.5, $is_hong_kong);
+        $makeCheckbox('dubai_checked',  100, 178.5, $is_dubai);
+        $makeCheckbox('other_checked',  33.5, 183.5, $is_other_country);
 
         // ---- Save final ----
         $pdf->Output($finalPdfPath, 'F');

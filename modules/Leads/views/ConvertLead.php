@@ -8,16 +8,19 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-class Leads_ConvertLead_View extends Vtiger_Index_View {
+class Leads_ConvertLead_View extends Vtiger_Index_View
+{
 
-	public function requiresPermission(\Vtiger_Request $request) {
+	public function requiresPermission(\Vtiger_Request $request)
+	{
 		$permissions = parent::requiresPermission($request);
 		$permissions[] = array('module_parameter' => 'module', 'action' => 'DetailView', 'record_parameter' => 'record');
 		$permissions[] = array('module_parameter' => 'module', 'action' => 'ConvertLead', 'record_parameter' => 'record');
 		return $permissions;
 	}
 
-	function process(Vtiger_Request $request) {
+	function process(Vtiger_Request $request)
+	{
 		$currentUserPriviligeModel = Users_Privileges_Model::getCurrentUserPrivilegesModel();
 
 		$viewer = $this->getViewer($request);
@@ -25,13 +28,13 @@ class Leads_ConvertLead_View extends Vtiger_Index_View {
 		$moduleName = $request->getModule();
 
 		$recordModel = Vtiger_Record_Model::getInstanceById($recordId);
-        $imageDetails = $recordModel->getImageDetails();
-        if(php7_count($imageDetails)) {
-            $imageAttachmentId = $imageDetails[0]['id'];
-            $viewer->assign('IMAGE_ATTACHMENT_ID', $imageAttachmentId);
-        }
+		$imageDetails = $recordModel->getImageDetails();
+		if (php7_count($imageDetails)) {
+			$imageAttachmentId = $imageDetails[0]['id'];
+			$viewer->assign('IMAGE_ATTACHMENT_ID', $imageAttachmentId);
+		}
 		$moduleModel = $recordModel->getModule();
-		
+
 		$viewer->assign('MODULE', $moduleName);
 		$viewer->assign('USER_MODEL', Users_Record_Model::getCurrentUserModel());
 		$viewer->assign('CURRENT_USER_PRIVILEGE', $currentUserPriviligeModel);
@@ -47,11 +50,17 @@ class Leads_ConvertLead_View extends Vtiger_Index_View {
 		$contactField = Vtiger_Field_Model::getInstance('contact_id', $potentialModuleModel);
 		$viewer->assign('ACCOUNT_FIELD_MODEL', $accountField);
 		$viewer->assign('CONTACT_FIELD_MODEL', $contactField);
-		
+
 		$contactsModuleModel = Vtiger_Module_Model::getInstance('Contacts');
 		$accountField = Vtiger_Field_Model::getInstance('account_id', $contactsModuleModel);
+		$leadOrganisationId = $recordModel->get('organisation_id');
+		if (!empty($leadOrganisationId)) {
+			$wsOrgId = vtws_getWebserviceEntityId(getSalesEntityType($leadOrganisationId), $leadOrganisationId);
+			$accountField->set('fieldvalue', $wsOrgId);
+		}
+
 		$viewer->assign('CONTACT_ACCOUNT_FIELD_MODEL', $accountField);
-		
+
 		$viewer->view('ConvertLead.tpl', $moduleName);
 	}
 }
