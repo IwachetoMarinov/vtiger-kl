@@ -89,11 +89,6 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             $intent = Vtiger_Record_Model::getInstanceById($request->get('fromIntent'), 'GPMIntent');
         }
 
-        // echo "<pre>";
-        // echo "$docType.tpl";
-        // var_dump($average_spot_price);
-        // echo "</pre>";
-
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);
