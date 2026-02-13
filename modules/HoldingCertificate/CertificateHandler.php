@@ -56,13 +56,38 @@ class GPM_CertificateHandler
         return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
 
+    /**
+     * Generates a QR code PNG image for the given GUID.
+     *
+     * The QR code encodes a URL composed of the base URL and the provided GUID.
+     * The generated image is saved in the HoldingCertificate module directory
+     * using the GUID as the filename.
+     *
+     * Example:
+     *   If base_url = "https://example.com/certificate/"
+     *   and $guid = "abc123",
+     *   the QR will encode:
+     *     https://example.com/certificate/abc123
+     *   and will be saved as:
+     *     /modules/HoldingCertificate/abc123.png
+     *
+     * @param string $guid Unique identifier used to build the QR URL and filename.
+     *
+     * @return void
+     */
     protected function createQRCode($guid)
     {
         global $root_directory;
 
+        // Build the URL to be encoded in the QR code
         $text = $this->base_url . $guid;
+
+        // Define the output file path for the generated QR image
         $qrPath = $root_directory . '/modules/HoldingCertificate/' . $guid . '.png';
 
+        // Generate the QR code PNG file
+        // QR_ECLEVEL_H = high error correction level
+        // 10 = image size scaling factor
         QRcode::png($text, $qrPath, QR_ECLEVEL_H, 10);
     }
 

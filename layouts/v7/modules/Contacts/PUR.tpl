@@ -202,7 +202,7 @@
         </ul>
 
         <script type="text/javascript" src="layouts/v7/modules/Contacts/resources/PrintConf.js"></script>
-        {include file='TCPrintConf.tpl'|vtemplate_path:'Contacts'}
+        {include file='PURTCPrintConf.tpl'|vtemplate_path:'Contacts'}
     {/if}
 
     {assign var="start" value=0}
@@ -367,7 +367,13 @@
                                     <div style="float:left">
                                         {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg.
                                         No. {$COMPANY->get('company_reg_no')}){/if}<br>
-                                        {$COMPANY->get('company_address')}<br>
+                                        {$COMPANY->get('company_address')}
+
+                                        {if $COMPANY->get('city')}, {$COMPANY->get('city')}{/if}
+                                        {if $COMPANY->get('state')}, {$COMPANY->get('state')}{/if}
+                                        {if $COMPANY->get('code')}, {$COMPANY->get('code')}{/if}
+                                        {if $COMPANY->get('country')}, {$COMPANY->get('country')}{/if}
+                                        <br>
                                         T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
                                         {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
                                     </div>

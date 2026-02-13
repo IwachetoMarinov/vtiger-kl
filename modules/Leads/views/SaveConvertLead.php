@@ -74,6 +74,17 @@ class Leads_SaveConvertLead_View extends Vtiger_View_Controller
 			}
 		}
 		try {
+			// Add relation between Lead and Cleitn Organisation (Accounts) or Contact (Contacts) in case of conversion
+			// --- Copy Lead Organisation -> Contact Organisation Name (account_id) ---
+			$leadOrganisationId = $recordModel->get('organisation_id'); // CRMID like 123
+
+			if (!empty($leadOrganisationId) && !empty($entityValues['entities']['Contacts'])) {
+				// Convert to WS-ID (Accounts module internally)
+				$wsOrgId = vtws_getWebserviceEntityId(getSalesEntityType($leadOrganisationId), $leadOrganisationId);
+				$entityValues['entities']['Contacts']['account_id'] = $wsOrgId;
+			}
+
+
 			$result = vtws_convertlead($entityValues, $currentUser);
 		} catch (Exception $e) {
 			$this->showError($request, $e);

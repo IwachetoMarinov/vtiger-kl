@@ -166,6 +166,13 @@
             right: 0px;
             opacity: .4;
         }
+
+        .charge-item {
+            display: block;
+            padding-left: 5mm;
+            text-indent: -2mm;
+            line-height: 2;
+        }
     </style>
 </head>
 
@@ -260,7 +267,6 @@
                 </tr>
                 {assign var="spot_price" value="{$ERP_DOCUMENT->barItems[0]->spotPrice|default:0}"}
                 {assign var="metal" value="{$ERP_DOCUMENT->barItems[0]->metal|default:''}"}
-
                 <tr>
                     <td style="font-size: 9pt; height: 168mm; vertical-align: top;">
                         <table class="activity-tbl" style="margin-bottom:5mm">
@@ -274,7 +280,7 @@
                                 <td style="text-align: center;">{$ERP_DOCUMENT->documentDate}</td>
                                 <td style="width:25%;text-align: center;">{$metal}</td>
                                 <td style="width:25%;text-align: center;">{$ERP_DOCUMENT->currency}
-                                    {$ERP_DOCUMENT->fineOz} / OZ.</td>
+                                    {number_format($AVERAGE_SPOT_PRICE,2)} / OZ.</td>
                             </tr>
                         </table>
 
@@ -287,26 +293,27 @@
                                 <th style="width:25%;text-align: center">TOTAL {$ERP_DOCUMENT->currency}</th>
                             </tr>
                             <tr>
-                                <td style="height:50mm;border-bottom:none;vertical-align: top;line-height: 2">Storage
-                                    charge {if isset($metal) && $metal != "" } for <span
-                                        style="font-weight: 600;">{$metal}</span> {/if} for the period from
-                                    {$ERP_DOCUMENT->documentDate} to {$ERP_DOCUMENT->postingDate}:<br>
-                                    {foreach from=$ERP_DOCUMENT->barItems item=charge}
+                                <td style="height:50mm;border-bottom:none;vertical-align: top;line-height:2;">
+                                    Storage charge {if isset($metal) && $metal != ""} for <span
+                                        style="font-weight:600;">{$metal}</span>{/if}
+                                    for the period from {$ERP_DOCUMENT->documentDate} to
+                                    {$ERP_DOCUMENT->postingDate}:<br>
 
+                                    {foreach from=$ERP_DOCUMENT->barItems item=charge}
                                         {assign var="total" value=$charge->totalItemAmount}
                                         {assign var="calcTotal" value=$calcTotal+round($total,2)}
                                         {assign var="SUB_TOTAL" value=$SUB_TOTAL+round($total,2)}
-                                        &nbsp;&nbsp;&nbsp;&nbsp;- {$charge->description}<br>
+
+                                        <span class="charge-item">- {$charge->description}</span>
                                     {/foreach}
                                 </td>
+
                                 <td style="text-align:right;vertical-align: top;line-height: 2"><br>
                                     {foreach from=$ERP_DOCUMENT->barItems item=charge}
                                         {number_format($charge->totalItemAmount,2)}<br>
                                     {/foreach}
                                 </td>
                             </tr>
-
-                            {* Add 7 % to subtotal *}
 
                             {assign var="GST_AMOUNT" value=$SUB_TOTAL * $GST_RATE}
                             {assign var="TOTAL_WITH_GST" value=$SUB_TOTAL + $GST_AMOUNT}
@@ -320,21 +327,17 @@
 
                         <br>
                         <br>
-                        {* {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))} *}
-
-                            {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency)}
-                            {* <pre>{var_dump($exchangeRateInfo)}</pre>  *}
-                            {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
-                                <div>
-                                    {if $ERP_DOCUMENT->currency eq 'SGD'}
-                                        *Remarks: USD/SGD exchange rate at SGD {$exchangeRateInfo['rate']} / USD
-                                    {else}
-                                        *Remarks: {$ERP_DOCUMENT->currency}/SGD exchange rate at SGD
-                                        {$exchangeRateInfo['rate']} / {$ERP_DOCUMENT->currency}
-                                    {/if}
-                                </div>
-                            {/if}
-                        {* {/if} *}
+                        {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency)}
+                        {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
+                            <div>
+                                {if $ERP_DOCUMENT->currency eq 'SGD'}
+                                    *Remarks: USD/SGD exchange rate at SGD {$exchangeRateInfo['rate']} / USD
+                                {else}
+                                    *Remarks: {$ERP_DOCUMENT->currency}/SGD exchange rate at SGD
+                                    {$exchangeRateInfo['rate']} / {$ERP_DOCUMENT->currency}
+                                {/if}
+                            </div>
+                        {/if}
                         <br>
                         <br>
                         <div>
@@ -373,7 +376,13 @@
                         {if isset($COMPANY)}
                             {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
                             {$COMPANY->get('company_reg_no')}){/if}<br>
-                            {$COMPANY->get('company_address')}<br>
+                            {$COMPANY->get('company_address')}
+
+                            {if $COMPANY->get('city')}, {$COMPANY->get('city')} {/if}
+                            {if $COMPANY->get('state')}, {$COMPANY->get('state')} {/if}
+                            {if $COMPANY->get('code')}, {$COMPANY->get('code')} {/if}
+                            {if $COMPANY->get('country')}, {$COMPANY->get('country')} {/if}
+                            <br>
                             T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
                             {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
                         {/if}

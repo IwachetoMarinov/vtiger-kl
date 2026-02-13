@@ -151,7 +151,7 @@
 
         /* Additional Sections */
         .additional-section {
-            margin: 4mm 0;
+            margin: 2mm 0;
             line-height: 1.4;
         }
 
@@ -188,14 +188,14 @@
 
         /* Signature Section */
         .signature-section {
-            margin-top: 2mm;
+            margin-top: 0.5mm;
             padding: 0 4mm;
         }
 
         .signature-section-item {
             display: flex;
             justify-content: space-between;
-            margin-top: 4mm;
+            margin-top: 2mm;
         }
 
         .signature-section-left {
@@ -214,6 +214,8 @@
         .company-data {
             display: flex;
             border: 1px solid #000;
+            max-height: 183px;
+            height: 183px;
         }
 
         .company-data-item {
@@ -322,23 +324,11 @@
             display: inline-block;
             width: 5mm;
             height: 5mm;
-            border: 0.3mm solid #000;
+            border: 0.3mm solid transparent;
             vertical-align: middle;
             position: relative;
             margin-right: 2mm;
             box-sizing: border-box;
-        }
-
-        .pdf-checkbox.checked::after {
-            content: "";
-            position: absolute;
-            left: 1.2mm;
-            top: 0.2mm;
-            width: 1.6mm;
-            height: 2.8mm;
-            border-right: 0.6mm solid #000;
-            border-bottom: 0.6mm solid #000;
-            transform: rotate(45deg);
         }
 
         .pdf-checkbox-label {
@@ -493,13 +483,23 @@
                             {if isset($COMPANY)}
                                 {$COMPANY->get('company_address')}
                             {/if}
+                            <br />
+                            {if isset($COMPANY)}
+                                {if !empty($COMPANY->get('city'))}
+                                    {$COMPANY->get('city')},
+                                {/if}
+                                {$COMPANY->get('state')} {$COMPANY->get('code')}<br>
+                                {$COMPANY->get('country')}
+                            {/if}
                         </div>
                     </div>
                     <div class="number-container">
                         {if isset($COMPANY)}
-                            {if !empty($COMPANY->get('company_fax'))} <p>Fax no: <span
-                                    style="font-style: italic;">{$COMPANY->get('company_fax')}</span> or</p> {/if}
-                            <p>Email:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
+                            {if !empty($COMPANY->get('email'))}
+                                <p>Contact:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
+                            {/if}
+                            {if !empty($COMPANY->get('company_phone'))} <p>or <span
+                                    style="font-style: italic;">{$COMPANY->get('company_phone')}</span> or</p> {/if}
                         {/if}
                     </div>
                 </div>
@@ -599,8 +599,7 @@
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="1"> Singapore
                             {else}
-                                <span
-                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 1}checked{/if}"></span>
+                                <span class="pdf-checkbox"></span>
                                 <span class="pdf-checkbox-label">Singapore</span>
                             {/if}
                         </div>
@@ -608,8 +607,7 @@
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="2"> Switzerland
                             {else}
-                                <span
-                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 2}checked{/if}"></span>
+                                <span class="pdf-checkbox"></span>
                                 <span class="pdf-checkbox-label">Switzerland</span>
                             {/if}
                         </div>
@@ -617,8 +615,7 @@
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="3"> Hong Kong
                             {else}
-                                <span
-                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 3}checked{/if}"></span>
+                                <span class="pdf-checkbox"></span>
                                 <span class="pdf-checkbox-label">Hong Kong</span>
                             {/if}
                         </div>
@@ -626,8 +623,7 @@
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="4"> Dubai
                             {else}
-                                <span
-                                    class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 4}checked{/if}"></span>
+                                <span class="pdf-checkbox"></span>
                                 <span class="pdf-checkbox-label">Dubai</span>
                             {/if}
                         </div>
@@ -644,9 +640,9 @@
                                             style="width:60mm; margin-left:2mm;" />
                                     </div>
                                 {else}
-                                    <span
-                                        class="pdf-checkbox {if isset($COUNTRY_OPTION) && $COUNTRY_OPTION == 5}checked{/if}"></span>
-                                    <span class="pdf-checkbox-label">Other country or location (Please specify): {$CUSTOM_COUNTRY|default:''}</span>
+                                    <span class="pdf-checkbox"></span>
+                                    <span class="pdf-checkbox-label">Other country or location (Please specify):
+                                        {$CUSTOM_COUNTRY|default:''}</span>
                                 {/if}
                             </div>
                         </div>
@@ -664,7 +660,7 @@
             </div>
 
             <!-- SECTION 3 -->
-            <div class="additional-section ">
+            <div class="additional-section" style="margin-bottom: 1mm;">
                 <div style="margin-bottom:2mm;" class="bolder-element">
                     3. I/We make the payment of the Shipping and Storage Fees:
                 </div>
@@ -724,7 +720,7 @@
 
 
             <!-- SECTION 2 -->
-            <div class="additional-section ">
+            <div class="additional-section" style="margin-top: 0;">
                 <div style="margin-bottom:2mm;" class="bolder-element">
                     4. This Shipment & Storage Order and any agreement with GPM resulting therefrom shall be subject to
                     and governed by the terms and conditions of the Customer Metal Agreement executed and entered into
@@ -739,7 +735,7 @@
                         <div class="editable-input-wrapper">
                             <span> Place:</span> <input type="text" name="place_input" class="custom-editable-input" />
                         </div>
-                        <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
                             <span>Date:</span> <input type="text" name="date_input" class="custom-editable-input" />
                         </div>
                     </div>
@@ -749,14 +745,14 @@
                             <span> Signed by: </span>
                             <input type="text" name="signed_by" class="custom-editable-input" />
                         </div>
-                        <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
                             <span> On behalf of:</span>
                             <input type="text" name="on_behalf_of" class="custom-editable-input" />
                         </div>
                     </div>
                 </div>
 
-                <div style="margin-top:10mm;">
+                <div style="margin-top:7.5mm;">
                     <div class="signature-line">...............................................</div><br>
                     Signature
                 </div>

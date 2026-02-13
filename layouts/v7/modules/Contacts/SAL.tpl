@@ -394,11 +394,11 @@
                             </table>
                             <br>
                             <br>
-                            
+
                             {* {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))} *}
-                            
-                            {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency)}
-                            {* <pre>{var_dump($exchangeRateInfo)}</pre> *}
+
+                                {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency)}
+                                {* <pre>{var_dump($exchangeRateInfo)}</pre> *}
                                 {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
                                     <div>
                                         {if $ERP_DOCUMENT->currency eq 'SGD'}
@@ -456,7 +456,13 @@
                             {if isset($COMPANY)}
                                 {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
                                 {$COMPANY->get('company_reg_no')}){/if}<br>
-                                {$COMPANY->get('company_address')}<br>
+                                {$COMPANY->get('company_address')}
+
+                                {if $COMPANY->get('city')}, {$COMPANY->get('city')}{/if}
+                                {if $COMPANY->get('state')}, {$COMPANY->get('state')}{/if}
+                                {if $COMPANY->get('code')}, {$COMPANY->get('code')}{/if}
+                                {if $COMPANY->get('country')}, {$COMPANY->get('country')}{/if}
+                                <br>
                                 T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
                                 {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
                             {/if}

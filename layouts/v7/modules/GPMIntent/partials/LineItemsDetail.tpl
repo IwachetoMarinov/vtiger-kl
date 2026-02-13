@@ -55,11 +55,11 @@
                             </td>
 
                             <td>
-                                $ {$LINE->get('premium_or_discount_usd')|number_format:2}
+                                {$CURRENCY} {$LINE->get('premium_or_discount_usd')|number_format:2}
                             </td>
 
                             <td>
-                                $ {$LINE->get('value_usd')|number_format:2}
+                                {$CURRENCY} {$LINE->get('value_usd')|number_format:2}
                             </td>
                         </tr>
                     {/foreach}
@@ -77,11 +77,11 @@
                         <td></td>
 
                         <td style="font-size:10pt;font-weight:bold;">
-                            ${$RECORD->get('total_amount')|number_format:2}
+                            {$CURRENCY} {$RECORD->get('total_amount')|number_format:2}
                         </td>
                     </tr>
 
-                  
+
                 {else}
                     <tr>
                         <td colspan="6" style="text-align:center;padding:20px;">

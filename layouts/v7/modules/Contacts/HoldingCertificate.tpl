@@ -231,8 +231,7 @@
           <div id="QRCode">
             <img src="{$site_URL}modules/HoldingCertificate/{$GUID}.png" alt="Please scan to verify">
             <p>
-              <a target="_blank"
-                href="https://certificates.global-precious-metals.com/id/{$GUID}">
+              <a target="_blank" href="https://certificates.global-precious-metals.com/id/{$GUID}">
                 https://certificates.global-precious-metals.com/id/{$GUID}
               </a>
             </p>
@@ -259,7 +258,8 @@
 
                 {foreach item=HOLDINGS key=location from=$ERP_HOLDINGS}
                   {foreach item=HOLDING from=$HOLDINGS}
-                    <span style="display:inline-block; width: 20px;"></span>-<span style="display:inline-block; width: 20px;"></span>
+                    <span style="display:inline-block; width: 20px;"></span>-<span
+                      style="display:inline-block; width: 20px;"></span>
                     {number_format($HOLDING.quantity,0)} {$HOLDING.metal} {$HOLDING.description}
                     {if !empty($HOLDING.serial_no)}- Serial {$HOLDING.serial_no}{/if}<br>
                   {/foreach}
@@ -275,20 +275,23 @@
 
                 How to verify certificate validity:<br><br>
 
-                <span style="display:inline-block; width: 20px;"></span>1.<span style="display:inline-block; width: 20px;"></span>
-                Scan QR code or click on url on the top right of this document. The linked page will indicate the status of the
+                <span style="display:inline-block; width: 20px;"></span>1.<span
+                  style="display:inline-block; width: 20px;"></span>
+                Scan QR code or click on url on the top right of this document. The linked page will indicate the status
+                of the
                 certificate.<br>
 
-                <span style="display:inline-block; width: 20px;"></span>2.<span style="display:inline-block; width: 20px;"></span>
-                The page will also indicate the file checksum of the certificate (SHA256 protocol). If you have received this
+                <span style="display:inline-block; width: 20px;"></span>2.<span
+                  style="display:inline-block; width: 20px;"></span>
+                The page will also indicate the file checksum of the certificate (SHA256 protocol). If you have received
+                this
                 document as a PDF, use an online or offline SHA256 calculator to confirm that the validity refers to the
                 document in your possession. You can also download the document from the page.<br>
               </p>
             </div>
 
             <div id="signature">
-              <img src="{$site_URL}layouts/v7/modules/HoldingCertificate/nico_sig.png"
-                alt="Signature">
+              <img src="{$site_URL}layouts/v7/modules/HoldingCertificate/nico_sig.png" alt="Signature">
               <p style="color:black;">Nicolas Mathier<br>CEO</p>
             </div>
           </div>
@@ -307,7 +310,13 @@
             {/if}
           </p>
           <p class="companyMeta">
-            {$COMPANY->get('company_address')}<br>
+            {$COMPANY->get('company_address')}
+
+            {if $COMPANY->get('city')}, {$COMPANY->get('city')}{/if}
+            {if $COMPANY->get('state')}, {$COMPANY->get('state')}{/if}
+            {if $COMPANY->get('code')}, {$COMPANY->get('code')}{/if}
+            {if $COMPANY->get('country')}, {$COMPANY->get('country')}{/if}
+            <br>
             T: {$COMPANY->get('company_phone')}
             {if !empty($COMPANY->get('company_fax'))}| Fax: {$COMPANY->get('company_fax')}{/if}
             | {$COMPANY->get('company_website')}<br>

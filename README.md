@@ -245,8 +245,7 @@ WHERE fieldlabel = 'Contact Name'
 
   37.2 Update field name `UPDATE vtiger_field SET fieldlabel = 'Client Name' WHERE fieldlabel = 'Contact Name'   AND tabid = (SELECT tabid FROM vtiger_tab WHERE name='Potentials');`
 
-
-
-   
-
-<!-- mysql -u vtigeruser -p -e "USE vtiger_gpm; SELECT id,user_name,is_admin FROM vtiger_users;" -->
+38. Export LIVE database 
+    38.1 Make backup for database `mysqldump -u vtigeruser -p vtiger_gpm > db_backups/backup.sql`
+    38.2 Download file with absolupe pahe
+    38.3 remove file `rm /tmp/backup.sql.gz`

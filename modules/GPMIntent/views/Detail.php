@@ -9,6 +9,8 @@
  * All Rights Reserved.
  * *********************************************************************************** */
 
+// ini_set('display_errors', 1); error_reporting(E_ALL);
+
 class GPMIntent_Detail_View extends Vtiger_Detail_View
 {
 	public function getDetailViewLinks($linkParams)
@@ -45,7 +47,27 @@ class GPMIntent_Detail_View extends Vtiger_Detail_View
 		$recordId = $request->get('record');
 		$products = GPMIntent_Line_Model::getInstanceByIntent($recordId);
 
+		$recordModel = Vtiger_Record_Model::getInstanceById($recordId);
+		$moduleName  = $recordModel->getModuleName();
+
+		// Get module model properly
+		$moduleModel = Vtiger_Module_Model::getInstance($moduleName);
+
+		$currencyValue = null;
+
+		// THIS is correct place to call getFields()
+		foreach ($moduleModel->getFields() as $fieldModel) {
+
+			if (strcasecmp(trim($fieldModel->get('label')), 'Currency') === 0) {
+
+				$realFieldName = $fieldModel->get('name');
+				$currencyValue = $recordModel->get($realFieldName);
+				break;
+			}
+		}
+
 		$viewer = $this->getViewer($request);
+		$viewer->assign('CURRENCY', $currencyValue);
 		$viewer->assign('RELATED_PRODUCTS', $products);
 
 		return parent::showModuleBasicView($request);
