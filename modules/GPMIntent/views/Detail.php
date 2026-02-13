@@ -8,8 +8,9 @@
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
  * *********************************************************************************** */
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+
+// ini_set('display_errors', 1); error_reporting(E_ALL);
+
 class GPMIntent_Detail_View extends Vtiger_Detail_View
 {
 	public function getDetailViewLinks($linkParams)
