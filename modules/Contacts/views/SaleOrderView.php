@@ -1,7 +1,5 @@
 <?php
 
-// ini_set('display_errors', 1); error_reporting(E_ALL);
-
 include_once 'modules/Contacts/download/SaleOrderDownload.php';
 
 class Contacts_SaleOrderView_View extends Vtiger_Index_View

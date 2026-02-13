@@ -2,6 +2,7 @@
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
+include_once 'modules/Contacts/download/StockTransferOrderDownload.php';
 
 class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
 {
@@ -70,7 +71,8 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
 
         if ($request->get('PDFDownload')) {
             $html = $viewer->view("STO.tpl", $moduleName, true);
-            $this->downloadPDF($html, $request);
+            // $this->downloadPDF($html, $request);
+            StockTransferOrderDownload::process($html, $recordModel, $request);
         } else {
             $viewer->view("STO.tpl", $moduleName);
         }
