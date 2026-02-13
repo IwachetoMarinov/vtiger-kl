@@ -2,6 +2,16 @@
 
 class SaleOrderDownload
 {
+    /**
+     * HTML -> PDF via wkhtmltopdf, then overlay ONE PDF form field (serial_numbers),
+     * and download.
+     *
+     * Query param used:
+     *   serial_numbers
+     *
+     * Use &debug=1 to draw a grid and adjust coordinates.
+     */
+
     public static function process($html, $recordModel, Vtiger_Request $request)
     {
         global $root_directory;
@@ -299,7 +309,6 @@ class SaleOrderDownload
                 );
             }
         }
-
 
         // ---- Save final ----
         $pdf->Output($finalPdfPath, 'F');
