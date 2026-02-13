@@ -166,6 +166,13 @@
             right: 0px;
             opacity: .4;
         }
+
+        .charge-item {
+            display: block;
+            padding-left: 5mm;
+            text-indent: -2mm;
+            line-height: 2;
+        }
     </style>
 </head>
 
@@ -286,18 +293,21 @@
                                 <th style="width:25%;text-align: center">TOTAL {$ERP_DOCUMENT->currency}</th>
                             </tr>
                             <tr>
-                                <td style="height:50mm;border-bottom:none;vertical-align: top;line-height: 2">Storage
-                                    charge {if isset($metal) && $metal != "" } for <span
-                                        style="font-weight: 600;">{$metal}</span> {/if} for the period from
-                                    {$ERP_DOCUMENT->documentDate} to {$ERP_DOCUMENT->postingDate}:<br>
-                                    {foreach from=$ERP_DOCUMENT->barItems item=charge}
+                                <td style="height:50mm;border-bottom:none;vertical-align: top;line-height:2;">
+                                    Storage charge {if isset($metal) && $metal != ""} for <span
+                                        style="font-weight:600;">{$metal}</span>{/if}
+                                    for the period from {$ERP_DOCUMENT->documentDate} to
+                                    {$ERP_DOCUMENT->postingDate}:<br>
 
+                                    {foreach from=$ERP_DOCUMENT->barItems item=charge}
                                         {assign var="total" value=$charge->totalItemAmount}
                                         {assign var="calcTotal" value=$calcTotal+round($total,2)}
                                         {assign var="SUB_TOTAL" value=$SUB_TOTAL+round($total,2)}
-                                        &nbsp;&nbsp;&nbsp;&nbsp;- {$charge->description}<br>
+
+                                        <span class="charge-item">- {$charge->description}</span>
                                     {/foreach}
                                 </td>
+
                                 <td style="text-align:right;vertical-align: top;line-height: 2"><br>
                                     {foreach from=$ERP_DOCUMENT->barItems item=charge}
                                         {number_format($charge->totalItemAmount,2)}<br>
