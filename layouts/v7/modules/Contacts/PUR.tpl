@@ -202,7 +202,7 @@
         </ul>
 
         <script type="text/javascript" src="layouts/v7/modules/Contacts/resources/PrintConf.js"></script>
-        {include file='TCPrintConf.tpl'|vtemplate_path:'Contacts'}
+        {include file='PURTCPrintConf.tpl'|vtemplate_path:'Contacts'}
     {/if}
 
     {assign var="start" value=0}
