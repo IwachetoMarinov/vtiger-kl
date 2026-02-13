@@ -37,6 +37,8 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $activity = new dbo_db\ActivitySummary();
         $activity_data = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
+        $average_spot_price = $this->getAverageSpotPrice($activity_data['barItems'] ?? []);
+
         $docType = $activity_data['voucherType'] ?? "";
         $erpDoc = (object) $activity_data;
 
@@ -87,6 +89,11 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             $intent = Vtiger_Record_Model::getInstanceById($request->get('fromIntent'), 'GPMIntent');
         }
 
+        // echo "<pre>";
+        // echo "$docType.tpl";
+        // var_dump($average_spot_price);
+        // echo "</pre>";
+
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);
@@ -95,6 +102,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('INTENT', $intent);
         $viewer->assign('COMPANY', $companyRecord);
+        $viewer->assign('AVERAGE_SPOT_PRICE', $average_spot_price);
         $viewer->assign('PAGES', $this->makeDataPage($erpDoc->barItems, $docType));
         if ($request->get('PDFDownload')) {
             $html = $viewer->view("$docType.tpl", $moduleName, true);
@@ -127,6 +135,23 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         ];
 
         return $metal_names[$code] ?? '';
+    }
+
+    protected function getAverageSpotPrice($items)
+    {
+        $totalSpotPrice = 0.00;
+        $count = 0;
+
+        if(empty($items)) return $totalSpotPrice;
+
+        foreach ($items as $item) {
+            if (isset($item->averageSpotPrice) && $item->averageSpotPrice > 0) {
+                $totalSpotPrice += $item->averageSpotPrice;
+                $count++;
+            }
+        }
+
+        return $count > 0 ? round($totalSpotPrice / $count, 2) : 0.00;
     }
 
     public function postProcess(Vtiger_Request $request) {}

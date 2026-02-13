@@ -149,7 +149,6 @@ class ActivitySummary
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
         if (count($summary) === 0) return [];
-
         $row = $summary[0];
 
         return [
@@ -203,6 +202,7 @@ class ActivitySummary
 
                 'taxAmount'         => isset($item['Tx_Amt']) ? (float)$item['Tx_Amt'] : 0.00,
                 'spotPrice'         => isset($item['Spot_Price']) ? (float)$item['Spot_Price'] : 0.00,
+                'averageSpotPrice'  => isset($item['Avg_Spot_Price']) ? (float)$item['Avg_Spot_Price'] : 0.00,
 
                 'postingDate'       =>
                 isset($item['Appr_Date']) && $item['Appr_Date'] instanceof \DateTime

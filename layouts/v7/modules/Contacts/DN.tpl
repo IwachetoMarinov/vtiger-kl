@@ -260,7 +260,6 @@
                 </tr>
                 {assign var="spot_price" value="{$ERP_DOCUMENT->barItems[0]->spotPrice|default:0}"}
                 {assign var="metal" value="{$ERP_DOCUMENT->barItems[0]->metal|default:''}"}
-
                 <tr>
                     <td style="font-size: 9pt; height: 168mm; vertical-align: top;">
                         <table class="activity-tbl" style="margin-bottom:5mm">
@@ -274,7 +273,7 @@
                                 <td style="text-align: center;">{$ERP_DOCUMENT->documentDate}</td>
                                 <td style="width:25%;text-align: center;">{$metal}</td>
                                 <td style="width:25%;text-align: center;">{$ERP_DOCUMENT->currency}
-                                    {$ERP_DOCUMENT->fineOz} / OZ.</td>
+                                    {number_format($AVERAGE_SPOT_PRICE,2)} / OZ.</td>
                             </tr>
                         </table>
 
@@ -306,8 +305,6 @@
                                 </td>
                             </tr>
 
-                            {* Add 7 % to subtotal *}
-
                             {assign var="GST_AMOUNT" value=$SUB_TOTAL * $GST_RATE}
                             {assign var="TOTAL_WITH_GST" value=$SUB_TOTAL + $GST_AMOUNT}
 
@@ -320,21 +317,17 @@
 
                         <br>
                         <br>
-                        {* {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))} *}
-
-                            {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency)}
-                            {* <pre>{var_dump($exchangeRateInfo)}</pre>  *}
-                            {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
-                                <div>
-                                    {if $ERP_DOCUMENT->currency eq 'SGD'}
-                                        *Remarks: USD/SGD exchange rate at SGD {$exchangeRateInfo['rate']} / USD
-                                    {else}
-                                        *Remarks: {$ERP_DOCUMENT->currency}/SGD exchange rate at SGD
-                                        {$exchangeRateInfo['rate']} / {$ERP_DOCUMENT->currency}
-                                    {/if}
-                                </div>
-                            {/if}
-                        {* {/if} *}
+                        {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency)}
+                        {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
+                            <div>
+                                {if $ERP_DOCUMENT->currency eq 'SGD'}
+                                    *Remarks: USD/SGD exchange rate at SGD {$exchangeRateInfo['rate']} / USD
+                                {else}
+                                    *Remarks: {$ERP_DOCUMENT->currency}/SGD exchange rate at SGD
+                                    {$exchangeRateInfo['rate']} / {$ERP_DOCUMENT->currency}
+                                {/if}
+                            </div>
+                        {/if}
                         <br>
                         <br>
                         <div>

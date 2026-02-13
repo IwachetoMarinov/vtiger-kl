@@ -93,10 +93,6 @@
             font-size: 20pt;
         }
 
-        .hidden {
-            /*display: none;*/
-        }
-
         table.content-table th {
             border: 1px dotted #666666;
             font-size: 10pt;
@@ -256,6 +252,7 @@
                         All amounts in {$ERP_DOCUMENT->currency}
                     </td>
                 </tr>
+                <pre>{var_dump($AVERAGE_SPOT_PRICE)}</pre>
                 <tr>
                     <td style="font-size: 9pt; height: 168mm; vertical-align: top;">
                         <table class="activity-tbl" style="margin-bottom:5mm">
@@ -269,7 +266,7 @@
                                 <td style="text-align: center;">{$ERP_DOCUMENT['docDate']}</td>
                                 <td style="width:25%;text-align: center;">{$ERP_DOCUMENT['metal']}</td>
                                 <td style="width:25%;text-align: center;">{$ERP_DOCUMENT->currency}
-                                    {$ERP_DOCUMENT['metalOz']} / Oz.</td>
+                                    {$ERP_DOCUMENT['metalOz']} {number_format($AVERAGE_SPOT_PRICE,2)} / Oz.</td>
                             </tr>
                         </table>
                         <table class="activity-tbl">
