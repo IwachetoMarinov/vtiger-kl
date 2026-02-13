@@ -45,7 +45,12 @@ class GPMIntent_Detail_View extends Vtiger_Detail_View
 		$recordId = $request->get('record');
 		$products = GPMIntent_Line_Model::getInstanceByIntent($recordId);
 
+		$recordModel = Vtiger_Record_Model::getInstanceById($recordId);
+
+		$currency = $recordModel->get('cf_1132');
+
 		$viewer = $this->getViewer($request);
+		$viewer->assign('CURRENCY', $currency);
 		$viewer->assign('RELATED_PRODUCTS', $products);
 
 		return parent::showModuleBasicView($request);
