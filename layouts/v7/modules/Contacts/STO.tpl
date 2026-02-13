@@ -496,9 +496,9 @@
                     <div class="number-container">
                         {if isset($COMPANY)}
                             {if !empty($COMPANY->get('email'))}
-                                <p>EMAIL:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
+                                <p>Contact:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
                             {/if}
-                            {if !empty($COMPANY->get('company_phone'))} <p>or PHONE: <span
+                            {if !empty($COMPANY->get('company_phone'))} <p>or <span
                                     style="font-style: italic;">{$COMPANY->get('company_phone')}</span> or</p> {/if}
                         {/if}
                     </div>

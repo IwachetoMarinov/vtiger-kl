@@ -337,7 +337,7 @@ $totalAmt = Vtiger_Field::getInstance('total_amount', $module);
 if (!$totalAmt) {
     $totalAmt = new Vtiger_Field();
     $totalAmt->name       = 'total_amount';
-    $totalAmt->label      = 'Total Amount (USD)';
+    $totalAmt->label      = 'Total Amount';
     $totalAmt->table      = $module->basetable;
     $totalAmt->column     = 'total_amount';
     $totalAmt->columntype = 'DECIMAL(24,4)';
