@@ -36,9 +36,7 @@ class PurchaseOrderDownload
             [
                 'namePattern' => 'metal_{r}_weight_{c}',
                 'startX' => 57.3,
-                // 'startY' => 111.0,
-                // ONLY for test
-                'startY' => 111.0 + 5.0,
+                'startY' => 111.0,
                 'cellW'  => 13.57,
                 'cellH'  => 6.25,
                 'rows'   => 4,
