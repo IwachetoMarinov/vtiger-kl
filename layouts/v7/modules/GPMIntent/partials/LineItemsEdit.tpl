@@ -110,7 +110,7 @@
                             <input type="number" class="form-control item_premium_usd" id="premium_usd_{$INDEX+1}" name="premium_usd[]" value="{$LINE->get('premium_or_discount_usd')}" required="">
                         </div>
                         <div class="col-md-2 col-sm-3 col-xs-12">
-                            <input type="text" class="form-control item_value_usd"  id="value_usd_{$INDEX+1}" name="value_usd[]" value="{$LINE->get('value_usd')}" readonly=true>
+                            <input type="text" class="form-control item_value_usd"  id="value_usd_{$INDEX+1}" name="value_usd[]" value="{$LINE->get('value_usd')|number_format:2:'.':','}" readonly=true>
                         </div>
                         <div class="col-md-1 col-sm-3 col-xs-12">
                         </div>
@@ -144,7 +144,7 @@
                     </div>
                     <div class="col-md-2 col-sm-3 col-xs-12">
                     {if $MODE eq 'edit'}
-                        <input type="text" class="form-control" id="total_amount" name="total_amount" value="{$RECORD->get('total_amount')}" readonly required="">
+                        <input type="text" class="form-control" id="total_amount" name="total_amount" value="{$RECORD->get('total_amount')|number_format:2:'.':','}" readonly required="">
                     {else}
                         <input type="text" class="form-control" id="total_amount" name="total_amount" value="" readonly required="">
                     {/if}
