@@ -182,8 +182,7 @@ class CollectionRequestDownload
         $descH  = 9.6;
 
         // row positioning
-        $startY  = 95.5;
-        // $startY  = 89.5;
+        $startY  = 89.5;
         $rowStep = 11.7;
 
         // table geometry
