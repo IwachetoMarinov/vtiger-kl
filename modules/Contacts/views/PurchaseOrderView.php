@@ -1,5 +1,7 @@
 <?php
 
+include_once 'modules/Contacts/download/PurchaseOrderDownload.php';
+
 class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
 {
 
@@ -68,7 +70,8 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
 
         if ($request->get('PDFDownload')) {
             $html = $viewer->view("PO.tpl", $moduleName, true);
-            $this->downloadPDF($html, $request);
+            // $this->downloadPDF($html, $request);
+            PurchaseOrderDownload::process($html, $recordModel, $request);
         } else {
             $viewer->view("PO.tpl", $moduleName);
         }
