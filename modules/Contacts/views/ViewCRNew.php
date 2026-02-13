@@ -2,10 +2,7 @@
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
-
-// ini_set('display_errors', 1);error_reporting(E_ALL);
-
-use TCPDF;
+include_once 'modules/Contacts/download/CollectionRequestDownload.php';
 
 class Contacts_ViewCRNew_View extends Vtiger_Index_View
 {
@@ -52,7 +49,8 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
 
         if ($request->get('PDFDownload')) {
             $html = $viewer->view("NCR.tpl", $moduleName, true);
-            $this->downloadPDF($html, $request);
+            // $this->downloadPDF($html, $request);
+            CollectionRequestDownload::process($html, $recordModel, $request);
         } else {
             $viewer->view("NCR.tpl", $moduleName);
         }
@@ -130,12 +128,6 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
         if (@file_put_contents($htmlPath, $html) === false) {
             die('Cannot write HTML file: ' . $htmlPath);
         }
-
-        // $cmd = "wkhtmltopdf --enable-local-file-access "
-        //     . "--page-size A4 --dpi 96 --zoom 1 "
-        //     . "--margin-top 0 --margin-right 0 --margin-bottom 0 --margin-left 0 "
-        //     . "--disable-smart-shrinking "
-        //     . escapeshellarg($htmlPath) . " " . escapeshellarg($basePdfPath) . " 2>&1";
 
         $cmd = "wkhtmltopdf --enable-local-file-access "
             . "--page-size A4 --dpi 96 --zoom 1 "
