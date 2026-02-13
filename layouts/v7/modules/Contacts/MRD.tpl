@@ -328,7 +328,13 @@
                                         {$COMPANY->get('company_name')}
                                         {if $COMPANY->get('company_reg_no')} (Co. Reg. No.
                                         {$COMPANY->get('company_reg_no')}){/if}<br>
-                                        {$COMPANY->get('company_address')}<br>
+                                        {$COMPANY->get('company_address')}
+
+                                        {if $COMPANY->get('city')}, {$COMPANY->get('city')}{/if}
+                                        {if $COMPANY->get('state')}, {$COMPANY->get('state')}{/if}
+                                        {if $COMPANY->get('code')}, {$COMPANY->get('code')}{/if}
+                                        {if $COMPANY->get('country')}, {$COMPANY->get('country')}{/if}
+                                        <br>
                                         T: {$COMPANY->get('company_phone')}
                                         {if $COMPANY->get('company_fax')} | Fax: {$COMPANY->get('company_fax')} {/if}
                                         | {$COMPANY->get('company_website')}<br>

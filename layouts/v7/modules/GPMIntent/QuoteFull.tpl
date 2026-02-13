@@ -97,7 +97,7 @@
                 </tr>
                 <tr>
                     <td style="text-align: right;font-size: 9pt">
-                       All amounts in {if isset($INTENT_CURRENCY)}{$INTENT_CURRENCY}{else}currency{/if}
+                        All amounts in {if isset($INTENT_CURRENCY)}{$INTENT_CURRENCY}{else}currency{/if}
                     </td>
                 </tr>
                 <tr>
@@ -173,7 +173,13 @@
                         {if isset($COMPANY)}
                             {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
                             {$COMPANY->get('company_reg_no')}){/if}<br>
-                            {$COMPANY->get('company_address')}<br>
+                            {$COMPANY->get('company_address')}
+
+                            {if $COMPANY->get('city')}, {$COMPANY->get('city')}{/if}
+                            {if $COMPANY->get('state')}, {$COMPANY->get('state')}{/if}
+                            {if $COMPANY->get('code')}, {$COMPANY->get('code')}{/if}
+                            {if $COMPANY->get('country')}, {$COMPANY->get('country')}{/if}
+                            <br>
                             T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
                             {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
                         {/if}
