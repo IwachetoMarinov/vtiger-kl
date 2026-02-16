@@ -17,7 +17,10 @@ class PurchaseOrderDownload
             'h' => 5.5,
             'style' => ['border' => 0],
             // base default appearance for text fields
-            'opts' => ['da' => '/Helv 6.5 Tf 0 g'],
+            'opts' => [
+                'da' => '/Helv 5.5 Tf 0 g',
+                'q'  => 1, // <-- center align (PDF /Q = 1)
+            ],
         ],
 
         'fields' => [
