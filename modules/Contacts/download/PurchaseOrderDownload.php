@@ -38,7 +38,7 @@ class PurchaseOrderDownload
                 'startX' => 57.5,
                 'startY' => 110.6,
                 'cellW'  => 13.54,
-                'cellH'  => 6.32,
+                'cellH'  => 6.35,
                 'rows'   => 4,
                 'cols'   => 9,
                 'padX'   => 0.6,
