@@ -302,6 +302,11 @@
             border-bottom: 1px dotted #000;
         }
 
+        .metals-table .custom-editable-input {
+            padding-top: 0.5mm;
+            padding-bottom: 0.5mm;
+        }
+
         .custom-editable-input:focus {
             outline: none;
         }
@@ -489,7 +494,7 @@
                                 <p>Contact:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
                             {/if}
                             {if !empty($COMPANY->get('company_phone'))} <p>or <span
-                                    style="font-style: italic;">{$COMPANY->get('company_phone')}</span> or</p> {/if}
+                                    style="font-style: italic;">{$COMPANY->get('company_phone')}</span></p> {/if}
                         {/if}
                     </div>
                 </div>
