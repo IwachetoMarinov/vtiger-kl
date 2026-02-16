@@ -35,14 +35,14 @@ class PurchaseOrderDownload
         'grids' => [
             [
                 'namePattern' => 'metal_{r}_weight_{c}',
-                'startX' => 57.3,
+                'startX' => 57.5,
                 'startY' => 110.6,
-                'cellW'  => 13.57,
+                'cellW'  => 13.54,
                 'cellH'  => 6.3,
                 'rows'   => 4,
                 'cols'   => 9,
                 'padX'   => 0.6,
-                'padY'   => 0.33,
+                'padY'   => 0.36,
                 'innerPad' => 1.2,
                 'opts' => ['da' => '/Helv 5.5 Tf 0 g'],
             ],
