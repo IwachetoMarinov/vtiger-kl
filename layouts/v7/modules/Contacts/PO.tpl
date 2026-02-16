@@ -191,13 +191,10 @@
         .company-data {
             display: flex;
             border: 1px solid #000;
-            /* max-height: 183px; */
-            /* height: 183px; */
         }
 
         .company-data-item {
             width: 50%;
-            /* font-size: 10pt; */
             line-height: 1.2;
         }
 
@@ -305,6 +302,7 @@
         .metals-table .custom-editable-input {
             padding-top: 0.5mm;
             padding-bottom: 0.5mm;
+            text-align: center;
         }
 
         .custom-editable-input:focus {

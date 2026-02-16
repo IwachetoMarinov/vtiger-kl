@@ -272,6 +272,7 @@
         .metals-table .custom-editable-input {
             padding-top: 0.5mm;
             padding-bottom: 0.5mm;
+            text-align: center;
         }
 
         .custom-editable-table-input {
