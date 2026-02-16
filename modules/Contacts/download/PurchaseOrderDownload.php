@@ -21,24 +21,24 @@ class PurchaseOrderDownload
         ],
 
         'fields' => [
-            ['name' => 'currency',     'x' => 60.0,  'y' => 138.0,  'w' => 38.5, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'location',     'x' => 102.0, 'y' => 152.5,  'w' => 40.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'address',      'x' => 72.0,  'y' => 159.3,  'w' => 55.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'country',      'x' => 49.0,  'y' => 175.5,  'w' => 45.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'currency',     'x' => 60.0,  'y' => 139.0,  'w' => 38.5, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'location',     'x' => 102.0, 'y' => 153.5,  'w' => 40.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'address',      'x' => 72.0,  'y' => 160.3,  'w' => 55.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'country',      'x' => 49.0,  'y' => 176.5,  'w' => 45.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
 
-            ['name' => 'place_input',  'x' => 41.0,  'y' => 254.5,  'w' => 45.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'signed_by',    'x' => 109.0, 'y' => 254.5,  'w' => 65.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'date_input',   'x' => 41.0,  'y' => 263.0,  'w' => 45.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'on_behalf_of', 'x' => 112.0, 'y' => 263.0,  'w' => 62.0],
+            ['name' => 'place_input',  'x' => 41.0,  'y' => 255.5,  'w' => 45.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'signed_by',    'x' => 109.0, 'y' => 255.5,  'w' => 65.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'date_input',   'x' => 41.0,  'y' => 264.0,  'w' => 45.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'on_behalf_of', 'x' => 112.0, 'y' => 264.0,  'w' => 62.0],
         ],
 
         'grids' => [
             [
                 'namePattern' => 'metal_{r}_weight_{c}',
                 'startX' => 57.3,
-                'startY' => 111.0,
+                'startY' => 110.6,
                 'cellW'  => 13.57,
-                'cellH'  => 6.25,
+                'cellH'  => 6.3,
                 'rows'   => 4,
                 'cols'   => 9,
                 'padX'   => 0.6,
