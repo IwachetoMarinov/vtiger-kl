@@ -137,22 +137,7 @@
                             </tr>
                         </table>
 
-                        {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($INTENT->get('modifiedtime'), $INTENT_CURRENCY)}
-
-                        <!-- Remarks -->
-                        {* {if isset($COMPANY) && $COMPANY->get('company_gst_no')} *}
-
-                            {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
-                                <div style="margin-bottom: 2mm;">
-                                    {if $INTENT_CURRENCY eq 'SGD'}
-                                        *Remarks: USD/SGD exchange rate at SGD {$exchangeRateInfo['rate']} / USD
-                                    {else}
-                                        *Remarks: {$INTENT_CURRENCY}/SGD exchange rate at SGD
-                                        {$exchangeRateInfo['rate']} / {$INTENT_CURRENCY}
-                                    {/if}
-                                </div>
-                            {/if}
-                        {* {/if} *}
+                        {* {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($INTENT->get('modifiedtime'), $INTENT_CURRENCY)} *}
 
                         <!-- Bank info -->
                         {if isset($SELECTED_BANK) && $SELECTED_BANK}

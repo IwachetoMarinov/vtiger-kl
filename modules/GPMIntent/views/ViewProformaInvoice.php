@@ -41,17 +41,13 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 
 		$intent_currency = $fieldName ? $intent->get($fieldName) : '';
 
-		// echo "<pre>";
-		// print_r($intent_currency);
-		// echo "</pre>";
-
 		if (empty($contactId)) throw new AppException("Intent has no related Contact ID.");
 
 		$recordModel = Vtiger_Record_Model::getInstanceById($contactId, 'Contacts');
 
 		if (!$recordModel) throw new AppException("Contact not found for ID: $contactId");
 
-		$companyId = $recordModel->get('company_id');
+		// $companyId = $recordModel->get('company_id');
 
 		$companyRecord = null;
 		$allBankAccounts = [];
