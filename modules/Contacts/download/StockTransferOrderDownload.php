@@ -53,7 +53,10 @@ class StockTransferOrderDownload
                 'padY'   => 0.6,
                 'innerPad' => 1.2,
                 // grid-only opts (same as defaults, but kept here if you want to tweak later)
-                'opts' => ['da' => '/Helv 5.5 Tf 0 g'],
+                'opts' => [
+                    'da' => '/Helv 5.5 Tf 0 g',
+                    'q'  => 1, // <-- center align (PDF /Q = 1)
+                ],
             ],
         ],
     ];

@@ -56,7 +56,10 @@ class SaleOrderDownload
                 'padY'   => 0.6,
                 'innerPad' => 1.2,
                 // Optional grid-only overrides:
-                // 'opts' => ['da' => '/Helv 5.0 Tf 0 g'],
+                'opts' => [
+                    'da' => '/Helv 5.5 Tf 0 g',
+                    'q'  => 1, // <-- center align (PDF /Q = 1)
+                ],
             ],
         ],
     ];
