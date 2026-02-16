@@ -111,7 +111,7 @@
 
         /* Section 2 */
         .section-title {
-            margin: 2mm 0 2mm 2mm;
+            margin: 2mm 0 3mm 2mm;
         }
 
         /* Metals Table */
