@@ -93,10 +93,6 @@
             font-size: 20pt;
         }
 
-        .hidden {
-            /*display: none;*/
-        }
-
         table.content-table th {
             border: 1px dotted #666666;
             font-size: 10pt;
@@ -394,9 +390,6 @@
                             </table>
                             <br>
                             <br>
-
-                            {* {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))} *}
-
                                 {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency)}
                                 {* <pre>{var_dump($exchangeRateInfo)}</pre> *}
                                 {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
@@ -409,7 +402,6 @@
                                         {/if}
                                     </div>
                                 {/if}
-                            {* {/if} *}
                             <br>
                             <br>
                             {if $SELECTED_BANK}
