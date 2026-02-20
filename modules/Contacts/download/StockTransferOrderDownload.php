@@ -41,7 +41,6 @@ class StockTransferOrderDownload
 
         'grids' => [
             [
-                // Request fields: metal_0_weight_0 ... metal_3_weight_8
                 'namePattern' => 'metal_{r}_weight_{c}',
                 'startX' => 57.5,
                 'startY' => 107.1,
@@ -52,10 +51,9 @@ class StockTransferOrderDownload
                 'padX'   => 0.6,
                 'padY'   => 0.6,
                 'innerPad' => 1.2,
-                // grid-only opts (same as defaults, but kept here if you want to tweak later)
                 'opts' => [
                     'da' => '/Helv 5.5 Tf 0 g',
-                    'q'  => 1, // <-- center align (PDF /Q = 1)
+                    'q'  => 1,
                 ],
             ],
         ],

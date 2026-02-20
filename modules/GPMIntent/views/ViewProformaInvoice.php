@@ -9,6 +9,8 @@
  * *********************************************************************************** */
 // ini_set('display_errors', 1);error_reporting(E_ALL);
 
+include_once 'dbo_db/ProformaInvoice.php';
+
 class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 {
 	public function process(Vtiger_Request $request)
@@ -30,6 +32,7 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 		$fields = $moduleModel->getFields();
 
 		$targetLabel = 'Currency';
+		$table_name = 'DW_DocPI';
 
 		$fieldName = null;
 		foreach ($fields as $f) {
@@ -46,6 +49,10 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 		$recordModel = Vtiger_Record_Model::getInstanceById($contactId, 'Contacts');
 
 		if (!$recordModel) throw new AppException("Contact not found for ID: $contactId");
+
+		// $client_id = $recordModel->get('cf_898');
+		// $proformaInvoice = new dbo_db\ProformaInvoice();
+		// $erp_data = $proformaInvoice->getProformaInvoice("$client_id",  $table_name);
 
 		// $companyId = $recordModel->get('company_id');
 

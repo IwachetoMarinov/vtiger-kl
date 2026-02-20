@@ -301,7 +301,7 @@
                                                 </button>
                                             </a>
                                         </td>
-                                    {else if in_array($TX.voucher_type, ['MPD', 'MRD'])}
+                                    {else if in_array($TX.voucher_type, ['MPD'])}
                                         <td>
                                             <a href="index.php?module=Contacts&view=ViewCR&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">
@@ -316,7 +316,7 @@
 
                                     {* Collection Acknowlegement button *}
                                     <td>
-                                        {if in_array($TX.voucher_type, ['MPD', 'MRD', 'SAL'])}
+                                        {if in_array($TX.voucher_type, ['MPD', 'SAL'])}
                                             <a href="index.php?module=Contacts&view=CollectionAcknowledgement&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">
                                                 <button type="button" class="btn btn-default module-buttons">

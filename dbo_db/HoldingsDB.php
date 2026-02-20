@@ -104,10 +104,6 @@ class HoldingsDB
             $summary[] = $row;
         }
 
-        // echo "<pre>";
-        // var_dump($summary);
-        // echo "</pre>";
-
         sqlsrv_free_stmt($stmt);
 
         $results = [];
