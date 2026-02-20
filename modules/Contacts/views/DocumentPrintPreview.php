@@ -137,7 +137,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $totalSpotPrice = 0.00;
         $count = 0;
 
-        if(empty($items)) return $totalSpotPrice;
+        if (empty($items)) return $totalSpotPrice;
 
         foreach ($items as $item) {
             if (isset($item->averageSpotPrice) && $item->averageSpotPrice > 0) {
@@ -157,11 +157,8 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
         $docType = substr($request->get('docNo'), 0, 3);
-        if ($docType == 'SWD' || $docType == 'SAL') {
-            $docType = 'SI';
-        } elseif ($docType == 'PWD' || $docType == 'PUR') {
-            $docType = 'PI';
-        }
+
+        if ($docType == 'PWD' || $docType == 'PUR') $docType = 'PI';
 
         $year = date('Y');
         // Get last part of docNo after last '/'
