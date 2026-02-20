@@ -141,21 +141,6 @@ class Contacts_Detail_View extends Accounts_Detail_View
 			});
 		}
 
-		// Order transactions by amount_in_account_currency ascending based on order_by param
-		// if ($order_by === 'asc') {
-		// 	usort($activity_data, function ($a, $b) {
-		// 		$amtA = isset($a['amount_in_account_currency']) ? floatval($a['amount_in_account_currency']) : 0;
-		// 		$amtB = isset($b['amount_in_account_currency']) ? floatval($b['amount_in_account_currency']) : 0;
-		// 		return $amtA <=> $amtB;
-		// 	});
-		// } elseif ($order_by === 'desc') {
-		// 	usort($activity_data, function ($a, $b) {
-		// 		$amtA = isset($a['amount_in_account_currency']) ? floatval($a['amount_in_account_currency']) : 0;
-		// 		$amtB = isset($b['amount_in_account_currency']) ? floatval($b['amount_in_account_currency']) : 0;
-		// 		return $amtB <=> $amtA;
-		// 	});
-		// }
-
 		// Assign safely to TPL
 		$viewer->assign('CLIENT_CURRENCY', $currency_list);
 		$viewer->assign('ACTIVITY_SUMMERY_CURRENCY', $selected_currency);

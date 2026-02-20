@@ -213,6 +213,7 @@
                                 <th>DOCUMENT NO</th>
                                 <th></th>
                                 <th></th>
+                                <th></th>
                                 <th>DATE</th>
                                 <th>DESCRIPTION</th>
                                 <th>AMOUNT</th>
@@ -313,6 +314,18 @@
                                     {else}
                                         <td></td>
                                     {/if}
+
+                                    {* PI button only for SAL and SWD type of transaction *}
+                                    <td>
+                                        {if in_array($TX.voucher_type, ['SAL', 'SWD'])}
+                                            <a href="index.php?module=Contacts&view=ProformaInvoiceView&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
+                                                target="_blank">
+                                                <button type="button" class="btn btn-default module-buttons">
+                                                    <span class="fa fa-download"></span>&nbsp;PI
+                                                </button>
+                                            </a>
+                                        {/if}
+                                    </td>
 
                                     {* Collection Acknowlegement button *}
                                     <td>
