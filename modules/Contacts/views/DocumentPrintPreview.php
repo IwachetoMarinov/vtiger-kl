@@ -166,18 +166,12 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $docNoLastPart = end($docNoParts);
 
         $fileName = $clientID . '-' . $docType . '-' . $year . '-' . $docNoLastPart . '-' . $docType;
-        // Change root directory to storage directory to avoid permission issue
-        $directory = rtrim($root_directory, '/\\') . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR;
-        if (!is_dir($directory))  mkdir($directory, 0775, true);
-        $filePath = $directory . $fileName . '.html';
-        $handle = fopen($filePath, 'w') or die('Cannot open file: ' . $filePath);
-        
+        $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
         fwrite($handle, $html);
         fclose($handle);
 
-        exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $filePath . " " . $directory . $fileName . ".pdf");
-        
-        unlink($filePath);
+        exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $root_directory . "$fileName.html " . $root_directory . "$fileName.pdf");
+        unlink($root_directory . $fileName . '.html');
 
         header("Content-type: application/pdf");
         header("Cache-Control: private");
@@ -185,8 +179,8 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         header("Content-Description: Global Precious Metals CRM Data");
         ob_clean();
         flush();
-        readfile($directory . "$fileName.pdf");
-        unlink($directory . "$fileName.pdf");
+        readfile($root_directory . "$fileName.pdf");
+        unlink($root_directory . "$fileName.pdf");
         exit;
     }
 }

@@ -153,12 +153,7 @@ class Contacts_ProformaInvoiceView_View extends Vtiger_Index_View
         $docNoLastPart = end($docNoParts);
 
         $fileName = $clientID . '-' . $docType . '-' . $year . '-' . $docNoLastPart . '-' . $docType;
-        // Change root directory to storage directory to avoid permission issue
-        $directory = rtrim($root_directory, '/\\') . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR;
-        if (!is_dir($directory))  mkdir($directory, 0775, true);
-        $filePath = $directory . $fileName . '.html';
-        $handle = fopen($filePath, 'w') or die('Cannot open file: ' . $filePath);
-        
+        $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
         fwrite($handle, $html);
         fclose($handle);
 
