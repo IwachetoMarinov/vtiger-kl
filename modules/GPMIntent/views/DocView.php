@@ -90,7 +90,12 @@ class GPMIntent_DocView_View extends Vtiger_Index_View
 
 
         $fileName = md5(rand());
-        $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
+        // Change root directory to storage directory to avoid permission issue
+        $directory = rtrim($root_directory, '/\\') . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR;
+        if (!is_dir($directory))  mkdir($directory, 0775, true);
+        $filePath = $directory . $fileName . '.html';
+        $handle = fopen($filePath, 'w') or die('Cannot open file: ' . $filePath);
+        
         fwrite($handle, $html);
         fclose($handle);
 

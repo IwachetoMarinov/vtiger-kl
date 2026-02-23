@@ -124,7 +124,12 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
         $clientID = $recordModel->get('cf_898');
 
         $fileName = $clientID . "_activity-summary";
-        $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
+        // Change root directory to storage directory to avoid permission issue
+        $directory = rtrim($root_directory, '/\\') . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR;
+        if (!is_dir($directory))  mkdir($directory, 0775, true);
+        $filePath = $directory . $fileName . '.html';
+        $handle = fopen($filePath, 'w') or die('Cannot open file: ' . $filePath);
+
         fwrite($handle, $html);
         fclose($handle);
 
