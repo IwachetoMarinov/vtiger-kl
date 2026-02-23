@@ -228,14 +228,8 @@
                 <table class="print-tbl">
                     <tr>
                         <td style="height: 28mm;">
-                            {if isset($smarty.request.PDFDownload) && $smarty.request.PDFDownload eq true}
-                                <img src="file:///var/www/html/layouts/v7/modules/Contacts/resources/gpm-new-logo.png"
-                                    style="max-height: 100%; float:left;width: 154px;" />
-                            {else}
-                                <img src='layouts/v7/modules/Contacts/resources/gpm-new-logo.png'
-                                    style="max-height: 100%; float:right;width: 154px;">
-                            {/if}
-
+                            <img src='layouts/v7/modules/Contacts/resources/gpm-new-logo.png'
+                                style="max-height: 100%; float:right;width: 154px;">
                             <div style="font-size: 11pt;margin-top: 14px;margin-bottom: 32px">
                                 {* ERP Client number *}
                                 {$RECORD_MODEL->get('cf_898')}<br>
