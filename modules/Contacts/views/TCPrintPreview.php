@@ -120,25 +120,70 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
     function downloadPDF($html, Vtiger_Request $request)
     {
         global $root_directory;
+
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
 
-        $fileName = $clientID . '-' . str_replace('/', '-', $request->get('docNo')) . "-TC";
-        $handle = fopen($root_directory . $fileName . '.html', 'a') or die('Cannot open file:  ');
-        fwrite($handle, $html);
-        fclose($handle);
+        // Build filename (keep your logic, but also sanitize for filesystem safety)
+        $docNo = (string)$request->get('docNo');
+        $baseName = $clientID . '-' . str_replace('/', '-', $docNo) . "-TC";
+        $fileName = preg_replace('/[^A-Za-z0-9_\-\.]/', '_', $baseName); // avoid spaces, quotes, etc.
 
-        exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $root_directory . "$fileName.html " . $root_directory . "$fileName.pdf");
-        unlink($root_directory . $fileName . '.html');
+        // Write directly into vtiger storage/
+        $storageDir = rtrim($root_directory, "/\\") . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR;
+        $htmlPath   = $storageDir . $fileName . '.html';
+        $pdfPath    = $storageDir . $fileName . '.pdf';
 
-        header("Content-type: application/pdf");
-        header("Cache-Control: private");
-        header("Content-Disposition: attachment; filename=$fileName.pdf");
-        header("Content-Description: Global Precious Metals CRM Data");
-        ob_clean();
-        flush();
-        readfile($root_directory . "$fileName.pdf");
-        unlink($root_directory . "$fileName.pdf");
+        // Ensure storage exists & is writable
+        if (!is_dir($storageDir)) {
+            @mkdir($storageDir, 0775, true);
+        }
+        if (!is_writable($storageDir)) {
+            throw new Exception("Storage directory is not writable: " . $storageDir);
+        }
+
+        // Write HTML (overwrite, not append)
+        $bytes = file_put_contents($htmlPath, $html);
+        if ($bytes === false || $bytes === 0) {
+            throw new Exception("Cannot write HTML file: " . $htmlPath);
+        }
+
+        // Run wkhtmltopdf safely (quote args, capture stderr)
+        $cmd = "wkhtmltopdf --enable-local-file-access -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking "
+            . escapeshellarg($htmlPath) . " "
+            . escapeshellarg($pdfPath)
+            . " 2>&1";
+
+        $output = [];
+        $exitCode = 0;
+        exec($cmd, $output, $exitCode);
+
+        // Remove HTML even if PDF fails (optional — keep if you want debugging)
+        @unlink($htmlPath);
+
+        // Validate PDF
+        if ($exitCode !== 0) {
+            throw new Exception("wkhtmltopdf failed (exit=$exitCode): " . implode("\n", $output));
+        }
+        if (!file_exists($pdfPath) || filesize($pdfPath) === 0) {
+            throw new Exception("PDF not created or empty: " . $pdfPath . "\nOutput: " . implode("\n", $output));
+        }
+
+        // Download PDF
+        if (ob_get_length()) {
+            ob_end_clean(); // safer than ob_clean() if output buffers exist
+        }
+
+        header('Content-Type: application/pdf');
+        header('Cache-Control: private');
+        header('Content-Disposition: attachment; filename="' . $fileName . '.pdf"');
+        header('Content-Length: ' . filesize($pdfPath));
+
+        // Send file
+        readfile($pdfPath);
+
+        // Cleanup PDF after download
+        @unlink($pdfPath);
         exit;
     }
 }
