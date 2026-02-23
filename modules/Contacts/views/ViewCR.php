@@ -78,8 +78,9 @@ class Contacts_ViewCR_View extends Vtiger_Index_View
         fwrite($handle, $html);
         fclose($handle);
 
-        exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $root_directory . "$fileName.html " . $root_directory . "$fileName.pdf");
-        unlink($root_directory . $fileName . '.html');
+        exec("wkhtmltopdf --enable-local-file-access  -L 0 -R 0 -B 0 -T 0 --disable-smart-shrinking " . $filePath . " " . $directory . $fileName . ".pdf");
+        
+        unlink($filePath);
 
         header("Content-type: application/pdf");
         header("Cache-Control: private");
@@ -87,8 +88,8 @@ class Contacts_ViewCR_View extends Vtiger_Index_View
         header("Content-Description: Global Precious Metals CRM Data");
         ob_clean();
         flush();
-        readfile($root_directory . "$fileName.pdf");
-        unlink($root_directory . "$fileName.pdf");
+        readfile($directory . "$fileName.pdf");
+        unlink($directory . "$fileName.pdf");
         exit;
     }
 }
