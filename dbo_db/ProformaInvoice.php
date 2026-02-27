@@ -15,10 +15,12 @@ use helpers\DBConnection;
 class ProformaInvoice
 {
     private $connection;
+    private $database_prefix;
 
     public function __construct()
     {
         $this->connection = DBConnection::getConnection();
+        $this->database_prefix = DBConnection::getDatabasePrefix();
     }
 
     public function getProformaInvoice(string $client_id, string $table_name)
@@ -34,7 +36,7 @@ class ProformaInvoice
                 $params[] = $client_id;
             }
 
-            $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[$table_name] $where";
+            $sql = "SELECT * FROM $this->database_prefix.[$table_name] $where";
 
             // var_dump("Executing SQL: " . $sql);
             // var_dump("With params: " . implode(", ", $params));

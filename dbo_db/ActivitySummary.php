@@ -15,10 +15,12 @@ use helpers\DBConnection;
 class ActivitySummary
 {
     private $connection;
+    private $database_prefix;
 
     public function __construct()
     {
         $this->connection = DBConnection::getConnection();
+        $this->database_prefix = DBConnection::getDatabasePrefix();
     }
 
     public function getActivitySummary($customer_id = null)
@@ -35,7 +37,7 @@ class ActivitySummary
             $params[] = $customer_id;
         }
 
-        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_TxHx] $where order by [Tx_Date] DESC";
+        $sql = "SELECT * FROM $this->database_prefix.[DW_TxHx] $where order by [Tx_Date] DESC";
 
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
@@ -81,7 +83,7 @@ class ActivitySummary
 
             $sql = "
                 SELECT *
-                FROM [HFS_SQLEXPRESS].[GPM].[dbo].[$table_name] $where";
+                FROM $this->database_prefix.[$table_name] $where";
 
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
@@ -113,7 +115,7 @@ class ActivitySummary
             }
 
             $sql = "
-                SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[$table_name] $where";
+                SELECT * FROM $this->database_prefix.[$table_name] $where";
 
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
@@ -141,7 +143,7 @@ class ActivitySummary
             $params[] = $doc_no;
         }
 
-        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_TxHx] $where";
+        $sql = "SELECT * FROM $this->database_prefix.[DW_TxHx] $where";
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
         if (count($summary) === 0) return [];

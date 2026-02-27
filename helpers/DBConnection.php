@@ -43,4 +43,20 @@ class DBConnection
             return null;
         }
     }
+
+    public static function getDatabasePrefix()
+    {
+        if (self::$connection === null) return null;
+
+        try {
+            $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
+            $dotenv->safeLoad();
+
+            $db_prefix = $_ENV['DB_PREFIX'] ?? getenv('DB_PREFIX') ?: '';
+    
+            return $db_prefix ?: null;
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
 }

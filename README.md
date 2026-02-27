@@ -250,3 +250,9 @@ WHERE fieldlabel = 'Contact Name'
     38.2 Download file with absolupe path `/var/www/html/db_backups/backup.sql`
     38.3 remove file `rm /db_backups/backup.sql`
     38.4 Give permissions `sudo chown $USER:$USER db_backups`
+
+
+
+
+39. Fix Production server in confic.inc.php add this row `$dbconfig['db_socket'] = '/var/lib/mysql/mysql.sock';`
+40. 

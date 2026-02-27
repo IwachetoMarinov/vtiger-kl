@@ -12,10 +12,12 @@ use helpers\DBConnection;
 class HoldingsDB
 {
     private $connection;
+    private $database_prefix;
 
     public function __construct()
     {
         $this->connection = DBConnection::getConnection();
+        $this->database_prefix = DBConnection::getDatabasePrefix();
     }
 
     public function getHoldings($customer_id = null)
@@ -26,7 +28,7 @@ class HoldingsDB
 
         $params[] = $customer_id;
 
-        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_DocHoldings] WHERE [Party_Code] = ?";
+        $sql = "SELECT * FROM $this->database_prefix.[DW_DocHoldings] WHERE [Party_Code] = ?";
 
         $stmt = sqlsrv_query($this->connection, $sql, $params);
 
@@ -63,7 +65,7 @@ class HoldingsDB
 
         $params[] = $customer_id;
 
-        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_DocWalletBal] WHERE [Party_Code] = ?";
+        $sql = "SELECT * FROM $this->database_prefix.[DW_DocWalletBal] WHERE [Party_Code] = ?";
 
         $stmt = sqlsrv_query($this->connection, $sql, $params);
 
@@ -93,7 +95,7 @@ class HoldingsDB
             $params[] = $customer_id;
         }
 
-        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_StkHoldings] $where";
+        $sql = "SELECT * FROM $this->database_prefix.[DW_StkHoldings] $where";
 
         $stmt = sqlsrv_query($this->connection, $sql, $params);
 

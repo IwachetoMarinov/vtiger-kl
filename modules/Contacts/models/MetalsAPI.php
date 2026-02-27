@@ -10,10 +10,12 @@ use helpers\DBConnection;
 class MetalsAPI
 {
     private $connection;
+    private $database_prefix;
 
     public function __construct()
     {
         $this->connection = DBConnection::getConnection();
+        $this->database_prefix = DBConnection::getDatabasePrefix();
     }
 
     public function getLatestPriceByName($metal, $currency)
@@ -56,7 +58,7 @@ class MetalsAPI
         }
 
         $sql = "SELECT [Date],[MT_Code],[Curr_Code],[SpotPriceUSD],[Exc_Rate],[SpotPriceCurr]
-        FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_SpotPrice]
+        FROM $this->database_prefix.[DW_SpotPrice]
         $where
         ORDER BY [Date] DESC, [Curr_Code]";
 
@@ -91,7 +93,7 @@ class MetalsAPI
             $params[] = $date;
         }
 
-        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_ExcRateHistoric] $where ORDER BY [Exc_Date] DESC";
+        $sql = "SELECT * FROM $this->database_prefix.[DW_ExcRateHistoric] $where ORDER BY [Exc_Date] DESC";
 
         $stmt = sqlsrv_query($this->connection, $sql, $params);
 
