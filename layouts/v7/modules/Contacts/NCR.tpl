@@ -311,7 +311,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="height: 20mm; text-decoration: underline;text-align: right;">
+                    <td style="height: 18mm; text-decoration: underline;text-align: right;">
                         <strong>COLLECTION REQUEST</strong>
                     </td>
                 </tr>
