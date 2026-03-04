@@ -277,7 +277,7 @@
                 <tr>
                     <td>
                         {if isset($smarty.request.PDFDownload) && $smarty.request.PDFDownload eq true}
-                            <img src="file:///var/www/html/layouts/v7/modules/Contacts/resources/gpm-new-logo.png"
+                            <img src="file://{$ROOT_DIRECTORY}layouts/v7/modules/Contacts/resources/gpm-new-logo.png"
                                 style="max-height: 100%; float:left;width: 196px;" />
                         {else}
                             <img src='layouts/v7/modules/Contacts/resources/gpm-new-logo.png'

@@ -23,11 +23,14 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
 
         $companyRecord = Contacts_DefaultCompany_View::process();
 
+        $ROOT_DIRECTORY = getenv('ROOT_DIRECTORY') ?: ($ROOT_DIRECTORY ?? null);
+
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', 1);
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
+        $viewer->assign('ROOT_DIRECTORY', $ROOT_DIRECTORY);
         $viewer->assign('CLIENT_TYPE', $client_type);
         $viewer->assign('DOCNO', $request->get('docNo'));
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));

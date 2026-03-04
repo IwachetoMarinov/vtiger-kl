@@ -35,11 +35,14 @@ class Contacts_ViewCRNew_View extends Vtiger_Index_View
             $erpData = [];
         }
 
+        $ROOT_DIRECTORY = getenv('ROOT_DIRECTORY') ?: ($ROOT_DIRECTORY ?? null);
+
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', 1);
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
+        $viewer->assign('ROOT_DIRECTORY', $ROOT_DIRECTORY);
         $viewer->assign('ERP_DOCUMENT', $erpData);
         $viewer->assign('ID_OPTION', $request->get('idOption') ?? null);
         $viewer->assign('COMPANY_OPTION', $request->get('companyName') ?? null);
