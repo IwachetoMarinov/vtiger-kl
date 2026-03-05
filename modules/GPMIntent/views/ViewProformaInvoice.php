@@ -10,6 +10,7 @@
 // ini_set('display_errors', 1);error_reporting(E_ALL);
 
 include_once 'dbo_db/ProformaInvoice.php';
+include_once 'dbo_db/Helper.php';
 
 class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 {
@@ -96,6 +97,8 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 			$selectedBank->set('swift_code', '');
 		}
 
+		$company_full_address = Helper::getCompanyFullAddress($companyRecord);
+
 		// ✅ Prepare viewer
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RECORD_MODEL', $recordModel);
@@ -106,6 +109,7 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 		$viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);
 		$viewer->assign('SELECTED_BANK', $selectedBank);
 		$viewer->assign('COMPANY', $companyRecord);
+		$viewer->assign('COMPANY_FULL_ADDRESS', $company_full_address);
 
 		// ✅ Render / download
 		if ($request->get('PDFDownload')) {

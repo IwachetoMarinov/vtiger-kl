@@ -2,6 +2,7 @@
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
+include_once 'dbo_db/Helper.php';
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
@@ -35,10 +36,13 @@ class Contacts_CollectionAcknowledgement_View extends Vtiger_Index_View
         $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
         $viewer = $this->getViewer($request);
+        $company_full_address = Helper::getCompanyFullAddress($companyRecord);
+
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', 1);
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
+        $viewer->assign('COMPANY_FULL_ADDRESS', $company_full_address);
         $viewer->assign('ERP_DOCUMENT', $erpData);
         $viewer->assign('DOCNO', $request->get('docNo'));
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));

@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-         @font-face {
+        @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
@@ -390,8 +390,7 @@
                             </table>
                             <br>
                             <br>
-                                {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency)}
-                                {* <pre>{var_dump($exchangeRateInfo)}</pre> *}
+                            {* {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency)}
                                 {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
                                     <div>
                                         {if $ERP_DOCUMENT->currency eq 'SGD'}
@@ -401,7 +400,7 @@
                                             {$exchangeRateInfo['rate']} / {$ERP_DOCUMENT->currency}
                                         {/if}
                                     </div>
-                                {/if}
+                                {/if} *}
                             <br>
                             <br>
                             {if $SELECTED_BANK}
@@ -448,12 +447,7 @@
                             {if isset($COMPANY)}
                                 {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
                                 {$COMPANY->get('company_reg_no')}){/if}<br>
-                                {$COMPANY->get('company_address')}
-
-                                {if $COMPANY->get('city')}, {$COMPANY->get('city')}{/if}
-                                {if $COMPANY->get('state')}, {$COMPANY->get('state')}{/if}
-                                {if $COMPANY->get('code')}, {$COMPANY->get('code')}{/if}
-                                {if $COMPANY->get('country')}, {$COMPANY->get('country')}{/if}
+                                {$COMPANY_FULL_ADDRESS}
                                 <br>
                                 T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
                                 {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>

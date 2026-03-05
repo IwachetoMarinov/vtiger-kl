@@ -1,6 +1,7 @@
 <?php
 
 include_once 'dbo_db/ActivitySummary.php';
+include_once 'dbo_db/Helper.php';
 
 class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
 {
@@ -86,6 +87,8 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
                 }
             }
         }
+        
+        $company_full_address = Helper::getCompanyFullAddress($companyRecord);
 
         $recordModel = $this->record->getRecord();
         $viewer = $this->getViewer($request);
@@ -95,6 +98,7 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('EARLIEST_DATE', $earliestDate ? date('Y-M-d', $earliestDate) : null);
         $viewer->assign('LATEST_DATE', $latestDate ? date('Y-M-d', $latestDate) : null);
         $viewer->assign('COMPANY', $companyRecord);
+        $viewer->assign('COMPANY_FULL_ADDRESS', $company_full_address);
         if ($request->get('PDFDownload')) {
             $viewer->assign('ENABLE_DOWNLOAD_BUTTON', false);
             $html = $viewer->view('ActivtySummeryPrintPreview.tpl', $moduleName, true);

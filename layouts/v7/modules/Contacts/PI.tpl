@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-         @font-face {
+        @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
@@ -338,7 +338,7 @@
                             <br>
 
                             {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency)}
-                           
+
                             {* {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
                                 <div>
                                     {if $ERP_DOCUMENT->currency eq 'SGD'}
@@ -349,66 +349,61 @@
                                     {/if}
                                 </div>
                             {/if} *}
-                       
-                        {if $SELECTED_BANK}
-                            {assign var=iban value=$SELECTED_BANK->get('iban_no')|lower|replace:' ':''}
-                            {assign var=bank_routing_no value=$SELECTED_BANK->get('bank_routing_no')|lower|replace:' ':''}
 
-                            {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
-                                <input type="hidden" class="selected-bank" value="{$SELECTED_BANK->getId()}">
+                            {if $SELECTED_BANK}
+                                {assign var=iban value=$SELECTED_BANK->get('iban_no')|lower|replace:' ':''}
+                                {assign var=bank_routing_no value=$SELECTED_BANK->get('bank_routing_no')|lower|replace:' ':''}
+
+                                {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
+                                    <input type="hidden" class="selected-bank" value="{$SELECTED_BANK->getId()}">
+                                {/if}
+
+                                <div>
+                                    Please transfer the payment net of charges to our bank account:<br>
+                                    Beneficiary: {$SELECTED_BANK->get('beneficiary_name')}<br>
+                                    Account No: {$SELECTED_BANK->get('account_no')}
+                                    {$SELECTED_BANK->get('account_currency')}<br>
+
+                                    {if $iban neq 'x'}
+                                        IBAN: {$SELECTED_BANK->get('iban_no')}<br>
+                                    {/if}
+
+                                    Bank: {$SELECTED_BANK->get('bank_name')}<br>
+                                    Bank Address: {$SELECTED_BANK->get('bank_address')}<br>
+                                    Swift Code: {$SELECTED_BANK->get('swift_code')}<br>
+
+                                    {if $bank_routing_no neq 'x'}
+                                        Bank Code: {$SELECTED_BANK->get('bank_code')}<br>
+                                        Branch Code: {$SELECTED_BANK->get('branch_code')}<br>
+                                    {else}
+                                        Routing No: {$SELECTED_BANK->get('bank_routing_no')}<br>
+                                    {/if}
+
+                                    <br><br>
+
+                                    {if !empty($SELECTED_BANK->get('intermediary_bank'))}
+                                        Intermediary Bank: {$SELECTED_BANK->get('intermediary_bank')}<br>
+                                        Swift Code: {$SELECTED_BANK->get('intermediary_swift_code')}<br>
+                                    {/if}
+                                </div>
                             {/if}
-
-                            <div>
-                                Please transfer the payment net of charges to our bank account:<br>
-                                Beneficiary: {$SELECTED_BANK->get('beneficiary_name')}<br>
-                                Account No: {$SELECTED_BANK->get('account_no')}
-                                {$SELECTED_BANK->get('account_currency')}<br>
-
-                                {if $iban neq 'x'}
-                                    IBAN: {$SELECTED_BANK->get('iban_no')}<br>
-                                {/if}
-
-                                Bank: {$SELECTED_BANK->get('bank_name')}<br>
-                                Bank Address: {$SELECTED_BANK->get('bank_address')}<br>
-                                Swift Code: {$SELECTED_BANK->get('swift_code')}<br>
-
-                                {if $bank_routing_no neq 'x'}
-                                    Bank Code: {$SELECTED_BANK->get('bank_code')}<br>
-                                    Branch Code: {$SELECTED_BANK->get('branch_code')}<br>
-                                {else}
-                                    Routing No: {$SELECTED_BANK->get('bank_routing_no')}<br>
-                                {/if}
-
-                                <br><br>
-
-                                {if !empty($SELECTED_BANK->get('intermediary_bank'))}
-                                    Intermediary Bank: {$SELECTED_BANK->get('intermediary_bank')}<br>
-                                    Swift Code: {$SELECTED_BANK->get('intermediary_swift_code')}<br>
-                                {/if}
-                            </div>
-                        {/if}
-                    </td>
-                </tr>
-                <tr>
-                    <td style='font-size: 8pt;font-weight: bold;position: absolute;bottom: 14px;'>
-                        {if isset($COMPANY)}
-                            {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
-                            {$COMPANY->get('company_reg_no')}){/if}<br>
-                            {$COMPANY->get('company_address')}
-
-                            {if $COMPANY->get('city')}, {$COMPANY->get('city')}{/if}
-                            {if $COMPANY->get('state')}, {$COMPANY->get('state')}{/if}
-                            {if $COMPANY->get('code')}, {$COMPANY->get('code')}{/if}
-                            {if $COMPANY->get('country')}, {$COMPANY->get('country')}{/if}
-                            <br>
-                            T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
-                        {/if}
-                    </td>
-                </tr>
-            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style='font-size: 8pt;font-weight: bold;position: absolute;bottom: 14px;'>
+                            {if isset($COMPANY)}
+                                {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
+                                {$COMPANY->get('company_reg_no')}){/if}<br>
+                                {$COMPANY_FULL_ADDRESS}
+                                <br>
+                                T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
+                                {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                            {/if}
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-    </div>
     {/for}
 </body>
 

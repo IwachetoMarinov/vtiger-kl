@@ -2,6 +2,7 @@
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
+include_once 'dbo_db/Helper.php';
 
 class Contacts_NotePrintPreview_View extends Vtiger_Index_View
 {
@@ -69,6 +70,8 @@ class Contacts_NotePrintPreview_View extends Vtiger_Index_View
             $intent = Vtiger_Record_Model::getInstanceById($request->get('fromIntent'), 'GPMIntent');
         }
 
+        $company_full_address = Helper::getCompanyFullAddress($companyRecord);
+
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);
@@ -77,6 +80,7 @@ class Contacts_NotePrintPreview_View extends Vtiger_Index_View
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('INTENT', $intent);
         $viewer->assign('COMPANY', $companyRecord);
+        $viewer->assign('COMPANY_FULL_ADDRESS', $company_full_address);
         $viewer->assign('PAGES', $this->makeDataPage($erpDoc->barItems, $docType));
         if ($request->get('PDFDownload')) {
             $html = $viewer->view("$template_name.tpl", $moduleName, true);
