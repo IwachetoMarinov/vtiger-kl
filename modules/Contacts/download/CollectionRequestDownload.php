@@ -62,11 +62,21 @@ class CollectionRequestDownload
         $fileName = self::buildFileName($recordModel, $request);
 
         $tmpDir = CoreDownload::getWritableTmpDir($root_directory);
-        [$htmlPath, $basePdfPath, $finalPdfPath] = CoreDownload::buildPaths($tmpDir, $fileName);
+        [, $basePdfPath, $finalPdfPath] = CoreDownload::buildPaths($tmpDir, $fileName);
 
-        // HTML -> base PDF
+        // IMPORTANT: write HTML in vtiger root so relative assets resolve (old behavior)
+        $htmlPath = rtrim($root_directory, "/\\") . DIRECTORY_SEPARATOR . $fileName . '.html';
+
         CoreDownload::writeFileOrFail($htmlPath, (string)$html);
         CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath, self::WKHTML_OPTS);
+        @unlink($htmlPath);
+
+        // $tmpDir = CoreDownload::getWritableTmpDir($root_directory);
+        // [$htmlPath, $basePdfPath, $finalPdfPath] = CoreDownload::buildPaths($tmpDir, $fileName);
+
+        // HTML -> base PDF
+        // CoreDownload::writeFileOrFail($htmlPath, (string)$html);
+        // CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath, self::WKHTML_OPTS);
         @unlink($htmlPath);
 
         // Infer dynamic row count from HTML names: qty_1..qty_N
