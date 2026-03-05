@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
 
     <style>
-        @font-face {
+        /* @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
@@ -20,6 +20,20 @@
             font-weight: 700;
             src: local('Open Sans Bold'), local('OpenSans-Bold'),
                 url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+        } */
+
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: 400;
+            src: url('layouts/v7/resources/fonts/OpenSans-Regular.woff') format('woff');
+        }
+
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: 700;
+            src: url('layouts/v7/resources/fonts/OpenSans-Bold.woff') format('woff');
         }
 
         * {

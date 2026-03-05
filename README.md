@@ -255,4 +255,4 @@ WHERE fieldlabel = 'Contact Name'
 
 
 39. Fix Production server in confic.inc.php add this row `$dbconfig['db_socket'] = '/var/lib/mysql/mysql.sock';`
-40. 
+40. Show logs in the server `sudo tail -n 100 /var/www/html/crm_kl/logs/fileMissing.log`
