@@ -2,7 +2,9 @@ jQuery(function () {
   jQuery("body").on("click", "#printConf", function (e) {
     var modal = document.getElementById("myModal");
 
-    var selectedBank = jQuery(".selected-bank")?.val();
+    var selectedBank = jQuery(".selected-bank").length
+      ? jQuery(".selected-bank").val()
+      : null;
 
     if (selectedBank)
       jQuery("#bank_accounts").val(selectedBank).trigger("change");
