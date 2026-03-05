@@ -382,10 +382,8 @@
                         </td>
                     </tr>
 
-                    {* <pre>{var_dump($COMPANY)}</pre> *}
-
                     <tr>
-                        <td style='font-size: 8pt;font-weight: bold;width: 85%'>
+                        <td style='font-size: 8pt;font-weight: bold;width: 85%; position: absolute;bottom: 14px;'>
                             <div style="margin-top: 2mm;">
                                 {if isset($COMPANY)}
                                     <div style="float:left">
