@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-         @font-face {
+        @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
@@ -166,14 +166,14 @@
                     <tr>
                         <td style="height: 28mm;">
                             <img src='layouts/v7/modules/Contacts/resources/gpm-new-logo.png'
-                                style="max-height: 100%; float:left;width: 192px;">
+                                style="max-height: 100%; float:left;width: 154px;">
                             <div style="font-size: 11pt;margin-top: 20mm; float:right;">
                                 <span>From: {$RECORD_MODEL->get('cf_898')}</span>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td style="height: 20mm;text-align: left">
+                        <td style="height: 20mm;text-align: left; font-size: 9.5pt;">
                             <div style="max-width:50%">
                                 {if isset($COMPANY)}
                                     <div style="margin-top: 10mm;">To:
@@ -187,7 +187,7 @@
                                     {if isset($COMPANY)}
                                         {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
                                         {$COMPANY->get('company_reg_no')})<br>{/if}
-                                        {$COMPANY->get('company_address')}<br>
+                                        {$COMPANY_FULL_ADDRESS}<br>
                                         T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
                                         {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('email')}<br>
                                     {/if}
@@ -281,58 +281,68 @@
                     shall cease when the Customer or its authorised representative has acknowledged receipt of the goods by
                     signing this Collection Acknowledgement receipt.</div>
 
-                <div style="margin-top: 8mm; font-size: 9.5pt;">
-                    <span>Date:</span>
-                    <span>.........................................</span>
-                </div>
+                <table style="width:100%; margin-top:8mm; font-size:9.5pt; border-collapse:collapse;">
 
-                <div style="margin-top: 5mm;" class="bottom-container">
-                    <div class="bottom-container-item">
-                        <span>Signed by: </span>
-                        <span>................................</span>
-                    </div>
-                    <div class="bottom-container-item">
-                        <span>Signed by: </span>
-                        <span>................................</span>
-                    </div>
-                </div>
+                    <!-- Date -->
+                    <tr>
+                        <td colspan="2">
+                            <span>Date:</span>
+                            <span>.........................................</span>
+                        </td>
+                    </tr>
 
-                <div style="margin-top: 5mm;" class="bottom-container">
-                    <div class="bottom-container-item">
-                        <span>On behalf of: </span>
-                        <span>...........................</span>
-                    </div>
-                    <div class="bottom-container-item">
-                        <span>On behalf of:</span>
+                    <!-- Signed by -->
+                    <tr>
+                        <td style="padding-top:5mm; width:50%;">
+                            <span>Signed by:</span>
+                            <span>................................</span>
+                        </td>
+                        <td style="padding-top:5mm; width:50%;">
+                            <span>Signed by:</span>
+                            <span>................................</span>
+                        </td>
+                    </tr>
 
-                        {if isset($COMPANY)}
-                            <span style="font-weight: 700; text-transform: capitalize;">
-                                {$COMPANY->get('company_name')}
-                            </span>
-                        {/if}
-                    </div>
-                </div>
+                    <!-- On behalf of -->
+                    <tr>
+                        <td style="padding-top:5mm;">
+                            <span>On behalf of:</span>
+                            <span>...........................</span>
+                        </td>
+                        <td style="padding-top:5mm;">
+                            <span>On behalf of:</span>
 
-                <div style="margin-top:5mm;">
-                    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                        <tr>
-                            <td width="48%" valign="top">
-                                <div style="height:100px;"></div>
-                                <div style="border-bottom:1px solid #000; margin-bottom:2mm;"></div>
-                                <p style="margin:0;">Signature</p>
-                            </td>
+                            {if isset($COMPANY)}
+                                <span style="font-weight:700; text-transform:capitalize;">
+                                    {$COMPANY->get('company_name')}
+                                </span>
+                            {/if}
+                        </td>
+                    </tr>
 
-                            <td width="4%"></td>
-
-                            <td width="48%" valign="top">
-                                <div style="height:100px;"></div>
-                                <div style="border-bottom:1px solid #000; margin-bottom:2mm;"></div>
-                                <p style="margin:0;">Signature</p>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                </table>
             </div>
+
+            <div style="margin-top:5mm;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                    <tr>
+                        <td width="48%" valign="top">
+                            <div style="height:100px;"></div>
+                            <div style="border-bottom:1px solid #000; margin-bottom:2mm;"></div>
+                            <p style="margin:0;">Signature</p>
+                        </td>
+
+                        <td width="4%"></td>
+
+                        <td width="48%" valign="top">
+                            <div style="height:100px;"></div>
+                            <div style="border-bottom:1px solid #000; margin-bottom:2mm;"></div>
+                            <p style="margin:0;">Signature</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
         </div>
     {/for}
 </body>

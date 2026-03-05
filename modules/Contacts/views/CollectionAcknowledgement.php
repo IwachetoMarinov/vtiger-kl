@@ -36,7 +36,7 @@ class Contacts_CollectionAcknowledgement_View extends Vtiger_Index_View
         $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
         $viewer = $this->getViewer($request);
-        $company_full_address = Helper::getCompanyFullAddress($companyRecord);
+        $company_full_address = Helper::getCompanyFullAddressWithoutCommas($companyRecord);
 
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', 1);
