@@ -294,7 +294,7 @@
                             <div>
                                 If you have any questions concerning these transactions, please contact
                                 {$COMPANY->get('company_name')} at <br>Tel: {$COMPANY->get('company_phone')} or by email:
-                                relationship@global-precious-metals.com.
+                                {$COMPANY->get('email')}.
                             </div>
                         {/if}
                     </td>
@@ -307,7 +307,7 @@
                              {$COMPANY_FULL_ADDRESS}
                             <br>
                             T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('email')}<br>
                         {/if}
                     </td>
                 </tr>

@@ -332,7 +332,7 @@
                                         <br>
                                         T: {$COMPANY->get('company_phone')}
                                         {if $COMPANY->get('company_fax')} | Fax: {$COMPANY->get('company_fax')} {/if}
-                                        | {$COMPANY->get('company_website')}<br>
+                                        | {$COMPANY->get('email')}<br>
                                     </div>
                                 {/if}
                                 <div style="float:right;"><br><br>Page {$page} | {$PAGES}</div>

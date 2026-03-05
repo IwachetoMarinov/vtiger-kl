@@ -370,7 +370,7 @@
                                         {$COMPANY_FULL_ADDRESS}
                                         <br>
                                         T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                                        {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                                        {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('email')}<br>
                                     </div>
                                 {/if}
                                 <div style="float:right;"><br><br>Page {$page} | {$PAGES}</div>

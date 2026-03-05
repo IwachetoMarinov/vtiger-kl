@@ -380,7 +380,7 @@
                                     If you have any questions concerning these transactions, please contact
                                     <span style="font-weight: 600;">{$COMPANY->get('company_name')}</span> at <br>Tel:
                                     {$COMPANY->get('company_phone')} or by email:
-                                    relationship@global-precious-metals.com.
+                                    {$COMPANY->get('email')}.
                                 {/if}
                             </div>
                         </td>
@@ -397,7 +397,7 @@
                                         {$COMPANY->get('company_address')}<br>
                                         T: {$COMPANY->get('company_phone')}
                                         {if $COMPANY->get('company_fax')} | Fax: {$COMPANY->get('company_fax')} {/if}
-                                        | {$COMPANY->get('company_website')}<br>
+                                        | {$COMPANY->get('email')}<br>
                                     </div>
                                 {/if}
 
