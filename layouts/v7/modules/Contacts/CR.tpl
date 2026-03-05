@@ -197,7 +197,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="height: 20mm;text-align: left">
+                        <td style="height: 20mm;text-align: left; font-size: 9.5pt;">
                             <div style="max-width:50%">
                                 {if isset($COMPANY)}
                                     <div style="margin-top: 10mm;">To:
@@ -210,7 +210,7 @@
                                     {if isset($COMPANY)}
                                         {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
                                         {$COMPANY->get('company_reg_no')})<br>{/if}
-                                        {$COMPANY->get('company_address')}<br>
+                                        {$COMPANY_FULL_ADDRESS}<br>
                                         T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
                                         {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('email')}<br>
                                     {/if}

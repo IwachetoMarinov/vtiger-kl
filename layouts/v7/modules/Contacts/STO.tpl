@@ -13,7 +13,7 @@
             {assign var="sansRegular" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Regular.woff"}
             {assign var="sansBold" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Bold.woff"}
         {/if}  
-        
+
         @font-face {
             font-family: 'Open Sans';
 
@@ -703,7 +703,7 @@
                                 Please transfer the payment net of charges to our bank account:<br>
                                 Beneficiary: {$SELECTED_BANK->get('beneficiary_name')}<br>
                                 Account No: {$SELECTED_BANK->get('account_no')}
-                                {$SELECTED_BANK->get('account_currency')}<br>
+                                <br>
 
                                 {if $iban neq 'x'}
                                     IBAN: {$SELECTED_BANK->get('iban_no')}<br>

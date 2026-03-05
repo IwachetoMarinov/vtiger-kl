@@ -2,6 +2,7 @@
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
+include_once 'dbo_db/Helper.php';
 
 class Contacts_ViewCR_View extends Vtiger_Index_View
 {
@@ -33,6 +34,8 @@ class Contacts_ViewCR_View extends Vtiger_Index_View
             $erpData = [];
         }
 
+         $company_full_address = Helper::getCompanyFullAddressWithoutCommas($companyRecord);
+
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', 1);
@@ -40,6 +43,7 @@ class Contacts_ViewCR_View extends Vtiger_Index_View
         $viewer->assign('COMPANY', $companyRecord);
         $viewer->assign('ERP_DOCUMENT', $erpData);
         $viewer->assign('ID_OPTION', $request->get('idOption') ?? null);
+        $viewer->assign('COMPANY_FULL_ADDRESS', $company_full_address);
         $viewer->assign('COMPANY_OPTION', $request->get('companyOption') ?? null);
         $viewer->assign('DOCNO', $request->get('docNo'));
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));
