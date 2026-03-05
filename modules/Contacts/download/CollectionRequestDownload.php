@@ -65,7 +65,6 @@ class CollectionRequestDownload
         [$htmlPath, $basePdfPath, $finalPdfPath] = CoreDownload::buildPaths($tmpDir, $fileName);
 
         // HTML -> base PDF
-        $html = '<base href="file://' . rtrim($root_directory, "/\\") . '/">' . $html;
         CoreDownload::writeFileOrFail($htmlPath, (string)$html);
         CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath, self::WKHTML_OPTS);
         @unlink($htmlPath);
