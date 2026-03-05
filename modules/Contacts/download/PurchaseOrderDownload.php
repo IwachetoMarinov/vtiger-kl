@@ -63,12 +63,16 @@ class PurchaseOrderDownload
         $fileName = CoreDownload::safeFileName($recordModel, 'PO');
 
         // temp paths
+        // temp paths (PDFs stay in tmp)
         $tmpDir = CoreDownload::getWritableTmpDir($root_directory);
-        [$htmlPath, $basePdfPath, $finalPdfPath] = CoreDownload::buildPaths($tmpDir, $fileName);
+        [, $basePdfPath, $finalPdfPath] = CoreDownload::buildPaths($tmpDir, $fileName);
 
-        // HTML -> base PDF
+        // HTML must be written in vtiger root so relative assets resolve
+        $htmlPath = rtrim($root_directory, "/\\") . DIRECTORY_SEPARATOR . $fileName . '.html';
+
         CoreDownload::writeFileOrFail($htmlPath, (string)$html);
         CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath);
+        
         @unlink($htmlPath);
 
         // Import base PDF

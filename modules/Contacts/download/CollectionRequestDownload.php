@@ -69,6 +69,7 @@ class CollectionRequestDownload
 
         CoreDownload::writeFileOrFail($htmlPath, (string)$html);
         CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath, self::WKHTML_OPTS);
+        
         @unlink($htmlPath);
 
         // $tmpDir = CoreDownload::getWritableTmpDir($root_directory);
