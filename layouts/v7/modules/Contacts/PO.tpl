@@ -22,18 +22,27 @@
                 url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
         } */
 
+        {{assign var="sansRegular" value="layouts/v7/resources/fonts/OpenSans-Regular.woff"}}
+        {{assign var="sansBold" value="layouts/v7/resources/fonts/OpenSans-Bold.woff"}}
+
+        {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
+            {assign var="sansRegular" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Regular.woff"}
+            {assign var="sansBold" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Bold.woff"}
+        {/if}  
+
         @font-face {
             font-family: 'Open Sans';
+
             font-style: normal;
             font-weight: 400;
-            src: url('layouts/v7/resources/fonts/OpenSans-Regular.woff') format('woff');
+            src: url('{$sansRegular}') format('woff');
         }
 
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 700;
-            src: url('layouts/v7/resources/fonts/OpenSans-Bold.woff') format('woff');
+            src: url('{$sansBold}') format('woff');
         }
 
         * {
