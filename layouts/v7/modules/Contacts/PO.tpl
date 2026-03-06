@@ -218,6 +218,7 @@
 
         .company-data-item {
             width: 50%;
+            font-size: 9.5pt;
             line-height: 1.2;
         }
 

@@ -12,11 +12,10 @@
         {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
             {assign var="sansRegular" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Regular.woff"}
             {assign var="sansBold" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Bold.woff"}
-        {/if}  
+        {/if}
 
         @font-face {
             font-family: 'Open Sans';
-
             font-style: normal;
             font-weight: 400;
             src: url('{$sansRegular}') format('woff');
@@ -201,40 +200,48 @@
             margin-top: 8mm;
         }
 
+        /* FIXED TOP COMPANY TABLE FOR WKHTMLTOPDF */
         .company-data {
-            display: flex;
+            display: table;
+            width: 100%;
             border: 1px solid #000;
             max-height: 183px;
             height: 183px;
+            table-layout: fixed;
+            border-collapse: collapse;
         }
 
         .company-data-item {
+            display: table-cell;
             width: 50%;
-            font-size: 10pt;
+            font-size: 9.5pt;
             line-height: 1.2;
-        }
-
-        .company-data-item-to {
-            display: flex;
+            vertical-align: top;
         }
 
         .company-data-item-from {
             border-right: 1px solid #000;
         }
 
-        .company-data-item-to,
-        .from-container {
-            display: flex;
+        .from-container-wrapper {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
         }
 
         .place-container {
+            display: table-cell;
             padding: 2mm;
             border-right: 1px solid #000;
             width: 25%;
+            vertical-align: top;
         }
 
         .company-container {
+            display: table-cell;
             width: 75%;
+            vertical-align: top;
         }
 
         .number-container {
@@ -254,10 +261,6 @@
 
         .details-container {
             padding: 0 4mm;
-        }
-
-        .from-container-wrapper {
-            display: flex;
         }
 
         .editable-input-wrapper {
@@ -337,7 +340,7 @@
             {* Left Column *}
             <div class="company-data-item company-data-item-from">
                 <div class="from-container-wrapper">
-                    <div class="place-container from-container">
+                    <div class="place-container">
                         <div><strong>From:</strong></div>
                     </div>
                     <div class="company-container" style="min-height: 24mm; padding:2mm;">
@@ -386,37 +389,40 @@
             </div>
 
             {* Right column *}
-            <div class="company-data-item company-data-item-to">
-                <div class="place-container"><strong>To:</strong></div>
-                <div class="company-container">
-                    <div style="padding:2mm;min-height:27mm;">
-                        <div style="text-transform: capitalize; font-weight: 600;">
-                            {if isset($COMPANY)}
-                                {$COMPANY->get('company_name')}
-                            {/if}
-                        </div>
-                        <div style="margin-top: 1.5mm;">
-                            {if isset($COMPANY)}
-                                {$COMPANY->get('company_address')}
-                            {/if}
-                            <br />
-                            {if isset($COMPANY)}
-                                {if !empty($COMPANY->get('city'))}
-                                    {$COMPANY->get('city')},
+            <div class="company-data-item">
+                <div class="from-container-wrapper">
+                    <div class="place-container"><strong>To:</strong></div>
+                    <div class="company-container">
+                        <div style="padding:2mm;min-height:27mm;">
+                            <div style="text-transform: capitalize; font-weight: 600;">
+                                {if isset($COMPANY)}
+                                    {$COMPANY->get('company_name')}
                                 {/if}
-                                {$COMPANY->get('state')} {$COMPANY->get('code')}<br>
-                                {$COMPANY->get('country')}
+                            </div>
+                            <div style="margin-top: 1.5mm;">
+                                {if isset($COMPANY)}
+                                    {$COMPANY->get('company_address')}
+                                {/if}
+                                <br />
+                                {if isset($COMPANY)}
+                                    {if !empty($COMPANY->get('city'))}
+                                        {$COMPANY->get('city')},
+                                    {/if}
+                                    {$COMPANY->get('state')} {$COMPANY->get('code')}<br>
+                                    {$COMPANY->get('country')}
+                                {/if}
+                            </div>
+                        </div>
+                        <div class="number-container">
+                            {if isset($COMPANY)}
+                                {if !empty($COMPANY->get('email'))}
+                                    <p>Contact:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
+                                {/if}
+                                {if !empty($COMPANY->get('company_phone'))}
+                                    <p>or<span style="font-style: italic;">{$COMPANY->get('company_phone')}</span></p>
+                                {/if}
                             {/if}
                         </div>
-                    </div>
-                    <div class="number-container">
-                        {if isset($COMPANY)}
-                            {if !empty($COMPANY->get('email'))}
-                                <p>Contact:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
-                            {/if}
-                            {if !empty($COMPANY->get('company_phone'))} <p>or<span
-                                    style="font-style: italic;">{$COMPANY->get('company_phone')}</span></p> {/if}
-                        {/if}
                     </div>
                 </div>
             </div>
@@ -486,7 +492,6 @@
                     </tr>
                 {/foreach}
             </table>
-
 
             <!-- SERIALS BOX -->
             <div class="serials-box">
@@ -605,7 +610,6 @@
                 url.searchParams.delete('clientName');
             }
 
-            // Get all custom-editable-input values and append to URL as query parameters
             document.querySelectorAll('.custom-editable-input').forEach(input => {
                 if (!input.name) return;
 
