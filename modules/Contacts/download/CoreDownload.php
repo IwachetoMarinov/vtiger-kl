@@ -191,6 +191,10 @@ final class CoreDownload
             '--print-to-pdf=' . escapeshellarg($basePdfPath),
             '--no-pdf-header-footer',
             '--print-to-pdf-no-header',
+            '--print-to-pdf-margin-top=0',       // ← add this
+            '--print-to-pdf-margin-bottom=0',    // ← add this
+            '--print-to-pdf-margin-left=0',      // ← add this
+            '--print-to-pdf-margin-right=0',     // ← add this
         ];
 
         $extra = [];
