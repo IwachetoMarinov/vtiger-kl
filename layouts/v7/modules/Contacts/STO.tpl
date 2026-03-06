@@ -12,11 +12,10 @@
         {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
             {assign var="sansRegular" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Regular.woff"}
             {assign var="sansBold" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Bold.woff"}
-        {/if}  
+        {/if}
 
         @font-face {
             font-family: 'Open Sans';
-
             font-style: normal;
             font-weight: 400;
             src: url('{$sansRegular}') format('woff');
@@ -57,11 +56,12 @@
         /* Header */
         .header-table {
             width: 100%;
-            margin-bottom: 1mm;
+            /* margin-bottom: 1mm; */
+            border-collapse: collapse;
         }
 
         .table-heading {
-            margin-bottom: 4mm;
+            margin-bottom: 2mm;
         }
 
         .header-table td {
@@ -79,42 +79,62 @@
             padding-top: 3mm;
         }
 
-        /* From / To Section */
-        .from-to-table {
+        /* REAL TABLE FOR FROM / TO SECTION */
+        .company-table {
             width: 100%;
-            border: 1px solid #000;
+            height: 183px;
+            max-height: 183px;
             border-collapse: collapse;
-            margin-bottom: 3mm;
+            table-layout: fixed;
         }
 
-        .from-to-table td {
+        .company-table td {
             border: 1px solid #000;
-            padding: 2mm;
+            vertical-align: top;
+            padding: 0;
+        }
+
+        .company-left-col,
+        .company-right-col {
+            width: 50%;
+            height: 183px;
+        }
+
+        .inner-company-table {
+            width: 100%;
+            height: 183px;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .inner-company-table td {
+            border: none;
             vertical-align: top;
         }
 
-        .from-label {
-            width: 50mm;
-            height: 30mm;
+        .label-cell {
+            width: 25%;
+            padding: 2mm;
+            border-right: 1px solid #000 !important;
         }
 
-        .from-box {
-            width: 65mm;
-            height: 30mm;
-            background: repeating-linear-gradient(transparent,
-                    transparent 3.5mm,
-                    #000 3.5mm,
-                    #000 3.6mm);
+        .content-cell {
+            width: 75%;
+            padding: 2mm;
         }
 
-        .to-box {
-            width: 85mm;
-            line-height: 1.3;
+        .top-row {
+            height: 92px;
         }
 
-        .customer-label {
-            width: 50mm;
-            height: 8mm;
+        .bottom-row {
+            height: 91px;
+        }
+
+        .customer-row td,
+        .contact-row td {
+            border-top: 1px solid #000 !important;
+            padding: 2mm;
         }
 
         /* Section 2 */
@@ -218,50 +238,9 @@
             margin-top: 8mm;
         }
 
-        .company-data {
-            display: flex;
-            border: 1px solid #000;
-            max-height: 183px;
-            height: 183px;
-        }
-
-        .company-data-item {
-            width: 50%;
-            font-size: 9.5pt;
-            line-height: 1.2;
-        }
-
-        .company-data-item-to {
-            display: flex;
-        }
-
-        .company-data-item-from {
-            border-right: 1px solid #000;
-        }
-
-        .company-data-item-to,
-        .from-container {
-            display: flex;
-        }
-
-        .place-container {
-            padding: 2mm;
-            border-right: 1px solid #000;
-            width: 25%;
-        }
-
-        .company-container {
-            width: 75%;
-        }
-
-        .number-container {
-            padding: 2mm;
-            border-top: 1px solid #000;
-        }
-
         .main-table {
             border: 1px solid #000;
-            margin-top: 3.5mm;
+            margin-top: 2.5mm;
             padding: 3.5mm 2mm;
         }
 
@@ -271,10 +250,6 @@
 
         .details-container {
             padding: 0 4mm;
-        }
-
-        .from-container-wrapper {
-            display: flex;
         }
 
         .custom-country {
@@ -295,7 +270,6 @@
             width: 48%;
         }
 
-        /* Remove focus outline from custom country input */
         .custom-country-input:focus {
             outline: none;
         }
@@ -379,7 +353,7 @@
                 <select class="inputElement select2" name="bank_accounts" id="bank_accounts">
                     <option value="">Select Bank Account</option>
                     {foreach item=account from=$ALL_BANK_ACCOUNTS}
-                        <option {if $smarty.request.bank  eq $account->getId() } selected {/if} value="{$account->getId()}">
+                        <option {if $bank_account_id  eq $account->getId() } selected {/if} value="{$account->getId()}">
                             {$account->get('bank_alias_name')}</option>
                     {/foreach}
                 </select>
@@ -408,7 +382,7 @@
     <div class="printAreaContainer">
 
         <!-- HEADER -->
-        <table>
+        <table class="header-table">
             <tr>
                 <td class="logo">
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
@@ -430,102 +404,111 @@
         </table>
 
         <!-- FROM / TO SECTION -->
-        <div class="company-data">
-            {* Left Column *}
-            <div class="company-data-item company-data-item-from">
-                <div class="from-container-wrapper">
-                    <div class="place-container from-container">
-                        <div><strong>From:</strong></div>
-                    </div>
-                    <div class="company-container" style="min-height: 24mm; padding:2mm;">
-                        <div>
-                            {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
-                        </div>
+        <table class="company-table">
+            <tr>
+                <td class="company-left-col">
+                    <table class="inner-company-table">
+                        <tr class="top-row">
+                            <td class="label-cell" style="padding: 2mm 0 0 2mm;">
+                                <strong>From:</strong>
+                            </td>
+                            <td class="content-cell" style="padding: 2mm 0 0 2mm;">
+                                <div>
+                                    {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
+                                </div>
 
-                        <div>
-                            {if !empty($RECORD_MODEL->get('mailingstreet'))}
-                                {$RECORD_MODEL->get('mailingstreet')}<br>
-                            {/if}
+                                <div>
+                                    {if !empty($RECORD_MODEL->get('mailingstreet'))}
+                                        {$RECORD_MODEL->get('mailingstreet')}<br>
+                                    {/if}
 
-                            {if empty($RECORD_MODEL->get('mailingpobox'))}
+                                    {if empty($RECORD_MODEL->get('mailingpobox'))}
 
-                                {if !empty($RECORD_MODEL->get('mailingcity')) && !empty($RECORD_MODEL->get('mailingzip'))}
-                                    {$RECORD_MODEL->get('mailingcity')} {$RECORD_MODEL->get('mailingzip')}<br>
-                                {elseif !empty($RECORD_MODEL->get('mailingcity'))}
-                                    {$RECORD_MODEL->get('mailingcity')}<br>
-                                {else}
-                                    {$RECORD_MODEL->get('mailingzip')}<br>
+                                        {if !empty($RECORD_MODEL->get('mailingcity')) && !empty($RECORD_MODEL->get('mailingzip'))}
+                                            {$RECORD_MODEL->get('mailingcity')} {$RECORD_MODEL->get('mailingzip')}<br>
+                                        {elseif !empty($RECORD_MODEL->get('mailingcity'))}
+                                            {$RECORD_MODEL->get('mailingcity')}<br>
+                                        {else}
+                                            {$RECORD_MODEL->get('mailingzip')}<br>
+                                        {/if}
+
+                                        {$RECORD_MODEL->get('mailingcountry')}
+
+                                    {else}
+
+                                        {if !empty($RECORD_MODEL->get('mailingcity'))}
+                                            P.O. Box {$RECORD_MODEL->get('mailingpobox')}, {$RECORD_MODEL->get('mailingcity')}<br>
+                                        {else}
+                                            P.O. Box {$RECORD_MODEL->get('mailingpobox')}<br>
+                                        {/if}
+
+                                        {if !empty($RECORD_MODEL->get('mailingstate'))}
+                                            {$RECORD_MODEL->get('mailingstate')}, {$RECORD_MODEL->get('mailingcountry')}
+                                        {else}
+                                            {$RECORD_MODEL->get('mailingcountry')}
+                                        {/if}
+
+                                    {/if}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="bottom-row customer-row">
+                            <td colspan="2">Customer number:
+                                <span style="font-weight: 600;"> {$RECORD_MODEL->get('cf_898')}</span>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+
+                <td class="company-right-col">
+                    <table class="inner-company-table">
+                        <tr class="top-row">
+                            <td class="label-cell" style="padding: 2mm 0 0 2mm;">
+                                <strong>To:</strong>
+                            </td>
+                            <td class="content-cell" style="padding: 2mm 0 0 2mm;">
+                                <div style="text-transform: capitalize; font-weight: 600;">
+                                    {if isset($COMPANY)}
+                                        {$COMPANY->get('company_name')}
+                                    {/if}
+                                </div>
+                                <div style="margin-top: 1.5mm;">
+                                    {if isset($COMPANY)}
+                                        {$COMPANY->get('company_address')}
+                                    {/if}
+                                    <br />
+                                    {if isset($COMPANY)}
+                                        {if !empty($COMPANY->get('city'))}
+                                            {$COMPANY->get('city')},
+                                        {/if}
+                                        {$COMPANY->get('state')} {$COMPANY->get('code')}<br>
+                                        {$COMPANY->get('country')}
+                                    {/if}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="bottom-row contact-row">
+                            <td colspan="2">
+                                {if isset($COMPANY)}
+                                    {if !empty($COMPANY->get('email'))}
+                                        <p>Contact:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
+                                    {/if}
+                                    {if !empty($COMPANY->get('company_phone'))}
+                                        <p>or <span style="font-style: italic;">{$COMPANY->get('company_phone')}</span></p>
+                                    {/if}
                                 {/if}
-
-                                {$RECORD_MODEL->get('mailingcountry')}
-
-                            {else}
-
-                                {if !empty($RECORD_MODEL->get('mailingcity'))}
-                                    P.O. Box {$RECORD_MODEL->get('mailingpobox')}, {$RECORD_MODEL->get('mailingcity')}<br>
-                                {else}
-                                    P.O. Box {$RECORD_MODEL->get('mailingpobox')}<br>
-                                {/if}
-
-                                {if !empty($RECORD_MODEL->get('mailingstate'))}
-                                    {$RECORD_MODEL->get('mailingstate')}, {$RECORD_MODEL->get('mailingcountry')}
-                                {else}
-                                    {$RECORD_MODEL->get('mailingcountry')}
-                                {/if}
-
-                            {/if}
-                        </div>
-                    </div>
-                </div>
-                <div class="number-container" style="padding-bottom: 6mm;">Customer number:
-                    <span style="font-weight: 600;"> {$RECORD_MODEL->get('cf_898')}</span>
-                </div>
-            </div>
-
-
-            {* Right column *}
-            <div class="company-data-item company-data-item-to">
-                <div class="place-container"><strong>To:</strong></div>
-                <div class="company-container">
-                    <div style="padding:2mm;min-height:27mm;">
-                        <div style="text-transform: capitalize; font-weight: 600;">
-                            {if isset($COMPANY)}
-                                {$COMPANY->get('company_name')}
-                            {/if}
-                        </div>
-                        <div style="margin-top: 1.5mm;">
-                            {if isset($COMPANY)}
-                                {$COMPANY->get('company_address')}
-                            {/if}
-                            <br />
-                            {if isset($COMPANY)}
-                                {if !empty($COMPANY->get('city'))}
-                                    {$COMPANY->get('city')},
-                                {/if}
-                                {$COMPANY->get('state')} {$COMPANY->get('code')}<br>
-                                {$COMPANY->get('country')}
-                            {/if}
-                        </div>
-                    </div>
-                    <div class="number-container">
-                        {if isset($COMPANY)}
-                            {if !empty($COMPANY->get('email'))}
-                                <p>Contact:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
-                            {/if}
-                            {if !empty($COMPANY->get('company_phone'))} <p>or <span
-                                    style="font-style: italic;">{$COMPANY->get('company_phone')}</span></p> {/if}
-                        {/if}
-                    </div>
-                </div>
-            </div>
-        </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
 
         <!-- SECTION 1 -->
         <section class="main-table">
             <div class="additional-section bolder-element" style="margin-top: 0mm;">
                 1. I/We hereby instruct GPM:
             </div>
-
 
             <div class="section-title">
                 (a) <span class="bolder-element"> to ship</span> in its name and on my/our behalf the following physical
@@ -609,7 +592,6 @@
                         storage in:</span>
                     <div class="country-options">
                         <div>
-
                             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                                 <input class="country-checkbox" type="checkbox" name="1"> Singapore
                             {else}
@@ -689,7 +671,6 @@
 
                 <div style="margin-left: 2mm; margin-top:2mm;">
                     <p>(b) to <span class="bolder-element">GPM’s bank account</span> as follows:</p>
-                    <!-- BANK DETAILS -->
                     <div style="padding-left: 5mm;">
                         {if $SELECTED_BANK}
                             {assign var=iban value=$SELECTED_BANK->get('iban_no')|lower|replace:' ':''}
@@ -732,8 +713,6 @@
                 </div>
             </div>
 
-
-            <!-- SECTION 2 -->
             <div class="additional-section" style="margin-top: 0;">
                 <div style="margin-bottom:2mm;" class="bolder-element">
                     4. This Shipment & Storage Order and any agreement with GPM resulting therefrom shall be subject to
@@ -771,10 +750,7 @@
                     Signature
                 </div>
             </div>
-    </div>
-
-
-    </section>
+        </section>
     </div>
 
     <script>
@@ -793,14 +769,12 @@
                         if (customInput) customInput.value = '';
                     }
 
-                    // Remove checked state from other checkboxes
                     checkboxes.forEach(function(box) {
                         if (box !== e.target) box.checked = false;
                     });
                 });
             });
         }
-
 
         document.getElementById('downloadBtn').addEventListener('click', function(e) {
 
@@ -820,7 +794,6 @@
                 }
             }
 
-            // Get all custom-editable-input values and append to URL as query parameters
             document.querySelectorAll('.custom-editable-input').forEach(input => {
                 if (!input.name) return;
 
