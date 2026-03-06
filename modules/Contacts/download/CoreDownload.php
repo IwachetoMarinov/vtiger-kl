@@ -190,7 +190,7 @@ final class CoreDownload
             '--enable-local-file-accesses',
             '--disable-web-security',
             '--print-to-pdf=' . escapeshellarg($basePdfPath),
-            '--print-to-pdf-no-header',
+            '--no-pdf-header-footer'
         ];
 
         $extra = [];
