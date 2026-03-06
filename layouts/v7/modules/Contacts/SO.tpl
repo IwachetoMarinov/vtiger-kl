@@ -52,7 +52,7 @@
         .header-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 4mm;
+            margin-bottom: 3mm;
         }
 
         .header-table td {
@@ -67,7 +67,7 @@
             text-align: center;
             font-size: 13pt;
             font-weight: bold;
-            padding-top: 3mm;
+            padding-top: 1mm;
         }
 
         /* ======= FROM / TO BLOCK (FIXED HEIGHT) ======= */
