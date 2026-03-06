@@ -12,10 +12,11 @@
         {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
             {assign var="sansRegular" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Regular.woff"}
             {assign var="sansBold" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Bold.woff"}
-        {/if}
+        {/if}  
 
         @font-face {
             font-family: 'Open Sans';
+
             font-style: normal;
             font-weight: 400;
             src: url('{$sansRegular}') format('woff');
@@ -47,11 +48,9 @@
             padding: 6mm;
         }
 
-        /* HEADER */
-
+        /* Header */
         .header-table {
             width: 100%;
-            border-collapse: collapse;
             margin-bottom: 4mm;
         }
 
@@ -70,75 +69,50 @@
             padding-top: 3mm;
         }
 
-        /* ======= FROM / TO BLOCK (FIXED HEIGHT) ======= */
-
-        .company-table {
+        /* From / To Section */
+        .from-to-table {
             width: 100%;
-            height: 183px;
-            max-height: 183px;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
-
-        .company-table td {
             border: 1px solid #000;
-            vertical-align: top;
-            padding: 0;
-        }
-
-        .company-left-col,
-        .company-right-col {
-            width: 50%;
-            height: 183px;
-        }
-
-        .inner-company-table {
-            width: 100%;
-            height: 183px;
             border-collapse: collapse;
-            table-layout: fixed;
+            margin-bottom: 3mm;
         }
 
-        .inner-company-table td {
-            border: none;
+        .from-to-table td {
+            border: 1px solid #000;
+            padding: 2mm;
             vertical-align: top;
         }
 
-        .label-cell {
-            width: 25%;
-            padding: 2mm;
-            border-right: 1px solid #000 !important;
+        .from-label {
+            width: 50mm;
+            height: 30mm;
         }
 
-        .content-cell {
-            width: 75%;
-            padding: 2mm;
+        .from-box {
+            width: 65mm;
+            height: 30mm;
+            background: repeating-linear-gradient(transparent,
+                    transparent 3.5mm,
+                    #000 3.5mm,
+                    #000 3.6mm);
         }
 
-        /* force exact height split */
-
-        .top-row {
-            height: 92px;
+        .to-box {
+            width: 85mm;
+            line-height: 1.3;
         }
 
-        .bottom-row {
-            height: 91px;
+        .customer-label {
+            width: 50mm;
+            height: 8mm;
         }
 
-        .customer-row td,
-        .contact-row td {
-            border-top: 1px solid #000 !important;
-            padding: 2mm;
-        }
-
-        /* SECTION */
-
+        /* Section 2 */
         .section-title {
             margin: 2mm 0;
         }
 
-        /* METALS TABLE */
-
+        /* Metals Table */
         .metals-table {
             width: 100%;
             border-collapse: collapse;
@@ -155,7 +129,7 @@
         }
 
         .metals-table th {
-            background: #f0f0f0;
+            background-color: #f0f0f0;
             font-weight: bold;
         }
 
@@ -165,16 +139,14 @@
             padding-left: 2mm;
         }
 
-        /* SERIAL BOX */
-
+        /* Serials Box */
         .serials-box {
             min-height: 15mm;
             padding: 2mm;
             margin-bottom: 2mm;
         }
 
-        /* TEXT BLOCKS */
-
+        /* Additional Sections */
         .additional-section {
             margin: 3mm 0;
             line-height: 1.4;
@@ -188,8 +160,15 @@
             margin-left: 5mm;
         }
 
-        /* BANK DETAILS */
+        .line {
+            display: inline-block;
+        }
 
+        .long-line {
+            display: inline-block;
+        }
+
+        /* Bank Details Section */
         .bank-details {
             margin: 2mm 0;
         }
@@ -198,8 +177,7 @@
             margin-bottom: 1.5mm;
         }
 
-        /* SIGNATURE */
-
+        /* Signature Section */
         .signature-section {
             margin-top: 8mm;
         }
@@ -223,7 +201,46 @@
             margin-top: 8mm;
         }
 
-        /* MAIN BLOCK */
+        .company-data {
+            display: flex;
+            border: 1px solid #000;
+            max-height: 183px;
+            height: 183px;
+        }
+
+        .company-data-item {
+            width: 50%;
+            font-size: 10pt;
+            line-height: 1.2;
+        }
+
+        .company-data-item-to {
+            display: flex;
+        }
+
+        .company-data-item-from {
+            border-right: 1px solid #000;
+        }
+
+        .company-data-item-to,
+        .from-container {
+            display: flex;
+        }
+
+        .place-container {
+            padding: 2mm;
+            border-right: 1px solid #000;
+            width: 25%;
+        }
+
+        .company-container {
+            width: 75%;
+        }
+
+        .number-container {
+            padding: 2mm;
+            border-top: 1px solid #000;
+        }
 
         .main-table {
             border: 1px solid #000;
@@ -239,7 +256,9 @@
             padding: 0 4mm;
         }
 
-        /* INPUTS */
+        .from-container-wrapper {
+            display: flex;
+        }
 
         .editable-input-wrapper {
             display: flex;
@@ -291,6 +310,7 @@
 
     <div class="printAreaContainer">
 
+        <!-- HEADER -->
         <table class="header-table" style="margin-bottom: 1mm;">
             <tr>
                 <td class="logo">
@@ -312,114 +332,104 @@
             </tr>
         </table>
 
-        <table class="company-table">
-            <tr class="top-row">
-                <td class="company-left-col">
-                    <table class="inner-company-table">
-                        <tr>
-                            <td class="label-cell">
-                                <strong>From:</strong>
-                            </td>
-                            <td class="content-cell from-top-content">
-                                <div>
-                                    {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
-                                </div>
+        <!-- FROM / TO SECTION -->
+        <div class="company-data">
+            {* Left Column *}
+            <div class="company-data-item company-data-item-from">
+                <div class="from-container-wrapper">
+                    <div class="place-container from-container">
+                        <div><strong>From:</strong></div>
+                    </div>
+                    <div class="company-container" style="min-height: 24mm; padding:2mm;">
+                        <div>
+                            {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
+                        </div>
 
-                                <div>
-                                    {if !empty($RECORD_MODEL->get('mailingstreet'))}
-                                        {$RECORD_MODEL->get('mailingstreet')}<br>
-                                    {/if}
+                        <div>
+                            {if !empty($RECORD_MODEL->get('mailingstreet'))}
+                                {$RECORD_MODEL->get('mailingstreet')}<br>
+                            {/if}
 
-                                    {if empty($RECORD_MODEL->get('mailingpobox'))}
+                            {if empty($RECORD_MODEL->get('mailingpobox'))}
 
-                                        {if !empty($RECORD_MODEL->get('mailingcity')) && !empty($RECORD_MODEL->get('mailingzip'))}
-                                            {$RECORD_MODEL->get('mailingcity')} {$RECORD_MODEL->get('mailingzip')}<br>
-                                        {elseif !empty($RECORD_MODEL->get('mailingcity'))}
-                                            {$RECORD_MODEL->get('mailingcity')}<br>
-                                        {else}
-                                            {$RECORD_MODEL->get('mailingzip')}<br>
-                                        {/if}
-
-                                        {$RECORD_MODEL->get('mailingcountry')}
-
-                                    {else}
-
-                                        {if !empty($RECORD_MODEL->get('mailingcity'))}
-                                            P.O. Box {$RECORD_MODEL->get('mailingpobox')},
-                                            {$RECORD_MODEL->get('mailingcity')}<br>
-                                        {else}
-                                            P.O. Box {$RECORD_MODEL->get('mailingpobox')}<br>
-                                        {/if}
-
-                                        {if !empty($RECORD_MODEL->get('mailingstate'))}
-                                            {$RECORD_MODEL->get('mailingstate')}, {$RECORD_MODEL->get('mailingcountry')}
-                                        {else}
-                                            {$RECORD_MODEL->get('mailingcountry')}
-                                        {/if}
-
-                                    {/if}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="bottom-row customer-row">
-                            <td colspan="2">
-                                Customer number:
-                                <span style="font-weight: 600;"> {$RECORD_MODEL->get('cf_898')}</span>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-
-                <td class="company-right-col">
-                    <table class="inner-company-table">
-                        <tr>
-                            <td class="label-cell">
-                                <strong>To:</strong>
-                            </td>
-                            <td class="content-cell to-top-content">
-                                <div style="text-transform: capitalize; font-weight: 600;">
-                                    {if isset($COMPANY)}
-                                        {$COMPANY->get('company_name')}
-                                    {/if}
-                                </div>
-                                <div style="margin-top: 1.5mm;">
-                                    {if isset($COMPANY)}
-                                        {$COMPANY->get('company_address')}
-                                    {/if}
-                                    <br />
-                                    {if isset($COMPANY)}
-                                        {if !empty($COMPANY->get('city'))}
-                                            {$COMPANY->get('city')},
-                                        {/if}
-                                        {$COMPANY->get('state')} {$COMPANY->get('code')}<br>
-                                        {$COMPANY->get('country')}
-                                    {/if}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="bottom-row contact-row">
-                            <td colspan="2">
-                                {if isset($COMPANY)}
-                                    {if !empty($COMPANY->get('email'))}
-                                        <p>Contact:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
-                                    {/if}
-                                    {if !empty($COMPANY->get('company_phone'))}
-                                        <p>or<span style="font-style: italic;">{$COMPANY->get('company_phone')}</span></p>
-                                    {/if}
+                                {if !empty($RECORD_MODEL->get('mailingcity')) && !empty($RECORD_MODEL->get('mailingzip'))}
+                                    {$RECORD_MODEL->get('mailingcity')} {$RECORD_MODEL->get('mailingzip')}<br>
+                                {elseif !empty($RECORD_MODEL->get('mailingcity'))}
+                                    {$RECORD_MODEL->get('mailingcity')}<br>
+                                {else}
+                                    {$RECORD_MODEL->get('mailingzip')}<br>
                                 {/if}
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
 
+                                {$RECORD_MODEL->get('mailingcountry')}
+
+                            {else}
+
+                                {if !empty($RECORD_MODEL->get('mailingcity'))}
+                                    P.O. Box {$RECORD_MODEL->get('mailingpobox')}, {$RECORD_MODEL->get('mailingcity')}<br>
+                                {else}
+                                    P.O. Box {$RECORD_MODEL->get('mailingpobox')}<br>
+                                {/if}
+
+                                {if !empty($RECORD_MODEL->get('mailingstate'))}
+                                    {$RECORD_MODEL->get('mailingstate')}, {$RECORD_MODEL->get('mailingcountry')}
+                                {else}
+                                    {$RECORD_MODEL->get('mailingcountry')}
+                                {/if}
+
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+                <div class="number-container" style="padding-bottom: 6mm;">Customer number:
+                    <span style="font-weight: 600;"> {$RECORD_MODEL->get('cf_898')}</span>
+                </div>
+            </div>
+
+            {* Right column *}
+            <div class="company-data-item company-data-item-to">
+                <div class="place-container"><strong>To:</strong></div>
+                <div class="company-container">
+                    <div style="padding:2mm;min-height:27mm;">
+                        <div style="text-transform: capitalize; font-weight: 600;">
+                            {if isset($COMPANY)}
+                                {$COMPANY->get('company_name')}
+                            {/if}
+                        </div>
+                        <div style="margin-top: 1.5mm;">
+                            {if isset($COMPANY)}
+                                {$COMPANY->get('company_address')}
+                            {/if}
+                            <br />
+                            {if isset($COMPANY)}
+                                {if !empty($COMPANY->get('city'))}
+                                    {$COMPANY->get('city')},
+                                {/if}
+                                {$COMPANY->get('state')} {$COMPANY->get('code')}<br>
+                                {$COMPANY->get('country')}
+                            {/if}
+                        </div>
+                    </div>
+                    <div class="number-container">
+                        {if isset($COMPANY)}
+                            {if !empty($COMPANY->get('email'))}
+                                <p>Contact:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
+                            {/if}
+                            {if !empty($COMPANY->get('company_phone'))} <p>or<span
+                                    style="font-style: italic;">{$COMPANY->get('company_phone')}</span></p> {/if}
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 1 -->
         <section class="main-table">
             <div class="additional-section bolder-element">
                 <strong>1.</strong> This Sale Order is subject to and governed by the terms and conditions of the
                 Customer Metal Agreement (CMA) executed and entered into by and between me/us and GPM.
             </div>
 
+            <!-- SECTION 2 -->
             <div class="section-title bolder-element">
                 <strong>2.</strong> I/We hereby wish to sell to
                 <span style="text-transform: capitalize;">
@@ -431,6 +441,7 @@
                 the following precious metals:
             </div>
 
+            <!-- METALS TABLE -->
             {assign var="metals" value=[
             'Gold 999.9',
             'Silver 999.0',
@@ -476,11 +487,14 @@
                 {/foreach}
             </table>
 
+
+            <!-- SERIALS BOX -->
             <div class="serials-box">
                 <p>If applicable, please specify the serial numbers of the items to be sold:</p>
                 <input type="text" name="serial_numbers" class="custom-editable-input full-width" />
             </div>
 
+            <!-- SECTION 3 -->
             <div class="additional-section">
                 If the metal to be sold is not currently in storage with GPM, please specify the
                 exact pick-up location and the details of the person authorised to release the metal to GPM (if
@@ -498,6 +512,7 @@
                 </div>
             </div>
 
+            <!-- SECTION 4 -->
             <div class="additional-section bolder-element ">
                 <strong>3.</strong> I/We acknowledge that:
                 <div class="indent">
@@ -510,10 +525,12 @@
                 </div>
             </div>
 
+            <!-- SECTION 5 -->
             <div class="additional-section bolder-element">
                 <strong>4.</strong> The sales proceeds agreed upon shall be transferred to my/our bank account:
             </div>
 
+            <!-- BANK DETAILS -->
             <div class="details-container">
                 <div class="bank-details">
                     <div class="bank-row editable-input-wrapper">
@@ -541,6 +558,7 @@
                     </div>
                 </div>
 
+                <!-- SIGNATURE SECTION -->
                 <div class="signature-section">
                     <div class="signature-section-item">
                         <div class="signature-section-left">
@@ -587,6 +605,7 @@
                 url.searchParams.delete('clientName');
             }
 
+            // Get all custom-editable-input values and append to URL as query parameters
             document.querySelectorAll('.custom-editable-input').forEach(input => {
                 if (!input.name) return;
 
