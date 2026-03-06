@@ -39,13 +39,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
 
         if ($request->get('PDFDownload')) {
             $html = $viewer->view("SO.tpl", $moduleName, true);
-
-            if ((string)$request->get('debug_html') === '1') {
-                header('Content-Type: text/html');
-                echo $html;
-                exit;
-            }
-            // SaleOrderDownload::process($html, $recordModel, $request);
+            SaleOrderDownload::process($html, $recordModel, $request);
             // $this->downloadPDF($html, $request);
         } else {
             $viewer->view("SO.tpl", $moduleName);

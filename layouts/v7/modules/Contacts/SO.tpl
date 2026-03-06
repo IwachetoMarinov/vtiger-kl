@@ -40,6 +40,16 @@
             color: #666;
         }
 
+        @page {
+            margin: 0mm;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
         .printAreaContainer {
             width: 210mm;
             height: 297mm;
@@ -304,7 +314,7 @@
             <li style="float:right">
                 <a id="downloadBtn"
                     style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
-                    href="index.php?module=Contacts&view=SaleOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}&debug_html=1">
+                    href="index.php?module=Contacts&view=SaleOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
                     Download
                 </a>
             </li>
