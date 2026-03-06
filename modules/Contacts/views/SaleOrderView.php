@@ -45,7 +45,7 @@ class Contacts_SaleOrderView_View extends Vtiger_Index_View
                 echo $html;
                 exit;
             }
-            SaleOrderDownload::process($html, $recordModel, $request);
+            // SaleOrderDownload::process($html, $recordModel, $request);
             // $this->downloadPDF($html, $request);
         } else {
             $viewer->view("SO.tpl", $moduleName);
