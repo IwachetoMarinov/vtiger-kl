@@ -56,12 +56,12 @@
         /* Header */
         .header-table {
             width: 100%;
-            /* margin-bottom: 1mm; */
+            margin-bottom: 1mm;
             border-collapse: collapse;
         }
 
         .table-heading {
-            margin-bottom: 3mm;
+            margin-bottom: 4mm;
         }
 
         .header-table td {
