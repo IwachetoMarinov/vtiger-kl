@@ -242,6 +242,17 @@
             flex-wrap: wrap;
         }
 
+        .print-tbl tr:first-child td {
+            border: 0;
+            padding: 0;
+        }
+
+        table.activity-tbl {
+            border-collapse: collapse;
+            width: 100%;
+            border: none;
+        }
+
         @media print {
 
             @page {
@@ -500,15 +511,6 @@
                     <div>Signature</div>
                 </div>
             </div>
-
-            {* <div style="margin-top: 3mm;" class="bottom-container">
-                    <div class="bottom-container-item">
-                        <div style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 50px;background-color:#dce6f9;">
-                        </div>
-                        <p>Signature</p>
-                    </div>
-                    <div class="bottom-container-item"></div>
-                </div> *}
         </div>
 
     {/for}
