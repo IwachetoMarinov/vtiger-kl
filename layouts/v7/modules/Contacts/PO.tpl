@@ -218,7 +218,7 @@
 
         .main-table {
             border: 1px solid #000;
-            margin-top: 3mm;
+            margin-top: 1.5mm;
             padding: 3.5mm 2mm;
         }
 
