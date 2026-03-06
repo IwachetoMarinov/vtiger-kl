@@ -295,17 +295,6 @@
         .full-width {
             width: 100%;
         }
-
-        @page {
-            size: A4;
-            margin: 0;
-        }
-
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-        }
     </style>
 </head>
 

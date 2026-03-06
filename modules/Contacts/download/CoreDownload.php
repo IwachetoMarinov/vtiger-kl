@@ -183,7 +183,7 @@ final class CoreDownload
         $url = 'file://' . str_replace(DIRECTORY_SEPARATOR, '/', $htmlReal);
 
         $defaults = [
-            '--headless=new',
+            '--headless=old',
             '--disable-gpu',
             '--no-sandbox',
             '--allow-file-access-from-files',
