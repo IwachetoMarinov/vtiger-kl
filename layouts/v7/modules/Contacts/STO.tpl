@@ -125,10 +125,12 @@
 
         .top-row {
             height: 92px;
+            max-height: 92px;
         }
 
         .bottom-row {
             height: 91px;
+            max-height: 91px;
         }
 
         .customer-row td,
