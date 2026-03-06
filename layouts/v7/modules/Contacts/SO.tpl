@@ -52,7 +52,7 @@
         .header-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 3mm;
+            margin-bottom: 2mm;
         }
 
         .header-table td {
