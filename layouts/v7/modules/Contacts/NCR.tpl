@@ -242,11 +242,6 @@
             flex-wrap: wrap;
         }
 
-        .print-tbl tr:first-child td {
-            border: 0;
-            padding: 0;
-        }
-
         @media print {
 
             @page {
