@@ -61,7 +61,7 @@
         }
 
         .table-heading {
-            margin-bottom: 2mm;
+            margin-bottom: 3mm;
         }
 
         .header-table td {
@@ -243,7 +243,7 @@
 
         .main-table {
             border: 1px solid #000;
-            margin-top: 2.5mm;
+            margin-top: 4mm;
             padding: 3.5mm 2mm;
         }
 
