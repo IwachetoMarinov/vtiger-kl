@@ -212,9 +212,17 @@
             width: 57%;
         }
 
+        /* .custom-editable-input {
+            border: none;
+            position: relative;
+            padding-bottom: 1mm;
+            flex: 1;
+            min-width: 40mm;
+            border-bottom: 1px dotted #000;
+        } */
         .custom-editable-input {
             border: none;
-            possition: relative;
+            position: relative;
             padding-bottom: 1mm;
             flex: 1;
             min-width: 40mm;
@@ -240,6 +248,22 @@
 
         .editable-input-wrapper-gap {
             flex-wrap: wrap;
+        }
+
+        input[type="text"],
+        textarea,
+        input[type="checkbox"] {
+            -webkit-appearance: none !important;
+            appearance: none !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+
+        textarea {
+            resize: none !important;
+            overflow: hidden !important;
         }
 
         @media print {

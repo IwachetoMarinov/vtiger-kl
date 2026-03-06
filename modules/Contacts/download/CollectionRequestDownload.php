@@ -69,7 +69,7 @@ class CollectionRequestDownload
 
         CoreDownload::writeFileOrFail($htmlPath, (string)$html);
         CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath, self::WKHTML_OPTS);
-        
+
         @unlink($htmlPath);
 
         // $tmpDir = CoreDownload::getWritableTmpDir($root_directory);
@@ -78,7 +78,6 @@ class CollectionRequestDownload
         // HTML -> base PDF
         // CoreDownload::writeFileOrFail($htmlPath, (string)$html);
         // CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath, self::WKHTML_OPTS);
-        @unlink($htmlPath);
 
         // Infer dynamic row count from HTML names: qty_1..qty_N
         $rowCount = self::inferRowCountFromHtml((string)$html, 30);
