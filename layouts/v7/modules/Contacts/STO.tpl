@@ -86,6 +86,7 @@
             max-height: 183px;
             border-collapse: collapse;
             table-layout: fixed;
+            font-size: 8.5pt;
         }
 
         .company-table td {
