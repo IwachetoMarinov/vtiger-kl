@@ -247,12 +247,6 @@
             padding: 0;
         }
 
-        table.activity-tbl {
-            border-collapse: collapse;
-            width: 100%;
-            border: none;
-        }
-
         @media print {
 
             @page {
