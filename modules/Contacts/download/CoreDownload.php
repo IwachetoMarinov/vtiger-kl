@@ -139,6 +139,92 @@ final class CoreDownload
         }
     }
 
+    public static function runChromiumPdfOrFail(string $htmlPath, string $basePdfPath, array $opts = []): void
+    {
+        $chromeBin = null;
+
+        $candidates = [
+            '/usr/bin/google-chrome',
+            '/usr/bin/google-chrome-stable',
+            '/usr/bin/chromium',
+            '/usr/bin/chromium-browser',
+            'google-chrome',
+            'google-chrome-stable',
+            'chromium',
+            'chromium-browser',
+        ];
+
+        foreach ($candidates as $bin) {
+            $check = 'command -v ' . escapeshellarg($bin) . ' 2>/dev/null';
+            $found = trim((string)shell_exec($check));
+
+            if ($found !== '') {
+                $chromeBin = $found;
+                break;
+            }
+
+            if (@is_executable($bin)) {
+                $chromeBin = $bin;
+                break;
+            }
+        }
+
+        if (!$chromeBin) {
+            header("HTTP/1.1 500 Internal Server Error");
+            die('Chromium/Chrome binary not found on server.');
+        }
+
+        $htmlReal = realpath($htmlPath);
+        if ($htmlReal === false || !file_exists($htmlReal)) {
+            header("HTTP/1.1 500 Internal Server Error");
+            die('HTML file not found: ' . $htmlPath);
+        }
+
+        $url = 'file://' . str_replace(DIRECTORY_SEPARATOR, '/', $htmlReal);
+
+        $defaults = [
+            '--headless=new',
+            '--disable-gpu',
+            '--no-sandbox',
+            '--allow-file-access-from-files',
+            '--enable-local-file-accesses',
+            '--disable-web-security',
+            '--print-to-pdf=' . escapeshellarg($basePdfPath),
+            '--print-to-pdf-no-header',
+        ];
+
+        $extra = [];
+        if (!empty($opts['landscape'])) {
+            $extra[] = '--landscape';
+        }
+
+        if (!empty($opts['window-size'])) {
+            $extra[] = '--window-size=' . escapeshellarg((string)$opts['window-size']);
+        } else {
+            $extra[] = '--window-size=1400,2000';
+        }
+
+        $cmdParts = array_merge(
+            [escapeshellcmd($chromeBin)],
+            $defaults,
+            $extra,
+            [escapeshellarg($url)]
+        );
+
+        $cmd = implode(' ', $cmdParts) . ' 2>&1';
+
+        $out = [];
+        $code = 0;
+        exec($cmd, $out, $code);
+
+        clearstatcache(true, $basePdfPath);
+
+        if ($code !== 0 || !file_exists($basePdfPath) || filesize($basePdfPath) < 2000) {
+            header("HTTP/1.1 500 Internal Server Error");
+            die("Chromium PDF generation failed (exit=$code):\n" . implode("\n", $out));
+        }
+    }
+
     /**
      * Create a ready-to-use FPDI(TCPDF) instance with default form appearance.
      */
