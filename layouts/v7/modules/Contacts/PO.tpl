@@ -56,12 +56,12 @@
         /* Header */
         .header-table {
             width: 100%;
-            margin-bottom: 1mm;
+            /* margin-bottom: 1mm; */
             border-collapse: collapse;
         }
 
         .table-heading {
-            margin-bottom: 4mm;
+            margin-bottom: 2mm;
         }
 
         .header-table td {
@@ -400,10 +400,10 @@
                 <td class="company-left-col">
                     <table class="inner-company-table">
                         <tr class="top-row">
-                            <td class="label-cell">
+                            <td class="label-cell" style="padding: 2mm 0 0 2mm;">
                                 <strong>From:</strong>
                             </td>
-                            <td class="content-cell">
+                            <td class="content-cell" style="padding: 2mm 0 0 2mm;">
                                 <div>
                                     {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
                                 </div>
@@ -454,10 +454,10 @@
                 <td class="company-right-col">
                     <table class="inner-company-table">
                         <tr class="top-row">
-                            <td class="label-cell">
+                            <td class="label-cell" style="padding: 2mm 0 0 2mm;">
                                 <strong>To:</strong>
                             </td>
-                            <td class="content-cell">
+                            <td class="content-cell" style="padding: 2mm 0 0 2mm;">
                                 <div style="text-transform: capitalize; font-weight: 600;">
                                     {if isset($COMPANY)}
                                         {$COMPANY->get('company_name')}
