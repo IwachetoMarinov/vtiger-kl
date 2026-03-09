@@ -45,9 +45,7 @@ class Users_DeleteAjax_Action extends Vtiger_Delete_Action
             // $transformUserId = vtws_getWebserviceEntityId($moduleName, $newOwnerId);
 
             // $userModel = Users_Record_Model::getCurrentUserModel();
-
             // vtws_deleteUser($userId, $transformUserId, $userModel);
-
             // if($request->get('permanent') == '1') {
             //     Users_Record_Model::deleteUserPermanently($ownerId, $newOwnerId);
             // }    
