@@ -151,6 +151,7 @@
             border-collapse: collapse;
             border: 1px solid #000;
             font-size: 8pt;
+            margin-top: 4mm;
             margin-bottom: 2mm;
             table-layout: fixed;
         }
