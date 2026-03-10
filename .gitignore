@@ -14,7 +14,7 @@ pdf_debug.log
 tabdata.php
 parent_tabdata.php
 user_privileges/*
-user_privileges/**
+!user_privileges/index.html
 
 api/api_debug.log
 
