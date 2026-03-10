@@ -6,26 +6,26 @@
     <meta charset="UTF-8">
 
     <style>
-        {{assign var="sansRegular" value="layouts/v7/resources/fonts/OpenSans-Regular.woff"}}
-        {{assign var="sansBold" value="layouts/v7/resources/fonts/OpenSans-Bold.woff"}}
+        {{assign var="sansRegular" value="layouts/v7/resources/fonts/OpenSans-Regular.ttf"}}
+        {{assign var="sansBold" value="layouts/v7/resources/fonts/OpenSans-Bold.ttf"}}
 
         {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
-            {assign var="sansRegular" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Regular.woff"}
-            {assign var="sansBold" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Bold.woff"}
+            {assign var="sansRegular" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Regular.ttf"}
+            {assign var="sansBold" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Bold.ttf"}
         {/if}
 
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
-            src: url('{$sansRegular}') format('woff');
+            src: url('{$sansRegular}') format('truetype');
         }
 
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 700;
-            src: url('{$sansBold}') format('woff');
+            src: url('{$sansBold}') format('truetype');
         }
 
         * {
