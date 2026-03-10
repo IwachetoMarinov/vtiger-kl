@@ -40,19 +40,19 @@
             color: #666;
         }
 
-        /* .printAreaContainer {
+        .printAreaContainer {
             width: 210mm;
             height: 297mm;
             margin: auto;
             padding: 6mm;
-        } */
+        }
 
-        .printAreaContainer {
+        /* .printAreaContainer {
             width: 198mm;
             min-height: 297mm;
             margin: 0 auto;
             padding: 6mm;
-        }
+        } */
 
         /* HEADER */
 
