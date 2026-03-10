@@ -122,6 +122,31 @@ final class CoreDownload
         return implode(' ', $parts) . ' 2>&1';
     }
 
+    public static function runChromePdfOrFail(string $htmlPath, string $pdfPath): void
+    {
+        $script = rtrim(__DIR__, '/\\') . DIRECTORY_SEPARATOR . 'chrome_pdf.js';
+
+        if (!file_exists($script)) {
+            header("HTTP/1.1 500 Internal Server Error");
+            die("Chrome PDF script not found: " . $script);
+        }
+
+        $cmd = 'node '
+            . escapeshellarg($script) . ' '
+            . escapeshellarg($htmlPath) . ' '
+            . escapeshellarg($pdfPath)
+            . ' 2>&1';
+
+        $out = [];
+        $code = 0;
+        exec($cmd, $out, $code);
+
+        if ($code !== 0 || !file_exists($pdfPath) || filesize($pdfPath) < 2000) {
+            header("HTTP/1.1 500 Internal Server Error");
+            die("Chrome PDF failed (exit=$code):\n" . implode("\n", $out));
+        }
+    }
+
     /**
      * Runs wkhtmltopdf and validates output.
      */
