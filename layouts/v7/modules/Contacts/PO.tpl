@@ -372,6 +372,9 @@
 
     <div
         class="printAreaContainer {if isset($smarty.request.PDFDownload) && $smarty.request.PDFDownload eq true}pdf-wrapper{/if}">
+            
+
+            <pre>{var_dump($ROOT_DIRECTORY)}</pre>
 
         <!-- HEADER -->
         <div class="logo">
