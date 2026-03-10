@@ -129,7 +129,7 @@
         }
 
         .bottom-row {
-            height: 91px;
+            /* height: 91px; */
         }
 
         .customer-row td,
