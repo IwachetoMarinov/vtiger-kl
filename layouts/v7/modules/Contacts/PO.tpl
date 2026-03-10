@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
 
     <style>
-
         {{assign var="sansRegular" value="layouts/v7/resources/fonts/OpenSans-Regular.woff"}}
         {{assign var="sansBold" value="layouts/v7/resources/fonts/OpenSans-Bold.woff"}}
 
@@ -37,7 +36,7 @@
 
         body {
             font-family: 'Open Sans';
-            font-size: 9pt;
+            font-size: 8.5pt;
             color: #666;
         }
 
@@ -47,10 +46,16 @@
         }
 
         .printAreaContainer {
-            width: 210mm;
-            height: 297mm;
+            width: 200mm;
+            height: 287mm;
             margin: auto;
-            padding: 6mm;
+            padding: 4mm;
+        }
+
+        .pdf-wrapper {
+            position: relative;
+            background-color: #fff;
+            top: -7mm;
         }
 
         /* Header */
@@ -68,73 +73,56 @@
             vertical-align: top;
         }
 
-        .logo {
-            width: 52mm;
-        }
-
         .title {
             text-align: center;
-            font-size: 13pt;
+            font-size: 12pt;
             font-weight: bold;
-            padding-top: 2mm;
+            padding-top: 1mm;
         }
 
         /* REAL TABLE FOR FROM / TO SECTION */
-        .company-table {
+        .company-box {
             width: 100%;
-            height: 183px;
-            max-height: 183px;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
-
-        .company-table td {
+            height: 38mm;
             border: 1px solid #000;
-            vertical-align: top;
-            padding: 0;
+            display: flex;
+            margin-top: 1mm;
         }
 
-        .company-left-col,
-        .company-right-col {
+        .company-half {
             width: 50%;
-            height: 183px;
+            display: flex;
+            flex-direction: column;
         }
 
-        .inner-company-table {
-            width: 100%;
-            height: 183px;
-            border-collapse: collapse;
-            table-layout: fixed;
+        .company-left {
+            border-right: 1px solid #000;
         }
 
-        .inner-company-table td {
-            border: none;
-            vertical-align: top;
+        .company-top {
+            height: 24mm;
+            display: flex;
+            border-bottom: 1px solid #000;
         }
 
-        .label-cell {
-            width: 25%;
+        .company-bottom {
+            height: 14mm;
             padding: 2mm;
-            border-right: 1px solid #000 !important;
+            overflow: hidden;
         }
 
-        .content-cell {
-            width: 75%;
-            padding: 2mm;
+        .company-label {
+            width: 18mm;
+            padding: 2mm 0 0 2mm;
+            border-right: 1px solid #000;
+            flex-shrink: 0;
         }
 
-        .top-row {
-            height: 92px;
-        }
-
-        .bottom-row {
-            /* height: 91px; */
-        }
-
-        .customer-row td,
-        .contact-row td {
-            border-top: 1px solid #000 !important;
-            padding: 2mm;
+        .company-content {
+            flex: 1;
+            padding: 2mm 2mm 0 2mm;
+            overflow: hidden;
+            line-height: 1.35;
         }
 
         /* Section 2 */
@@ -147,8 +135,9 @@
             width: 100%;
             border-collapse: collapse;
             border: 1px solid #000;
-            font-size: 8.5pt;
+            font-size: 8pt;
             margin-bottom: 2mm;
+            table-layout: fixed;
         }
 
         .metals-table th,
@@ -171,12 +160,12 @@
 
         /* Serials Box */
         .serials-box {
-            padding: 2mm;
+            padding: 1.5mm;
         }
 
         /* Additional Sections */
         .additional-section {
-            margin: 3mm 0;
+            margin: 1mm 0;
             line-height: 1.4;
         }
 
@@ -207,8 +196,8 @@
 
         /* Signature Section */
         .signature-section {
-            margin-top: 8mm;
-            padding: 0 4mm;
+            margin-top: 4mm;
+            padding: 0 2mm;
         }
 
         .signature-line {
@@ -218,8 +207,8 @@
 
         .main-table {
             border: 1px solid #000;
-            margin-top: 1.5mm;
-            padding: 3.5mm 2mm;
+            margin-top: 1mm;
+            padding: 2mm;
         }
 
         .bolder-element {
@@ -233,7 +222,7 @@
         .signature-section-item {
             display: flex;
             justify-content: space-between;
-            margin-top: 4mm;
+            margin-top: 2mm;
         }
 
         .signature-section-left {
@@ -311,6 +300,17 @@
             width: 5mm;
             line-height: 3.5mm;
         }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
     </style>
 
 
@@ -333,7 +333,7 @@
             <li style="float:right">
                 <a id="downloadBtn"
                     style="display:block;color:white;text-align:center;padding:14px 16px;text-decoration:none;background-color:#bea364;"
-                    href="index.php?module=Contacts&view=PurchaseOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}">
+                    href="index.php?module=Contacts&view=PurchaseOrderView&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo|default:''}&PDFDownload=true&hideCustomerInfo={$smarty.request.hideCustomerInfo|default:0}&debug=1">
                     Download
                 </a>
             </li>
@@ -370,23 +370,18 @@
         {/literal}
     {/if}
 
-    <div class="printAreaContainer">
+    <div
+        class="printAreaContainer {if isset($smarty.request.PDFDownload) && $smarty.request.PDFDownload eq true}pdf-wrapper{/if}">
 
         <!-- HEADER -->
-        <table class="header-table ">
-            <tr>
-                <td class="logo">
-                    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-                        <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
-                    {else}
-                        <img src="file://{$ROOT_DIRECTORY}layouts/v7/modules/Contacts/resources/gpm-new-logo.png"
-                            width="100%">
-                    {/if}
-                </td>
-                <td class="title"></td>
-                <td style="width:25mm;"></td>
-            </tr>
-        </table>
+        <div class="logo">
+            {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" style="width:45mm;">
+            {else}
+                <img src="file://{$ROOT_DIRECTORY}/layouts/v7/modules/Contacts/resources/gpm-new-logo.png"
+                    style="width:40mm;">
+            {/if}
+        </div>
 
         <table class="header-table table-heading">
             <tr>
@@ -395,105 +390,95 @@
         </table>
 
         <!-- FROM / TO SECTION -->
-        <table class="company-table">
-            <tr>
-                <td class="company-left-col">
-                    <table class="inner-company-table">
-                        <tr class="top-row">
-                            <td class="label-cell" style="padding: 2mm 0 0 2mm;">
-                                <strong>From:</strong>
-                            </td>
-                            <td class="content-cell" style="padding: 2mm 0 0 2mm;">
-                                <div>
-                                    {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
-                                </div>
+        <div class="company-box">
+            <div class="company-half company-left">
+                <div class="company-top">
+                    <div class="company-label"><strong>From:</strong></div>
+                    <div class="company-content">
+                        <div>
+                            {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
+                        </div>
 
-                                <div>
-                                    {if !empty($RECORD_MODEL->get('mailingstreet'))}
-                                        {$RECORD_MODEL->get('mailingstreet')}<br>
-                                    {/if}
+                        <div>
+                            {if !empty($RECORD_MODEL->get('mailingstreet'))}
+                                {$RECORD_MODEL->get('mailingstreet')}<br>
+                            {/if}
 
-                                    {if empty($RECORD_MODEL->get('mailingpobox'))}
+                            {if empty($RECORD_MODEL->get('mailingpobox'))}
 
-                                        {if !empty($RECORD_MODEL->get('mailingcity')) && !empty($RECORD_MODEL->get('mailingzip'))}
-                                            {$RECORD_MODEL->get('mailingcity')} {$RECORD_MODEL->get('mailingzip')}<br>
-                                        {elseif !empty($RECORD_MODEL->get('mailingcity'))}
-                                            {$RECORD_MODEL->get('mailingcity')}<br>
-                                        {else}
-                                            {$RECORD_MODEL->get('mailingzip')}<br>
-                                        {/if}
-
-                                        {$RECORD_MODEL->get('mailingcountry')}
-
-                                    {else}
-
-                                        {if !empty($RECORD_MODEL->get('mailingcity'))}
-                                            P.O. Box {$RECORD_MODEL->get('mailingpobox')}, {$RECORD_MODEL->get('mailingcity')}<br>
-                                        {else}
-                                            P.O. Box {$RECORD_MODEL->get('mailingpobox')}<br>
-                                        {/if}
-
-                                        {if !empty($RECORD_MODEL->get('mailingstate'))}
-                                            {$RECORD_MODEL->get('mailingstate')}, {$RECORD_MODEL->get('mailingcountry')}
-                                        {else}
-                                            {$RECORD_MODEL->get('mailingcountry')}
-                                        {/if}
-
-                                    {/if}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="bottom-row customer-row">
-                            <td colspan="2">Customer number:
-                                <span style="font-weight: 600;"> {$RECORD_MODEL->get('cf_898')}</span>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-
-                <td class="company-right-col">
-                    <table class="inner-company-table">
-                        <tr class="top-row">
-                            <td class="label-cell" style="padding: 2mm 0 0 2mm;">
-                                <strong>To:</strong>
-                            </td>
-                            <td class="content-cell" style="padding: 2mm 0 0 2mm;">
-                                <div style="text-transform: capitalize; font-weight: 600;">
-                                    {if isset($COMPANY)}
-                                        {$COMPANY->get('company_name')}
-                                    {/if}
-                                </div>
-                                <div style="margin-top: 1.5mm;">
-                                    {if isset($COMPANY)}
-                                        {$COMPANY->get('company_address')}
-                                    {/if}
-                                    <br />
-                                    {if isset($COMPANY)}
-                                        {if !empty($COMPANY->get('city'))}
-                                            {$COMPANY->get('city')},
-                                        {/if}
-                                        {$COMPANY->get('state')} {$COMPANY->get('code')}<br>
-                                        {$COMPANY->get('country')}
-                                    {/if}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="bottom-row contact-row">
-                            <td colspan="2">
-                                {if isset($COMPANY)}
-                                    {if !empty($COMPANY->get('email'))}
-                                        <p>Contact:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
-                                    {/if}
-                                    {if !empty($COMPANY->get('company_phone'))}
-                                        <p>or <span style="font-style: italic;">{$COMPANY->get('company_phone')}</span></p>
-                                    {/if}
+                                {if !empty($RECORD_MODEL->get('mailingcity')) && !empty($RECORD_MODEL->get('mailingzip'))}
+                                    {$RECORD_MODEL->get('mailingcity')} {$RECORD_MODEL->get('mailingzip')}<br>
+                                {elseif !empty($RECORD_MODEL->get('mailingcity'))}
+                                    {$RECORD_MODEL->get('mailingcity')}<br>
+                                {else}
+                                    {$RECORD_MODEL->get('mailingzip')}<br>
                                 {/if}
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
+
+                                {$RECORD_MODEL->get('mailingcountry')}
+
+                            {else}
+
+                                {if !empty($RECORD_MODEL->get('mailingcity'))}
+                                    P.O. Box {$RECORD_MODEL->get('mailingpobox')}, {$RECORD_MODEL->get('mailingcity')}<br>
+                                {else}
+                                    P.O. Box {$RECORD_MODEL->get('mailingpobox')}<br>
+                                {/if}
+
+                                {if !empty($RECORD_MODEL->get('mailingstate'))}
+                                    {$RECORD_MODEL->get('mailingstate')}, {$RECORD_MODEL->get('mailingcountry')}
+                                {else}
+                                    {$RECORD_MODEL->get('mailingcountry')}
+                                {/if}
+
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="company-bottom">
+                    Customer number:
+                    <span style="font-weight: 600;">{$RECORD_MODEL->get('cf_898')}</span>
+                </div>
+            </div>
+
+            <div class="company-half company-right">
+                <div class="company-top">
+                    <div class="company-label"><strong>To:</strong></div>
+                    <div class="company-content">
+                        <div style="text-transform: capitalize; font-weight: 600;">
+                            {if isset($COMPANY)}
+                                {$COMPANY->get('company_name')}
+                            {/if}
+                        </div>
+
+                        <div style="margin-top: 1.5mm;">
+                            {if isset($COMPANY)}
+                                {$COMPANY->get('company_address')}
+                            {/if}
+                            <br />
+                            {if isset($COMPANY)}
+                                {if !empty($COMPANY->get('city'))}
+                                    {$COMPANY->get('city')},
+                                {/if}
+                                {$COMPANY->get('state')} {$COMPANY->get('code')}<br>
+                                {$COMPANY->get('country')}
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="company-bottom">
+                    {if isset($COMPANY)}
+                        {if !empty($COMPANY->get('email'))}
+                            <p>Contact: <span style="font-style: italic;">{$COMPANY->get('email')}</span></p>
+                        {/if}
+                        {if !empty($COMPANY->get('company_phone'))}
+                            <p>or <span style="font-style: italic;">{$COMPANY->get('company_phone')}</span></p>
+                        {/if}
+                    {/if}
+                </div>
+            </div>
+        </div>
 
         <!-- SECTION 1 -->
         <section class="main-table">
@@ -530,10 +515,22 @@
         ]}
 
             <table class="metals-table">
+                <colgroup>
+                    <col style="width:18%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                </colgroup>
                 <tr>
-                    <th style="width:18%;">Metal</th>
+                    <th>Metal</th>
                     {foreach from=$weights item=w}
-                        <th style="width:9%;">
+                        <th>
                             {$w.label}<br>
                             {if $w.grams}{$w.grams}{/if}
                         </th>
@@ -638,9 +635,9 @@
                                     Branch Code: {$SELECTED_BANK->get('branch_code')}<br>
                                 {else}
                                     Routing No: {$SELECTED_BANK->get('bank_routing_no')}<br>
+                                    <br>
                                 {/if}
 
-                                <br>
 
                                 {if !empty($SELECTED_BANK->get('intermediary_bank'))}
                                     Intermediary Bank: {$SELECTED_BANK->get('intermediary_bank')}<br>
@@ -704,7 +701,7 @@
                                 <span> Place:</span> <input type="text" name="place_input"
                                     class="custom-editable-input" />
                             </div>
-                            <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                            <div class="editable-input-wrapper" style="margin-top: 2.5mm;">
                                 <span>Date:</span> <input type="text" name="date_input" class="custom-editable-input" />
                             </div>
                         </div>
@@ -714,15 +711,15 @@
                                 <span> Signed by: </span>
                                 <input type="text" name="signed_by" class="custom-editable-input" />
                             </div>
-                            <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                            <div class="editable-input-wrapper" style="margin-top: 2.5mm;">
                                 <span> On behalf of:</span>
                                 <input type="text" name="on_behalf_of" class="custom-editable-input" />
                             </div>
                         </div>
                     </div>
 
-                    <div style="margin-top:10mm;">
-                        <div class="signature-line">...............................................</div><br>
+                    <div style="margin-top:1mm;">
+                        <div class="signature-line">.......................</div><br>
                         Signature
                     </div>
                 </div>

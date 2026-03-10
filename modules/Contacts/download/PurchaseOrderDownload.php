@@ -21,24 +21,24 @@ class PurchaseOrderDownload
         ],
 
         'fields' => [
-            ['name' => 'currency',     'x' => 60.0,  'y' => 139.0,  'w' => 38.5, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'location',     'x' => 102.0, 'y' => 153.5,  'w' => 40.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'address',      'x' => 72.0,  'y' => 160.3,  'w' => 55.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'country',      'x' => 49.0,  'y' => 176.5,  'w' => 45.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'currency',     'x' => 45.0,  'y' => 124.0,  'w' => 40.5, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'location',     'x' => 90.0, 'y' => 141.5,  'w' => 42.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'address',      'x' => 57.0,  'y' => 149.3,  'w' => 55.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'country',      'x' => 34.0,  'y' => 167.5,  'w' => 48.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
 
-            ['name' => 'place_input',  'x' => 41.0,  'y' => 255.5,  'w' => 45.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'signed_by',    'x' => 109.0, 'y' => 255.5,  'w' => 65.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'date_input',   'x' => 41.0,  'y' => 264.0,  'w' => 45.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'on_behalf_of', 'x' => 112.0, 'y' => 264.0,  'w' => 62.0],
+            ['name' => 'place_input',  'x' => 28.0,  'y' => 255.5,  'w' => 50.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'signed_by',    'x' => 107.0, 'y' => 255.5,  'w' => 69.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'date_input',   'x' => 29.0,  'y' => 262.0,  'w' => 50.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'on_behalf_of', 'x' => 111.0, 'y' => 262.0,  'w' => 66.0],
         ],
 
         'grids' => [
             [
                 'namePattern' => 'metal_{r}_weight_{c}',
-                'startX' => 57.5,
-                'startY' => 110.8,
-                'cellW'  => 13.54,
-                'cellH'  => 6.37,
+                'startX' => 45.2,
+                'startY' => 94.8,
+                'cellW'  => 17.05,
+                'cellH'  => 6.87,
                 'rows'   => 4,
                 'cols'   => 9,
                 'padX'   => 0.6,
@@ -73,7 +73,7 @@ class PurchaseOrderDownload
         CoreDownload::writeFileOrFail($htmlPath, (string)$html);
         // CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath);
         CoreDownload::runChromePdfOrFail($htmlPath, $basePdfPath);
-        
+
         @unlink($htmlPath);
 
         // Import base PDF
@@ -82,9 +82,7 @@ class PurchaseOrderDownload
         @unlink($basePdfPath);
 
         // Debug grid
-        if ((string)$request->get('debug') === '1') {
-            CoreDownload::drawDebugGrid($pdf);
-        }
+        if ((string)$request->get('debug') === '1')  CoreDownload::drawDebugGrid($pdf);
 
         // Overlay text fields + metals grid
         CoreDownload::applyLayout($pdf, $request, self::LAYOUT);
@@ -129,10 +127,10 @@ class PurchaseOrderDownload
         $countryChk    = (string)$request->get('countryOption') === '1';
         $addressChk    = (string)$request->get('addressOption') === '1';
 
-        $makeCheckbox('country_checked',   35.0, 154.5, $countryChk);
-        $makeCheckbox('address_checked',   35.0, 161.3, $addressChk);
+        $makeCheckbox('country_checked',   19.0, 143.5, $countryChk);
+        $makeCheckbox('address_checked',   19.0, 150.3, $addressChk);
 
-        $makeCheckbox('pricing_option_1',  34.0, 226.5, $firstPricing);
-        $makeCheckbox('pricing_option_2',  34.0, 233.5, $secondPricing);
+        $makeCheckbox('pricing_option_1',  17.0, 228.5, $firstPricing);
+        $makeCheckbox('pricing_option_2',  17.0, 235.5, $secondPricing);
     }
 }
