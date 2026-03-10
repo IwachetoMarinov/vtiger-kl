@@ -42,9 +42,9 @@ class StockTransferOrderDownload
         'grids' => [
             [
                 'namePattern' => 'metal_{r}_weight_{c}',
-                'startX' => 40.8,
+                'startX' => 41.2,
                 'startY' => 95.7,
-                'cellW'  => 18.05,
+                'cellW'  => 18.10,
                 'cellH'  => 6.95,
                 'rows'   => 4,
                 'cols'   => 9,
@@ -131,10 +131,10 @@ class StockTransferOrderDownload
 
         $opt = (string)$request->get('countryOption');
 
-        $makeCheckbox('singapore_checked',   13.5, 160.0, $opt === '1');
+        $makeCheckbox('singapore_checked',   13.0, 160.0, $opt === '1');
         $makeCheckbox('switzerland_checked', 44.0, 160.0, $opt === '2');
-        $makeCheckbox('hongkong_checked',    77.5, 160.0, $opt === '3');
-        $makeCheckbox('dubai_checked',      115.0, 160.0, $opt === '4');
+        $makeCheckbox('hongkong_checked',    78.5, 160.0, $opt === '3');
+        $makeCheckbox('dubai_checked',      112.5, 160.0, $opt === '4');
         $makeCheckbox('other_checked',       13.5, 167.5, $opt === '5');
     }
 }
