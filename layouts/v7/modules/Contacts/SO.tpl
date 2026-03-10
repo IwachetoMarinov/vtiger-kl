@@ -51,7 +51,7 @@
             width: 198mm;
             min-height: 297mm;
             margin: 0 auto;
-            padding: 4mm;
+            padding: 6mm;
         }
 
         /* HEADER */
@@ -237,7 +237,7 @@
 
         .main-table {
             border: 1px solid #000;
-            margin-top: 3mm;
+            margin-top: 5mm;
             padding: 2mm 1.5mm;
         }
 
@@ -301,7 +301,7 @@
 
     <div class="printAreaContainer">
 
-        <table class="header-table" style="margin-bottom: 1mm;">
+        <table class="header-table" style="margin-bottom: 3mm;">
             <tr>
                 <td class="logo">
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
