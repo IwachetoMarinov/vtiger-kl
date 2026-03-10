@@ -19,9 +19,9 @@ const puppeteer = require("puppeteer");
       console.error("HTML file not found: " + absHtml);
       process.exit(1);
     }
-
     const browser = await puppeteer.launch({
       headless: true,
+      executablePath: "/usr/bin/chromium",
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
