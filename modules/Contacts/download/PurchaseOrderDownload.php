@@ -71,7 +71,8 @@ class PurchaseOrderDownload
         $htmlPath = rtrim($root_directory, "/\\") . DIRECTORY_SEPARATOR . $fileName . '.html';
 
         CoreDownload::writeFileOrFail($htmlPath, (string)$html);
-        CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath);
+        // CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath);
+        CoreDownload::runChromePdfOrFail($htmlPath, $basePdfPath);
         
         @unlink($htmlPath);
 
