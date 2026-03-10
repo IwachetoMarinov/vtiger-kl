@@ -21,27 +21,27 @@ class PurchaseOrderDownload
         ],
 
         'fields' => [
-            ['name' => 'currency',     'x' => 45.0,  'y' => 124.0,  'w' => 40.5, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'location',     'x' => 90.0, 'y' => 141.5,  'w' => 42.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'address',      'x' => 57.0,  'y' => 149.3,  'w' => 55.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'country',      'x' => 34.0,  'y' => 167.5,  'w' => 48.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'currency',     'x' => 43.0,  'y' => 132.0,  'w' => 40.5, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'location',     'x' => 91.0, 'y' => 149.5,  'w' => 42.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'address',      'x' => 57.0,  'y' => 157.3,  'w' => 60.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'country',      'x' => 32.0,  'y' => 175.5,  'w' => 60.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
 
-            ['name' => 'place_input',  'x' => 28.0,  'y' => 255.5,  'w' => 50.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'signed_by',    'x' => 107.0, 'y' => 255.5,  'w' => 69.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'date_input',   'x' => 29.0,  'y' => 262.0,  'w' => 50.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'on_behalf_of', 'x' => 111.0, 'y' => 262.0,  'w' => 66.0],
+            ['name' => 'place_input',  'x' => 21.0,  'y' => 260.0,  'w' => 50.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'signed_by',    'x' => 108.0, 'y' => 260.0,  'w' => 69.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'date_input',   'x' => 22.0,  'y' => 266.0,  'w' => 50.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'on_behalf_of', 'x' => 112.0, 'y' => 266.0,  'w' => 66.0],
         ],
 
         'grids' => [
             [
                 'namePattern' => 'metal_{r}_weight_{c}',
-                'startX' => 45.2,
-                'startY' => 94.8,
-                'cellW'  => 17.05,
-                'cellH'  => 6.87,
+                'startX' => 42.0,
+                'startY' => 101.0,
+                'cellW'  => 17.7,
+                'cellH'  => 7.00,
                 'rows'   => 4,
                 'cols'   => 9,
-                'padX'   => 0.6,
+                'padX'   => 0.65,
                 'padY'   => 0.40,
                 'innerPad' => 1.2,
                 'opts' => [
@@ -127,10 +127,10 @@ class PurchaseOrderDownload
         $countryChk    = (string)$request->get('countryOption') === '1';
         $addressChk    = (string)$request->get('addressOption') === '1';
 
-        $makeCheckbox('country_checked',   19.0, 143.5, $countryChk);
-        $makeCheckbox('address_checked',   19.0, 150.3, $addressChk);
+        $makeCheckbox('country_checked',   14.0, 150.5, $countryChk);
+        $makeCheckbox('address_checked',   14.0, 158.0, $addressChk);
 
-        $makeCheckbox('pricing_option_1',  17.0, 228.5, $firstPricing);
-        $makeCheckbox('pricing_option_2',  17.0, 235.5, $secondPricing);
+        $makeCheckbox('pricing_option_1',  12.0, 232.5, $firstPricing);
+        $makeCheckbox('pricing_option_2',  12.0, 239.5, $secondPricing);
     }
 }

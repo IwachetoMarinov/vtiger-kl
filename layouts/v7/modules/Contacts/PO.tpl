@@ -10,8 +10,9 @@
         {{assign var="sansBold" value="layouts/v7/resources/fonts/OpenSans-Bold.ttf"}}
 
         {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
-            {assign var="sansRegular" value="file://{$ROOT_DIRECTORY}/layouts/v7/resources/fonts/OpenSans-Regular.ttf"}
-            {assign var="sansBold" value="file://{$ROOT_DIRECTORY}/layouts/v7/resources/fonts/OpenSans-Bold.ttf"}
+            {assign var="rootPath" value=$ROOT_DIRECTORY|replace:'\\':'/'}
+            {assign var="sansRegular" value="file:///$rootPath/layouts/v7/resources/fonts/OpenSans-Regular.ttf"}
+            {assign var="sansBold" value="file:///$rootPath/layouts/v7/resources/fonts/OpenSans-Bold.ttf"}
         {/if}
 
         @font-face {
@@ -36,7 +37,7 @@
 
         body {
             font-family: 'Open Sans';
-            font-size: 8.5pt;
+            font-size: 8pt;
             color: #666;
         }
 
@@ -46,8 +47,8 @@
         }
 
         .printAreaContainer {
-            width: 200mm;
-            height: 287mm;
+            width: 210mm;
+            height: 297mm;
             margin: auto;
             padding: 4mm;
         }
@@ -202,7 +203,7 @@
 
         .signature-line {
             display: inline-block;
-            margin-top: 8mm;
+            margin-top: 4mm;
         }
 
         .main-table {
@@ -372,9 +373,6 @@
 
     <div
         class="printAreaContainer {if isset($smarty.request.PDFDownload) && $smarty.request.PDFDownload eq true}pdf-wrapper{/if}">
-            
-
-            <pre>{var_dump($ROOT_DIRECTORY)}</pre>
 
         <!-- HEADER -->
         <div class="logo">
