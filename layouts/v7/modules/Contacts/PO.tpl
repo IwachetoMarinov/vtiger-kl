@@ -302,6 +302,17 @@
             line-height: 3.5mm;
         }
 
+        /* Max 2 rows */
+        .company-heading {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            /* max 2 rows */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            font-size: 7.5pt;
+
+        }
+
         @page {
             size: A4;
             margin: 0;
@@ -683,7 +694,7 @@
                     </div>
                 </div>
 
-                <div class="additional-section" style="margin-top:4mm;">
+                <div class="additional-section company-heading" style="margin-top:4mm;">
                     <span class="bolder-element">4. This Purchase & Storage Order and any agreement with GPM resulting
                         therefrom shall be subject to and governed by
                         the terms and conditions of the Customer Metal Agreement executed and entered into by and
