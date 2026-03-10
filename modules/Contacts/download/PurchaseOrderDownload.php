@@ -26,10 +26,10 @@ class PurchaseOrderDownload
             ['name' => 'address',      'x' => 57.0,  'y' => 157.3,  'w' => 60.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
             ['name' => 'country',      'x' => 32.0,  'y' => 175.5,  'w' => 60.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
 
-            ['name' => 'place_input',  'x' => 21.0,  'y' => 260.0,  'w' => 50.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'signed_by',    'x' => 108.0, 'y' => 260.0,  'w' => 69.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'date_input',   'x' => 22.0,  'y' => 266.0,  'w' => 50.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'on_behalf_of', 'x' => 112.0, 'y' => 266.0,  'w' => 66.0],
+            ['name' => 'place_input',  'x' => 21.0,  'y' => 259.5,  'w' => 50.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'signed_by',    'x' => 108.0, 'y' => 259.5,  'w' => 69.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'date_input',   'x' => 22.0,  'y' => 265.5,  'w' => 50.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'on_behalf_of', 'x' => 112.0, 'y' => 265.5,  'w' => 66.0],
         ],
 
         'grids' => [
