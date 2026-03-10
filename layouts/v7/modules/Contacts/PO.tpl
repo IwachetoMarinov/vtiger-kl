@@ -10,8 +10,8 @@
         {{assign var="sansBold" value="layouts/v7/resources/fonts/OpenSans-Bold.ttf"}}
 
         {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
-            {assign var="sansRegular" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Regular.ttf"}
-            {assign var="sansBold" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Bold.ttf"}
+            {assign var="sansRegular" value="file://{$ROOT_DIRECTORY}/layouts/v7/resources/fonts/OpenSans-Regular.ttf"}
+            {assign var="sansBold" value="file://{$ROOT_DIRECTORY}/layouts/v7/resources/fonts/OpenSans-Bold.ttf"}
         {/if}
 
         @font-face {
