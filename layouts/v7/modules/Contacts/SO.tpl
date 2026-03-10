@@ -301,7 +301,7 @@
 
     <div class="printAreaContainer">
 
-        <table class="header-table" style="margin-bottom: 3mm;">
+        <table class="header-table" style="margin-bottom: 5.5mm;">
             <tr>
                 <td class="logo">
                     {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
