@@ -21,40 +21,40 @@ class SaleOrderDownload
         ],
 
         'fields' => [
-            ['name' => 'serial_numbers',         'x' => 32.0,  'y' => 148.0,  'w' => 145.0],
-            ['name' => 'pick_up_location',       'x' => 51.5,  'y' => 166.0,  'w' => 127.0],
+            ['name' => 'serial_numbers',         'x' => 12.0,  'y' => 147.0,  'w' => 155.0],
+            ['name' => 'pick_up_location',       'x' => 35.5,  'y' => 169.5,  'w' => 147.0],
 
-            ['name' => 'authorised_person_name', 'x' => 70.0,  'y' => 173.75, 'w' => 44.0],
-            ['name' => 'authorised_person_id',   'x' => 134.0, 'y' => 173.75, 'w' => 44.0],
+            ['name' => 'authorised_person_name', 'x' => 53.0,  'y' => 178.0, 'w' => 64.0],
+            ['name' => 'authorised_person_id',   'x' => 142.0, 'y' => 178.0, 'w' => 64.0],
 
-            ['name' => 'bank_name',              'x' => 50.0,  'y' => 203.0,  'w' => 125.0],
-            ['name' => 'bank_address',           'x' => 53.0,  'y' => 210.0,  'w' => 120.0],
-            ['name' => 'bank_code',              'x' => 49.0,  'y' => 217.0,  'w' => 51.0],
-            ['name' => 'swift_code',             'x' => 120.0, 'y' => 217.0,  'w' => 55.0],
+            ['name' => 'bank_name',              'x' => 31.0,  'y' => 216.5,  'w' => 135.0],
+            ['name' => 'bank_address',           'x' => 35.0,  'y' => 224.0,  'w' => 135.0],
+            ['name' => 'bank_code',              'x' => 34.0,  'y' => 231.5,  'w' => 61.0],
+            ['name' => 'swift_code',             'x' => 124.0, 'y' => 231.5,  'w' => 65.0],
 
-            ['name' => 'account_no',             'x' => 49.0,  'y' => 224.0,  'w' => 47.0],
-            ['name' => 'account_currency',       'x' => 124.0, 'y' => 224.0,  'w' => 49.0],
+            ['name' => 'account_no',             'x' => 34.0,  'y' => 238.0,  'w' => 57.0],
+            ['name' => 'account_currency',       'x' => 132.0, 'y' => 238.0,  'w' => 59.0],
 
-            ['name' => 'place_input',            'x' => 41.0,  'y' => 235.5,  'w' => 45.0],
-            ['name' => 'signed_by',              'x' => 109.0, 'y' => 235.5,  'w' => 65.0],
+            ['name' => 'place_input',            'x' => 22.0,  'y' => 252.5,  'w' => 65.0],
+            ['name' => 'signed_by',              'x' => 109.0, 'y' => 252.5,  'w' => 75.0],
 
-            ['name' => 'date_input',             'x' => 41.0,  'y' => 243.8,  'w' => 45.0],
-            ['name' => 'on_behalf_of',           'x' => 113.0, 'y' => 243.8,  'w' => 62.0],
+            ['name' => 'date_input',             'x' => 22.0,  'y' => 260.3,  'w' => 65.0],
+            ['name' => 'on_behalf_of',           'x' => 113.0, 'y' => 260.3,  'w' => 72.0],
         ],
 
         'grids' => [
             [
                 // Request fields: metal_0_weight_0 ... metal_3_weight_8
                 'namePattern' => 'metal_{r}_weight_{c}',
-                'startX' => 58.0,
-                'startY' => 115.2,
-                'cellW'  => 13.5,
-                'cellH'  => 6.6,
+                'startX' => 40.8,
+                'startY' => 112.2,
+                'cellW'  => 18.05,
+                'cellH'  => 6.65,
                 'rows'   => 4,
                 'cols'   => 9,
-                'padX'   => 0.6,
+                'padX'   => 1.2,
                 'padY'   => 0.6,
-                'innerPad' => 1.2,
+                'innerPad' => 1.3,
                 // Optional grid-only overrides:
                 'opts' => [
                     'da' => '/Helv 5.5 Tf 0 g',
@@ -79,7 +79,8 @@ class SaleOrderDownload
         $htmlPath = rtrim($root_directory, "/\\") . DIRECTORY_SEPARATOR . $fileName . '.html';
 
         CoreDownload::writeFileOrFail($htmlPath, (string)$html);
-        CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath);
+        // CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath);
+        CoreDownload::runChromePdfOrFail($htmlPath, $basePdfPath);
 
         @unlink($htmlPath);
 
@@ -89,9 +90,7 @@ class SaleOrderDownload
         @unlink($basePdfPath);
 
         // Debug grid
-        if ((string)$request->get('debug') === '1') {
-            CoreDownload::drawDebugGrid($pdf);
-        }
+        if ((string)$request->get('debug') === '1')  CoreDownload::drawDebugGrid($pdf);
 
         // Apply all fields/grids from config
         CoreDownload::applyLayout($pdf, $request, self::LAYOUT);

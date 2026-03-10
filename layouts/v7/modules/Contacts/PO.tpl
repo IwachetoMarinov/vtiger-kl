@@ -388,7 +388,7 @@
         <!-- HEADER -->
         <div class="logo">
             {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-                <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" style="width:45mm;">
+                <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" style="width:50mm;">
             {else}
                 <img src="file://{$ROOT_DIRECTORY}/layouts/v7/modules/Contacts/resources/gpm-new-logo.png"
                     style="width:40mm;">
