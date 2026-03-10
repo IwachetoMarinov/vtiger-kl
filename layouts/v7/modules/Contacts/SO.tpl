@@ -40,11 +40,18 @@
             color: #666;
         }
 
-        .printAreaContainer {
+        /* .printAreaContainer {
             width: 210mm;
             height: 297mm;
             margin: auto;
             padding: 6mm;
+        } */
+
+        .printAreaContainer {
+            width: 198mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            padding: 4mm;
         }
 
         /* HEADER */
@@ -143,15 +150,18 @@
             width: 100%;
             border-collapse: collapse;
             border: 1px solid #000;
-            font-size: 8.5pt;
+            font-size: 8pt;
             margin-bottom: 2mm;
+            table-layout: fixed;
         }
 
         .metals-table th,
         .metals-table td {
             border: 1px solid #000;
-            padding: 1mm;
+            padding: 0.6mm;
             text-align: center;
+            overflow: hidden;
+            word-wrap: break-word;
         }
 
         .metals-table th {
@@ -228,7 +238,7 @@
         .main-table {
             border: 1px solid #000;
             margin-top: 3mm;
-            padding: 3.5mm 2mm;
+            padding: 2mm 1.5mm;
         }
 
         .bolder-element {
@@ -318,7 +328,7 @@
                     <table class="inner-company-table">
                         <tr>
                             <td class="label-cell" style="padding: 2mm 0 0 2mm;">
-                                <strong >From:</strong>
+                                <strong>From:</strong>
                             </td>
                             <td class="content-cell from-top-content" style="padding: 2mm 0 0 2mm;">
                                 <div>
@@ -451,10 +461,22 @@
         ]}
 
             <table class="metals-table">
+                <colgroup>
+                    <col style="width:18%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                </colgroup>
                 <tr>
-                    <th style="width:18%;">Metal</th>
+                    <th>Metal</th>
                     {foreach from=$weights item=w}
-                        <th style="width:9%;">
+                        <th>
                             {$w.label}<br>
                             {if $w.grams}{$w.grams}{/if}
                         </th>

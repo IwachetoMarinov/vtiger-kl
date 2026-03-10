@@ -104,7 +104,7 @@ final class CoreDownload
             '--margin-right' => '0',
             '--margin-bottom' => '0',
             '--margin-left' => '0',
-            '--disable-smart-shrinking' => null,
+            // '--disable-smart-shrinking' => null,
         ];
 
         // Caller overrides take priority
