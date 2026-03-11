@@ -313,7 +313,7 @@
                 </tr>
                 <tr>
                     <td style="height: 20mm;text-align: left">
-                        <div style="max-width:50%">
+                        <div>
                             {if isset($COMPANY)}
                                 <div style="margin-top: 4mm;">To:
                                     <span style="font-weight: 700; text-transform: capitalize;">
@@ -441,7 +441,8 @@
                 {else}
                     <span class="custom-checkbox"></span>
                 {/if}
-                <span style="display: inline-block; margin-left: 2mm;">I/We will personally collect the Stored Metal at the Storage Facility and will be holding
+                <span style="display: inline-block; margin-left: 2mm;">I/We will personally collect the Stored Metal at the
+                    Storage Facility and will be holding
                     ID/Passport number</span>
             </div>
             <div>
