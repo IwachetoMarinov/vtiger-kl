@@ -137,11 +137,16 @@ final class CoreDownload
             . escapeshellarg($pdfPath)
             . ' 2>&1';
 
-
         $production = getenv('PRODUCTION') === 'live';
 
         if ($production) {
-            $node = '/home/adm-panomatics/.nvm/versions/node/v18.20.8/bin/node';
+            $node = '/usr/local/bin/node18';   // or /usr/bin/node if that is Node 18 on LIVE
+
+            putenv('PUPPETEER_EXECUTABLE_PATH=/var/www/html/crm_kl/.puppeteer-cache/chrome/linux-146.0.7680.66/chrome-linux64/chrome');
+            putenv('XDG_CONFIG_HOME=/tmp/puppeteer-live/config');
+            putenv('XDG_CACHE_HOME=/tmp/puppeteer-live/cache');
+            putenv('XDG_RUNTIME_DIR=/tmp/puppeteer-live/runtime');
+            putenv('NODE_ENV=production');
 
             $cmd = escapeshellarg($node) . ' '
                 . escapeshellarg($script) . ' '
