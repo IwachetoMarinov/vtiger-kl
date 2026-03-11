@@ -36,15 +36,15 @@ class CollectionRequestDownload
         ],
         'fields' => [
             // These get values from request via CoreDownload::applyLayout
-            ['name' => 'reference',             'x' => 33.5, 'y' => 68.2,  'w' => 40.0, 'h' => 5.6],
-            ['name' => 'place_input',           'x' => 38.0, 'y' => 244.0, 'w' => 48.0, 'h' => 5.6],
-            ['name' => 'signed_by',             'x' => 109.0, 'y' => 244.0, 'w' => 70.0, 'h' => 5.6],
-            ['name' => 'date_input',            'x' => 38.0, 'y' => 251.3, 'w' => 48.0, 'h' => 5.6],
-            ['name' => 'on_behalf_of',          'x' => 113.0, 'y' => 251.3, 'w' => 67.0, 'h' => 5.6],
+            ['name' => 'reference',             'x' => 23.5, 'y' => 67.2,  'w' => 40.0, 'h' => 5.6],
+            ['name' => 'place_input',           'x' => 25.0, 'y' => 260.0, 'w' => 58.0, 'h' => 5.6],
+            ['name' => 'signed_by',             'x' => 109.0, 'y' => 260.0, 'w' => 80.0, 'h' => 5.6],
+            ['name' => 'date_input',            'x' => 25.0, 'y' => 267.3, 'w' => 58.0, 'h' => 5.6],
+            ['name' => 'on_behalf_of',          'x' => 118.0, 'y' => 267.3, 'w' => 77.0, 'h' => 5.6],
 
             // totals (no request mapping in old code, but still valid fields)
-            ['name' => 'total_value',           'x' => 29.0, 'y' => 172.0, 'w' => 35.0, 'h' => 5.5],
-            ['name' => 'total_oz',              'x' => 142.0, 'y' => 172.0, 'w' => 35.0, 'h' => 5.5],
+            ['name' => 'total_value',           'x' => 22.0, 'y' => 179.5, 'w' => 35.0, 'h' => 5.5],
+            ['name' => 'total_oz',              'x' => 147.0, 'y' => 179.5, 'w' => 35.0, 'h' => 5.5],
 
             // custom request-mapped fields (names differ in request)
             // We'll set these manually in applyExtraFields() below:
@@ -159,17 +159,17 @@ class CollectionRequestDownload
         $dy = 0.0;
 
         // These were set manually in old code (request keys are different)
-        $pdf->SetXY(86.0 + $dx, 180.0 + $dy);
-        $pdf->TextField('collection_date', 29.0, $h, $fieldStyle, ['v' => (string)$request->get('collectionDateInput')]);
+        $pdf->SetXY(81.0 + $dx, 189.0 + $dy);
+        $pdf->TextField('collection_date', 39.0, $h, $fieldStyle, ['v' => (string)$request->get('collectionDateInput')]);
 
-        $pdf->SetXY(27.0 + $dx, 194.0 + $dy);
-        $pdf->TextField('passport_number', 29.0, 5.0, $fieldStyle, ['v' => (string)$request->get('passportNumberInput')]);
+        $pdf->SetXY(11.0 + $dx, 205.0 + $dy);
+        $pdf->TextField('passport_number', 34.0, 5.0, $fieldStyle, ['v' => (string)$request->get('passportNumberInput')]);
 
-        $pdf->SetXY(111.0 + $dx, 200.0 + $dy);
-        $pdf->TextField('company_input', 70.0, $h, $fieldStyle, ['v' => (string)$request->get('companyInput')]);
+        $pdf->SetXY(112.0 + $dx, 212.0 + $dy);
+        $pdf->TextField('company_input', 80.0, $h, $fieldStyle, ['v' => (string)$request->get('companyInput')]);
 
-        $pdf->SetXY(64.5 + $dx, 207.5 + $dy);
-        $pdf->TextField('holding_passport_number', 29.0, 5.0, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
+        $pdf->SetXY(52.0 + $dx, 219.8 + $dy);
+        $pdf->TextField('holding_passport_number', 39.0, 5.0, $fieldStyle, ['v' => (string)$request->get('holdingPassportInput')]);
     }
 
     /**
@@ -178,31 +178,27 @@ class CollectionRequestDownload
      */
     private static function applyDynamicRows($pdf, int $rowCount): void
     {
-        if ($rowCount <= 0) {
-            return;
-        }
+        if ($rowCount <= 0) ;
 
         $fieldStyle = ['border' => 0];
 
-        // insetX/insetY = inner padding INSIDE each PDF form field (mm)
-        $insetX = 1.3;
-        $insetY = 0.88;
-        $fieldH = 5.0;
-        $descH  = 9.6;
+        // heights
+        $fieldH = 5.0;   // normal inputs
+        $descH  = 9.4;   // higher description only
 
         // row positioning
-        $startY  = 89.5;
-        $rowStep = 11.7;
+        $startY  = 90.25;
+        $rowStep = 13.05;
 
         // table geometry
-        $xTable = 27.5;
-        $wTable = 155.0;
+        $xTable = 9.3;
+        $wTable = 189.5;
 
-        // column ratios
-        $ratioQty    = 0.055;
-        $ratioDesc   = 0.65;
-        $ratioSerial = 0.20;
-        $ratioFine   = 0.10;
+        // adjusted widths
+        $ratioQty    = 0.050;
+        $ratioDesc   = 0.665;
+        $ratioSerial = 0.175;
+        $ratioFine   = 0.110;
 
         // computed widths
         $wQty    = $wTable * $ratioQty;
@@ -219,30 +215,49 @@ class CollectionRequestDownload
         for ($i = 1; $i <= $rowCount; $i++) {
             $y = $startY + ($i - 1) * $rowStep;
 
-            $pdf->SetXY($xQty + $insetX, $y + $insetY);
-            $pdf->TextField("qty_$i", $wQty - 2 * $insetX, $fieldH, $fieldStyle);
+            // QTY
+            $pdf->SetXY($xQty + 0.55, $y + 0.7);
+            $pdf->TextField(
+                "qty_$i",
+                $wQty - 1.0,
+                $fieldH,
+                $fieldStyle
+            );
 
-            $pdf->SetXY($xDesc + $insetX, $y + $insetY);
+            // DESCRIPTION
+            $pdf->SetXY($xDesc + 0.55, $y + 0.35);
             $pdf->TextField(
                 "desc_$i",
-                $wDesc - 2 * 0.3,
+                $wDesc - 1.1,
                 $descH,
                 $fieldStyle + [
                     'multiline' => true,
                     'linebreak' => true,
                     'padding'   => 0,
                     'style'     => [
-                        'margin' => [0, 0, 0, 0],
+                        'margin'  => [0, 0, 0, 0],
                         'padding' => [0, 0, 0, 0],
                     ],
                 ]
             );
 
-            $pdf->SetXY($xSerial + $insetX, $y + $insetY);
-            $pdf->TextField("serial_$i", $wSerial - 2 * $insetX, $fieldH, $fieldStyle);
+            // SERIAL NUMBERS
+            $pdf->SetXY($xSerial + 0.30, $y + 0.7);
+            $pdf->TextField(
+                "serial_$i",
+                $wSerial - 0.6,
+                $fieldH,
+                $fieldStyle
+            );
 
-            $pdf->SetXY($xFine + $insetX, $y + $insetY);
-            $pdf->TextField("fine_oz_$i", $wFine - 2 * $insetX, $fieldH, $fieldStyle);
+            // FINE OZ.
+            $pdf->SetXY($xFine + 0.18, $y + 0.7);
+            $pdf->TextField(
+                "fine_oz_$i",
+                $wFine - 0.45,
+                $fieldH,
+                $fieldStyle
+            );
         }
     }
 
@@ -275,7 +290,7 @@ class CollectionRequestDownload
         $companyChecked = (string)$request->get('companyName') === '1';
         $idOptionChecked = (string)$request->get('idOption') === '1';
 
-        $makeCheckbox('company_checked',   27.6, 189.5, $companyChecked);
-        $makeCheckbox('id_option_checked', 27.6, 201.3, $idOptionChecked);
+        $makeCheckbox('company_checked',   7.0, 192.5, $companyChecked);
+        $makeCheckbox('id_option_checked', 8.6, 201.3, $idOptionChecked);
     }
 }

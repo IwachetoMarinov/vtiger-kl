@@ -43,11 +43,10 @@
         }
 
         .printAreaContainer {
-            width: 210mm;
+            width: 200mm;
             height: 297mm;
             margin: auto;
             padding: 4mm;
-            padding-top: 2mm;
         }
 
         .pdf-wrapper {
@@ -166,7 +165,7 @@
         }
 
         .editable-input-wrapper {
-            margin-top: 3mm;
+            margin-top: 2mm;
             display: flex;
             align-items: center;
             gap: 2mm;
@@ -201,7 +200,7 @@
 
         /* Signature Section */
         .signature-section {
-            margin-top: 5mm;
+            margin-top: 2mm;
             padding: 0 4mm;
         }
 
@@ -335,7 +334,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="height: 15.5mm; text-decoration: underline;text-align: right;">
+                    <td style="height: 10mm; text-decoration: underline;text-align: right;">
                         <strong>COLLECTION REQUEST</strong>
                     </td>
                 </tr>
@@ -362,17 +361,16 @@
                 </tr>
             </table>
 
-
             {assign var="location" value=$ERP_DOCUMENT.barItems[0]->warehouse}
 
-            <div style="margin-top: 3mm;">I/We hereby wish to collect the Stored Metal detailed below at the following
+            <div style="margin-top: 2mm;">I/We hereby wish to collect the Stored Metal detailed below at the following
                 location:
                 <p style="font-style: italic;font-weight: 600;">{$location}</p>
             </div>
 
             {assign var="targetRows" value=[0, 1, 2, 3, 4, 5, 6]}
 
-            <table class="print-tbl" style="margin-top:5mm;">
+            <table class="print-tbl" style="margin-top: 2.5mm;">
                 <tr>
 
                     <td style="font-size: 9pt; vertical-align: top;">
@@ -394,9 +392,9 @@
                                             <input type="text" name="qty_{$smarty.foreach.rowloop.iteration}"
                                                 style="width:100%; border:0;" />
                                         </td>
-                                        <td style="height:12mm; vertical-align:top;">
+                                        <td style="height:9.5mm; vertical-align:top;">
                                             <textarea name="desc_{$smarty.foreach.rowloop.iteration}"
-                                                style="width:100%; height:12mm; border:0; resize:none; overflow:hidden;"></textarea>
+                                                style="width:100%; height:9.5mm; border:0; resize:none; overflow:hidden;"></textarea>
                                         </td>
                                         <td>
                                             <input type="text" name="serial_{$smarty.foreach.rowloop.iteration}"
@@ -437,13 +435,13 @@
                 <input type="text" name="collection_date" class="editable-input" />
             </div>
 
-            <div style="margin-top: 3mm;">
+            <div style="margin-top: 2mm;">
                 {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                     <input type="checkbox" name="id_option">
                 {else}
                     <span class="custom-checkbox"></span>
                 {/if}
-                <span>I/We will personally collect the Stored Metal at the Storage Facility and will be holding
+                <span style="display: inline-block; margin-left: 2mm;">I/We will personally collect the Stored Metal at the Storage Facility and will be holding
                     ID/Passport number</span>
             </div>
             <div>
@@ -463,7 +461,7 @@
                 <input type="text" name="company_input" class="editable-input editable-full-input" />
             </div>
 
-            <span style="display: inline-block; margin-top: 3mm;">
+            <span style="display: inline-block; margin-top: 2mm;">
                 <span>holding ID/Passport number</span>
                 <input type="text" name="holding_passport_number" class="editable-input" style="padding:0 1mm;"
                     {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}style="display: inline-block; margin-top: 2mm;"
@@ -490,27 +488,27 @@
             <div class="signature-section">
                 <div class="signature-section-item">
                     <div class="signature-section-left">
-                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 2mm;">
                             <span> Place:</span> <input type="text" name="place_input" class="custom-editable-input" />
                         </div>
-                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 2mm;">
                             <span>Date:</span> <input type="text" name="date_input" class="custom-editable-input" />
                         </div>
                     </div>
 
                     <div class="signature-section-right">
-                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 2mm;">
                             <span> Signed by: </span>
                             <input type="text" name="signed_by" class="custom-editable-input" />
                         </div>
-                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 2mm;">
                             <span> On behalf of:</span>
                             <input type="text" name="on_behalf_of" class="custom-editable-input" />
                         </div>
                     </div>
                 </div>
 
-                <div style="margin-top:10mm;">
+                <div style="margin-top:7mm;">
                     <div>...............................................</div>
                     <div>Signature</div>
                 </div>
