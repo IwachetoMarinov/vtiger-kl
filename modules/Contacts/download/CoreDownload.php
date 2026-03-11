@@ -137,6 +137,19 @@ final class CoreDownload
             . escapeshellarg($pdfPath)
             . ' 2>&1';
 
+
+        $production = getenv('PRODUCTION') === 'live';
+
+        if ($production) {
+            $node = '/home/adm-panomatics/.nvm/versions/node/v18.20.8/bin/node';
+
+            $cmd = escapeshellarg($node) . ' '
+                . escapeshellarg($script) . ' '
+                . escapeshellarg($htmlPath) . ' '
+                . escapeshellarg($pdfPath)
+                . ' 2>&1';
+        }
+
         $out = [];
         $code = 0;
         exec($cmd, $out, $code);
