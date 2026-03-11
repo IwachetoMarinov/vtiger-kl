@@ -1,9 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const os = require("os");
 const puppeteer = require("puppeteer");
-
-const chromePath = process.env.CHROME_PATH || puppeteer.executablePath();
 
 (async () => {
   try {
@@ -23,10 +20,38 @@ const chromePath = process.env.CHROME_PATH || puppeteer.executablePath();
       process.exit(1);
     }
 
+    // Keep EVERYTHING writable and local to the runtime user
+    const chromeRoot = "/tmp/puppeteer-live";
+    const userDataDir = path.join(chromeRoot, "user-data");
+    const configHome = path.join(chromeRoot, "config");
+    const cacheHome = path.join(chromeRoot, "cache");
+    const runtimeDir = path.join(chromeRoot, "runtime");
+
+    [chromeRoot, userDataDir, configHome, cacheHome, runtimeDir].forEach((dir) => {
+      fs.mkdirSync(dir, { recursive: true, mode: 0o777 });
+    });
+
+    process.env.HOME = chromeRoot;
+    process.env.XDG_CONFIG_HOME = configHome;
+    process.env.XDG_CACHE_HOME = cacheHome;
+    process.env.XDG_RUNTIME_DIR = runtimeDir;
+
+    // Use Puppeteer's installed Chrome
+    const chromePath = puppeteer.executablePath();
+
     const browser = await puppeteer.launch({
       headless: true,
       executablePath: chromePath,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      userDataDir,
+      dumpio: true,
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-features=Crashpad",
+        "--no-first-run",
+        "--no-default-browser-check",
+      ],
     });
 
     const page = await browser.newPage();
