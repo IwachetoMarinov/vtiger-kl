@@ -27,9 +27,11 @@ const puppeteer = require("puppeteer");
     const cacheHome = path.join(chromeRoot, "cache");
     const runtimeDir = path.join(chromeRoot, "runtime");
 
-    [chromeRoot, userDataDir, configHome, cacheHome, runtimeDir].forEach((dir) => {
-      fs.mkdirSync(dir, { recursive: true, mode: 0o777 });
-    });
+    [chromeRoot, userDataDir, configHome, cacheHome, runtimeDir].forEach(
+      (dir) => {
+        fs.mkdirSync(dir, { recursive: true, mode: 0o777 });
+      },
+    );
 
     process.env.HOME = chromeRoot;
     process.env.XDG_CONFIG_HOME = configHome;
@@ -37,7 +39,12 @@ const puppeteer = require("puppeteer");
     process.env.XDG_RUNTIME_DIR = runtimeDir;
 
     // Use Puppeteer's installed Chrome
-    const chromePath = puppeteer.executablePath();
+    let chromePath = puppeteer.executablePath();
+
+    if (process.env.NODE_ENV === "production") {
+      chromePath =
+        "/home/adm-panomatics/.cache/puppeteer/chrome/linux-146.0.7680.66/chrome-linux64/chrome";
+    }
 
     const browser = await puppeteer.launch({
       headless: true,
