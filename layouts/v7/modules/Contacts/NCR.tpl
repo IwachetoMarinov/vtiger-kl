@@ -10,9 +10,10 @@
         {{assign var="sansBold" value="layouts/v7/resources/fonts/OpenSans-Bold.woff"}}
 
         {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
-            {assign var="sansRegular" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Regular.woff"}
-            {assign var="sansBold" value="file://{$ROOT_DIRECTORY}layouts/v7/resources/fonts/OpenSans-Bold.woff"}
-        {/if}  
+            {assign var="rootPath" value=$ROOT_DIRECTORY|replace:'\\':'/'}
+            {assign var="sansRegular" value="file:///$rootPath/layouts/v7/resources/fonts/OpenSans-Regular.woff"}
+            {assign var="sansBold" value="file:///$rootPath/layouts/v7/resources/fonts/OpenSans-Bold.woff"}
+        {/if}
 
         @font-face {
             font-family: 'Open Sans';
@@ -37,7 +38,7 @@
 
         body {
             font-family: 'Open Sans';
-            font-size: 10pt;
+            font-size: 9pt;
             color: #666;
         }
 
@@ -45,8 +46,14 @@
             width: 210mm;
             height: 297mm;
             margin: auto;
-            padding: 4.5mm;
+            padding: 4mm;
             padding-top: 2mm;
+        }
+
+        .pdf-wrapper {
+            position: relative;
+            background-color: #fff;
+            top: -7mm;
         }
 
         .bottom-container {
@@ -250,22 +257,6 @@
             flex-wrap: wrap;
         }
 
-        input[type="text"],
-        textarea,
-        input[type="checkbox"] {
-            -webkit-appearance: none !important;
-            appearance: none !important;
-            background: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
-            outline: none !important;
-        }
-
-        textarea {
-            resize: none !important;
-            overflow: hidden !important;
-        }
-
         @media print {
 
             @page {
@@ -305,16 +296,16 @@
         {else}
             {assign var="end" value=($end+14)}
         {/if}
-        <div class="printAreaContainer">
+        <div
+            class="printAreaContainer {if isset($smarty.request.PDFDownload) && $smarty.request.PDFDownload eq true}pdf-wrapper{/if}">
             <table class="print-tbl">
                 <tr>
                     <td>
-                        {if isset($smarty.request.PDFDownload) && $smarty.request.PDFDownload eq true}
-                            <img src="file://{$ROOT_DIRECTORY}layouts/v7/modules/Contacts/resources/gpm-new-logo.png"
-                                style="max-height: 100%; float:left;width: 196px;" />
+                        {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                            <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" style="width:50mm;">
                         {else}
-                            <img src='layouts/v7/modules/Contacts/resources/gpm-new-logo.png'
-                                style="max-height: 100%; float:left;width: 196px;" />
+                            <img src="file://{$ROOT_DIRECTORY}/layouts/v7/modules/Contacts/resources/gpm-new-logo.png"
+                                style="width:40mm;">
                         {/if}
                         <div style="font-size: 11pt;margin-top: 27mm; float:right;">
                             <span>From: {$RECORD_MODEL->get('cf_898')}</span>

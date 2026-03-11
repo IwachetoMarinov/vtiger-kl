@@ -68,7 +68,8 @@ class CollectionRequestDownload
         $htmlPath = rtrim($root_directory, "/\\") . DIRECTORY_SEPARATOR . $fileName . '.html';
 
         CoreDownload::writeFileOrFail($htmlPath, (string)$html);
-        CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath, self::WKHTML_OPTS);
+        // CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath, self::WKHTML_OPTS);
+        CoreDownload::runChromePdfOrFail($htmlPath, $basePdfPath);
 
         @unlink($htmlPath);
 
@@ -88,9 +89,7 @@ class CollectionRequestDownload
         @unlink($basePdfPath);
 
         // Debug grid
-        if ((string)$request->get('debug') === '1') {
-            CoreDownload::drawDebugGrid($pdf);
-        }
+        if ((string)$request->get('debug') === '1') CoreDownload::drawDebugGrid($pdf);
 
         // Apply static fields (reference/place/signed/date/etc + totals)
         CoreDownload::applyLayout($pdf, $request, self::LAYOUT);

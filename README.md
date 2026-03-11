@@ -252,8 +252,6 @@ WHERE fieldlabel = 'Contact Name'
     38.4 Give permissions `sudo chown $USER:$USER db_backups`
 
 
-
-
 39. Fix Production server in confic.inc.php add this row `$dbconfig['db_socket'] = '/var/lib/mysql/mysql.sock';`
 40. Show logs in the server `sudo tail -n 100 /var/www/html/crm_kl/logs/fileMissing.log`
 41. Bug with showing of all users  run this to rebuild user provileges `sudo -u apache php rebuild_all_privileges.php`

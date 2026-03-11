@@ -1,7 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
-const puppeteer = require('puppeteer');
+const fs = require("fs");
+const path = require("path");
+const os = require("os");
+const puppeteer = require("puppeteer");
+
+const chromePath = process.env.CHROME_PATH || puppeteer.executablePath();
 
 (async () => {
   try {
@@ -9,7 +11,7 @@ const puppeteer = require('puppeteer');
     const pdfPath = process.argv[3];
 
     if (!htmlPath || !pdfPath) {
-      console.error('Usage: node chrome_pdf.js <input.html> <output.pdf>');
+      console.error("Usage: node chrome_pdf.js <input.html> <output.pdf>");
       process.exit(1);
     }
 
@@ -17,33 +19,34 @@ const puppeteer = require('puppeteer');
     const absPdf = path.resolve(pdfPath);
 
     if (!fs.existsSync(absHtml)) {
-      console.error('HTML file not found: ' + absHtml);
+      console.error("HTML file not found: " + absHtml);
       process.exit(1);
     }
 
     const browser = await puppeteer.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      executablePath: chromePath,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
     const page = await browser.newPage();
 
-    await page.goto('file://' + absHtml, {
-      waitUntil: 'networkidle0'
+    await page.goto("file://" + absHtml, {
+      waitUntil: "networkidle0",
     });
 
     await page.pdf({
       path: absPdf,
-      format: 'A4',
+      format: "A4",
       printBackground: true,
       preferCSSPageSize: true,
       displayHeaderFooter: false,
       margin: {
-        top: '0mm',
-        right: '0mm',
-        bottom: '0mm',
-        left: '0mm'
-      }
+        top: "0mm",
+        right: "0mm",
+        bottom: "0mm",
+        left: "0mm",
+      },
     });
 
     await browser.close();
