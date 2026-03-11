@@ -20,14 +20,19 @@ const puppeteer = require("puppeteer");
       process.exit(1);
     }
 
-    const chromeRoot = "/tmp/puppeteer-live";
-    const userDataDir = path.join(chromeRoot, "user-data");
-    const configHome = path.join(chromeRoot, "config");
-    const cacheHome = path.join(chromeRoot, "cache");
-    const runtimeDir = path.join(chromeRoot, "runtime");
+    if (process.platform === "linux") {
+      fs.mkdirSync("/tmp/puppeteer-live/user-data", { recursive: true });
+      fs.mkdirSync("/tmp/puppeteer-live/config", { recursive: true });
+      fs.mkdirSync("/tmp/puppeteer-live/cache", { recursive: true });
+      fs.mkdirSync("/tmp/puppeteer-live/runtime", { recursive: true });
+
+      process.env.XDG_CONFIG_HOME = "/tmp/puppeteer-live/config";
+      process.env.XDG_CACHE_HOME = "/tmp/puppeteer-live/cache";
+      process.env.XDG_RUNTIME_DIR = "/tmp/puppeteer-live/runtime";
+    }
 
     const PROD_CHROME =
-      "/home/adm-panomatics/.cache/puppeteer/chrome/linux-146.0.7680.66/chrome-linux64/chrome";
+      "/var/www/html/crm_kl/.puppeteer-cache/chrome/linux-146.0.7680.66/chrome-linux64/chrome";
 
     let chromePath = puppeteer.executablePath();
 
@@ -39,27 +44,22 @@ const puppeteer = require("puppeteer");
       }
     }
 
+    console.log("Using chromePath:", chromePath);
+
     const browser = await puppeteer.launch({
       headless: true,
       executablePath: chromePath,
-      ...(process.platform === "linux" && process.env.NODE_ENV === "production"
-        ? { userDataDir }
-        : {}),
+      userDataDir:
+        process.platform === "linux" ? "/tmp/puppeteer-live/user-data" : undefined,
       args:
-        process.platform === "linux" && process.env.NODE_ENV === "production"
-          ? [
-              "--no-sandbox",
-              "--disable-setuid-sandbox",
-              "--disable-dev-shm-usage",
-            ]
+        process.platform === "linux"
+          ? ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"]
           : [],
     });
 
     const page = await browser.newPage();
 
-    await page.goto("file://" + absHtml, {
-      waitUntil: "networkidle0",
-    });
+    await page.goto("file://" + absHtml, { waitUntil: "networkidle0" });
 
     await page.pdf({
       path: absPdf,
