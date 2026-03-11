@@ -20,45 +20,42 @@ const puppeteer = require("puppeteer");
       process.exit(1);
     }
 
-    // Keep EVERYTHING writable and local to the runtime user
     const chromeRoot = "/tmp/puppeteer-live";
     const userDataDir = path.join(chromeRoot, "user-data");
     const configHome = path.join(chromeRoot, "config");
     const cacheHome = path.join(chromeRoot, "cache");
     const runtimeDir = path.join(chromeRoot, "runtime");
 
-    [chromeRoot, userDataDir, configHome, cacheHome, runtimeDir].forEach(
-      (dir) => {
-        fs.mkdirSync(dir, { recursive: true, mode: 0o777 });
-      },
-    );
-
-    process.env.HOME = chromeRoot;
-    process.env.XDG_CONFIG_HOME = configHome;
-    process.env.XDG_CACHE_HOME = cacheHome;
-    process.env.XDG_RUNTIME_DIR = runtimeDir;
-
-    // Use Puppeteer's installed Chrome
     let chromePath = puppeteer.executablePath();
 
-    if (process.env.NODE_ENV === "production") {
+    if (process.platform === "linux" && process.env.NODE_ENV === "production") {
+      [chromeRoot, userDataDir, configHome, cacheHome, runtimeDir].forEach((dir) => {
+        fs.mkdirSync(dir, { recursive: true, mode: 0o777 });
+      });
+
+      process.env.XDG_CONFIG_HOME = configHome;
+      process.env.XDG_CACHE_HOME = cacheHome;
+      process.env.XDG_RUNTIME_DIR = runtimeDir;
+
       chromePath =
+        process.env.PUPPETEER_EXECUTABLE_PATH ||
         "/home/adm-panomatics/.cache/puppeteer/chrome/linux-146.0.7680.66/chrome-linux64/chrome";
     }
 
     const browser = await puppeteer.launch({
       headless: true,
       executablePath: chromePath,
-      userDataDir,
-      dumpio: true,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-features=Crashpad",
-        "--no-first-run",
-        "--no-default-browser-check",
-      ],
+      ...(process.platform === "linux" && process.env.NODE_ENV === "production"
+        ? { userDataDir }
+        : {}),
+      args:
+        process.platform === "linux" && process.env.NODE_ENV === "production"
+          ? [
+              "--no-sandbox",
+              "--disable-setuid-sandbox",
+              "--disable-dev-shm-usage",
+            ]
+          : [],
     });
 
     const page = await browser.newPage();
