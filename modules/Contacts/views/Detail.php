@@ -66,7 +66,10 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$clientID = $recordModel->get('cf_898');
 
 		$activity = new dbo_db\ActivitySummary();
-		$activity_data = $activity->getActivitySummary($clientID);
+		// $activity_data = $activity->getActivitySummary($clientID);
+
+		// Get PI activity data and merge with old activity data
+		$activity_data = $activity->getPIActivitySummary($clientID);
 
 		$holdings = new dbo_db\HoldingsDB();
 		$holdings_data = $holdings->getHoldings($clientID);

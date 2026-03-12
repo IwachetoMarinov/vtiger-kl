@@ -23,17 +23,61 @@ class ActivitySummary
         $this->database_prefix = DBConnection::getDatabasePrefix();
     }
 
+    public function getPIActivitySummary($customer_id = null)
+    {
+        if (!$customer_id) return [];
+
+        $params = [];
+        $where  = '';
+
+        if ($customer_id) {
+            $where = "WHERE [Party_Code] = ?";
+            $params[] = $customer_id;
+        }
+
+        $sql = "SELECT * FROM $this->database_prefix.[DW_TxHxv2] $where order by [Tx_Date] DESC";
+
+        $summary = GetDBRows::getRows($this->connection, $sql, $params);
+
+        // echo "<pre>";
+        // echo "PI Activity Summary Result:\n";
+        // var_dump($summary);
+        // echo "</pre>";
+
+        $results  = [];
+        foreach ($summary as $item) {
+            $description = $item['Description'] ? $item['Description'] : $item['Tx_Desc'] ?? '';
+
+            $results[] = [
+                'voucher_no' => $item['Tx_No'] ?? '',
+                'voucher_type' => $item['Tx_Type'] ?? '',
+                'description' => $description,
+                'scr_description' => $item['SCR_Desc'] ?? '',
+                'table_name' => $item['Tx1_TblName'] ?? '',
+                'transaction_2' => $item['Tx2'] ?? '',
+                'table_name_2' => $item['Tx2_TblName'] ?? '',
+                'transaction_3' => $item['Tx3'] ?? '',
+                'table_name_3' => $item['Tx3_TblName'] ?? '',
+                'usd_val' => $item['Matched_Amt'] ? floatval($item['Matched_Amt']) : 0.00,
+                'doctype' => $item['Description'] ?? '',
+                'currency' => $item['Curr_Code'] ?? '',
+                'document_date' => $item['Tx_Date'] instanceof \DateTime ? $item['Tx_Date']->format('Y-m-d') : $item['Tx_Date'],
+                'posting_date' => $item['Appr_Date'] instanceof \DateTime ? $item['Appr_Date']->format('Y-m-d') : $item['Appr_Date'],
+                'мatched_аmt' => isset($item['Matched_Amt']) ? floatval($item['Matched_Amt']) : 0.00,
+                'amount_in_account_currency' =>
+                isset($item['TxAmt']) ? (float) $item['TxAmt'] : (isset($item['Tx_Amt']) ? (float) $item['Tx_Amt'] : 0.00),
+            ];
+        }
+
+        return $results;
+    }
+
     public function getActivitySummary($customer_id = null)
     {
         if (!$customer_id) return [];
 
-        if (!$this->connection || !is_resource($this->connection)) {
-            // Print connection errors for debugging
-            echo "<pre>";
-            var_dump($this->connection);
-            echo "</pre>";
-            return [];
-        }
+        if (!$this->connection || !is_resource($this->connection)) return [];
+
         echo "<pre>";
         var_dump($this->connection);
         echo "</pre>";
