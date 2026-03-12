@@ -22,6 +22,10 @@ class DBConnection
             $db_name = $_ENV['DB_EXTERNAL_NAME'] ?? getenv('DB_EXTERNAL_NAME') ?: '';
 
             echo "<pre>";
+            echo '' . "DB_USERNAME: " . $db_username . "\n" .
+                "DB_PASSWORD: " . ($db_password ? '******' : '') . "\n" .
+                "DB_SERVER_NAME: " . $server_name . "\n" .
+                "DB_EXTERNAL_NAME: " . $db_name . "\n";
             var_dump($db_username, $db_password, $server_name, $db_name);
             echo "</pre>";
 
