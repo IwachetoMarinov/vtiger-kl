@@ -21,6 +21,10 @@ class DBConnection
             $server_name = $_ENV['DB_SERVER_NAME'] ?? getenv('DB_SERVER_NAME') ?: '';
             $db_name = $_ENV['DB_EXTERNAL_NAME'] ?? getenv('DB_EXTERNAL_NAME') ?: '';
 
+            echo "<pre>";
+            var_dump($db_username, $db_password, $server_name, $db_name);
+            echo "</pre>";
+
             if (!$db_username || !$db_password || !$server_name || !$db_name) return null;
 
             $serverName = $server_name;
