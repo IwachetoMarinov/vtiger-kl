@@ -255,3 +255,12 @@ WHERE fieldlabel = 'Contact Name'
 39. Fix Production server in confic.inc.php add this row `$dbconfig['db_socket'] = '/var/lib/mysql/mysql.sock';`
 40. Show logs in the server `sudo tail -n 100 /var/www/html/crm_kl/logs/fileMissing.log`
 41. Bug with showing of all users  run this to rebuild user provileges `sudo -u apache php rebuild_all_privileges.php`
+
+42. If we backup database and we have problem with changing any role to CEO do these: 
+`DELETE FROM vtiger_datashare_module_rel WHERE tabid = 51 AND shareid IN (9,14,15,16,17);`
+
+`DELETE FROM vtiger_datashare_grp2grp WHERE shareid IN (9,14,16);`
+
+`DELETE FROM vtiger_datashare_rs2grp WHERE shareid IN (15);`
+
+`DELETE FROM vtiger_datashare_grp2rs WHERE shareid IN (17);`

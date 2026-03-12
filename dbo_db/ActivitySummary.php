@@ -27,7 +27,16 @@ class ActivitySummary
     {
         if (!$customer_id) return [];
 
-        if (!$this->connection || !is_resource($this->connection)) return [];
+        if (!$this->connection || !is_resource($this->connection)) {
+            // Print connection errors for debugging
+            echo "<pre>";
+            var_dump($this->connection);
+            echo "</pre>";
+            return [];
+        }
+        echo "<pre>";
+        var_dump($this->connection);
+        echo "</pre>";
 
         $params = [];
         $where  = '';
