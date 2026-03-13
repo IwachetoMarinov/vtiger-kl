@@ -26,10 +26,7 @@ class DBConnection
             // var_dump($db_username, $db_password, $server_name, $db_name);
             // echo "</pre>";
 
-            if (!$db_username || !$db_password || !$server_name || !$db_name) {
-                echo "<pre>Missing DB credentials</pre>";
-                return null;
-            }
+            if (!$db_username || !$db_password || !$server_name || !$db_name) return null;
 
             $serverName = $server_name;
             $connectionOptions = [
@@ -43,19 +40,11 @@ class DBConnection
 
             $conn = sqlsrv_connect($serverName, $connectionOptions);
 
-            if ($conn === false) {
-                echo "<pre>SQLSRV Connection Error:\n";
-                var_dump(sqlsrv_errors(SQLSRV_ERR_ALL));
-                echo "</pre>";
-                return null;
-            }
+            if ($conn === false) return null;
 
             self::$connection = $conn;
             return self::$connection;
         } catch (\Throwable $e) {
-            echo "<pre>Exception:\n";
-            var_dump($e->getMessage(), $e->getTrace());
-            echo "</pre>";
             return null;
         }
     }
