@@ -39,11 +39,6 @@ class ActivitySummary
 
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
-        // echo "<pre>";
-        // echo "PI Activity Summary Result:\n";
-        // var_dump($summary);
-        // echo "</pre>";
-
         $results  = [];
         foreach ($summary as $item) {
             $description = $item['Description'] ? $item['Description'] : $item['Tx_Desc'] ?? '';
@@ -77,10 +72,6 @@ class ActivitySummary
         if (!$customer_id) return [];
 
         if (!$this->connection || !is_resource($this->connection)) return [];
-
-        echo "<pre>";
-        var_dump($this->connection);
-        echo "</pre>";
 
         $params = [];
         $where  = '';
@@ -145,6 +136,56 @@ class ActivitySummary
             $transaction['barItems'] = $items;
 
             return $transaction;
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getActivityYears($customer_id = null)
+    {
+        if (!$customer_id || !$this->connection) return [];
+
+        try {
+            $params = [];
+            $where  = '';
+
+            if ($customer_id) {
+                $where = "WHERE [Party_Code] = ?";
+                $params[] = $customer_id;
+            }
+
+            $sql = "SELECT DISTINCT Year(Tx_Date) AS Year FROM $this->database_prefix.[DW_TxHxv2] $where";
+
+            $years = GetDBRows::getRows($this->connection, $sql, $params);
+
+            return array_map(function ($row) {
+                return $row['Year'] ?? '';
+            }, $years);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    public function getTransactionCurrencies($customer_id = null)
+    {
+        if (!$customer_id || !$this->connection) return [];
+
+        try {
+            $params = [];
+            $where  = '';
+
+            if ($customer_id) {
+                $where = "WHERE [Party_Code] = ?";
+                $params[] = $customer_id;
+            }
+
+            $sql = "SELECT DISTINCT Curr_Code FROM $this->database_prefix.[DW_TxHxv2] $where";
+
+            $currencies = GetDBRows::getRows($this->connection, $sql, $params);
+
+            return array_map(function ($row) {
+                return $row['Curr_Code'] ?? '';
+            }, $currencies);
         } catch (\Exception $e) {
             return [];
         }

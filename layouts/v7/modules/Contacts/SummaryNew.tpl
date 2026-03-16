@@ -19,7 +19,7 @@
     {assign var="RECID" value=$RECORD->getId()|default:0}
 
     {if $ASYEAR eq ""}
-        {assign var="ASYEAR" value={date('Y')}}
+        {assign var="ASYEAR" value=$SELECTED_YEAR}
     {/if}
 
     <style>

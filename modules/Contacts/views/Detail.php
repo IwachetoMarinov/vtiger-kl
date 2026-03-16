@@ -49,8 +49,22 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$order_by = "desc";
 		$order_by_params = $request->get('orderBy');
 
+		// REAL CUSTOMER ID FROM RECORD
+		$recordModel = $this->record->getRecord();
+		$clientID = $recordModel->get('cf_898');
+
+		$activity = new dbo_db\ActivitySummary();
+
+		$years  = $activity->getActivityYears($clientID);
+
 		// Check if there is no selected year set current year
-		if (empty($selected_year)) $selected_year = date('Y');
+		if (empty($selected_year)) {
+			if (is_array($years) && !empty($years)) {
+				$selected_year = max($years);
+			} else {
+				$selected_year = date('Y');
+			}
+		}
 
 		if (isset($start_date) && !empty($start_date)) $selected_year = '';
 
@@ -60,16 +74,10 @@ class Contacts_Detail_View extends Accounts_Detail_View
 
 		if (!$this->record) $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
 
-		$recordModel = $this->record->getRecord();
+		// $activity_data = $activity->getActivitySummary($clientID);
 
-		// REAL CUSTOMER ID FROM RECORD
-		$clientID = $recordModel->get('cf_898');
-
-		$activity = new dbo_db\ActivitySummary();
-		$activity_data = $activity->getActivitySummary($clientID);
-
-		// Get PI activity data and merge with old activity data
-		// $activity_data = $activity->getPIActivitySummary($clientID);
+		// Get PI activity data and merge with old activity data only for DEV server
+		$activity_data = $activity->getPIActivitySummary($clientID);
 
 		$holdings = new dbo_db\HoldingsDB();
 		$holdings_data = $holdings->getHoldings($clientID);
@@ -79,7 +87,8 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$certificate_id = $this->getCertificateId($recordId);
 
 		// Build dynamic currency list based on Activity Summary data
-		$currency_list = $this->getCurrenciesFromActivitySummary($activity_data);
+		// $currency_list = $this->getCurrenciesFromActivitySummary($activity_data);
+		$currency_list = $activity->getTransactionCurrencies($clientID);
 
 		if (
 			($selected_currency && in_array($selected_currency, $currency_list)) ||
@@ -124,8 +133,8 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		}
 
 		// Get year and remove current year from list
-		$years_array  = $this->createYearRange(2020, date('Y'));
-		$years = array_reverse($years_array);
+		// $years_array  = $this->createYearRange(2020, date('Y'));
+		// $years = array_reverse($years_array);
 
 		$viewer = $this->getViewer($request);
 
