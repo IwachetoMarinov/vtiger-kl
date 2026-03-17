@@ -240,12 +240,14 @@
                                             {if isset($TX.transaction_3) && $TX.transaction_3 neq ''}
                                                 {assign var="docNo" value=$TX.transaction_3}
                                                 {assign var="tableName" value=$TX.table_name_3}
-                                            {/if}
-                                            <a class="transaction-link"
-                                                href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD->getId()}&docNo={$docNo}&recordType={$TX.doctype}&tableName={$tableName}"
-                                                target="_blank">
+                                                <a class="transaction-link"
+                                                    href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD->getId()}&docNo={$docNo}&recordType={$TX.doctype}&tableName={$tableName}"
+                                                    target="_blank">
+                                                    {$TX.voucher_no}
+                                                </a>
+                                            {else}
                                                 {$TX.voucher_no}
-                                            </a>
+                                            {/if}
 
                                         {else if in_array($TX.voucher_type, ['MPD', 'MRD'])}
                                             {assign var="docLabel" value="Metal Payment Delivery"}
