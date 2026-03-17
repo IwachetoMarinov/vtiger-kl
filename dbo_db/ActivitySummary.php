@@ -115,7 +115,7 @@ class ActivitySummary
         if (!preg_match('/^[A-Za-z0-9_]+$/', $table_name)) return [];
 
         try {
-            $transaction  = $this->getSingleTransaction($doc_no);
+            $transaction  = $this->getSingleTransaction($doc_no, $table_name);
 
             $params = [];
             $where  = '';
@@ -229,7 +229,7 @@ class ActivitySummary
         if (!preg_match('/^[A-Za-z0-9_]+$/', $table_name)) return [];
 
         try {
-            $transaction = $this->getSingleTransaction($doc_no);
+            $transaction = $this->getSingleTransaction($doc_no, $table_name);
 
             $params = [];
             $where  = '';
@@ -296,7 +296,7 @@ class ActivitySummary
         }
     }
 
-    protected function getSingleTransaction($doc_no)
+    protected function getSingleTransaction($doc_no, $table_name = "DW_TxHx")
     {
         if (!$doc_no || !$this->connection) {
             die(print_r(sqlsrv_errors(), true));
@@ -311,7 +311,7 @@ class ActivitySummary
             $params[] = $doc_no;
         }
 
-        $sql = "SELECT * FROM $this->database_prefix.[DW_TxHx] $where";
+        $sql = "SELECT * FROM $this->database_prefix.[$table_name] $where";
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
         if (count($summary) === 0) return [];

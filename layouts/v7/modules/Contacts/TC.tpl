@@ -279,6 +279,7 @@
                             All amounts in {$ERP_DOCUMENT->currency}
                         </td>
                     </tr>
+                    <pre>{var_dump($ERP_DOCUMENT->currency)}</pre>
                     <tr>
                         {assign var="metalPrice" value=($ERP_DOCUMENT->barItems[0]->spotPrice)}
                         {assign var="transactionType" value=($ERP_DOCUMENT->barItems[0]->transactionType)}
