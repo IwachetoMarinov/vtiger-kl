@@ -268,7 +268,8 @@
                             {foreach item=HOLDINGS key=location from=$ERP_HOLDINGS}
                                 <tr class="no-border">
                                     <td></td>
-                                    <td><strong>{vtranslate($location,'MetalPrice')}</strong></td>
+                                    <td><strong>{$location}</strong></td>
+                                    {* <td><strong>{vtranslate($location,'MetalPrice')}</strong></td> *}
                                     <td style='text-align:right'></td>
                                     <td style='text-align:right'></td>
                                 </tr>

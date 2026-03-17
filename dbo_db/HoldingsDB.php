@@ -35,6 +35,7 @@ class HoldingsDB
         if ($stmt === false) die(print_r(sqlsrv_errors(), true));
 
         $summary = [];
+
         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
             $summary[] = $row;
         }
@@ -49,7 +50,7 @@ class HoldingsDB
                 'location' => $item['WH_Code'] ?? '',
                 'description' => $item['Item_Desc'] ?? '',
                 'quantity' => $item['Qty'] ?? 0,
-                'serial_no' => $item['Ser_No_List'] ?? '',
+                'serial_no' => $item['Ser_No_List'] ? $this->sanitizeSerials($item['Ser_No_List']) :  '',
                 'fine_oz' => $item['FineOz'] ?? 0,
                 'total' => $item['Total'] ?? 0,
             ];
@@ -145,5 +146,11 @@ class HoldingsDB
         ];
 
         return $metal_names[$code] ?? '';
+    }
+
+    protected function sanitizeSerials($serials): string
+    {
+        if (!$serials) return '';
+        return preg_replace('/;{2,}/', '', $serials);
     }
 }
