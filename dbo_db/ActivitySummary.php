@@ -191,6 +191,37 @@ class ActivitySummary
         }
     }
 
+    public function getProformaInvoiceData($doc_no = null, $table_name = null)
+    {
+        if (!$doc_no || !$table_name || !$this->connection) return [];
+
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $table_name)) return [];
+
+        try {
+            $transaction = $this->getProformaInvoiceTransaction($doc_no, $table_name);
+
+            $params = [];
+            $where  = '';
+
+            if ($doc_no) {
+                $where = "WHERE [Tx_No] = ?";
+                $params[] = $doc_no;
+            }
+
+            $sql = "
+                SELECT * FROM $this->database_prefix.[$table_name] $where";
+
+            $summary = GetDBRows::getRows($this->connection, $sql, $params);
+
+            $items = $this->mapTransactionItems($summary, $transaction);
+
+            $transaction['barItems'] = $items;
+            return $transaction;
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
     public function getDocumentPrintPreviewData($doc_no = null, $table_name = null)
     {
         if (!$doc_no || !$table_name || !$this->connection) return [];
@@ -217,6 +248,49 @@ class ActivitySummary
 
             $transaction['barItems'] = $items;
             return $transaction;
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    protected function getProformaInvoiceTransaction($doc_no, $table_name)
+    {
+
+        try {
+            $params = [];
+            $where  = '';
+
+            if ($doc_no) {
+                $where = "WHERE [Tx_No] = ?";
+                $params[] = $doc_no;
+            }
+
+            // $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_DocSO]";
+            $sql = "SELECT * FROM $this->database_prefix.[$table_name] $where";
+
+            $summary = GetDBRows::getRows($this->connection, $sql, $params);
+
+            if (count($summary) === 0) return [];
+            $row = $summary[0];
+
+            return [
+                'docNo'        => $row['Tx_No'] ?? '',
+                'GST'          => true,
+                'voucherType'  => $row['Tx_Type'] ?? '',
+                'currency'     => $row['Curr_Code'] ?? '',
+                'description'  => $row['Description'] ?? '',
+                'doctype'      => $row['Tx_Type'] ?? '',
+                'documentDate' =>
+                isset($row['Tx_Date']) && $row['Tx_Date'] instanceof \DateTime
+                    ? $row['Tx_Date']->format('Y-m-d')
+                    : ($row['Tx_Date'] ?? null),
+                'postingDate' =>
+                isset($row['Appr_Date']) && $row['Appr_Date'] instanceof \DateTime
+                    ? $row['Appr_Date']->format('Y-m-d')
+                    : ($row['Appr_Date'] ?? null),
+                'grandTotal'   => isset($row['Tx_Amt']) ? (float)$row['Tx_Amt'] : 0.00,
+                'totalusdVal'  => isset($row['Matched_Amt']) ? (float)$row['Matched_Amt'] : 0.00,
+            ];
         } catch (\Exception $e) {
             return [];
         }
@@ -320,7 +394,7 @@ class ActivitySummary
                 'totalItemAmount'   => $totalItemAmount,
                 'totalItemDcAmount' => isset($item['Total_Item_DC_Amt']) ? (float)$item['Total_Item_DC_Amt'] : 0.00,
 
-                'serialNumbers'     => $item['Ser_No'] ?? '',
+                'serialNumbers'     => $item['Ser_No'] ? $this->sanitizeSerialNumbers($item['Ser_No']) : '',
                 'serials'           => isset($item['Ser_No']) ? explode(',', $item['Ser_No']) : [],
 
                 'voucherType'       => $transaction['voucherType'] ?? '',
@@ -337,5 +411,11 @@ class ActivitySummary
         }
 
         return $items;
+    }
+
+    protected function sanitizeSerialNumbers($serNo)
+    {
+        // Remove any unwanted characters, allowing only alphanumeric and commas
+        return preg_replace('/;{2,}/', '', $serNo);
     }
 }

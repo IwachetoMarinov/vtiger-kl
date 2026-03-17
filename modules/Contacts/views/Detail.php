@@ -55,7 +55,8 @@ class Contacts_Detail_View extends Accounts_Detail_View
 
 		$activity = new dbo_db\ActivitySummary();
 
-		$years  = $activity->getActivityYears($clientID);
+		$years_array  = $activity->getActivityYears($clientID);
+		$years = array_reverse($years_array);
 
 		// Check if there is no selected year set current year
 		if (empty($selected_year)) {
