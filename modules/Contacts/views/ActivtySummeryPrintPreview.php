@@ -87,7 +87,12 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
                 }
             }
         }
-        
+
+        // echo "<pre>";
+        // echo "Filtered and Sorted Transactions:\n";
+        // print_r($transactions);
+        // echo "</pre>";
+
         $company_full_address = Helper::getCompanyFullAddress($companyRecord);
 
         $recordModel = $this->record->getRecord();

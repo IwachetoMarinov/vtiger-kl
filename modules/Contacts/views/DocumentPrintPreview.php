@@ -22,6 +22,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
     public function process(Vtiger_Request $request)
     {
         $docNo = $request->get('docNo');
+        $docType = $request->get('docType');
         $tableName = $request->get('tableName');
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
@@ -40,7 +41,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
 
         $average_spot_price = $this->getAverageSpotPrice($activity_data['barItems'] ?? []);
 
-        $docType = $activity_data['voucherType'] ?? "";
+        // $docType = $activity_data['voucherType'] ?? "";
         $erpDoc = (object) $activity_data;
 
         if ($docType == "DN"  && $tableName !== "DW_DocSTI ") {

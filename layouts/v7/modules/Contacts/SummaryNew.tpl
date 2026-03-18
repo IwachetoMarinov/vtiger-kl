@@ -225,17 +225,19 @@
 
                                 <tr class="listViewEntries1">
                                     <!-- Document number new hyperlink for different type of transaction -->
+                                    {* <pre>{var_dump($TX.voucher_type)}</pre> *}
                                     <td style="width: 140px; text-align: center; vertical-align: middle;">
-                                        {if in_array($TX.voucher_type, ['PUR', 'SWD', 'PWD'])}
+                                        {if in_array($TX.voucher_type, ['PUR', 'PWD'])}
                                             <a class="transaction-link"
                                                 href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
                                                 target="_blank">
                                                 {$TX.voucher_no}
                                             </a>
 
-                                        {else if in_array($TX.voucher_type, ['SAL'])}
+                                        {else if in_array($TX.voucher_type, ['SAL', 'SWD'])}
                                             {assign var="docNo" value="{$TX.voucher_no}"}
                                             {assign var="tableName" value="{$TX.table_name}"}
+
 
                                             {if isset($TX.transaction_3) && $TX.transaction_3 neq ''}
                                                 {assign var="docNo" value=$TX.transaction_3}
@@ -306,7 +308,7 @@
                                     <!-- INV button (only for Sales/Purchase Invoice) -->
                                     <td>
                                         {if in_array($TX.voucher_type, ['PUR', 'SWD', 'PWD'])}
-                                            <a href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
+                                            <a href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}&docType={$TX.voucher_type}"
                                                 target="_blank">
                                                 <button type="button" class="btn btn-default module-buttons">
                                                     <span class="fa fa-download"></span>&nbsp;INV
@@ -315,7 +317,7 @@
 
                                         {else if in_array($TX.voucher_type, ['SAL'])}
                                             {if isset($TX.transaction_3) && $TX.transaction_3 neq ''}
-                                                <a href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD->getId()}&docNo={$TX.transaction_3}&recordType={$TX.doctype}&tableName={$TX.table_name_3}"
+                                                <a href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD->getId()}&docNo={$TX.transaction_3}&recordType={$TX.doctype}&tableName={$TX.table_name_3}&docType={$TX.voucher_type}"
                                                     target="_blank">
                                                     <button type="button" class="btn btn-default module-buttons">
                                                         <span class="fa fa-download"></span>&nbsp;INV
@@ -336,12 +338,15 @@
                                     {* PI button only for SAL and SWD type of transaction *}
                                     <td>
                                         {if in_array($TX.voucher_type, ['SAL', 'SWD'])}
-                                            <a href="index.php?module=Contacts&view=ProformaInvoiceView&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
-                                                target="_blank">
-                                                <button type="button" class="btn btn-default module-buttons">
-                                                    <span class="fa fa-download"></span>&nbsp;PI
-                                                </button>
-                                            </a>
+                                            {if isset($TX.transaction_3) && $TX.transaction_3 neq ''}
+                                            {else}
+                                                <a href="index.php?module=Contacts&view=ProformaInvoiceView&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
+                                                    target="_blank">
+                                                    <button type="button" class="btn btn-default module-buttons">
+                                                        <span class="fa fa-download"></span>&nbsp;PI
+                                                    </button>
+                                                </a>
+                                            {/if}
                                         {/if}
                                     </td>
 

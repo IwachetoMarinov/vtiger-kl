@@ -84,7 +84,7 @@ class ActivitySummary
         $sql = "SELECT * FROM $this->database_prefix.[DW_TxHx] $where order by [Tx_Date] DESC";
 
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
-
+        
         $results  = [];
         foreach ($summary as $item) {
             $description = $item['Description'] ? $item['Description'] : $item['Tx_Desc'] ?? '';

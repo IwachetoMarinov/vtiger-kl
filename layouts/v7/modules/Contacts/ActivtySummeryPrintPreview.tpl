@@ -283,6 +283,7 @@
                                 </tr>
 
                                 {for $loopStart=$start to $end}
+
                                     {if $loopStart >= count($TRANSACTIONS)}{break}{/if}
 
                                     {assign var="start" value=($loopStart+1)}

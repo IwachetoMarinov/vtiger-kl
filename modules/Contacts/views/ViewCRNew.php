@@ -1,7 +1,7 @@
 <?php
 
-include_once 'dbo_db/ActivitySummary.php';
-include_once 'dbo_db/HoldingsDB.php';
+// include_once 'dbo_db/ActivitySummary.php';
+// include_once 'dbo_db/HoldingsDB.php';
 include_once 'modules/Contacts/download/CollectionRequestDownload.php';
 
 class Contacts_ViewCRNew_View extends Vtiger_Index_View
