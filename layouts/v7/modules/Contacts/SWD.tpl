@@ -265,7 +265,7 @@
                             <tr>
                                 <td colspan="2" style="text-align:center">{$smarty.request.docNo}</td>
                                 <td style="text-align:center">{$ERP_DOCUMENT->documentDate}</td>
-                                <td style="text-align:center">{$ERP_DOCUMENT->deliveryDate}</td>
+                                <td style="text-align:center">{$ERP_DOCUMENT->postingDate}</td>
                                 <td style="text-align:center">Purchase & Storage</td>
                             </tr>
                         </table>

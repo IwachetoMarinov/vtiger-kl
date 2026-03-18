@@ -229,7 +229,8 @@ class ActivitySummary
         if (!preg_match('/^[A-Za-z0-9_]+$/', $table_name)) return [];
 
         try {
-            $transaction = $this->getSingleTransaction($doc_no, $table_name);
+            $transaction = $this->getSingleTransaction($doc_no, "DW_TxHx");
+            // $transaction = $this->getSingleTransaction($doc_no, $table_name);
 
             $params = [];
             $where  = '';
@@ -255,7 +256,6 @@ class ActivitySummary
 
     protected function getProformaInvoiceTransaction($doc_no, $table_name)
     {
-
         try {
             $params = [];
             $where  = '';
