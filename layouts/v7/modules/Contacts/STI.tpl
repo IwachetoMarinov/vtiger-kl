@@ -328,10 +328,10 @@
                             {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
                                 <div>
                                     {if $ERP_DOCUMENT->currency eq 'SGD'}
-                                        *Remarks: USD/SGD exchange rate at SGD {$exchangeRateInfo['rate']} / USD
+                                        *Remarks: USD/SGD exchange rate at SGD {number_format($exchangeRateInfo['rate'],4)} / USD
                                     {else}
                                         *Remarks: {$ERP_DOCUMENT->currency}/SGD exchange rate at SGD
-                                        {$exchangeRateInfo['rate']} / {$ERP_DOCUMENT->currency}
+                                        {number_format($exchangeRateInfo['rate'],4)} / {$ERP_DOCUMENT->currency}
                                     {/if}
                                 </div>
                             {/if}

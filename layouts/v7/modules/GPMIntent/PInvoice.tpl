@@ -137,8 +137,6 @@
                             </tr>
                         </table>
 
-                        {* {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($INTENT->get('modifiedtime'), $INTENT_CURRENCY)} *}
-
                         <!-- Bank info -->
                         {if isset($SELECTED_BANK) && $SELECTED_BANK}
                             {assign var=ROUTING value=$SELECTED_BANK->get('bank_routing_no')}

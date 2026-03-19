@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-         @font-face {
+        @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
@@ -331,10 +331,10 @@
                         {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
                             <div>
                                 {if $ERP_DOCUMENT->currency eq 'SGD'}
-                                    *Remarks: USD/SGD exchange rate at SGD {$exchangeRateInfo['rate']} / USD
+                                    *Remarks: USD/SGD exchange rate at SGD {number_format($exchangeRateInfo['rate'],4)} / USD
                                 {else}
                                     *Remarks: {$ERP_DOCUMENT->currency}/SGD exchange rate at SGD
-                                    {$exchangeRateInfo['rate']} / {$ERP_DOCUMENT->currency}
+                                    {number_format($exchangeRateInfo['rate'],4)} / {$ERP_DOCUMENT->currency}
                                 {/if}
                             </div>
                         {/if}
@@ -376,7 +376,7 @@
                         {if isset($COMPANY)}
                             {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
                             {$COMPANY->get('company_reg_no')}){/if}<br>
-                             {$COMPANY_FULL_ADDRESS}
+                            {$COMPANY_FULL_ADDRESS}
                             <br>
                             T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
                             {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('email')}<br>
