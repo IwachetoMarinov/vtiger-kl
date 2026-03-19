@@ -67,6 +67,55 @@ class ActivitySummary
         return $results;
     }
 
+    public function getActivitySummaryOpeningBalance($customer_id = null, $currency = null, $start_date = null)
+    {
+        if (!$customer_id || !$currency || !$start_date || !$this->connection) return 0.00;
+
+        $params = [];
+        $where  = '';
+
+        if ($customer_id) {
+            $where = "WHERE [Party_Code] = ?";
+            $params[] = $customer_id;
+        }
+
+        if ($currency) {
+            $where .= empty($where) ? "WHERE" : " AND";
+            $where .= " [Curr_Code] = ?";
+            $params[] = $currency;
+        }
+
+        if ($start_date) {
+            $where .= empty($where) ? "WHERE" : " AND";
+            $where .= " [Tx_Date] > ?";
+            $params[] = $start_date;
+        }
+
+        $sql = "SELECT 'Opening Balance', sum(Tx_Amt) FROM $this->database_prefix.[DW_TxHx] $where";
+
+        try {
+            $summary = GetDBRows::getRows($this->connection, $sql, $params);
+
+            $amount = 0.00;
+
+            if (is_array($summary) && count($summary) > 0) {
+                foreach ($summary as $row) {
+                    // check if row has a value
+                    if (isset($row) && !is_null($row)) {
+                        if (is_array($row)) {
+                            $value = reset($row);
+                            $amount += floatval($value);
+                        }
+                    }
+                }
+            }
+
+            return $amount;
+        } catch (\Exception $e) {
+            return 0.00;
+        }
+    }
+
     public function getActivitySummary($customer_id = null)
     {
         if (!$customer_id) return [];

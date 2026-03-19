@@ -98,21 +98,23 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
             }
         }
 
-        // foreach ($transactions as $txn) {
-        //     if (!empty($txn[$dateField])) {
-        //         $txnTs = strtotime($txn[$dateField] . ' 00:00:00');
-        //         if (is_null($earliestDate) || $txnTs < $earliestDate)  $earliestDate = $txnTs;
-        //         if (is_null($latestDate) || $txnTs > $latestDate) $latestDate = $txnTs;
-        //     }
-        // }
-
         $company_full_address = Helper::getCompanyFullAddress($companyRecord);
+
+        // Get opening balance for the activity summary
+        $start_opening_balance_date = $transactions[0][$dateField] ?? null;
+        // Extract 1 day before the earliest transaction date for opening balance calculation
+        if ($start_opening_balance_date) 
+            $start_opening_balance_date = date('Y-m-d', strtotime($start_opening_balance_date . ' -1 day'));
+
+        // var_dump($start_opening_balance_date); // Debugging line to check the calculated opening balance date
+        $opening_balance = $activity->getActivitySummaryOpeningBalance($clientID, $selected_currency, $start_opening_balance_date);
 
         $recordModel = $this->record->getRecord();
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', $this->makeDataPage($transactions));
         $viewer->assign('TRANSACTIONS', $transactions);
+        $viewer->assign('OPENING_BALANCE', $opening_balance);
         $viewer->assign('EARLIEST_DATE', $earliestDate ? date('Y-M-d', $earliestDate) : null);
         $viewer->assign('LATEST_DATE', $latestDate ? date('Y-M-d', $latestDate) : null);
         $viewer->assign('COMPANY', $companyRecord);

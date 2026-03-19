@@ -283,6 +283,13 @@
                                     <th style="text-align: center">BALANCE</th>
                                 </tr>
 
+                                <tr>
+                                    <td colspan="4"><strong>OPENING BALANCE</strong></td>
+                                    <td style="text-align:right"><strong>
+                                            {if $OPENING_BALANCE > 0 }{number_format($OPENING_BALANCE, 2, '.', ',')}{else}({number_format(abs($OPENING_BALANCE), 2, '.', ',')}){/if}</strong>
+                                    </td>
+                                </tr>
+
                                 {for $loopStart=$start to $end}
 
                                     {if $loopStart >= count($TRANSACTIONS)}{break}{/if}
