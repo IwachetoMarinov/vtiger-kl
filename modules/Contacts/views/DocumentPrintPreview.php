@@ -93,6 +93,10 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
 
         $company_full_address = Helper::getCompanyFullAddress($companyRecord);
 
+        // echo "<pre>";
+        // print_r($erpDoc);
+        // echo "</pre>";
+
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);

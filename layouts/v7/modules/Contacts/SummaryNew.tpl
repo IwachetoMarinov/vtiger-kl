@@ -307,13 +307,23 @@
 
                                     <!-- INV button (only for Sales/Purchase Invoice) -->
                                     <td>
-                                        {if in_array($TX.voucher_type, ['PUR', 'SWD', 'PWD'])}
+                                        {if in_array($TX.voucher_type, ['PUR', 'PWD'])}
                                             <a href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}&docType={$TX.voucher_type}"
                                                 target="_blank">
                                                 <button type="button" class="btn btn-default module-buttons">
                                                     <span class="fa fa-download"></span>&nbsp;INV
                                                 </button>
                                             </a>
+
+                                        {else if in_array($TX.voucher_type, ['SWD'])}
+                                            {if isset($TX.transaction_3) && $TX.transaction_3 neq ''}
+                                                <a href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD->getId()}&docNo={$TX.transaction_3}&recordType={$TX.doctype}&tableName={$TX.table_name_3}&docType={$TX.voucher_type}"
+                                                    target="_blank">
+                                                    <button type="button" class="btn btn-default module-buttons">
+                                                        <span class="fa fa-download"></span>&nbsp;INV
+                                                    </button>
+                                                </a>
+                                            {/if}
 
                                         {else if in_array($TX.voucher_type, ['SAL'])}
                                             {if isset($TX.transaction_3) && $TX.transaction_3 neq ''}
