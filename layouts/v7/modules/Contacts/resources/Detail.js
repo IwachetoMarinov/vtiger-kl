@@ -41,7 +41,7 @@ Vtiger_Detail_Js(
         if (primaryEmailValue == "") {
           app.helper.showErrorNotification({
             message: app.vtranslate(
-              "JS_PLEASE_ENTER_PRIMARY_EMAIL_VALUE_TO_ENABLE_PORTAL_USER"
+              "JS_PLEASE_ENTER_PRIMARY_EMAIL_VALUE_TO_ENABLE_PORTAL_USER",
             ),
           });
           return false;
@@ -49,21 +49,26 @@ Vtiger_Detail_Js(
       }
       return true;
     },
+    
     registerActivtySummeryDateChange: function () {
-      jQuery("#ActivtySummeryDate").on("change", function (e) {
-        var selectElm = jQuery("#ActivtySummeryDate option:selected").val();
-        window.location.replace(
-          window.location.href.split("&ActivtySummeryDate=")[0] +
-            "&ActivtySummeryDate=" +
-            selectElm
-        );
+      jQuery("#ActivtySummeryDate").on("change", function () {
+        const url = new URL(window.location.href);
+        const value = jQuery(this).val();
+
+        url.searchParams.set("ActivtySummeryDate", value);
+
+        // 🔥 remove these when year changes
+        url.searchParams.delete("start_date");
+        url.searchParams.delete("end_date");
+
+        window.location.replace(url.toString());
       });
     },
 
     registerCertificateClick: function () {
       jQuery("#generateHoldingCertificate").on("click", function (e) {
         certificateId = jQuery("#generateHoldingCertificate").data(
-          "certificateid"
+          "certificateid",
         );
         if (certificateId > 1) {
           var params = {
@@ -95,7 +100,7 @@ Vtiger_Detail_Js(
 
                   jQuery("#generateHoldingCertificate").data(
                     "certificateid",
-                    docuemtntId[1]
+                    docuemtntId[1],
                   );
                   certificateId = docuemtntId[1];
                   app.helper.hideProgress();
@@ -113,36 +118,37 @@ Vtiger_Detail_Js(
                   });
                 });
               },
-              function (error, err) {}
+              function (error, err) {},
             );
         }
       });
     },
 
     registerActivitySummaryCurrencyChange: function () {
-      // var thisInstance = this;
-
       jQuery("#currencySelect").on("change", function () {
-        var selectedCurrency = jQuery(this).val();
+        const url = new URL(window.location.href);
+        const value = jQuery(this).val();
 
-        const originalUrl = window.location.href;
+        url.searchParams.set("ActivtySummeryCurrency", value);
 
-        // Build new AJAX URL (keeps record/module params)
-        var baseUrl = window.location.href.split("&ActivtySummeryCurrency=")[0];
-
-        var url = baseUrl + "&ActivtySummeryCurrency=" + selectedCurrency;
-
-        // Check for existing date param ActivtySummeryDate
-        if (originalUrl.indexOf("ActivtySummeryDate") !== -1) {
-          var dateParam = jQuery("#ActivtySummeryDate").val();
-          url += "&ActivtySummeryDate=" + dateParam;
-        }
-
-        // Trigger AJAX reload like native widgets
-        // thisInstance.getDetailViewContents(url);
-        // window.location.replace(url);
-        window.location.href = url;
+        window.location.replace(url.toString());
       });
+
+      // jQuery("#currencySelect").on("change", function () {
+      //   const originalUrl = window.location.href;
+
+      //   // Build new AJAX URL (keeps record/module params)
+      //   var baseUrl = window.location.href.split("&ActivtySummeryCurrency=")[0];
+
+      //   var url = baseUrl + "&ActivtySummeryCurrency=" + selectedCurrency;
+
+      //   // Check for existing date param ActivtySummeryDate
+      //   if (originalUrl.indexOf("ActivtySummeryDate") !== -1) {
+      //     var dateParam = jQuery("#ActivtySummeryDate").val();
+      //     url += "&ActivtySummeryDate=" + dateParam;
+      //   }
+      //   window.location.href = url;
+      // });
     },
     /**
      * Function which will register all the events
@@ -155,5 +161,5 @@ Vtiger_Detail_Js(
       this.registerCertificateClick();
       this.registerActivitySummaryCurrencyChange();
     },
-  }
+  },
 );

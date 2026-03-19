@@ -20,6 +20,36 @@ class HoldingsDB
         $this->database_prefix = DBConnection::getDatabasePrefix();
     }
 
+    public function getHoldingsMetals($customer_id = null)
+    {
+        if (!$customer_id || !$this->connection) return [];
+
+        try {
+            $params[] = $customer_id;
+
+            $sql = "SELECT DISTINCT MT_Name, Spot_Price FROM $this->database_prefix.[DW_DocHoldings] WHERE Party_Code = ?";
+
+            $stmt = sqlsrv_query($this->connection, $sql, $params);
+
+            if ($stmt === false) {
+                // die(print_r(sqlsrv_errors(), true));
+                return [];
+            }
+
+            $summary = [];
+
+            while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                $summary[] = $row;
+            }
+
+            sqlsrv_free_stmt($stmt);
+
+            return $summary;
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
     public function getHoldings($customer_id = null)
     {
         if (!$customer_id) return [];

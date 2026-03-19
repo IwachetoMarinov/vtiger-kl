@@ -183,6 +183,11 @@ class ActivitySummary
 
             $currencies = GetDBRows::getRows($this->connection, $sql, $params);
 
+            // return array but remove null or empty values
+            $currencies = array_filter($currencies, function ($row) {
+                return !empty($row['Curr_Code']);
+            });
+
             return array_map(function ($row) {
                 return $row['Curr_Code'] ?? '';
             }, $currencies);

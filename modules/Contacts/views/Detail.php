@@ -81,15 +81,23 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$activity_data = $activity->getPIActivitySummary($clientID);
 
 		$holdings = new dbo_db\HoldingsDB();
+
 		$holdings_data = $holdings->getHoldings($clientID);
 
 		$wallets = $holdings->getWalletBalances($clientID);
 
 		$certificate_id = $this->getCertificateId($recordId);
+		// Get currencies from ERP database
+		$currency_list = $activity->getTransactionCurrencies($clientID);
+
+		if (!$selected_currency && is_array($wallets)) {
+			$selected_currency = $wallets[0]['Curr_Code'] ?? '';
+		} elseif (!$selected_currency && is_array($currency_list)) {
+			$selected_currency = $currency_list[0] ?? '';
+		}
 
 		// Build dynamic currency list based on Activity Summary data
 		// $currency_list = $this->getCurrenciesFromActivitySummary($activity_data);
-		$currency_list = $activity->getTransactionCurrencies($clientID);
 
 		if (
 			($selected_currency && in_array($selected_currency, $currency_list)) ||
@@ -153,11 +161,6 @@ class Contacts_Detail_View extends Accounts_Detail_View
 				return $dateB <=> $dateA;
 			});
 		}
-
-		// echo "<pre>";
-		// echo "Final Activity Data after Filtering and Sorting:\n";
-		// print_r($activity_data);
-		// echo "</pre>";
 
 		// Assign safely to TPL
 		$viewer->assign('CLIENT_CURRENCY', $currency_list);

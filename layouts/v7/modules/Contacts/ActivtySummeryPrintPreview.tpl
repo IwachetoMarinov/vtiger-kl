@@ -205,6 +205,7 @@
     {assign var="start" value=0}
     {assign var="end" value=1}
     {assign var="openingBalance" value=0}
+    {assign var="currency" value=$smarty.request.ActivtySummeryCurrency|default:''}
 
     {for $page=1 to $PAGES}
         {if $page eq 1}
@@ -268,7 +269,7 @@
                     {/if}
                     <tr>
                         <td style="text-align: right;font-size: 9pt">
-                            All amounts in currency
+                            All amounts in {if isset($currency) and $currency neq ''}{$currency} {else} currency {/if}
                         </td>
                     </tr>
                     <tr>

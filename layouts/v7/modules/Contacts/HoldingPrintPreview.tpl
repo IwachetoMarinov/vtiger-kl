@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-         @font-face {
+        @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
@@ -19,6 +19,7 @@
             font-weight: 700;
             src: url('layouts/v7/resources/fonts/OpenSans-Bold.woff') format('woff');
         }
+
         * {
             box-sizing: border-box;
             margin: 0px;
@@ -235,7 +236,7 @@
                 </tr>
                 <tr>
                     <td style="text-align: right;font-size: 9pt">
-                        <table class="activity-tbl" style="margin-top:5mm; width: 40%">
+                        <table class="activity-tbl" style="margin-top:5mm; width: 50%">
                             <tr>
                                 <th colspan="2">REFERENCE VALUE AS PER THE</th>
                             </tr>
@@ -244,10 +245,15 @@
                                 <td style="text-align:center">{$LBMA_DATE}</td>
                             </tr>
                             {assign var="spot_price" value={$ERP_HOLDINGMETALS[0]['spot_price']|default:0} }
-                            <tr>
-                                <th>Gold</th>
-                                <td style="text-align:center">US$ {number_format($spot_price, 2, '.', ',')} / Oz..</td>
-                            </tr>
+                            {foreach item=metal from=$METALS}
+                                <tr>
+                                    <th>{if isset($metal['MT_Name'])}{$metal['MT_Name']}{/if}</th>
+                                    <td style="text-align:center">
+                                        {if isset($metal['Spot_Price'])}
+                                            USD {number_format($metal['Spot_Price'], 2, '.', ',')} / Oz..
+                                        {/if}</td>
+                                </tr>
+                            {/foreach}
                         </table>
                     </td>
                 </tr>

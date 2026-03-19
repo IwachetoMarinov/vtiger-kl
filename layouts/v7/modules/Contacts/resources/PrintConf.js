@@ -30,12 +30,19 @@ jQuery(function () {
     var element = jQuery(e.currentTarget);
     var bankId = Number(element.val());
     saveUrl = jQuery("#printConfSave").attr("href");
+    // var saveUrl = window.location.href;
+    console.log("saveUrl: ", saveUrl);
+    
     splitSaveUrl = saveUrl.split("&bank");
     newSaveUrl =
       splitSaveUrl[0] +
       "&bank=" +
       bankId +
       splitSaveUrl[1].substr(splitSaveUrl[1].indexOf("&"));
+
+    console.log("saveUrl: ", saveUrl);
+    console.log("newSaveUrl: ", newSaveUrl);
+
     jQuery("#printConfSave").attr("href", newSaveUrl);
   });
 

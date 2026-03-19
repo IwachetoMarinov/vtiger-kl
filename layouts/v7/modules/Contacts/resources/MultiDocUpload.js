@@ -24,6 +24,8 @@ jQuery(function () {
 
     const originalUrl = window.location.href;
 
+    const currency = jQuery("#currencySelect")?.val();
+
     // Remove existing parameters if present
     let baseUrl = originalUrl.split("&start_date=")[0];
     baseUrl = baseUrl.split("&end_date=")[0];
@@ -33,7 +35,9 @@ jQuery(function () {
       "&start_date=" +
       encodeURIComponent(start) +
       "&end_date=" +
-      encodeURIComponent(end);
+      encodeURIComponent(end) +
+      "&ActivtySummeryCurrency=" +
+      encodeURIComponent(currency);
   });
 
   // Date Range clear button

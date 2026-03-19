@@ -28,6 +28,8 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
 
         $holdings = new dbo_db\HoldingsDB();
         $holdings_data = $holdings->getHoldings($clientID);
+        $metals = $holdings->getHoldingsMetals($clientID);
+
         $total = $this->calculateSpotTotal($holdings_data);
 
         $LBMA_DATE = isset($holdings_data[0]['spot_date']) && is_array($holdings_data) ? date('d-M-y', strtotime($holdings_data[0]['spot_date'])) : '';
@@ -53,6 +55,7 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('LBMA_DATE', $LBMA_DATE);
         $viewer->assign('TOTAL', $total);
+        $viewer->assign('METALS', $metals);
         $viewer->assign('ERP_HOLDINGS', $grouped);
         $viewer->assign('ERP_HOLDINGMETALS', $holdings_data);
         $viewer->assign('COMPANY', $companyRecord);
