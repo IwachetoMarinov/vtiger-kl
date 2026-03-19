@@ -104,6 +104,8 @@ class MetalsAPI
             if (isset($row['Exc_Date']) && $row['Exc_Date'] instanceof DateTime) {
                 $row['Exc_Date'] = $row['Exc_Date']->format('Y-m-d');
             }
+            // Divide to 100 every rate to get the correct value as per MetalsAPI 
+            $row['100CurrToSGD'] = isset($row['100CurrToSGD']) ? $row['100CurrToSGD'] / 100 : null;
             $data[] = $row;
         }
 
