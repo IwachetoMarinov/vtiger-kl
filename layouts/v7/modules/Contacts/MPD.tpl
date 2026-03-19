@@ -225,7 +225,7 @@
                                 {assign var="total_value" value=$total_value+$barItem->totalFineOz}
                                 {assign var="calcTotal" value=$calcTotal+$barItem->totalFineOz}
                                 {* Get up to 80 symbols from serials *}
-                                {assign var="serials" value=implode(", ", $barItem->serials)}
+                                {assign var="serials" value=$barItem->serialNumbers|default:''}
                                 {assign var="serials" value=$serials|truncate:80:"..."}
 
                                 <tr>

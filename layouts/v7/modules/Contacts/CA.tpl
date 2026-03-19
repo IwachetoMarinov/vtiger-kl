@@ -252,7 +252,7 @@
                                         <td>
                                             <span>{$barItem->itemDescription}</span> <br />
                                             <span style="font-size:smaller;font-style:italic;">
-                                                {implode(", ", $barItem->serials)}</span>
+                                                {$barItem->serialNumbers}</span>
                                         </td>
 
                                         <td style="text-align:right;"> {number_format($barItem->totalFineOz,4)}</td>
