@@ -406,7 +406,7 @@ class ActivitySummary
                 'purity'            => $item['Purity'] ?? '',
                 'price'         => isset($item['Item_Price']) ? (float)$item['Item_Price'] : 0.00,
                 'unitPrice'         => isset($item['Unit_Price']) ? (float)$item['Unit_Price'] : 0.00,
-                'premium'          => isset($item['Premium_Perc']) ? (float)$item['Premium_Perc'] : 0.00,
+                'premium'          => isset($item['Premium_Perc']) ? $item['Premium_Perc'] : 0.00,
                 'premiumFinal'      => isset($item['Premium_Final']) ? (float)$item['Premium_Final'] : 0.00,
                 'totalItemAmount'   => $totalItemAmount,
                 'totalItemDcAmount' => isset($item['Total_Item_DC_Amt']) ? (float)$item['Total_Item_DC_Amt'] : 0.00,
