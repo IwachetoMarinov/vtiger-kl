@@ -199,9 +199,6 @@
         </ul>
     {/if}
 
-    {assign var="grandTotal" value=0}
-    {assign var="movementTotal" value=0}
-    {assign var="balanceAmount" value=0}
     {* New balance, totalMovement and endingBalance *}
     {assign var="balance" value=$OPENING_BALANCE|default:0}
     {assign var="totalMovement" value=0}
@@ -294,8 +291,6 @@
                                     </td>
                                 </tr>
 
-                                {assign var="usdVal" value=$OPENING_BALANCE|default:0}
-
                                 {for $loopStart=$start to $end}
 
                                     {if $loopStart >= count($TRANSACTIONS)}{break}{/if}
@@ -321,13 +316,6 @@
 
                                     {* Normalize values to avoid null warnings *}
                                     {assign var="docNo" value=$TRANSACTION['voucher_no']|default:''}
-                                    {* Add  amount_in_account_currency to usdValue*}
-                                    {assign var="usdVal" value=$usdVal + ($TRANSACTION['amount_in_account_currency']|default:0)}
-
-                                    {* Determine direction based on type *}
-                                    {if in_array($TRANSACTION['voucher_type'], ['PUR','PAY'])}
-                                        {assign var="usdVal" value=$usdVal + ($usdVal * -1)}
-                                    {/if}
 
                                     {assign var="transDate" value=$TRANSACTION['document_date']|default:''}
 
@@ -335,13 +323,6 @@
                                     {if in_array($docNo|substr:0:3, array('FXP','FXR','MPD','MRD'))}
                                         {continue}
                                     {/if}
-
-                                    {* Grand total always accumulates *}
-                                    {assign var="grandTotal" value=$grandTotal+$usdVal}
-
-                                    {* Record movement *}
-                                    {assign var="movementTotal" value=$movementTotal + $usdVal}
-                                    {assign var="balanceAmount" value=$balanceAmount + $usdVal}
 
                                     <tr>
                                         {* Doc number column *}

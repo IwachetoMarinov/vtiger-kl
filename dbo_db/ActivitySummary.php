@@ -479,6 +479,61 @@ class ActivitySummary
         return $items;
     }
 
+    public function getMonthlyTransactions($client_id, $start_date, $end_date)
+    {
+        if (!$client_id || !$this->connection || !$start_date || !$end_date) return [];
+
+        try {
+            $params = [];
+            $where  = '';
+
+            if ($client_id) {
+                $where = "WHERE [Party_Code] = ?";
+                $params[] = $client_id;
+            }
+
+            if ($start_date) {
+                $where .= empty($where) ? "WHERE" : " AND";
+                $where .= " [Tx_Date] >= ?";
+                $params[] = $start_date;
+            }
+
+            if ($end_date) {
+                $where .= empty($where) ? "WHERE" : " AND";
+                $where .= " [Tx_Date] <= ?";
+                $params[] = $end_date;
+            }
+
+            $sql = "SELECT * FROM $this->database_prefix.[DW_TxHx] $where order by [Tx_Date] DESC";
+
+            $summary = GetDBRows::getRows($this->connection, $sql, $params);
+
+            $results  = [];
+            foreach ($summary as $item) {
+                $description = $item['Description'] ? $item['Description'] : $item['Tx_Desc'] ?? '';
+
+                $results[] = [
+                    'voucher_no' => $item['Tx_No'] ?? '',
+                    'voucher_type' => $item['Tx_Type'] ?? '',
+                    'description' => $description,
+                    'table_name' => $item['TableName'] ?? '',
+                    'usd_val' => $item['Matched_Amt'] ? floatval($item['Matched_Amt']) : 0.00,
+                    'doctype' => $item['Description'] ?? '',
+                    'currency' => $item['Curr_Code'] ?? '',
+                    'document_date' => $item['Tx_Date'] instanceof \DateTime ? $item['Tx_Date']->format('Y-m-d') : $item['Tx_Date'],
+                    'posting_date' => $item['Appr_Date'] instanceof \DateTime ? $item['Appr_Date']->format('Y-m-d') : $item['Appr_Date'],
+                    'мatched_аmt' => isset($item['Matched_Amt']) ? floatval($item['Matched_Amt']) : 0.00,
+                    'amount_in_account_currency' =>
+                    isset($item['TxAmt']) ? (float) $item['TxAmt'] : (isset($item['Tx_Amt']) ? (float) $item['Tx_Amt'] : 0.00),
+                ];
+            }
+
+            return $results;
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
     protected function sanitizeSerialNumbers($serNo)
     {
         // Remove any unwanted characters, allowing only alphanumeric and commas
