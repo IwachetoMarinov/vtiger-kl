@@ -290,6 +290,8 @@
                                     </td>
                                 </tr>
 
+                                {assign var="usdVal" value=$OPENING_BALANCE|default:0}
+
                                 {for $loopStart=$start to $end}
 
                                     {if $loopStart >= count($TRANSACTIONS)}{break}{/if}
@@ -303,11 +305,12 @@
 
                                     {* Normalize values to avoid null warnings *}
                                     {assign var="docNo" value=$TRANSACTION['voucher_no']|default:''}
-                                    {assign var="usdVal" value=$TRANSACTION['amount_in_account_currency']|default:0}
+                                    {* Add  amount_in_account_currency to usdValue*}
+                                    {assign var="usdVal" value=$usdVal + ($TRANSACTION['amount_in_account_currency']|default:0)}
 
                                     {* Determine direction based on type *}
                                     {if in_array($TRANSACTION['voucher_type'], ['PUR','PAY'])}
-                                        {assign var="usdVal" value=$usdVal * -1}
+                                        {assign var="usdVal" value=$usdVal + ($usdVal * -1)}
                                     {/if}
 
                                     {assign var="transDate" value=$TRANSACTION['document_date']|default:''}
@@ -319,25 +322,6 @@
 
                                     {* Grand total always accumulates *}
                                     {assign var="grandTotal" value=$grandTotal+$usdVal}
-
-                                    {* Opening balance row *}
-                                    {if $docNo|substr:0:3 eq 'AOP'}
-                                        {assign var="openingBalance" value=$usdVal}
-                                        {assign var="balanceAmount" value=$usdVal}
-                                        <tr>
-                                            <td colspan="4"><strong>OPENING BALANCE</strong></td>
-                                            <td style="text-align:right">
-                                                <strong>
-                                                    {if $usdVal > 0}
-                                                        {number_format($usdVal, 2, '.', ',')}
-                                                    {else}
-                                                        ({number_format($usdVal*-1, 2, '.', ',')})
-                                                    {/if}
-                                                </strong>
-                                            </td>
-                                        </tr>
-                                        {continue}
-                                    {/if}
 
                                     {* Record movement *}
                                     {assign var="movementTotal" value=$movementTotal + $usdVal}
