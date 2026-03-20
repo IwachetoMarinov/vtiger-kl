@@ -87,7 +87,7 @@ class ActivitySummary
 
         if ($start_date) {
             $where .= empty($where) ? "WHERE" : " AND";
-            $where .= " [Tx_Date] > ?";
+            $where .= " [Tx_Date] < ?";
             $params[] = $start_date;
         }
 

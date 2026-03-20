@@ -101,10 +101,11 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
         $company_full_address = Helper::getCompanyFullAddress($companyRecord);
 
         // Get opening balance for the activity summary
-        $start_opening_balance_date = $transactions[0][$dateField] ?? null;
+        // $start_opening_balance_date = $transactions[0][$dateField] ?? null;
+        $start_opening_balance_date = $earliestDate ? date('Y-m-d', $earliestDate) : null;
         // Extract 1 day before the earliest transaction date for opening balance calculation
-        if ($start_opening_balance_date) 
-            $start_opening_balance_date = date('Y-m-d', strtotime($start_opening_balance_date . ' -1 day'));
+        // if ($start_opening_balance_date) 
+        //     $start_opening_balance_date = date('Y-m-d', strtotime($start_opening_balance_date . ' -1 day'));
 
         // var_dump($start_opening_balance_date); // Debugging line to check the calculated opening balance date
         $opening_balance = $activity->getActivitySummaryOpeningBalance($clientID, $selected_currency, $start_opening_balance_date);
