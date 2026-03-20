@@ -109,7 +109,7 @@ class Contacts_ActivtySummeryPrintPreview_View extends Vtiger_Index_View
 
         // var_dump($start_opening_balance_date); // Debugging line to check the calculated opening balance date
         $opening_balance = $activity->getActivitySummaryOpeningBalance($clientID, $selected_currency, $start_opening_balance_date);
-
+        
         $recordModel = $this->record->getRecord();
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);

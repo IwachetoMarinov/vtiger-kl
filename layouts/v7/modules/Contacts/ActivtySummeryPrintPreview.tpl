@@ -202,9 +202,13 @@
     {assign var="grandTotal" value=0}
     {assign var="movementTotal" value=0}
     {assign var="balanceAmount" value=0}
+    {* New balance, totalMovement and endingBalance *}
+    {assign var="balance" value=$OPENING_BALANCE|default:0}
+    {assign var="totalMovement" value=0}
+    {assign var="endingBalance" value=$OPENING_BALANCE|default:0}
+
     {assign var="start" value=0}
     {assign var="end" value=1}
-    {assign var="openingBalance" value=0}
     {assign var="currency" value=$smarty.request.ActivtySummeryCurrency|default:''}
 
     {for $page=1 to $PAGES}
@@ -302,6 +306,18 @@
                                     {* Asign description *}
                                     {assign var="description" value=$TRANSACTION['description']|default:''}
 
+                                    {* Asign depositWithdrawal *}
+                                    {assign var="depositWithdrawal" value=$TRANSACTION['amount_in_account_currency']|default:0}
+
+                                    {* Asign totalMovement *}
+                                    {assign var="totalMovement" value=$totalMovement + $depositWithdrawal}
+
+                                    {* Asign balance *}
+                                    {assign var="balance" value=$balance + $depositWithdrawal}
+
+                                    {* Asign Ending balance *}
+                                    {assign var="endingBalance" value=$endingBalance + $depositWithdrawal}
+
 
                                     {* Normalize values to avoid null warnings *}
                                     {assign var="docNo" value=$TRANSACTION['voucher_no']|default:''}
@@ -328,25 +344,34 @@
                                     {assign var="balanceAmount" value=$balanceAmount + $usdVal}
 
                                     <tr>
+                                        {* Doc number column *}
                                         <td>{$docNo}</td>
+
+                                        {* Transaction date column *}
                                         <td>
                                             {if $transDate ne ''}
                                                 {$transDate|date_format:"%d-%b-%y"}
                                             {/if}
                                         </td>
+
+                                        {* Description column *}
                                         <td>{$description}</td>
+
+                                        {* Deposit/Withdrawal column *}
                                         <td style="text-align:right">
-                                            {if $usdVal > 0}
-                                                {number_format($usdVal, 2, '.', ',')}
+                                            {if $depositWithdrawal > 0}
+                                                {number_format($depositWithdrawal, 2, '.', ',')}
                                             {else}
-                                                ({number_format($usdVal*-1, 2, '.', ',')})
+                                                ({number_format($depositWithdrawal*-1, 2, '.', ',')})
                                             {/if}
                                         </td>
+
+                                        {* Balance column *}
                                         <td style="text-align:right">
-                                            {if $balanceAmount gte 0}
-                                                {number_format($balanceAmount,2, '.', ',')}
+                                            {if $balance gte 0}
+                                                {number_format($balance,2, '.', ',')}
                                             {else}
-                                                ({number_format($balanceAmount*-1,2, '.', ',')})
+                                                ({number_format($balance*-1,2, '.', ',')})
                                             {/if}
                                         </td>
                                     </tr>
@@ -359,7 +384,7 @@
                                         <td></td>
                                         <td></td>
                                         <td style="text-align:right">
-                                            <strong>{if $movementTotal gte 0 }{number_format($movementTotal,2, '.', ',')}{else}({number_format($movementTotal*-1,2, '.', ',')}){/if}</strong>
+                                            <strong>{if $totalMovement gte 0 }{number_format($totalMovement,2, '.', ',')}{else}({number_format($totalMovement*-1,2, '.', ',')}){/if}</strong>
                                         </td>
                                         <td></td>
                                     </tr>
@@ -368,15 +393,14 @@
                                         <th></th>
                                         <th></th>
                                         <th></th>
-                                        <th style="text-align:right">{if $grandTotal gte 0 }
-                                                {if $grandTotal eq 0}
+                                        <th style="text-align:right">{if $endingBalance gte 0 }
+                                                {if $endingBalance eq 0}
                                                     --
                                                 {else}
-                                                    {number_format($grandTotal,2, '.', ',')}
+                                                    {number_format($endingBalance,2, '.', ',')}
                                                 {/if}
                                             {else}
-                                                ({number_format($grandTotal*-1,2, '.', ',')})
-
+                                                ({number_format($endingBalance*-1,2, '.', ',')})
                                             {/if}
                                         </th>
                                     </tr>
@@ -384,8 +408,8 @@
                             </table>
                             {if $PAGES eq $page}
                                 <div style="text-align: right;font-size: 9pt;margin-top: 2mm">
-                                    {if $grandTotal > 0 } This amount is owed to you by GPM.{/if}
-                                    {if $grandTotal < 0 } This amount is owed from you to GPM.{/if}
+                                    {if $endingBalance > 0 } This amount is owed to you by GPM.{/if}
+                                    {if $endingBalance < 0 } This amount is owed from you to GPM.{/if}
                                 </div>
                             {/if}
                         </td>
