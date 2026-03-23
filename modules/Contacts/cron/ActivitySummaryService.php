@@ -3,50 +3,34 @@
 
 include_once 'dbo_db/Helper.php';
 include_once 'dbo_db/ActivitySummary.php';
-// require_once 'libraries/Smarty/libs/Smarty.class.php';
+require_once 'modules/Documents/Documents.php';
+require_once 'data/CRMEntity.php';
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 class Contacts_ActivitySummaryService
 {
-
     public function __construct() {}
 
     public function generateAndStoreForClient($client_id, $date_range = [])
     {
-        // 1. Init ActivitySummary to fetch transactions for the date range
         $activity = new dbo_db\ActivitySummary();
 
-        // 2 init variables
         $selected_year = !empty($date_range) ? date('Y', strtotime($date_range[0])) : date('Y');
         $start_date = !empty($date_range) ? $date_range[0] : date('Y-m-01');
         $end_date = !empty($date_range) ? $date_range[1] : date('Y-m-t');
 
-        // 3.Get transactions for the client and date range
-        $activities =  $activity->getMonthlyTransactions($client_id, $start_date, $end_date);
-
-        // 4. Get contact record for the client ID
+        $activities = $activity->getMonthlyTransactions($client_id, $start_date, $end_date);
         $contactRecord = $this->getContactRecordByClientId($client_id);
-
-        // 5. Get all Currencies
         $currency_list = $activity->getTransactionCurrencies($client_id);
         $selected_currency = !empty($currency_list) ? $currency_list[0] : '';
-
-        // 6. Get full company record for the client
         $company_record = Contacts_DefaultCompany_View::process();
-
-        // 6. Get full company record for the client
         $company_full_address = Helper::getCompanyFullAddress($company_record);
-
-        // 7. Get Opening balance for the client and date range
         $opening_balance = $activity->getActivitySummaryOpeningBalance($client_id, $selected_currency, $start_date);
-
-        // 8. Create pages for the transactions to be used in PDF generation
         $pages = $this->makeDataPage($activities);
 
         $smarty = new Smarty();
-
         $smarty->setCompileDir(dirname(__DIR__, 3) . '/test/templates_c/');
         $smarty->setCacheDir(dirname(__DIR__, 3) . '/test/cache/');
         $smarty->setConfigDir(dirname(__DIR__, 3) . '/test/config/');
@@ -69,7 +53,6 @@ class Contacts_ActivitySummaryService
         $templatePath = dirname(__DIR__, 3) . '/layouts/v7/modules/Contacts/ActivtySummeryPrintPreview.tpl';
         $html = $smarty->fetch('file:' . $templatePath);
 
-
         $pdfPath = $this->generatePdf($html, $client_id);
 
         echo "<pre>";
@@ -77,6 +60,13 @@ class Contacts_ActivitySummaryService
         echo "PDF Path: $pdfPath\n";
         echo "Exists: " . (file_exists($pdfPath) ? 'YES' : 'NO') . "\n";
         echo "</pre>";
+
+        if (!file_exists($pdfPath)) {
+            echo "<pre>PDF was not generated. Skip storing in Documents.</pre>";
+            return;
+        }
+
+        $this->storePdfInDocuments($pdfPath, $client_id, $selected_year, $selected_currency);
     }
 
     protected function getContactRecordByClientId($client_id)
@@ -84,21 +74,43 @@ class Contacts_ActivitySummaryService
         $db = PearDatabase::getInstance();
 
         $query = "
-        SELECT c.contactid
-        FROM vtiger_contactscf ccf
-        INNER JOIN vtiger_contactdetails c ON c.contactid = ccf.contactid
-        INNER JOIN vtiger_crmentity ce ON ce.crmid = c.contactid
-        WHERE ccf.cf_898 = ?
-        AND ce.deleted = 0
-        LIMIT 1
-    ";
+            SELECT c.contactid
+            FROM vtiger_contactscf ccf
+            INNER JOIN vtiger_contactdetails c ON c.contactid = ccf.contactid
+            INNER JOIN vtiger_crmentity ce ON ce.crmid = c.contactid
+            WHERE ccf.cf_898 = ?
+            AND ce.deleted = 0
+            LIMIT 1
+        ";
 
         $result = $db->pquery($query, [$client_id]);
         $row = $db->fetch_array($result);
 
-        if (!$row) return null;
+        if (!$row) {
+            return null;
+        }
 
         return Vtiger_Record_Model::getInstanceById($row['contactid'], 'Contacts');
+    }
+
+    protected function getContactIdByClientId($client_id)
+    {
+        $db = PearDatabase::getInstance();
+
+        $query = "
+            SELECT c.contactid
+            FROM vtiger_contactscf ccf
+            INNER JOIN vtiger_contactdetails c ON c.contactid = ccf.contactid
+            INNER JOIN vtiger_crmentity ce ON ce.crmid = c.contactid
+            WHERE ccf.cf_898 = ?
+            AND ce.deleted = 0
+            LIMIT 1
+        ";
+
+        $result = $db->pquery($query, [$client_id]);
+        $row = $db->fetch_array($result);
+
+        return $row ? (int)$row['contactid'] : 0;
     }
 
     protected function makeDataPage($transaction)
@@ -137,8 +149,109 @@ class Contacts_ActivitySummaryService
         echo "PDF exists: " . (file_exists($pdfPath) ? 'YES' : 'NO') . "\n";
         echo '</pre>';
 
-        unlink($htmlPath);
+        if (file_exists($htmlPath)) {
+            unlink($htmlPath);
+        }
 
         return $pdfPath;
+    }
+
+    protected function storePdfInDocuments($pdfPath, $client_id, $selected_year, $selected_currency)
+    {
+        global $adb, $current_user, $site_URL;
+
+        if (!file_exists($pdfPath)) {
+            throw new Exception("PDF file does not exist: " . $pdfPath);
+        }
+
+        $contactId = $this->getContactIdByClientId($client_id);
+        if (!$contactId) {
+            throw new Exception("No contact found for client_id: " . $client_id);
+        }
+
+        $fileName = basename($pdfPath);
+        $fileSize = filesize($pdfPath);
+        $mimeType = 'application/pdf';
+
+        $documentTitle = sprintf(
+            'Monthly Activity Summary - %s - %s%s',
+            $client_id,
+            $selected_year,
+            $selected_currency ? ' - ' . $selected_currency : ''
+        );
+
+        $notes = CRMEntity::getInstance('Documents');
+        $notes->column_fields['notes_title'] = $documentTitle;
+        $notes->column_fields['filename'] = $fileName;
+        $notes->column_fields['filelocationtype'] = 'I';
+        $notes->column_fields['filestatus'] = 1;
+        $notes->column_fields['filesize'] = $fileSize;
+        $notes->column_fields['filetype'] = $mimeType;
+        $notes->column_fields['folderid'] = 1; // change if you want another Documents folder
+        $notes->column_fields['notecontent'] = 'Auto-generated monthly activity summary.';
+        $notes->column_fields['assigned_user_id'] = $current_user->id ?: 1;
+
+        $notes->save('Documents');
+
+        $documentId = $notes->id;
+        if (!$documentId) {
+            throw new Exception('Failed to create Documents record.');
+        }
+
+        $attachmentId = $adb->getUniqueID('vtiger_crmentity');
+
+        $uploadDir = decideFilePath();
+        $storedFileName = $attachmentId . '_' . $fileName;
+        $destination = $uploadDir . $storedFileName;
+
+        if (!copy($pdfPath, $destination)) {
+            throw new Exception('Failed to copy PDF to storage directory: ' . $destination);
+        }
+
+        $adb->pquery(
+            "INSERT INTO vtiger_crmentity (crmid, smcreatorid, smownerid, setype, description, createdtime, modifiedtime, presence, deleted)
+             VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?)",
+            [
+                $attachmentId,
+                $current_user->id ?: 1,
+                $current_user->id ?: 1,
+                'Documents Attachment',
+                $documentTitle,
+                1,
+                0
+            ]
+        );
+
+        $adb->pquery(
+            "INSERT INTO vtiger_attachments (attachmentsid, name, description, type, path)
+             VALUES (?, ?, ?, ?, ?)",
+            [
+                $attachmentId,
+                $fileName,
+                $documentTitle,
+                $mimeType,
+                $uploadDir
+            ]
+        );
+
+        $adb->pquery(
+            "INSERT INTO vtiger_seattachmentsrel (crmid, attachmentsid)
+             VALUES (?, ?)",
+            [$documentId, $attachmentId]
+        );
+
+        $adb->pquery(
+            "INSERT INTO vtiger_senotesrel (crmid, notesid)
+             VALUES (?, ?)",
+            [$contactId, $documentId]
+        );
+
+        echo "<pre>";
+        echo "Document created successfully\n";
+        echo "Document ID: {$documentId}\n";
+        echo "Attachment ID: {$attachmentId}\n";
+        echo "Related Contact ID: {$contactId}\n";
+        echo "Stored file: {$destination}\n";
+        echo "</pre>";
     }
 }

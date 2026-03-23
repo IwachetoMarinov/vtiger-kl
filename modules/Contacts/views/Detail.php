@@ -80,6 +80,10 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		// Get PI activity data and merge with old activity data only for DEV server
 		$activity_data = $activity->getPIActivitySummary($clientID);
 
+		// echo "<pre>";
+		// print_r($activity_data);
+		// echo "</pre>";
+
 		$holdings = new dbo_db\HoldingsDB();
 
 		$holdings_data = $holdings->getHoldings($clientID);
