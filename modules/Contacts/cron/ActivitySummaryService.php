@@ -155,19 +155,24 @@ class Contacts_ActivitySummaryService
 
         return $pdfPath;
     }
-
     protected function storePdfInDocuments($pdfPath, $client_id, $selected_year, $selected_currency)
     {
-        global $adb, $current_user, $site_URL;
+        global $adb, $current_user;
+
+        // Needed by CRMEntity internally
+        $this->initExecutionUser();
 
         if (!file_exists($pdfPath)) {
             throw new Exception("PDF file does not exist: " . $pdfPath);
         }
 
-        $contactId = $this->getContactIdByClientId($client_id);
-        if (!$contactId) {
+        $contactInfo = $this->getContactInfoByClientId($client_id);
+        if (!$contactInfo) {
             throw new Exception("No contact found for client_id: " . $client_id);
         }
+
+        $contactId = $contactInfo['contact_id'];
+        $contactOwnerId = $contactInfo['owner_id'];
 
         $fileName = basename($pdfPath);
         $fileSize = filesize($pdfPath);
@@ -187,9 +192,9 @@ class Contacts_ActivitySummaryService
         $notes->column_fields['filestatus'] = 1;
         $notes->column_fields['filesize'] = $fileSize;
         $notes->column_fields['filetype'] = $mimeType;
-        $notes->column_fields['folderid'] = 1; // change if you want another Documents folder
+        $notes->column_fields['folderid'] = 1;
         $notes->column_fields['notecontent'] = 'Auto-generated monthly activity summary.';
-        $notes->column_fields['assigned_user_id'] = $current_user->id ?: 1;
+        $notes->column_fields['assigned_user_id'] = $contactOwnerId; // assign to Client owner
 
         $notes->save('Documents');
 
@@ -201,6 +206,10 @@ class Contacts_ActivitySummaryService
         $attachmentId = $adb->getUniqueID('vtiger_crmentity');
 
         $uploadDir = decideFilePath();
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0775, true);
+        }
+
         $storedFileName = $attachmentId . '_' . $fileName;
         $destination = $uploadDir . $storedFileName;
 
@@ -209,12 +218,13 @@ class Contacts_ActivitySummaryService
         }
 
         $adb->pquery(
-            "INSERT INTO vtiger_crmentity (crmid, smcreatorid, smownerid, setype, description, createdtime, modifiedtime, presence, deleted)
-             VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?)",
+            "INSERT INTO vtiger_crmentity
+        (crmid, smcreatorid, smownerid, setype, description, createdtime, modifiedtime, presence, deleted)
+        VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?)",
             [
                 $attachmentId,
-                $current_user->id ?: 1,
-                $current_user->id ?: 1,
+                $current_user->id,   // technical creator
+                $contactOwnerId,     // actual owner = client owner
                 'Documents Attachment',
                 $documentTitle,
                 1,
@@ -224,7 +234,7 @@ class Contacts_ActivitySummaryService
 
         $adb->pquery(
             "INSERT INTO vtiger_attachments (attachmentsid, name, description, type, path)
-             VALUES (?, ?, ?, ?, ?)",
+         VALUES (?, ?, ?, ?, ?)",
             [
                 $attachmentId,
                 $fileName,
@@ -236,13 +246,13 @@ class Contacts_ActivitySummaryService
 
         $adb->pquery(
             "INSERT INTO vtiger_seattachmentsrel (crmid, attachmentsid)
-             VALUES (?, ?)",
+         VALUES (?, ?)",
             [$documentId, $attachmentId]
         );
 
         $adb->pquery(
             "INSERT INTO vtiger_senotesrel (crmid, notesid)
-             VALUES (?, ?)",
+         VALUES (?, ?)",
             [$contactId, $documentId]
         );
 
@@ -251,7 +261,53 @@ class Contacts_ActivitySummaryService
         echo "Document ID: {$documentId}\n";
         echo "Attachment ID: {$attachmentId}\n";
         echo "Related Contact ID: {$contactId}\n";
+        echo "Document Owner ID: {$contactOwnerId}\n";
         echo "Stored file: {$destination}\n";
         echo "</pre>";
+    }
+
+    protected function getContactInfoByClientId($client_id)
+    {
+        $db = PearDatabase::getInstance();
+
+        $query = "
+        SELECT c.contactid, ce.smownerid
+        FROM vtiger_contactscf ccf
+        INNER JOIN vtiger_contactdetails c ON c.contactid = ccf.contactid
+        INNER JOIN vtiger_crmentity ce ON ce.crmid = c.contactid
+        WHERE ccf.cf_898 = ?
+          AND ce.deleted = 0
+        LIMIT 1
+    ";
+
+        $result = $db->pquery($query, [$client_id]);
+        $row = $db->fetch_array($result);
+
+        if (!$row) {
+            return null;
+        }
+
+        return [
+            'contact_id' => (int)$row['contactid'],
+            'owner_id'   => (int)$row['smownerid'],
+        ];
+    }
+
+    protected function initExecutionUser()
+    {
+        global $current_user;
+
+        if ($current_user && !empty($current_user->id)) {
+            return $current_user;
+        }
+
+        require_once 'modules/Users/Users.php';
+        $current_user = Users::getActiveAdminUser();
+
+        if (!$current_user || empty($current_user->id)) {
+            throw new Exception('Unable to initialize execution user.');
+        }
+
+        return $current_user;
     }
 }

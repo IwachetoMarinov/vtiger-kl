@@ -80,10 +80,6 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		// Get PI activity data and merge with old activity data only for DEV server
 		$activity_data = $activity->getPIActivitySummary($clientID);
 
-		// echo "<pre>";
-		// print_r($activity_data);
-		// echo "</pre>";
-
 		$holdings = new dbo_db\HoldingsDB();
 
 		$holdings_data = $holdings->getHoldings($clientID);
@@ -99,9 +95,6 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		} elseif (!$selected_currency && is_array($currency_list)) {
 			$selected_currency = $currency_list[0] ?? '';
 		}
-
-		// Build dynamic currency list based on Activity Summary data
-		// $currency_list = $this->getCurrenciesFromActivitySummary($activity_data);
 
 		if (
 			($selected_currency && in_array($selected_currency, $currency_list)) ||
@@ -121,7 +114,17 @@ class Contacts_Detail_View extends Accounts_Detail_View
 			) {
 				// Currency filter
 				if ($selected_currency && in_array($selected_currency, $currency_list)) {
-					if (($item['currency'] ?? '') !== $selected_currency) {
+
+					$itemCurrency = $item['currency'] ?? '';
+					$voucherType  = $item['voucher_type'] ?? '';
+
+					// Allow MRD / MPD with empty currency
+					if (empty($itemCurrency) && in_array($voucherType, ['MRD', 'MPD'])) {
+						return true; // skip currency filtering, keep item
+					}
+
+					// Normal currency filtering
+					if ($itemCurrency !== $selected_currency) {
 						return false;
 					}
 				}
@@ -144,10 +147,6 @@ class Contacts_Detail_View extends Accounts_Detail_View
 				return true;
 			}));
 		}
-
-		// Get year and remove current year from list
-		// $years_array  = $this->createYearRange(2020, date('Y'));
-		// $years = array_reverse($years_array);
 
 		$viewer = $this->getViewer($request);
 

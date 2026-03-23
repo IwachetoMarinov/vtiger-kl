@@ -6,18 +6,22 @@ namespace dbo_db;
 include_once 'data/CRMEntity.php';
 include_once 'modules/Users/Users.php';
 include_once 'helpers/DBConnection.php';
+include_once 'helpers/DBSettings.php';
 
 use helpers\DBConnection;
+use helpers\DBSettings;
 
 class HoldingsDB
 {
     private $connection;
     private $database_prefix;
+    private $metal_settings;
 
     public function __construct()
     {
         $this->connection = DBConnection::getConnection();
         $this->database_prefix = DBConnection::getDatabasePrefix();
+        $this->metal_settings = DBSettings::MetalsOrderSettings();
     }
 
     public function getHoldingsMetals($customer_id = null)
@@ -41,6 +45,17 @@ class HoldingsDB
             while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                 $summary[] = $row;
             }
+
+            // reorder metals based on settings
+            usort($summary, function ($a, $b) {
+                $metalA = $a['MT_Name'] ?? '';
+                $metalB = $b['MT_Name'] ?? '';
+
+                $orderA = $this->metal_settings[$metalA] ?? PHP_INT_MAX;
+                $orderB = $this->metal_settings[$metalB] ?? PHP_INT_MAX;
+
+                return $orderA <=> $orderB;
+            });
 
             sqlsrv_free_stmt($stmt);
 
