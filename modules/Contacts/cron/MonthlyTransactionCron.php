@@ -17,6 +17,13 @@ class Contacts_MonthlyTransactionCron
         // 1. Build date range for the current month
         $date_range = $this->buildMonthlyDateRange();
 
+        // Hardcoded date range for testing, replace with above line in production only for testing
+        // SHOULD BE REMOVED IN PRODUCTION
+        $date_range = [
+            "2026-01-31",
+            "2026-03-31",
+        ];
+
         $service = new Contacts_ActivitySummaryService();
 
         // 2 Get all Party codes (client IDs) to process monthly transactions for each client

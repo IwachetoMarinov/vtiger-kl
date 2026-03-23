@@ -6,8 +6,7 @@ include_once 'dbo_db/ActivitySummary.php';
 require_once 'modules/Documents/Documents.php';
 require_once 'data/CRMEntity.php';
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1); error_reporting(E_ALL);
 
 class Contacts_ActivitySummaryService
 {
@@ -40,6 +39,11 @@ class Contacts_ActivitySummaryService
             return $templateRoot . '/' . $moduleName . '/' . $templateName;
         });
 
+        echo "<pre>";
+        echo "Client ID: $client_id\n";
+        var_dump($activities);
+        echo "</pre>";
+
         $smarty->assign('RECORD_MODEL', $contactRecord);
         $smarty->assign('TRANSACTIONS', $activities);
         $smarty->assign('COMPANY', $company_record);
@@ -53,7 +57,10 @@ class Contacts_ActivitySummaryService
         $templatePath = dirname(__DIR__, 3) . '/layouts/v7/modules/Contacts/ActivtySummeryPrintPreview.tpl';
         $html = $smarty->fetch('file:' . $templatePath);
 
-        $pdfPath = $this->generatePdf($html, $client_id);
+        echo $html; // For debugging purposes, to see the generated HTML
+        exit;
+
+        $pdfPath = $this->generatePdf($html, $client_id, $date_range);
 
         echo "<pre>";
         echo "Client ID: $client_id\n";
@@ -123,11 +130,22 @@ class Contacts_ActivitySummaryService
         return $totalPage;
     }
 
-    protected function generatePdf($html, $client_id)
+    protected function generatePdf($html, $client_id, $date_range)
     {
         global $root_directory;
 
-        $fileName = $client_id . "_activity-summary";
+        // Example file name M2001-AS-01-Mar-2026-31-Mar-2026
+        $startDate = date('d-M-Y', strtotime($date_range[0]));
+        $endDate = date('d-M-Y', strtotime($date_range[1]));
+
+        // $fileName = $client_id . "_activity-summary";
+        $fileName = sprintf(
+            'M%s-AS-%s-%s-%s',
+            $client_id,
+            $startDate,
+            $endDate,
+            date('YmdHis')
+        );
         $htmlPath = $root_directory . $fileName . '.html';
         $pdfPath = $root_directory . $fileName . '.pdf';
 
@@ -155,6 +173,7 @@ class Contacts_ActivitySummaryService
 
         return $pdfPath;
     }
+
     protected function storePdfInDocuments($pdfPath, $client_id, $selected_year, $selected_currency)
     {
         global $adb, $current_user;

@@ -522,7 +522,7 @@ class ActivitySummary
                     'currency' => $item['Curr_Code'] ?? '',
                     'document_date' => $item['Tx_Date'] instanceof \DateTime ? $item['Tx_Date']->format('Y-m-d') : $item['Tx_Date'],
                     'posting_date' => $item['Appr_Date'] instanceof \DateTime ? $item['Appr_Date']->format('Y-m-d') : $item['Appr_Date'],
-                    'мatched_аmt' => isset($item['Matched_Amt']) ? floatval($item['Matched_Amt']) : 0.00,
+                    'matched_amt' => isset($item['Matched_Amt']) ? floatval($item['Matched_Amt']) : 0.00,
                     'amount_in_account_currency' =>
                     isset($item['TxAmt']) ? (float) $item['TxAmt'] : (isset($item['Tx_Amt']) ? (float) $item['Tx_Amt'] : 0.00),
                 ];
