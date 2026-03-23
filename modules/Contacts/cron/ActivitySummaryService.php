@@ -39,11 +39,6 @@ class Contacts_ActivitySummaryService
             return $templateRoot . '/' . $moduleName . '/' . $templateName;
         });
 
-        echo "<pre>";
-        echo "Client ID: $client_id\n";
-        var_dump($activities);
-        echo "</pre>";
-
         $smarty->assign('RECORD_MODEL', $contactRecord);
         $smarty->assign('TRANSACTIONS', $activities);
         $smarty->assign('COMPANY', $company_record);
@@ -57,8 +52,8 @@ class Contacts_ActivitySummaryService
         $templatePath = dirname(__DIR__, 3) . '/layouts/v7/modules/Contacts/ActivtySummeryPrintPreview.tpl';
         $html = $smarty->fetch('file:' . $templatePath);
 
-        echo $html; // For debugging purposes, to see the generated HTML
-        exit;
+        // echo $html; // For debugging purposes, to see the generated HTML
+        // exit;
 
         $pdfPath = $this->generatePdf($html, $client_id, $date_range);
 
