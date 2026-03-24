@@ -7,12 +7,6 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-jQuery(document).ready(function(){
-    if (jQuery('#selectedModuleName').val() === 'Metals') {
-        jQuery('#selectedModuleName').val('Assets');
-    }
-})
-
 Vtiger.Class('Settings_LayoutEditor_Js', {
 }, {
 	updatedBlockSequence: {},
@@ -2243,7 +2237,23 @@ Vtiger.Class('Settings_LayoutEditor_Js', {
 	 * register events for layout editor
 	 */
 	registerEvents: function () {
+		// var thisInstance = this;
+		// thisInstance.registerModulesChangeEvent();
+		// thisInstance.triggerFieldListTabClickEvent();
+		// thisInstance.triggerRelatedModulesTabClickEvent();
+		// thisInstance.triggerDuplicationTabClickEvent();
+
+		// var selectedTab = jQuery('.selectedTab').val();
+		// jQuery('#layoutEditorContainer').find('.contents').find('.'+selectedTab).trigger('click');
 		var thisInstance = this;
+
+		var urlParams = new URLSearchParams(window.location.search);
+		if (urlParams.get('block') || urlParams.get('fieldid')) {
+			var moduleName = jQuery('#selectedModuleName').val() || 'Assets';
+			window.location.href = 'index.php?module=LayoutEditor&parent=Settings&view=Index&sourceModule=' + moduleName + '&mode=showFieldLayout';
+			return;
+		}
+
 		thisInstance.registerModulesChangeEvent();
 		thisInstance.triggerFieldListTabClickEvent();
 		thisInstance.triggerRelatedModulesTabClickEvent();
@@ -2251,7 +2261,7 @@ Vtiger.Class('Settings_LayoutEditor_Js', {
 
 		var selectedTab = jQuery('.selectedTab').val();
 		jQuery('#layoutEditorContainer').find('.contents').find('.'+selectedTab).trigger('click');
-	}
+		}
 });
 
 Settings_LayoutEditor_Js('Settings_LayoutEditor_Index_Js', {}, {
