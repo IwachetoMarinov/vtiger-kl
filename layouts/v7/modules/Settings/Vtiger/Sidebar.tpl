@@ -12,7 +12,8 @@
 		{assign var=SETTINGS_MENUS value=$SETTINGS_MODULE_MODEL->getMenus()}
 		<div class="settingsgroup">
 			<div>
-				<input type="text" placeholder="{vtranslate('LBL_SEARCH_FOR_SETTINGS', $QUALIFIED_MODULE)}" class="search-list col-lg-8" id='settingsMenuSearch'>
+				<input type="text" placeholder="{vtranslate('LBL_SEARCH_FOR_SETTINGS', $QUALIFIED_MODULE)}"
+					class="search-list col-lg-8" id='settingsMenuSearch'>
 			</div>
 			<br><br>
 			<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
@@ -26,17 +27,20 @@
 								<div class="app-settings-accordion">
 									<div class="settingsgroup-accordion">
 										<a data-toggle="collapse" data-parent="#accordion" class='collapsed' href="#{$BLOCK_NAME}">
-											<i class="indicator fa{if isset($ACTIVE_BLOCK['block']) && $ACTIVE_BLOCK['block'] eq $BLOCK_NAME} fa-chevron-down {else} fa-chevron-right {/if}"></i>
+											<i
+												class="indicator fa{if isset($ACTIVE_BLOCK['block']) && $ACTIVE_BLOCK['block'] eq $BLOCK_NAME} fa-chevron-down {else} fa-chevron-right {/if}"></i>
 											&nbsp;<span>{vtranslate($BLOCK_NAME,$QUALIFIED_MODULE)}</span>
 										</a>
 									</div>
 								</div>
 							</div>
-							<div id="{$BLOCK_NAME}" class="panel-collapse collapse ulBlock {if isset($ACTIVE_BLOCK['block']) && $ACTIVE_BLOCK['block'] eq $BLOCK_NAME} in {/if}">
+							<div id="{$BLOCK_NAME}"
+								class="panel-collapse collapse ulBlock {if isset($ACTIVE_BLOCK['block']) && $ACTIVE_BLOCK['block'] eq $BLOCK_NAME} in {/if}">
 								<ul class="list-group widgetContainer">
 									{foreach item=MENUITEM from=$BLOCK_MENU_ITEMS}
 										{assign var=MENU value= $MENUITEM->get('name')}
 										{assign var=MENU_LABEL value=$MENU}
+
 										{if $MENU eq 'LBL_EDIT_FIELDS'}
 											{assign var=MENU_LABEL value='LBL_MODULE_CUSTOMIZATION'}
 										{elseif $MENU eq 'LBL_TAX_SETTINGS'}
@@ -46,6 +50,10 @@
 										{/if}
 
 										{assign var=MENU_URL value=$MENUITEM->getUrl()}
+										{if $MENU eq 'LBL_EDIT_FIELDS'}
+											{assign var=MENU_URL value='index.php?module=LayoutEditor&parent=Settings&view=Index&sourceModule=Assets&mode=showFieldLayout'}
+										{/if}
+										{assign var=USER_MODEL value=Users_Record_Model::getCurrentUserModel()}
 										{assign var=USER_MODEL value=Users_Record_Model::getCurrentUserModel()}
 										{if $MENU eq 'My Preferences'}
 											{assign var=MENU_URL value=$USER_MODEL->getPreferenceDetailViewUrl()}
@@ -53,19 +61,19 @@
 											{assign var=MENU_URL value=$USER_MODEL->getCalendarSettingsDetailViewUrl()}
 										{/if}
 										<li>
-											<a data-name="{$MENU}" href="{$MENU_URL}" class="menuItemLabel {if isset($ACTIVE_BLOCK['menu']) && $ACTIVE_BLOCK['menu'] eq $MENU} settingsgroup-menu-color {/if}">
+											<a data-name="{$MENU}" href="{$MENU_URL}"
+												class="menuItemLabel {if isset($ACTIVE_BLOCK['menu']) && $ACTIVE_BLOCK['menu'] eq $MENU} settingsgroup-menu-color {/if}">
 												{vtranslate($MENU_LABEL,$QUALIFIED_MODULE)}
-												<img id="{$MENUITEM->getId()}_menuItem" data-id="{$MENUITEM->getId()}" class="pinUnpinShortCut cursorPointer pull-right"
-													 data-actionurl="{$MENUITEM->getPinUnpinActionUrl()}"
-													 data-pintitle="{vtranslate('LBL_PIN',$QUALIFIED_MODULE)}"
-													 data-unpintitle="{vtranslate('LBL_UNPIN',$QUALIFIED_MODULE)}"
-													 data-pinimageurl="{{vimage_path('pin.png')}}"
-													 data-unpinimageurl="{{vimage_path('unpin.png')}}"
-													 {if $MENUITEM->isPinned()}
-														 title="{vtranslate('LBL_UNPIN',$QUALIFIED_MODULE)}" src="{vimage_path('unpin.png')}" data-action="unpin"
-													 {else}
-														 title="{vtranslate('LBL_PIN',$QUALIFIED_MODULE)}" src="{vimage_path('pin.png')}" data-action="pin" 
-													 {/if} />
+												<img id="{$MENUITEM->getId()}_menuItem" data-id="{$MENUITEM->getId()}"
+													class="pinUnpinShortCut cursorPointer pull-right"
+													data-actionurl="{$MENUITEM->getPinUnpinActionUrl()}"
+													data-pintitle="{vtranslate('LBL_PIN',$QUALIFIED_MODULE)}"
+													data-unpintitle="{vtranslate('LBL_UNPIN',$QUALIFIED_MODULE)}"
+													data-pinimageurl="{{vimage_path('pin.png')}}"
+													data-unpinimageurl="{{vimage_path('unpin.png')}}" {if $MENUITEM->isPinned()}
+														title="{vtranslate('LBL_UNPIN',$QUALIFIED_MODULE)}" src="{vimage_path('unpin.png')}"
+													data-action="unpin" {else} title="{vtranslate('LBL_PIN',$QUALIFIED_MODULE)}"
+													src="{vimage_path('pin.png')}" data-action="pin" {/if} />
 											</a>
 										</li>
 									{/foreach}
