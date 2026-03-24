@@ -67,9 +67,9 @@ class GPMIntent_ViewQuotation_View extends GPMIntent_DocView_View
 
 		$company_full_address = Helper::getCompanyFullAddress($companyRecord);
 
-		echo "<pre>";
-		var_dump($intent);
-		echo "</pre>";
+		// echo "<pre>";
+		// var_dump($intent);
+		// echo "</pre>";
 
 		$viewer = $this->getViewer($request);
 		$viewer = $this->getViewer($request);
