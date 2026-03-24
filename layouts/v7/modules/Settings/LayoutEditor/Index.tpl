@@ -10,7 +10,8 @@
 
 {strip}
 	<div class="container-fluid main-scroll paddingTop15" id="layoutEditorContainer">
-		<input id="selectedModuleName" type="hidden" value="{$SELECTED_MODULE_NAME}" />
+		{* <input id="selectedModuleName" type="hidden" value="{$SELECTED_MODULE_NAME}" /> *}
+		<input type="hidden" id="selectedModuleName" value="{if $SELECTED_MODULE_NAME eq 'Metals'}Assets{else}{$SELECTED_MODULE_NAME}{/if}">
 		<input class="selectedTab" type="hidden" value="{$SELECTED_TAB}">
 		<input class="selectedMode" type="hidden" value="{$MODE}">
 		<input type="hidden" id="selectedModuleLabel" value="{vtranslate($SELECTED_MODULE_NAME,$SELECTED_MODULE_NAME)}" />
