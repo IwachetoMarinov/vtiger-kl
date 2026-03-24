@@ -251,7 +251,7 @@
 														{/foreach}
 													{else}
 														{if $MODULE eq 'GPMIntent' && $LISTVIEW_HEADERNAME eq 'total_amount'}
-															{number_format((float)$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME), 4, '.', ',')}
+															{number_format((float)$LISTVIEW_ENTRY->get($LISTVIEW_HEADERNAME), 2, '.', ',')}
 														{else}
 															{$LISTVIEW_ENTRY_VALUE}
 														{/if}
