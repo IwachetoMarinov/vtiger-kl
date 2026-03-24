@@ -2236,34 +2236,16 @@ Vtiger.Class('Settings_LayoutEditor_Js', {
 	/**
 	 * register events for layout editor
 	 */
-	// registerEvents: function () {
-	// 	var thisInstance = this;
-	// 	thisInstance.registerModulesChangeEvent();
-	// 	thisInstance.triggerFieldListTabClickEvent();
-	// 	thisInstance.triggerRelatedModulesTabClickEvent();
-	// 	thisInstance.triggerDuplicationTabClickEvent();
-
-	// 	var selectedTab = jQuery('.selectedTab').val();
-	// 	jQuery('#layoutEditorContainer').find('.contents').find('.'+selectedTab).trigger('click');
-	// }
 	registerEvents: function () {
-    var thisInstance = this;
+		var thisInstance = this;
+		thisInstance.registerModulesChangeEvent();
+		thisInstance.triggerFieldListTabClickEvent();
+		thisInstance.triggerRelatedModulesTabClickEvent();
+		thisInstance.triggerDuplicationTabClickEvent();
 
-    console.log('LayoutEditor registerEvents', {
-        href: window.location.href,
-        selectedTab: jQuery('.selectedTab').val(),
-        selectedModuleName: jQuery('#selectedModuleName').val(),
-        targetCount: jQuery('#layoutEditorContainer').find('.contents').find('.' + jQuery('.selectedTab').val()).length
-    });
-
-    thisInstance.registerModulesChangeEvent();
-    thisInstance.triggerFieldListTabClickEvent();
-    thisInstance.triggerRelatedModulesTabClickEvent();
-    thisInstance.triggerDuplicationTabClickEvent();
-
-    var selectedTab = jQuery('.selectedTab').val();
-    jQuery('#layoutEditorContainer').find('.contents').find('.'+selectedTab).trigger('click');
-}
+		var selectedTab = jQuery('.selectedTab').val();
+		jQuery('#layoutEditorContainer').find('.contents').find('.'+selectedTab).trigger('click');
+	}
 });
 
 Settings_LayoutEditor_Js('Settings_LayoutEditor_Index_Js', {}, {

@@ -10,8 +10,7 @@
 
 {strip}
 	<div class="container-fluid main-scroll paddingTop15" id="layoutEditorContainer">
-		{* <input id="selectedModuleName" type="hidden" value="{$SELECTED_MODULE_NAME}" /> *}
-		<input type="hidden" id="selectedModuleName" value="{if $SELECTED_MODULE_NAME eq 'Metals'}Assets{else}{$SELECTED_MODULE_NAME}{/if}">
+		<input id="selectedModuleName" type="hidden" value="{$SELECTED_MODULE_NAME}" />
 		<input class="selectedTab" type="hidden" value="{$SELECTED_TAB}">
 		<input class="selectedMode" type="hidden" value="{$MODE}">
 		<input type="hidden" id="selectedModuleLabel" value="{vtranslate($SELECTED_MODULE_NAME,$SELECTED_MODULE_NAME)}" />
@@ -22,9 +21,19 @@
 			<div class="col-sm-6">
 				<select class="select2 col-sm-6" name="layoutEditorModules">
 					<option value=''>{vtranslate('LBL_SELECT_OPTION', $QUALIFIED_MODULE)}</option>
-					{foreach item=MODULE_NAME key=TRANSLATED_MODULE_NAME from=$SUPPORTED_MODULES}
-						<option value="{$MODULE_NAME}" {if $MODULE_NAME eq $SELECTED_MODULE_NAME} selected {/if}>
-							{$TRANSLATED_MODULE_NAME}
+					{foreach item=MODULE_NAME from=$SUPPORTED_MODULES}
+						{assign var=OPTION_VALUE value=$MODULE_NAME}
+						{assign var=OPTION_LABEL value=$MODULE_NAME}
+
+						{if $MODULE_NAME eq 'Metals'}
+							{assign var=OPTION_VALUE value='Assets'}
+							{assign var=OPTION_LABEL value='Assets'}
+						{/if}
+
+						<option value="{$OPTION_VALUE}"
+							{if $SELECTED_MODULE_NAME eq $MODULE_NAME || $SELECTED_MODULE_NAME eq $OPTION_VALUE}
+							selected="selected" {/if}>
+							{$OPTION_LABEL}
 						</option>
 					{/foreach}
 				</select>
@@ -36,9 +45,18 @@
 			<div class="contents tabbable">
 				<ul class="nav nav-tabs layoutTabs massEditTabs marginBottom10px">
 					{assign var=URL value="index.php?module=LayoutEditor&parent=Settings&view=Index"}
-					<li class="{if $SELECTED_TAB eq 'detailViewTab'}active {/if}detailViewTab"><a data-toggle="tab" href="#detailViewLayout" data-url="{$URL}" data-mode="showFieldLayout"><strong>{vtranslate('LBL_DETAILVIEW_LAYOUT', $QUALIFIED_MODULE)}</strong></a></li>
-					<li class="{if $SELECTED_TAB eq 'relatedListTab'}active {/if}relatedListTab"><a data-toggle="tab" href="#relatedTabOrder" data-url="{$URL}" data-mode="showRelatedListLayout"><strong>{vtranslate('LBL_RELATION_SHIPS', $QUALIFIED_MODULE)}</strong></a></li>
-					<li class="{if $SELECTED_TAB eq 'duplicationTab'}active {/if}duplicationTab"><a data-toggle="tab" href="#duplicationContainer" data-url="{$URL}" data-mode="showDuplicationHandling"><strong>{vtranslate('LBL_DUPLICATE_HANDLING', $QUALIFIED_MODULE)}</strong></a></li>
+					<li class="{if $SELECTED_TAB eq 'detailViewTab'}active {/if}detailViewTab"><a data-toggle="tab"
+							href="#detailViewLayout" data-url="{$URL}"
+							data-mode="showFieldLayout"><strong>{vtranslate('LBL_DETAILVIEW_LAYOUT', $QUALIFIED_MODULE)}</strong></a>
+					</li>
+					<li class="{if $SELECTED_TAB eq 'relatedListTab'}active {/if}relatedListTab"><a data-toggle="tab"
+							href="#relatedTabOrder" data-url="{$URL}"
+							data-mode="showRelatedListLayout"><strong>{vtranslate('LBL_RELATION_SHIPS', $QUALIFIED_MODULE)}</strong></a>
+					</li>
+					<li class="{if $SELECTED_TAB eq 'duplicationTab'}active {/if}duplicationTab"><a data-toggle="tab"
+							href="#duplicationContainer" data-url="{$URL}"
+							data-mode="showDuplicationHandling"><strong>{vtranslate('LBL_DUPLICATE_HANDLING', $QUALIFIED_MODULE)}</strong></a>
+					</li>
 				</ul>
 				<div class="tab-content layoutContent themeTableColor overflowVisible">
 					<div class="tab-pane{if $SELECTED_TAB eq 'detailViewTab'} active{/if}" id="detailViewLayout">
