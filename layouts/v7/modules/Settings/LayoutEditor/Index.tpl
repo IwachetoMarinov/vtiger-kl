@@ -30,6 +30,13 @@
 							{assign var=OPTION_LABEL value='Assets'}
 						{/if}
 
+						{if $MODULE_NAME eq 'Contacts'}
+							{assign var=OPTION_LABEL value='Clients'}
+						{/if}
+						{if $MODULE_NAME eq 'Accounts'}
+							{assign var=OPTION_LABEL value='Organisations'}
+						{/if}
+
 						<option value="{$OPTION_VALUE}"
 							{if $SELECTED_MODULE_NAME eq $MODULE_NAME || $SELECTED_MODULE_NAME eq $OPTION_VALUE}
 							selected="selected" {/if}>
