@@ -159,24 +159,6 @@ Vtiger_Edit_Js(
       );
     },
 
-    registerIndicativeSpotPriceChangeEvent: function () {
-      var thisInstance = this;
-
-      // jQuery('input[name="indicative_spot_price"], input[name="cf_1136"]').on(
-      //   "input",
-      //   function (e) {
-      //     const lines = document.querySelectorAll(
-      //       "div[data-block='ITEM INFORMATION'] div.item_infromation_input",
-      //     );
-      //     lines.forEach((line) => {
-      //       // thisInstance.calculateTheCurrentLineItem(line);
-      //       // thisInstance.calculateTotal();
-      //       // thisInstance.calculateForeignValue();
-      //     });
-      //   },
-      // );
-    },
-
     registerAddButton: function () {
       var thisInstance = this;
       jQuery("#add-btn").on("click", function () {
@@ -510,7 +492,6 @@ Vtiger_Edit_Js(
       this.toggleCurrencySelect(true);
       this.registerMetalTypeChangeEvent();
       this.registerCurrencySelectChangeEvent();
-      this.registerIndicativeSpotPriceChangeEvent();
       this.registerAddButton();
       this.registerLineItemDelete();
       this.registerOrderTypeChange();
