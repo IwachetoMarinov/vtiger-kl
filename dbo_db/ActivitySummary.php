@@ -534,9 +534,16 @@ class ActivitySummary
         }
     }
 
-    protected function sanitizeSerialNumbers($serNo)
+    protected function sanitizeSerialNumbers($serials): string
     {
-        // Remove any unwanted characters, allowing only alphanumeric and commas
-        return preg_replace('/;{2,}/', '', $serNo);
+        if (!$serials) return '';
+
+        // 1. Remove trailing semicolons
+        $serials = preg_replace('/;+$/', '', $serials);
+
+        // 2. Replace multiple semicolons in the middle with newline
+        $serials = preg_replace('/;{2,}/', "\n", $serials);
+
+        return $serials;
     }
 }

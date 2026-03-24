@@ -196,6 +196,13 @@ class HoldingsDB
     protected function sanitizeSerials($serials): string
     {
         if (!$serials) return '';
-        return preg_replace('/;{2,}/', '', $serials);
+
+        // 1. Remove trailing semicolons
+        $serials = preg_replace('/;+$/', '', $serials);
+
+        // 2. Replace multiple semicolons in the middle with newline
+        $serials = preg_replace('/;{2,}/', "\n", $serials);
+
+        return $serials;
     }
 }

@@ -312,7 +312,8 @@
                                         <td style="vertical-align: top">{$barItem->quantity}</td>
                                         <td style="border-bottom:none;vertical-align: top">
                                             {$barItem->itemDescription} <br><span
-                                                style="font-size: smaller;font-style: italic;max-width: 250px;display: inline-block;word-break: break-all;white-space: normal;">{$barItem->serialNumbers}</span>
+                                                style="font-size: smaller;font-style: italic;max-width: 250px;display: inline-block;word-break: break-all;white-space: normal;">
+                                                <pre>{$barItem->serialNumbers}</pre></span>
                                         </td>
                                         {if $barItem->metal eq 'mBTC'}
                                             <td style="text-align:right;vertical-align: top">

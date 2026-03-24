@@ -226,7 +226,7 @@
                                 {assign var="calcTotal" value=$calcTotal+$barItem->totalFineOz}
                                 {* Get up to 80 symbols from serials *}
                                 {assign var="serials" value=$barItem->serialNumbers|default:''}
-                                {assign var="serials" value=$serials|truncate:80:"..."}
+                                {* {assign var="serials" value=$serials|truncate:80:"..."} *}
 
                                 <tr>
                                     <td>{number_format($barItem->quantity,0)}</td>
@@ -235,7 +235,7 @@
                                         {$barItem->itemDescription}
                                         <br>
                                         <span style="font-size:smaller;font-style:italic;">
-                                            {$serials}
+                                             <pre>{$serials}</pre>
                                         </span>
                                     </td>
 

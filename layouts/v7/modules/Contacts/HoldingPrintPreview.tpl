@@ -286,7 +286,7 @@
                                         <td>
                                             {$HOLDING->longDesc} <br>
                                             <span style="font-size: smaller;font-style: italic;">
-                                                {$HOLDING->serials}
+                                                <pre>{$HOLDING->serials}</pre>
                                             </span>
                                         </td>
 
