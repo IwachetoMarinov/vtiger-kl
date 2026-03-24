@@ -8,7 +8,7 @@
  * All Rights Reserved.
  ************************************************************************************/
 
-ini_set('display_errors', 1); error_reporting(E_ALL);
+// ini_set('display_errors', 1); error_reporting(E_ALL);
 
 class Settings_Leads_MappingEdit_View extends Settings_Vtiger_Index_View {
 
