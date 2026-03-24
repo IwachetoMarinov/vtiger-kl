@@ -7,6 +7,12 @@
  * All Rights Reserved.
  *************************************************************************************/
 
+jQuery(document).ready(function(){
+    if (jQuery('#selectedModuleName').val() === 'Metals') {
+        jQuery('#selectedModuleName').val('Assets');
+    }
+})
+
 Vtiger.Class('Settings_LayoutEditor_Js', {
 }, {
 	updatedBlockSequence: {},
@@ -1808,10 +1814,7 @@ Vtiger.Class('Settings_LayoutEditor_Js', {
 		return aDeferred.promise();
 	},
 	getSelectedModuleName: function () {
-		// return jQuery('#selectedModuleName').val();
-		var moduleName = jQuery('#selectedModuleName').val();
-		if (moduleName === 'Metals') moduleName = 'Assets';
-		return moduleName;
+		return jQuery('#selectedModuleName').val();
 	},
 	/**
 	 * Function to register the change event for layout editor modules list
@@ -1859,8 +1862,7 @@ Vtiger.Class('Settings_LayoutEditor_Js', {
 			params['view'] = 'Index';
 			params['mode'] = 'showFieldEdit';
 			params['fieldid'] = fieldId;
-			// params['sourceModule'] = jQuery('#selectedModuleName').val();
-			params['sourceModule'] = thisInstance.getSelectedModuleName();
+			params['sourceModule'] = jQuery('#selectedModuleName').val();
 
 			app.request.post({'data': params}).then(
 				function (err, data) {
