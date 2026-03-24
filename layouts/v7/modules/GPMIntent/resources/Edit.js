@@ -27,7 +27,7 @@ Vtiger_Edit_Js(
 
     toggleCurrencySelect: function (value) {
       const currencySelect = jQuery(
-        'select[name="cf_1132"], select[name="cf_1134"]'
+        'select[name="cf_1132"], select[name="cf_1134"]',
       );
 
       currencySelect.prop("disabled", value);
@@ -36,13 +36,15 @@ Vtiger_Edit_Js(
     setSpotPrice: function (selectedMetal, currency = "USD") {
       var thisInstance = this;
 
+      console.log(selectedMetal, currency);
+
       //if (jQuery('input[name="indicative_spot_price"]').val() == '') {
       thisInstance
         .getCurruntMetalSpotPrice(selectedMetal, currency)
         .then(function (data) {
           data = JSON.parse(data);
           jQuery(
-            'input[name="indicative_spot_price"], input[name="cf_1136"]'
+            'input[name="indicative_spot_price"], input[name="cf_1136"]',
           ).val(data.price);
         });
       //}
@@ -74,7 +76,7 @@ Vtiger_Edit_Js(
               '">' +
               thisInstance.itemList[selectedMetal][item]["product_name"] +
               "</option>";
-          }
+          },
         );
       }
     },
@@ -132,7 +134,7 @@ Vtiger_Edit_Js(
           // thisInstance.setSpotPrice(selectedMetal);
           // thisInstance.setupMetalOption(selectedMetal);
           // thisInstance.selectedMetal = selectedMetal;
-        }
+        },
       );
     },
 
@@ -153,7 +155,31 @@ Vtiger_Edit_Js(
           thisInstance.setSpotPrice(selectedMetal, currency);
           thisInstance.setupMetalOption(selectedMetal);
           thisInstance.selectedMetal = selectedMetal;
-        }
+        },
+      );
+    },
+
+    registerIndicativeSpotPriceChangeEvent: function () {
+      var thisInstance = this;
+
+      jQuery('input[name="indicative_spot_price"], input[name="cf_1136"]').on(
+        "input",
+        function (e) {
+          selectedMetal = jQuery('select[name="gpm_metal_type"]').val();
+
+          console.log("selectedMetal", selectedMetal);
+
+          const currency = jQuery(e.currentTarget).val() || "USD";
+          console.log("currency", currency);
+
+          if (selectedMetal === "") return;
+
+          console.log("selectedMetal", selectedMetal, "currency", currency);
+
+          thisInstance.setSpotPrice(selectedMetal, currency);
+          thisInstance.setupMetalOption(selectedMetal);
+          thisInstance.selectedMetal = selectedMetal;
+        },
       );
     },
 
@@ -174,7 +200,7 @@ Vtiger_Edit_Js(
             .replaceAll("raw", thisInstance.itemIndex)
             .replaceAll(
               "{{xxx}}",
-              thisInstance.metalOption[thisInstance.selectedMetal]
+              thisInstance.metalOption[thisInstance.selectedMetal],
             );
 
           jQuery("#item_container").append(itemLine);
@@ -207,7 +233,7 @@ Vtiger_Edit_Js(
           } else {
             jQuery(".pre_disc").html("Premium (%)");
           }
-        }
+        },
       );
     },
     calculateTheCurrentLineItem: function (line) {
@@ -234,7 +260,7 @@ Vtiger_Edit_Js(
       itemTotalOz = line.find(".item_fineoz").val();
       // indicativeSpotPrice = jQuery('input[name="indicative_spot_price"]').val();
       indicativeSpotPrice = jQuery(
-        'input[name="indicative_spot_price"], input[name="cf_1136"]'
+        'input[name="indicative_spot_price"], input[name="cf_1136"]',
       ).val();
       exactSpotPrice = jQuery('input[name="spot_price"]').val();
       currentSpotPrice =
@@ -304,7 +330,7 @@ Vtiger_Edit_Js(
           thisInstance.calculateTheCurrentLineItem(line);
           thisInstance.calculateTotal();
           thisInstance.calculateForeignValue();
-        }
+        },
       );
     },
     registerCurrencyChangeEvent: function () {
@@ -330,7 +356,7 @@ Vtiger_Edit_Js(
             selectedCurrencyUSDSpot =
               (selectedCurrencySGDSpot * 1) / sgd_usdspot;
             jQuery('input[name="indicative_fx_spot"]').val(
-              selectedCurrencyUSDSpot.toFixed(4)
+              selectedCurrencyUSDSpot.toFixed(4),
             );
           } else {
             sgd_usdspot = forexDate.usd_sgd;
@@ -340,11 +366,11 @@ Vtiger_Edit_Js(
             selectedCurrencyUSDSpot =
               (sgd_usdspot * 1) / selectedCurrencySGDSpot;
             jQuery('input[name="indicative_fx_spot"]').val(
-              selectedCurrencyUSDSpot.toFixed(4)
+              selectedCurrencyUSDSpot.toFixed(4),
             );
           }
           jQuery('input[name="package_price"]').trigger("keydown");
-        }
+        },
       );
     },
     registerPackageAmountChange: function () {
@@ -370,9 +396,9 @@ Vtiger_Edit_Js(
           calCulatedAmount = FxSpot * amount;
 
           jQuery('input[name="package_price_usd"]').val(
-            calCulatedAmount.toFixed(2)
+            calCulatedAmount.toFixed(2),
           );
-        }
+        },
       );
     },
     registerEditOrCreate: function () {
@@ -395,16 +421,16 @@ Vtiger_Edit_Js(
     registerSpotPriceChange: function () {
       var thisInstance = this;
       jQuery(
-        'input[name="spot_price"], input[name="fx_spot_price"],input[name="indicative_fx_spot"],#GPMIntent_editView_fieldName_spot_price, #GPMIntent_editView_fieldName_fx_spot_price, #GPMIntent_editView_fieldName_indicative_spot_price, #GPMIntent_editView_fieldName_indicative_fx_spot'
+        'input[name="spot_price"], input[name="fx_spot_price"],input[name="indicative_fx_spot"],#GPMIntent_editView_fieldName_spot_price, #GPMIntent_editView_fieldName_fx_spot_price, #GPMIntent_editView_fieldName_indicative_spot_price, #GPMIntent_editView_fieldName_indicative_fx_spot',
       ).on("change keydown keypress keyup blur", function (e) {
-        jQuery("#item_container > div.item_infromation_input").each(function (
-          i
-        ) {
-          line = jQuery(this);
-          thisInstance.calculateTheCurrentLineItem(line);
-          thisInstance.calculateTotal();
-          thisInstance.calculateForeignValue();
-        });
+        jQuery("#item_container > div.item_infromation_input").each(
+          function (i) {
+            line = jQuery(this);
+            thisInstance.calculateTheCurrentLineItem(line);
+            thisInstance.calculateTotal();
+            thisInstance.calculateForeignValue();
+          },
+        );
       });
     },
     calculateForeignValue: function () {
@@ -441,7 +467,7 @@ Vtiger_Edit_Js(
       }
 
       jQuery('input[name="total_foreign_amount"]').val(
-        calCulatedAmount.toFixed(2)
+        calCulatedAmount.toFixed(2),
       );
     },
     setFineOzForNoneStrdBars: function () {
@@ -488,6 +514,7 @@ Vtiger_Edit_Js(
       this.toggleCurrencySelect(true);
       this.registerMetalTypeChangeEvent();
       this.registerCurrencySelectChangeEvent();
+      this.registerIndicativeSpotPriceChangeEvent();
       this.registerAddButton();
       this.registerLineItemDelete();
       this.registerOrderTypeChange();
@@ -498,5 +525,5 @@ Vtiger_Edit_Js(
       this.registerSpotPriceChange();
       this.setFineOzForNoneStrdBars();
     },
-  }
+  },
 );
