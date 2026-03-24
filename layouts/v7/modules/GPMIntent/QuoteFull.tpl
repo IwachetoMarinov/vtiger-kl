@@ -89,8 +89,13 @@
                             <tr>
                                 <th>{vtranslate($INTENT->get('gpm_metal_type'),'MetalPrice')}</th>
                                 <td style="text-align:center">
+                                    {assign var=spotPrice value=$INTENT->get('indicative_spot_price')}
+                                    {if $spotPrice eq '' || $spotPrice eq null}
+                                        {assign var=spotPrice value=$INTENT->get('cf_1136')}
+                                    {/if}
+
                                     {$INTENT_CURRENCY}
-                                    {number_format($INTENT->get('indicative_spot_price'),2, '.', ',')} / oz.
+                                    {number_format($spotPrice, 2, '.', ',')} / oz.
                             </tr>
                         </table>
                     </td>
@@ -173,7 +178,7 @@
                         {if isset($COMPANY)}
                             {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
                             {$COMPANY->get('company_reg_no')}){/if}<br>
-                             {$COMPANY_FULL_ADDRESS}
+                            {$COMPANY_FULL_ADDRESS}
                             <br>
                             T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
                             {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('email')}<br>
