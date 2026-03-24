@@ -264,3 +264,8 @@ WHERE fieldlabel = 'Contact Name'
 `DELETE FROM vtiger_datashare_rs2grp WHERE shareid IN (15);`
 
 `DELETE FROM vtiger_datashare_grp2rs WHERE shareid IN (17);`
+
+43. Log for gihub in Putty
+ - `sudo su`
+ -  `enter my own account password`
+ - `su gpm-git-sync`
