@@ -162,25 +162,19 @@ Vtiger_Edit_Js(
     registerIndicativeSpotPriceChangeEvent: function () {
       var thisInstance = this;
 
-      jQuery('input[name="indicative_spot_price"], input[name="cf_1136"]').on(
-        "input",
-        function (e) {
-          selectedMetal = jQuery('select[name="gpm_metal_type"]').val();
-
-          console.log("selectedMetal", selectedMetal);
-
-          const currency = jQuery(e.currentTarget).val() || "USD";
-          console.log("currency", currency);
-
-          if (selectedMetal === "") return;
-
-          console.log("selectedMetal", selectedMetal, "currency", currency);
-
-          thisInstance.setSpotPrice(selectedMetal, currency);
-          thisInstance.setupMetalOption(selectedMetal);
-          thisInstance.selectedMetal = selectedMetal;
-        },
-      );
+      // jQuery('input[name="indicative_spot_price"], input[name="cf_1136"]').on(
+      //   "input",
+      //   function (e) {
+      //     const lines = document.querySelectorAll(
+      //       "div[data-block='ITEM INFORMATION'] div.item_infromation_input",
+      //     );
+      //     lines.forEach((line) => {
+      //       // thisInstance.calculateTheCurrentLineItem(line);
+      //       // thisInstance.calculateTotal();
+      //       // thisInstance.calculateForeignValue();
+      //     });
+      //   },
+      // );
     },
 
     registerAddButton: function () {
@@ -327,6 +321,8 @@ Vtiger_Edit_Js(
         function (e) {
           line = jQuery(e.currentTarget).closest("div.item_infromation_input");
 
+          console.log("line", line);
+
           thisInstance.calculateTheCurrentLineItem(line);
           thisInstance.calculateTotal();
           thisInstance.calculateForeignValue();
@@ -421,7 +417,7 @@ Vtiger_Edit_Js(
     registerSpotPriceChange: function () {
       var thisInstance = this;
       jQuery(
-        'input[name="spot_price"], input[name="fx_spot_price"],input[name="indicative_fx_spot"],#GPMIntent_editView_fieldName_spot_price, #GPMIntent_editView_fieldName_fx_spot_price, #GPMIntent_editView_fieldName_indicative_spot_price, #GPMIntent_editView_fieldName_indicative_fx_spot',
+        'input[name="spot_price"], input[name="indicative_spot_price"], input[name="cf_1136"], input[name="fx_spot_price"],input[name="indicative_fx_spot"],#GPMIntent_editView_fieldName_spot_price, #GPMIntent_editView_fieldName_fx_spot_price, #GPMIntent_editView_fieldName_indicative_spot_price, #GPMIntent_editView_fieldName_indicative_fx_spot',
       ).on("change keydown keypress keyup blur", function (e) {
         jQuery("#item_container > div.item_infromation_input").each(
           function (i) {
