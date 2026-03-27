@@ -83,12 +83,7 @@ class HoldingsDB
         }
 
         sqlsrv_free_stmt($stmt);
-
-
-        echo "<pre>";
-        print_r($summary);
-        echo "</pre>";
-
+        
         $results = [];
         foreach ($summary as $item) {
             $results[] = [
