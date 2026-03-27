@@ -358,32 +358,31 @@
                         {/if}
                     </div>
                 </div>
+                <table style="width:100%; margin-top:4mm; border-collapse:collapse;">
+                    <tr>
+                        <td style="width:35%;"></td>
+                        <td>Date:</td>
+                    </tr>
+                </table>
 
-                <div style="margin-top: 4mm;" class="bottom-container">
-                    <div class="signed-item"></div>
-                    <div class="behalf-item">
-                        <span>Date: </span>
-                    </div>
-                </div>
+                <table style="width:100%; margin-top:4mm; border-collapse:collapse;">
+                    <tr>
+                        <td style="width:35%;">Signed by:</td>
+                        <td>On behalf of:</td>
+                    </tr>
+                </table>
 
-                <div style="margin-top: 4mm;" class="bottom-container">
-                    <div class="signed-item">
-                        <span>Signed by: </span>
-                    </div>
-                    <div class="behalf-item">
-                        <span>On behalf of:</span>
-                    </div>
-                </div>
+                <table style="width:100%; margin-top:3mm; border-collapse:collapse;">
+                    <tr>
+                        <td style="width:50%; vertical-align:top;">
+                            <div style="border-bottom:1px solid #000; height:80px; margin-bottom:2mm;"></div>
+                            <p>Signature</p>
+                        </td>
+                        <td style="width:50%;"></td>
+                    </tr>
+                </table>
 
-                <div style="margin-top: 3mm;" class="bottom-container">
-                    <div class="bottom-container-item">
-                        <div
-                            style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 80px;">
-                        </div>
-                        <p>Signature</p>
-                    </div>
-                    <div class="bottom-container-item"></div>
-                </div>
+              
             </div>
         </div>
 
