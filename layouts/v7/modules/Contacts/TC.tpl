@@ -355,7 +355,8 @@
                                         {else}
                                             <td style="text-align:right;vertical-align: top">0 %</td>
                                         {/if} *}
-                                        <td style="text-align:right;vertical-align: top"> {$barItem->premium} %</td>
+                                        <td style="text-align:right;vertical-align: top"> 
+                                        {$barItem->premium} %</td>
 
                                         <td style="text-align:right;vertical-align: top">
                                             {number_format($balanceAmount,2)}

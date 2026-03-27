@@ -34,6 +34,10 @@
             position: relative;
         }
 
+        .text-content {
+            font-size: 9.75pt !important;
+        }
+
         .bottom-container {
             display: flex;
             gap: 10mm;
@@ -64,7 +68,7 @@
             color: #fff;
             background: #008ECA;
             font-weight: bold;
-            font-size: 10pt;
+            font-size: 9.5;
         }
 
         .printAreaContainer .header-text span {
@@ -80,7 +84,7 @@
 
         table.content-table th {
             border: 1px dotted #666666;
-            font-size: 10pt;
+            font-size: 9.5;
             background: #ECECEC;
             font-weight: bold;
             padding: 4px
@@ -92,14 +96,14 @@
 
         table.content-table td {
             border: none;
-            font-size: 10pt;
+            font-size: 9.5;
             font-weight: normal;
             padding: 4px
         }
 
         table.graph-table td {
             width: 50%;
-            font-size: 10pt;
+            font-size: 9.5;
             padding: 4px 0px;
         }
 
@@ -190,7 +194,7 @@
                     <tr>
                         <td style="height: 28mm;">
                             <img src='layouts/v7/modules/Contacts/resources/gpm-new-logo.png'
-                                style="max-height: 100%; float:left;width: 192px;">
+                                style="max-height: 100%; float:left;max-width: 154px;">
                             <div style="font-size: 11pt;margin-top: 20mm; float:right;">
                                 <span>From: {$RECORD_MODEL->get('cf_898')}</span>
                             </div>
@@ -200,7 +204,7 @@
                         <td style="height: 20mm;text-align: left; font-size: 9.5pt;">
                             <div style="max-width:50%">
                                 {if isset($COMPANY)}
-                                    <div style="margin-top: 10mm;">To:
+                                    <div style="margin-top: 6mm;">To:
                                         <span style="font-weight: 700; text-transform: capitalize;">
                                             {$COMPANY->get('company_name')}
                                         </span>
@@ -219,7 +223,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="height: 20mm; text-decoration: underline;text-align: right;">
+                        <td style="height: 15mm; text-decoration: underline;text-align: right;">
                             <strong>COLLECTION REQUEST</strong>
                         </td>
                     </tr>
@@ -246,12 +250,12 @@
 
                 {assign var="location" value=$ERP_DOCUMENT.barItems[0]->warehouse}
 
-                <div style="margin-top: 5mm;">I/We hereby wish to collect the Stored Metal detailed below at the following
+                <div style="margin-top: 3mm;">I/We hereby wish to collect the Stored Metal detailed below at the following
                     location:
                     <p style="font-style: italic;font-weight: 600;">{$location}</p>
                 </div>
 
-                <table class="print-tbl" style="margin-top:5mm;">
+                <table class="print-tbl" style="margin-top: 3mm;">
                     <tr>
                         {assign var="metalPrice" value=$ERP_DOCUMENT.barItems[0]->price}
                         <td style="font-size: 9pt; vertical-align: top;">
@@ -277,7 +281,8 @@
                                         <td>
                                             <span>{$barItem->itemDescription}</span> <br />
                                             <span style="font-size:smaller;font-style:italic;">
-                                                {implode(", ", $barItem->serials)}</span>
+                                                <pre>{$barItem->serialNumbers}</pre>
+                                            </span>
                                         </td>
 
                                         <td style="text-align:right;"> {number_format($barItem->totalFineOz,4)}</td>
@@ -299,64 +304,69 @@
 
                 </table>
 
-                <div style="margin-top: 6mm;">I/We would like the Collection to take place on:
-                    <span>...................</span>
-                </div>
+                <div class="text-content">
 
-                <div style="margin-top: 4mm;">
-                    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-                        <input type="checkbox" name="id_option">
-                    {else}
-                        {if isset($ID_OPTION) && $ID_OPTION eq 1}
-                            <span
-                                style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                    <div style="margin-top: 4mm;">I/We would like the Collection to take place on:
+                        <span>...................</span>
+                    </div>
+
+                    <div style="margin-top: 3mm;">
+                        {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                            <input type="checkbox" name="id_option">
+                        {else}
+                            {if isset($ID_OPTION) && $ID_OPTION eq 1}
+                                <span
+                                    style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                            {/if}
                         {/if}
-                    {/if}
-                    <span>I/We will personally collect the Stored Metal at the Storage Facility and will be holding
-                        ID/Passport number</span>
-                    <span> .......................</span>
-                </div>
+                        <span>I/We will personally collect the Stored Metal at the Storage Facility and will be holding
+                            ID/Passport number</span>
+                        <span> .......................</span>
+                    </div>
 
-                <div style="margin-top: 4mm;">
-                    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-                        <input type="checkbox" name="company_option">
-                    {else}
-                        {if isset($COMPANY_OPTION) && $COMPANY_OPTION eq 1}
-                            <span
-                                style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                    <div style="margin-top: 3mm;">
+                        {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                            <input type="checkbox" name="company_option">
+                        {else}
+                            {if isset($COMPANY_OPTION) && $COMPANY_OPTION eq 1}
+                                <span
+                                    style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
+                            {/if}
                         {/if}
-                    {/if}
 
-                    <span>I/We hereby authorise Mr/Mrs/Representatives of the company </span>
-                    <span> .......................</span>
-                    (<span>holding ID/Passport number</span>
-                    <span> .......................</span>)
-                    <span> to collect the Stored Metal on my/our behalf. This
-                        authorisation is only valid for the collection of the Stored Metal specified above and shall not be
-                        extended
-                        to any other services covered under the Customer Metal Agreement.</span>
+                        <span>I/We hereby authorise Mr/Mrs/Representatives of the company </span>
+                        <span> .......................</span>
+                        (<span>holding ID/Passport number</span>
+                        <span> .......................</span>)
+                        <span> to collect the Stored Metal on my/our behalf. This
+                            authorisation is only valid for the collection of the Stored Metal specified above and shall not
+                            be
+                            extended
+                            to any other services covered under the Customer Metal Agreement.</span>
+                    </div>
+
+
+                    <p style="margin-top: 4mm;font-style: italic;font-weight: bold;">I/We hereby enclose a photocopy of the
+                        passport of the person(s) who will collect the Stored Metal. The
+                        original passport(s) will need to be presented prior to Collection at the Storage Facility</p>
+
+                    <div style="margin-top: 4mm;">This Collection Order is subject to and governed by the terms and
+                        conditions
+                        of the Customer Metal Agreement
+                        executed and entered into by and between me/us and {if isset($COMPANY)}
+                            <span style="text-transform: capitalize;">{$COMPANY->get('company_name')}</span>
+                        {/if}
+                    </div>
                 </div>
 
-
-                <p style="margin-top: 4mm;font-style: italic;font-weight: bold;">I/We hereby enclose a photocopy of the
-                    passport of the person(s) who will collect the Stored Metal. The
-                    original passport(s) will need to be presented prior to Collection at the Storage Facility</p>
-
-                <div style="margin-top: 5mm;">This Collection Order is subject to and governed by the terms and conditions
-                    of the Customer Metal Agreement
-                    executed and entered into by and between me/us and {if isset($COMPANY)}
-                        <span style="text-transform: capitalize;">{$COMPANY->get('company_name')}</span>
-                    {/if}
-                </div>
-
-                <div style="margin-top: 5mm;" class="bottom-container">
+                <div style="margin-top: 4mm;" class="bottom-container">
                     <div class="signed-item"></div>
                     <div class="behalf-item">
                         <span>Date: </span>
                     </div>
                 </div>
 
-                <div style="margin-top: 5mm;" class="bottom-container">
+                <div style="margin-top: 4mm;" class="bottom-container">
                     <div class="signed-item">
                         <span>Signed by: </span>
                     </div>
@@ -365,10 +375,10 @@
                     </div>
                 </div>
 
-                <div style="margin-top: 5mm;" class="bottom-container">
+                <div style="margin-top: 3mm;" class="bottom-container">
                     <div class="bottom-container-item">
                         <div
-                            style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 100px;background-color:#dce6f9;">
+                            style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 80px;">
                         </div>
                         <p>Signature</p>
                     </div>

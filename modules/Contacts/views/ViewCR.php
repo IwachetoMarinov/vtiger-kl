@@ -34,7 +34,7 @@ class Contacts_ViewCR_View extends Vtiger_Index_View
             $erpData = [];
         }
 
-         $company_full_address = Helper::getCompanyFullAddressWithoutCommas($companyRecord);
+        $company_full_address = Helper::getCompanyFullAddressWithoutCommas($companyRecord);
 
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
