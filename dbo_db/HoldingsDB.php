@@ -35,10 +35,7 @@ class HoldingsDB
 
             $stmt = sqlsrv_query($this->connection, $sql, $params);
 
-            if ($stmt === false) {
-                // die(print_r(sqlsrv_errors(), true));
-                return [];
-            }
+            if ($stmt === false) return [];
 
             $summary = [];
 
@@ -86,6 +83,11 @@ class HoldingsDB
         }
 
         sqlsrv_free_stmt($stmt);
+
+
+        echo "<pre>";
+        print_r($summary);
+        echo "</pre>";
 
         $results = [];
         foreach ($summary as $item) {

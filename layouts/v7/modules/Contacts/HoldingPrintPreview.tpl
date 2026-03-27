@@ -250,7 +250,7 @@
                                     <th>{if isset($metal['MT_Name'])}{$metal['MT_Name']}{/if}</th>
                                     <td style="text-align:center">
                                         {if isset($metal['Spot_Price'])}
-                                            USD {number_format($metal['Spot_Price'], 2, '.', ',')} / Oz..
+                                            USD {number_format($metal['Spot_Price'], 2, '.', ',')} / Oz.
                                         {/if}</td>
                                 </tr>
                             {/foreach}
