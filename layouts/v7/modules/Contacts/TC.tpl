@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-         @font-face {
+        @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
@@ -279,7 +279,7 @@
                             All amounts in {$ERP_DOCUMENT->currency}
                         </td>
                     </tr>
-                 
+
                     <tr>
                         {assign var="metalPrice" value=($ERP_DOCUMENT->barItems[0]->spotPrice)}
                         {assign var="transactionType" value=($ERP_DOCUMENT->barItems[0]->transactionType)}
@@ -347,16 +347,12 @@
                                         <td style="text-align:right;vertical-align: top">
                                             {number_format($barItem->totalFineOz,4)}
                                         </td>
-
-                                        {* {if $barItem->premium > 0 && $metalPrice > 0}
-                                            <td style="text-align:right;vertical-align: top">
-                                                {number_format($barItem->premium,2)} %
-                                            </td>
-                                        {else}
-                                            <td style="text-align:right;vertical-align: top">0 %</td>
-                                        {/if} *}
-                                        <td style="text-align:right;vertical-align: top"> 
-                                        {$barItem->premium} %</td>
+                                        <td style="text-align:right;vertical-align: top">
+                                            {if $barItem->premium !== ""}
+                                                {number_format($barItem->premium, 2)}%
+                                            {else}
+                                                -
+                                            {/if}</td>
 
                                         <td style="text-align:right;vertical-align: top">
                                             {number_format($balanceAmount,2)}
@@ -394,7 +390,7 @@
                                         {if $COMPANY->get('company_reg_no')} (Co. Reg. No.
                                         {$COMPANY->get('company_reg_no')}){/if}
                                         <br>
-                                         {$COMPANY_FULL_ADDRESS}
+                                        {$COMPANY_FULL_ADDRESS}
                                         <br>
                                         T: {$COMPANY->get('company_phone')}
                                         {if $COMPANY->get('company_fax')} | Fax: {$COMPANY->get('company_fax')} {/if}

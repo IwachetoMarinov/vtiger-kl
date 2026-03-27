@@ -112,6 +112,12 @@ class Contacts_Detail_View extends Accounts_Detail_View
 				$startTs,
 				$endTs,
 			) {
+				// Year filter
+				if (!empty($selected_year) && !empty($item['document_date'])) {
+					$itemYear = date('Y', strtotime($item['document_date']));
+					if ($itemYear !== (string) $selected_year) return false;
+				}
+
 				// Currency filter
 				if ($selected_currency && in_array($selected_currency, $currency_list)) {
 
@@ -119,20 +125,10 @@ class Contacts_Detail_View extends Accounts_Detail_View
 					$voucherType  = $item['voucher_type'] ?? '';
 
 					// Allow MRD / MPD with empty currency
-					if (empty($itemCurrency) && in_array($voucherType, ['MRD', 'MPD'])) {
-						return true; // skip currency filtering, keep item
-					}
+					if (empty($itemCurrency) && in_array($voucherType, ['MRD', 'MPD'])) return true;
 
 					// Normal currency filtering
-					if ($itemCurrency !== $selected_currency) {
-						return false;
-					}
-				}
-
-				// Year filter
-				if (!empty($selected_year) && !empty($item['document_date'])) {
-					$itemYear = date('Y', strtotime($item['document_date']));
-					if ($itemYear !== (string) $selected_year) return false;
+					if ($itemCurrency !== $selected_currency) return false;
 				}
 
 				// Date range filter
