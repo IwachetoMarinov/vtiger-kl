@@ -299,6 +299,10 @@ class ActivitySummary
 
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
+            echo "<pre>";
+            print_r($summary);
+            echo "</pre>";
+
             $items = $this->mapTransactionItems($summary, $transaction);
 
             $transaction['barItems'] = $items;
