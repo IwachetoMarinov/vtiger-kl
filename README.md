@@ -72,33 +72,32 @@ Deploy in github with export/import database
 1. chmod +x deploy.sh // Only first time
 2. ./deploy.sh
 
-
 3. Pull all changes from github repo: `sudo git pull origin main`
 4. Install new packages if need it `composer install`
 5. Give permissions:
-     `sudo chown -R $USER:$USER /var/www/html`
-     `sudo chmod -R 775 /var/www/html`
+   `sudo chown -R $USER:$USER /var/www/html`
+   `sudo chmod -R 775 /var/www/html`
 6. Login to mysql `mysql -u vtigeruser -p` after that enter the password
-    6.1. Use databasel `USE vtiger_gpm;` 
+   6.1. Use databasel `USE vtiger_gpm;`
 7. import database (if it neeed) add file only with `_changes_` in the name `mysql -u vtigeruser -p vtiger_gpm < db_backups/vtiger_gpm_changes_2025_11_05_1621.sql`
 8. Restart apache server `sudo service apache2 restart`
 
-9. If VM instalation failed and got 'Access to restricted file' 
-    9.1 Check in config file: $dbconfig['db_server'] = 'localhost';
-                                $dbconfig['db_port'] = ':3306';
-                                $dbconfig['db_username'] = 'root';
-                                $dbconfig['db_password'] = '';
-                                $dbconfig['db_name'] = 'vtiger_gpm';
-                                $dbconfig['db_type'] = 'mysqli';
-                                $dbconfig['db_status'] = 'true';
-                                $site_URL = 'http://localhost/vtiger-gpm/';
-                                $root_directory = '/var/www/html/';
+9. If VM instalation failed and got 'Access to restricted file'
+   9.1 Check in config file: $dbconfig['db_server'] = 'localhost';
+   $dbconfig['db_port'] = ':3306';
+   $dbconfig['db_username'] = 'root';
+   $dbconfig['db_password'] = '';
+   $dbconfig['db_name'] = 'vtiger_gpm';
+   $dbconfig['db_type'] = 'mysqli';
+   $dbconfig['db_status'] = 'true';
+   $site_URL = 'http://localhost/vtiger-gpm/';
+   $root_directory = '/var/www/html/';
 
 10. Clear cache: `rm -rf test/templates_c/v7`
-   10.1 After that you should create this folder `mkdir -p test/templates_c/v7`
-   10.2 Perrmission to this folder: `sudo chown -R www-data:www-data test/templates_c`, `sudo chmod -R 775 test/templates_c`
+    10.1 After that you should create this folder `mkdir -p test/templates_c/v7`
+    10.2 Perrmission to this folder: `sudo chown -R www-data:www-data test/templates_c`, `sudo chmod -R 775 test/templates_c`
 
-11. Open config.ini  file `nano config.inc.php`
+11. Open config.ini file `nano config.inc.php`
 
 12. count how many times cron ran with log file `grep -c "Cron job completed" logs/order_cron.log`
 
@@ -108,10 +107,9 @@ Deploy in github with export/import database
 
 14. Change field in CRM
     14.1 First select table and field id from table based on label `SELECT fieldid, fieldlabel, fieldname, columnname, tablename, typeofdata FROM vtiger_field WHERE fieldlabel = 'Indicative FX spot';`
-    14.2 Change database column to TEXT (if you wanna change other type must add type) `ALTER TABLE vtiger_gpmintent MODIFY COLUMN indicative_fx_spot VARCHAR(255);` 
+    14.2 Change database column to TEXT (if you wanna change other type must add type) `ALTER TABLE vtiger_gpmintent MODIFY COLUMN indicative_fx_spot VARCHAR(255);`
     14.3 Update field metadata `UPDATE vtiger_field SET typeofdata = 'V~O' WHERE fieldid = 1035;`
     14.4 Change UI type (VERY IMPORTANT) `UPDATE vtiger_field SET uitype = 1 WHERE fieldid = 1035;`
-
 
 15. Run cron for metals manually: `bash /var/www/html/vtiger_metals_cron.sh`
 
@@ -123,21 +121,20 @@ Deploy in github with export/import database
 
 19. Make it executable any cron job `sudo chmod +x /var/www/html/vtiger_metals_cron.sh` and `sudo chown iwacheto:iwacheto /var/www/html/vtiger_metals_cron.sh`
 
-20. When create Holding certificate do not forget to check and give permissions for these folder '/modules/HoldingCertificate/tmp' and '/var/www/html/test/templates_c/v7/' with these commands: 
-     `sudo chown -R iwacheto:www-data /var/www/html/modules/HoldingCertificate/tmp/`
-     `sudo chmod -R 775 /var/www/html/modules/HoldingCertificate/tmp/`
+20. When create Holding certificate do not forget to check and give permissions for these folder '/modules/HoldingCertificate/tmp' and '/var/www/html/test/templates_c/v7/' with these commands:
+    `sudo chown -R iwacheto:www-data /var/www/html/modules/HoldingCertificate/tmp/`
+    `sudo chmod -R 775 /var/www/html/modules/HoldingCertificate/tmp/`
 
     `sudo chown -R iwacheto:www-data /var/www/html/test/templates_c/`
     `sudo chmod -R 775 /var/www/html/test/templates_c/`
 
-21. delete ALL QR codes?  `find /var/www/html/modules/HoldingCertificate -maxdepth 1 -name "*.png" -delete`   
+21. delete ALL QR codes? `find /var/www/html/modules/HoldingCertificate -maxdepth 1 -name "*.png" -delete`
 
-22. add git configs `git config user.name "IwachetoMarinov"`  and `git config user.email "ivailo.marinov@webrika.bg"`
+22. add git configs `git config user.name "IwachetoMarinov"` and `git config user.email "ivailo.marinov@webrika.bg"`
 
 23. Add permissions to write in templates_c directory: `sudo chown -R www-data:www-data /var/www/html/test/templates_c` and `sudo chmod -R 775 /var/www/html/test/templates_c`
 
 24. Move Intent, Assets and MetalPrices to ASSETS menu `UPDATE vtiger_app2tab SET appname = 'SALES' WHERE tabid IN (SELECT tabid FROM vtiger_tab WHERE name IN ('Assets', 'MetalPrice', 'GPMIntent'));`
-     
 25. To change any main menu name go to `languages/en_us/Vtiger.php` and find menu name
 
 26. Install Microsoft ODBC driver repo + driver
@@ -164,36 +161,35 @@ echo "extension=pdo_sqlsrv" | sudo tee /etc/php/8.2/mods-available/pdo_sqlsrv.in
 
 sudo phpenmod sqlsrv pdo_sqlsrv
 
-30. Restart your web stack 
-sudo systemctl restart apache2 || true
-sudo systemctl restart php8.2-fpm || true
-
+30. Restart your web stack
+    sudo systemctl restart apache2 || true
+    sudo systemctl restart php8.2-fpm || true
 
 31. Backup database `mysqldump -u root -p vtiger_gpm > db_backups/vtiger_backup.sql`
 
 32. Rename base module name: `go to this file C:\laragon\www\vtiger-gpm\languages\en_us\Vtiger.php and find label name`
 
 33. Change One module to other
-33.1 Find id or ids of modules thats should be moved `SELECT tabid, name FROM vtiger_tab WHERE name IN ('Assets','MetalPrice');`
-33.2 Update SQL we need to know appname `UPDATE vtiger_app2tab SET appname = 'SUPPORT' WHERE tabid IN (38,56);`
+    33.1 Find id or ids of modules thats should be moved `SELECT tabid, name FROM vtiger_tab WHERE name IN ('Assets','MetalPrice');`
+    33.2 Update SQL we need to know appname `UPDATE vtiger_app2tab SET appname = 'SUPPORT' WHERE tabid IN (38,56);`
 
-34. Multiple file upload template file - `C:\laragon\www\vtiger-gpm\layouts\v7\modules\Documents\UploadDocument.tpl` 
+34. Multiple file upload template file - `C:\laragon\www\vtiger-gpm\layouts\v7\modules\Documents\UploadDocument.tpl`
 
 35. Find and delete created notes_id for HoldingCertificate
-35.1. `select notes_id from vtiger_holdingcertificate AS A join vtiger_crmentity AS B ON (A.holdingcertificateid = B.crmid) where A.contact_id = <contact_id> AND A.certificate_status = 'Active'  order by holdingcertificateid DESC limit 1`
-35.2  `SET @note_id := (
-  SELECT A.notes_id
-  FROM vtiger_holdingcertificate AS A
-  JOIN vtiger_crmentity AS B ON A.holdingcertificateid = B.crmid
-  WHERE A.contact_id = <contact_id>
+    35.1. `select notes_id from vtiger_holdingcertificate AS A join vtiger_crmentity AS B ON (A.holdingcertificateid = B.crmid) where A.contact_id = <contact_id> AND A.certificate_status = 'Active'  order by holdingcertificateid DESC limit 1`
+    35.2 `SET @note_id := (
+    SELECT A.notes_id
+    FROM vtiger_holdingcertificate AS A
+    JOIN vtiger_crmentity AS B ON A.holdingcertificateid = B.crmid
+    WHERE A.contact_id = <contact_id>
     AND A.certificate_status = 'Active'
-  ORDER BY A.holdingcertificateid DESC
-  LIMIT 1
-);
+    ORDER BY A.holdingcertificateid DESC
+    LIMIT 1
+    );
 
 DELETE FROM vtiger_senotesrel WHERE notesid = @note_id;
-DELETE FROM vtiger_notes     WHERE notesid = @note_id;
-DELETE FROM vtiger_crmentity WHERE crmid   = @note_id;`
+DELETE FROM vtiger_notes WHERE notesid = @note_id;
+DELETE FROM vtiger_crmentity WHERE crmid = @note_id;`
 
 35.3 `UPDATE vtiger_holdingcertificate AS A
 JOIN (
@@ -210,7 +206,7 @@ JOIN (
 ) t ON t.holdingcertificateid = A.holdingcertificateid
 SET A.notes_id = NULL;`
 
-35.4  `UPDATE vtiger_crmentity B
+35.4 `UPDATE vtiger_crmentity B
 JOIN (
   SELECT x.holdingcertificateid
   FROM (
@@ -225,39 +221,39 @@ JOIN (
 ) t ON t.holdingcertificateid = B.crmid
 SET B.deleted = 1;`
 
-36. Remove field in Module 
-  36.1 Find field id from module by module name
-   - `SELECT fieldid, tabid, fieldname, fieldlabel, uitype, presence, block
+36. Remove field in Module
+    36.1 Find field id from module by module name
+
+- `SELECT fieldid, tabid, fieldname, fieldlabel, uitype, presence, block
 FROM vtiger_field
 WHERE tabid = (SELECT tabid FROM vtiger_tab WHERE name='Potentials')
   AND (fieldlabel='Organisation Name' OR fieldname IN ('related_to','account_id'));`
 
-  36.2 Remove it the field 
-   - `UPDATE vtiger_field SET presence = 1 WHERE fieldid = 113;`
+  36.2 Remove it the field
 
+- `UPDATE vtiger_field SET presence = 1 WHERE fieldid = 113;`
 
 37. Rename name of column in module
-  37.1 Find field information
-  `SELECT fieldid, fieldname, fieldlabel, tabid
+    37.1 Find field information
+    `SELECT fieldid, fieldname, fieldlabel, tabid
 FROM vtiger_field
 WHERE fieldlabel = 'Contact Name'
   AND tabid = (SELECT tabid FROM vtiger_tab WHERE name='Potentials');`
 
-  37.2 Update field name `UPDATE vtiger_field SET fieldlabel = 'Client Name' WHERE fieldlabel = 'Contact Name'   AND tabid = (SELECT tabid FROM vtiger_tab WHERE name='Potentials');`
+    37.2 Update field name `UPDATE vtiger_field SET fieldlabel = 'Client Name' WHERE fieldlabel = 'Contact Name'   AND tabid = (SELECT tabid FROM vtiger_tab WHERE name='Potentials');`
 
-38. Export LIVE database 
+38. Export LIVE database
     38.1 Make backup for database `mysqldump -u vtigeruser -p vtiger_gpm > db_backups/backup.sql`
     38.2 Download file with absolupe path `/var/www/html/db_backups/backup.sql`
     38.3 remove file `rm /db_backups/backup.sql`
     38.4 Give permissions `sudo chown $USER:$USER db_backups`
 
-
 39. Fix Production server in confic.inc.php add this row `$dbconfig['db_socket'] = '/var/lib/mysql/mysql.sock';`
 40. Show logs in the server `sudo tail -n 100 /var/www/html/crm_kl/logs/fileMissing.log`
-41. Bug with showing of all users  run this to rebuild user provileges `sudo -u apache php rebuild_all_privileges.php`
+41. Bug with showing of all users run this to rebuild user provileges `sudo -u apache php rebuild_all_privileges.php`
 
-42. If we backup database and we have problem with changing any role to CEO do these: 
-`DELETE FROM vtiger_datashare_module_rel WHERE tabid = 51 AND shareid IN (9,14,15,16,17);`
+42. If we backup database and we have problem with changing any role to CEO do these:
+    `DELETE FROM vtiger_datashare_module_rel WHERE tabid = 51 AND shareid IN (9,14,15,16,17);`
 
 `DELETE FROM vtiger_datashare_grp2grp WHERE shareid IN (9,14,16);`
 
@@ -266,6 +262,19 @@ WHERE fieldlabel = 'Contact Name'
 `DELETE FROM vtiger_datashare_grp2rs WHERE shareid IN (17);`
 
 43. Log for gihub in Putty
- - `sudo su`
- -  `enter my own account password`
- - `su gpm-git-sync`
+
+- `sudo su`
+- `enter my own account password`
+- `su gpm-git-sync`
+
+44. Fix import
+
+- create import folder under cache folder `sudo mkdir /var/www/html/cache/import`
+- give permissions of this folder `sudo chown -R www-data:www-data /var/www/html/cache/import`
+  `sudo chmod -R 775 /var/www/html/cache/import`
+  LIVE
+  `sudo chown -R apache:apache /var/www/html/crm_kl/cache/import
+sudo chmod -R 775 /var/www/html/crm_kl/cache/import`
+
+45. Allow these special characters to can add in picklists `/&-` 
+    search for this function `registerAddItemSaveEvent` and check this `var specialChars = ....`
