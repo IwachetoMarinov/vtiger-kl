@@ -35,6 +35,47 @@ class MetalsAPI
         return null;
     }
 
+    public function getMetalTypes()
+    {
+        if (!$this->connection) return [];
+
+        if (!$this->connection) return [];
+
+        // $params = [];
+        // $where  = '';
+
+        // if ($date) {
+        //     $where = "WHERE [Date] = ?";
+        //     $params[] = $date;
+        // }
+
+        $sql = "SELECT * FROM $this->database_prefix.[DW_Items]";
+        // $sql = "SELECT * FROM $this->database_prefix.[DW_MetalType]";
+
+        echo "<pre>";
+        echo "SQL: $sql\n";
+        echo "</pre>";
+
+        $stmt = sqlsrv_query($this->connection, $sql, $params);
+
+        if ($stmt === false) die(print_r(sqlsrv_errors(), true));
+
+        $data = [];
+        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+            $data[] = $row;
+        }
+
+        sqlsrv_free_stmt($stmt);
+
+
+        echo "<pre>";
+        echo "Metals Type data: \n";
+        print_r($data);
+        echo "</pre>";
+
+        return $data;
+    }
+
     public function getMetals()
     {
         if (!$this->connection) return [];

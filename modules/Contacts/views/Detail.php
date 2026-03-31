@@ -14,6 +14,8 @@
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
 
+// include_once 'modules/Contacts/models/MetalsAPI.php';
+
 class Contacts_Detail_View extends Accounts_Detail_View
 {
 
@@ -48,6 +50,10 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$end_date = $request->get('end_date');
 		$order_by = "desc";
 		$order_by_params = $request->get('orderBy');
+
+		// Test for Metal Prices 
+		// $metalsAPI = new MetalsAPI();
+		// $metals = $metalsAPI->getMetalTypes();
 
 		// REAL CUSTOMER ID FROM RECORD
 		$recordModel = $this->record->getRecord();
