@@ -299,11 +299,6 @@ class ActivitySummary
 
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
-            echo "<pre>";
-            echo "Transaction Summary for Document Print Preview:";
-            var_dump($summary);
-            echo "</pre>";
-
             $items = $this->mapTransactionItems($summary, $transaction);
 
             $transaction['barItems'] = $items;
@@ -423,7 +418,16 @@ class ActivitySummary
             }
 
             $description = $item['Description'] ?? (isset($item['Item_Desc']) ? $item['Item_Desc'] : '');
+
             $transactionType = $item['Tx_Type'] ?? (isset($item['Doc_Type']) ? $item['Doc_Type'] : '');
+
+            $creditNoteAmount = 0.00;
+
+            if ($item['Tx_Type'] === 'CN') {
+                $creditNoteAmount = isset($item['CN_Det_Amt']) ? (float)$item['CN_Det_Amt'] : 0.00;
+            } elseif ($item['Tx_Type'] === 'DN') {
+                $creditNoteAmount = isset($item['DN_Det_Amt']) ? (float)$item['DN_Det_Amt'] : 0.00;
+            }
 
             if (empty($description) && isset($item['Desciption'])) $description = $item['Desciption'];
 
@@ -478,6 +482,7 @@ class ActivitySummary
                 'otherCharge'       => isset($item['Other_Charge']) ? (float)$item['Other_Charge'] : 0.00,
                 'narration'         => $item['Narration'] ?? '',
                 'longDesc'          => $item['Long_Desc'] ?? '',
+                'creditNoteAmount'  => $creditNoteAmount,
             ];
         }
 

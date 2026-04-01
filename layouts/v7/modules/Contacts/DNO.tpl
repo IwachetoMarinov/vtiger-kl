@@ -279,6 +279,7 @@
                 <tr>
                     <td style="width:25%;font-size: 9pt; height: 138mm; vertical-align: top;">
                         {assign var="description" value=$ERP_DOCUMENT->barItems[0]->description|default:""}
+                        {assign var="total" value=$ERP_DOCUMENT->barItems[0]->creditNoteAmount|default:0.00}
 
                         <table class="activity-tbl">
                             <tr>
@@ -290,13 +291,13 @@
                                     {$description}
                                 </td>
                                 <td style="text-align:right;vertical-align: top">
-                                    {CurrencyField::convertToUserFormat($ERP_DOCUMENT->grandTotal)}
+                                    {CurrencyField::convertToUserFormat($total)}
                                 </td>
                             </tr>
                             <tr>
                                 <th>TOTAL DEBIT AMOUNT:</th>
                                 <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
-                                        {number_format($ERP_DOCUMENT->grandTotal, 2, '.', ',')}
+                                        {number_format($total, 2, '.', ',')}
                                     </strong>
                                 </td>
                             </tr>
