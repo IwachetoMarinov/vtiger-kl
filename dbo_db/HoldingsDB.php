@@ -82,6 +82,12 @@ class HoldingsDB
             $summary[] = $row;
         }
 
+
+        echo "<pre>";
+        echo "Holdings Summary for Customer ID: $customer_id";
+        var_dump($summary);
+        echo "</pre>";
+
         sqlsrv_free_stmt($stmt);
         
         $results = [];
