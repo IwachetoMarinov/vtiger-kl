@@ -159,7 +159,7 @@ class GPMIntent extends Vtiger_CRMEntity
 	}
 
 
-	function addIntroducer()
+	protected function addIntroducer()
 	{
 		$db = PearDatabase::getInstance();
 		$erpNumber = $this->column_fields['contact_erp_no'];

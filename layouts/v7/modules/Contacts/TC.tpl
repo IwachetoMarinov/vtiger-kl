@@ -283,6 +283,8 @@
                     <tr>
                         {assign var="metalPrice" value=($ERP_DOCUMENT->barItems[0]->spotPrice)}
                         {assign var="transactionType" value=($ERP_DOCUMENT->barItems[0]->transactionType)}
+                        {assign var="hideDiscount" value=$smarty.request.hideDiscount|default:0}
+
                         <td style="font-size: 9pt; vertical-align: top;">
                             <table class="activity-tbl" style="margin-bottom:5mm">
                                 <tr>
@@ -307,9 +309,11 @@
                                     <th style="width:10%;">QTY</th>
                                     <th style="width:40%;">DESCRIPTION</th>
                                     <th style="width:12.5%;text-align:center">FINE OZ.</th>
-                                    <th style="width:12.5%;text-align:center">
-                                        {if $ERP_DOCUMENT->voucherType eq 'PUR'}DISCOUNT{else}PREMIUM{/if}(%)
-                                    </th>
+                                    {if !$hideDiscount}
+                                        <th style="width:12.5%;text-align:center">
+                                            {if $ERP_DOCUMENT->voucherType eq 'PUR'}DISCOUNT{else}PREMIUM{/if}(%)
+                                        </th>
+                                    {/if}
                                     <th style="width:25%;text-align:center">TOTAL {$ERP_DOCUMENT->currency}</th>
                                 </tr>
 
@@ -326,12 +330,8 @@
                                     {* Build serial list safely *}
                                     {assign var="serials" value=$serials|cat:implode(',', $barItem->serials)|cat:','}
 
-                                    {* balanceAmount old way *}
-                                    {* {assign var="balanceAmount" value=($barItem->spotPrice * $barItem->totalFineOz) * (1 + ($barItem->premium / 100))} *}
-
                                     {* balanceAmount NEW way *}
                                     {assign var="balanceAmount" value=($barItem->totalItemAmount)}
-
                                     {assign var="calcTotal" value=$calcTotal+$balanceAmount}
 
                                     <tr>
@@ -341,18 +341,22 @@
                                             {$barItem->itemDescription}
                                             <br><span
                                                 style="font-size: smaller;font-style: italic;max-width: 250px;display: inline-block;word-break: break-all;white-space: normal; font-size: 9px;">
-                                                <pre>{$barItem->serialNumbers}</pre></span>
+                                                <pre>{$barItem->serialNumbers}</pre>
+                                            </span>
                                         </td>
 
                                         <td style="text-align:right;vertical-align: top">
                                             {number_format($barItem->totalFineOz,4)}
                                         </td>
-                                        <td style="text-align:right;vertical-align: top">
-                                            {if $barItem->premium !== ""}
-                                                {number_format($barItem->premium, 2)}%
-                                            {else}
-                                                -
-                                            {/if}</td>
+
+                                        {if !$hideDiscount}
+                                            <td style="text-align:right;vertical-align: top">
+                                                {if $barItem->premium !== ""}
+                                                    {number_format($barItem->premium, 2)}%
+                                                {else}
+                                                    -
+                                                {/if}</td>
+                                        {/if}
 
                                         <td style="text-align:right;vertical-align: top">
                                             {number_format($balanceAmount,2)}
@@ -360,9 +364,14 @@
                                     </tr>
                                 {/for}
 
+                                {assign var="colspan" value=3}
+                                {if !$hideDiscount}
+                                    {assign var="colspan" value=$colspan+1}
+                                {/if}
+
                                 {if $page eq count($PAGES)}
                                     <tr>
-                                        <th style="width:75%;" colspan="4">TOTAL TRADE AMOUNT:</th>
+                                        <th style="width:75%;" colspan="{$colspan}">TOTAL TRADE AMOUNT:</th>
                                         <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
                                                 {number_format(($calcTotal),2)} </strong>
                                         </td>
