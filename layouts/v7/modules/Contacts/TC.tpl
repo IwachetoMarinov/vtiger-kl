@@ -196,9 +196,10 @@
                 background-color: #333;">
             <li style="float:right">
                 {assign var="hideInfo" value=$smarty.request.hideCustomerInfo|default:0}
+                {assign var="hideDisc" value=$smarty.request.hideDiscount|default:0}
                 {assign var="docNo" value=$smarty.request.docNo|default:''}
                 <a style="display: block;color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
-                    href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$docNo}&tableName={$smarty.request.tableName}&PDFDownload=true&hideCustomerInfo={$hideInfo}">
+                    href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$docNo}&tableName={$smarty.request.tableName}&PDFDownload=true&hideCustomerInfo={$hideInfo}&hideDiscount={$hideDisc}{if $INTENT}&fromIntent={$smarty.request.fromIntent|escape:'url'}{/if}">
                     Download
                 </a>
             </li>
