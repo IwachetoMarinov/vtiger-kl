@@ -42,13 +42,19 @@ class GPMIntent_DetailView_Model extends Vtiger_DetailView_Model
 			}
 		}
 
+		// echo '<pre>';
+		// echo "Module: $moduleName, Record ID: $recordId\n";
+		// print_r(Users_Privileges_Model::isPermitted($moduleName, 'ViewQuotation', $recordId));
+		// echo "Permissions for ViewQuotation: " . (Users_Privileges_Model::isPermitted($moduleName, 'ViewQuotation', $recordId) ? 'Yes' : 'No') . "\n";
+		// echo '</pre>';
+
 		if (Users_Privileges_Model::isPermitted($moduleName, 'ViewQuotation', $recordId)) {
 			$basicActionLink = array(
 				'linktype' => 'DETAILVIEWBASIC',
 				'linklabel' => 'View Quotation',
 				'linkurl' => 'index.php?module=' . $moduleName . '&view=ViewQuotation&record=' . $recordId . '&type=full',
 				'linkicon' => '',
-				'linktarget' => '_blank',   //  ← add this
+				'linktarget' => '_blank',
 			);
 			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
 		}
@@ -59,7 +65,7 @@ class GPMIntent_DetailView_Model extends Vtiger_DetailView_Model
 				'linklabel' => 'View Proforma Invoice',
 				'linkurl' => 'index.php?module=' . $moduleName . '&view=ViewProformaInvoice&record=' . $recordId,
 				'linkicon' => '',
-				'linktarget' => '_blank',   //  ← add this
+				'linktarget' => '_blank',
 			);
 			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
 		}

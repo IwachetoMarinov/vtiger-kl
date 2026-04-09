@@ -15,9 +15,18 @@ class GPMIntent_Module_Model extends Vtiger_Module_Model
 	 * Function to check whether the module is enabled for quick create
 	 * @return <Boolean> - true/false
 	 */
-	public function isQuickCreateSupported() {
+	public function isQuickCreateSupported()
+	{
 		return false;
 	}
 
-	
+
+
+	/*
+	 * Function to get supported utility actions for a module
+	 */
+	public function getUtilityActionsNames()
+	{
+		return array('Import', 'Export', 'DuplicatesHandling');
+	}
 }
