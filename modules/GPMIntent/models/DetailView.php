@@ -42,13 +42,7 @@ class GPMIntent_DetailView_Model extends Vtiger_DetailView_Model
 			}
 		}
 
-		// echo '<pre>';
-		// echo "Module: $moduleName, Record ID: $recordId\n";
-		// print_r(Users_Privileges_Model::isPermitted($moduleName, 'ViewQuotation', $recordId));
-		// echo "Permissions for ViewQuotation: " . (Users_Privileges_Model::isPermitted($moduleName, 'ViewQuotation', $recordId) ? 'Yes' : 'No') . "\n";
-		// echo '</pre>';
-
-		if (Users_Privileges_Model::isPermitted($moduleName, 'ViewQuotation', $recordId)) {
+		if ($this->hasCustomToolPermission($moduleName, 'ViewQuotation')) {
 			$basicActionLink = array(
 				'linktype' => 'DETAILVIEWBASIC',
 				'linklabel' => 'View Quotation',
@@ -59,7 +53,8 @@ class GPMIntent_DetailView_Model extends Vtiger_DetailView_Model
 			$linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
 		}
 
-		if (Users_Privileges_Model::isPermitted($moduleName, 'ViewProformaInvoice', $recordId)) {
+		// if (Users_Privileges_Model::isPermitted($moduleName, 'ViewProformaInvoice', $recordId)) {
+		if ($this->hasCustomToolPermission($moduleName, 'ViewProformaInvoice')) {
 			$basicActionLink = array(
 				'linktype' => 'DETAILVIEWBASIC',
 				'linklabel' => 'View Proforma Invoice',
@@ -93,5 +88,37 @@ class GPMIntent_DetailView_Model extends Vtiger_DetailView_Model
 
 
 		return $linkModelList;
+	}
+
+	protected function hasCustomToolPermission($moduleName, $actionName, $userId = null)
+	{
+		global $adb, $current_user;
+
+		$userId = $userId ?: $current_user->id;
+		$tabId = getTabid($moduleName);
+
+		if (!$tabId) {
+			return false;
+		}
+
+		$sql = "
+		SELECT 1
+		FROM vtiger_user2role ur
+		INNER JOIN vtiger_role2profile rp
+			ON rp.roleid = ur.roleid
+		INNER JOIN vtiger_actionmapping am
+			ON am.actionname = ?
+		INNER JOIN vtiger_profile2utility pu
+			ON pu.profileid = rp.profileid
+			AND pu.tabid = ?
+			AND pu.activityid = am.actionid
+		WHERE ur.userid = ?
+		  AND pu.permission = 0
+		LIMIT 1
+	";
+
+		$result = $adb->pquery($sql, array($actionName, $tabId, $userId));
+
+		return ($result && $adb->num_rows($result) > 0);
 	}
 }
