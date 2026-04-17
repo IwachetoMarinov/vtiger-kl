@@ -25,7 +25,7 @@ class ActivitySummary
 
     public function getPIActivitySummary($customer_id = null)
     {
-        if (!$customer_id) return [];
+        if (!$customer_id || !$this->connection) return [];
 
         $params = [];
         $where  = '';
@@ -38,6 +38,8 @@ class ActivitySummary
         $sql = "SELECT * FROM $this->database_prefix.[DW_TxHxv2] $where order by [Tx_Date] DESC";
 
         $summary = GetDBRows::getRows($this->connection, $sql, $params);
+
+        if (!is_array($summary) || count($summary) === 0) return [];
 
         $results  = [];
         foreach ($summary as $item) {

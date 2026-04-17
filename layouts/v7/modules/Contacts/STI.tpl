@@ -180,7 +180,7 @@
             {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
                 <li style="float:right">
                     <a style="display: block;color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
-                        href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&tableName={$smarty.request.tableName}&PDFDownload=true&bank={$SELECTED_BANK->getId()}&hideCustomerInfo={$smarty.request.hideCustomerInfo}">Download</a>
+                        href="index.php?module=Contacts&view=STIPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&tableName={$smarty.request.tableName}&PDFDownload=true&bank={$SELECTED_BANK->getId()}&hideCustomerInfo={$smarty.request.hideCustomerInfo}">Download</a>
                 </li>
             {/if}
 
@@ -195,7 +195,10 @@
         {include file='printConf.tpl'|vtemplate_path:'Contacts'}
 
     {/if}
+
     <div class="printAreaContainer">
+        {assign var="metal" value=$ERP_DOCUMENT->barItems[0]->metal}
+
         <div class="full-width">
             <table class="print-tbl">
                 <tr>
@@ -252,7 +255,7 @@
                         All amounts in {$ERP_DOCUMENT->currency}
                     </td>
                 </tr>
-                <pre>{var_dump($AVERAGE_SPOT_PRICE)}</pre>
+
                 <tr>
                     <td style="font-size: 9pt; height: 168mm; vertical-align: top;">
                         <table class="activity-tbl" style="margin-bottom:5mm">
@@ -262,45 +265,39 @@
                                 <th colspan="2" style="width:50%;text-align: center;">AVERAGE LONDON FIX</th>
                             </tr>
                             <tr>
-                                <td colspan="2" style="text-align: center;">{$ERP_DOCUMENT['docno']}</td>
-                                <td style="text-align: center;">{$ERP_DOCUMENT['docDate']}</td>
-                                <td style="width:25%;text-align: center;">{$ERP_DOCUMENT['metal']}</td>
+                                <td colspan="2" style="text-align: center;">{$ERP_DOCUMENT->docNo}</td>
+                                <td style="text-align: center;">{$ERP_DOCUMENT->documentDate}</td>
+                                <td style="width:25%;text-align: center;">{$metal}</td>
                                 <td style="width:25%;text-align: center;">{$ERP_DOCUMENT->currency}
-                                    {$ERP_DOCUMENT['metalOz']} {number_format($AVERAGE_SPOT_PRICE,2)} / Oz.</td>
+                                    {number_format($AVERAGE_SPOT_PRICE,2)} / OZ.</td>
                             </tr>
                         </table>
+                        {assign var="totalStorageFee" value=0}
                         <table class="activity-tbl">
                             <tr>
                                 <th style="width:75%;">DESCRIPTION</th>
                                 <th style="width:25%;text-align: center">TOTAL {$ERP_DOCUMENT->currency}</th>
                             </tr>
                             <tr>
-                                <td style="height:50mm;border-bottom:none;vertical-align: top;line-height: 2">Storage
-                                    charge for {$ERP_DOCUMENT['metal']} for the period from
-                                    {$ERP_DOCUMENT['fromDate']} to {$ERP_DOCUMENT['toDate']}:<br>
-                                    {foreach from=$ERP_DOCUMENT['priceDate']['charge'] item=charge}
-                                        &nbsp;&nbsp;&nbsp;&nbsp;- {$charge['label']}<br>
+                                <td style="height:50mm;border-bottom:none;vertical-align: top;line-height: 2">
+                                    {$ERP_DOCUMENT->description}
+                                    {* Map locations *}
+                                    {foreach from=$ERP_DOCUMENT->barItems item=charge}
+                                        {if isset($charge->description) && !empty($charge->description)}
+                                            <div style="margin-left: 10px;">- {$charge->description}</div>
+                                        {/if}
                                     {/foreach}
                                 </td>
-                                <td style="text-align:right;vertical-align: top;line-height: 2"><br>
-                                    {foreach from=$ERP_DOCUMENT['priceDate']['charge'] item=charge}
-                                        {number_format($charge['amount'],2)}<br>
+                                <td style="text-align:right;vertical-align: top;line-height: 2">
+                                    <br>
+                                    {foreach from=$ERP_DOCUMENT->barItems item=charge}
+                                        {assign var="totalStorageFee" value=$totalStorageFee+$charge->totalItemAmount}
+                                        {number_format($charge->totalItemAmount,2)}<br>
                                     {/foreach}
                                 </td>
                             </tr>
-                            {if $ERP_DOCUMENT['GST']}
-                                <tr>
-                                    <td style="width:75%;">SUBTOTAL:</td>
-                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
-                                            {number_format($ERP_DOCUMENT['priceDate']['subtotal'],2)}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td style="width:75%;">{$ERP_DOCUMENT['priceDate']['GST']['label']}</td>
-                                    <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
-                                            {number_format($ERP_DOCUMENT['priceDate']['GST']['amount'],2)}</strong></td>
-                                </tr>
-                            {/if}
-                            {if !empty($COMPANY->get('company_gst_no')) && empty($ERP_DOCUMENT['GST'])}
+
+                            {if !empty($COMPANY->get('company_gst_no'))}
                                 <tr>
                                     <td style="width:75%;">SUBTOTAL:</td>
                                     <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
@@ -315,53 +312,63 @@
                             <tr>
                                 <th style="width:75%;">TOTAL STORAGE FEE:</th>
                                 <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
-                                        {$ERP_DOCUMENT->grandTotal}</strong></td>
+                                        {number_format($totalStorageFee,2)}</strong></td>
                             </tr>
                         </table>
 
                         <br>
                         <br>
-                        {* {if isset($COMPANY) && !empty($COMPANY->get('company_gst_no'))} *}
+                        {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency)}
 
-                            {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency)}
-
-                            {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
-                                <div>
-                                    {if $ERP_DOCUMENT->currency eq 'SGD'}
-                                        *Remarks: USD/SGD exchange rate at SGD {number_format($exchangeRateInfo['rate'],4)} / USD
-                                    {else}
-                                        *Remarks: {$ERP_DOCUMENT->currency}/SGD exchange rate at SGD
-                                        {number_format($exchangeRateInfo['rate'],4)} / {$ERP_DOCUMENT->currency}
-                                    {/if}
-                                </div>
-                            {/if}
-                        {* {/if} *}
+                        {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
+                            <div>
+                                {if $ERP_DOCUMENT->currency eq 'SGD'}
+                                    *Remarks: USD/SGD exchange rate at SGD {number_format($exchangeRateInfo['rate'],4)} / USD
+                                {else}
+                                    *Remarks: {$ERP_DOCUMENT->currency}/SGD exchange rate at SGD
+                                    {number_format($exchangeRateInfo['rate'],4)} / {$ERP_DOCUMENT->currency}
+                                {/if}
+                            </div>
+                        {/if}
                         <br>
                         <br>
-                        <div>
-                            Please transfer the payment net of charges to our bank account:<br>
-                            Beneficiary: {$SELECTED_BANK->get('beneficiary_name')}<br>
-                            Account No: {$SELECTED_BANK->get('account_no')}
-                            {$SELECTED_BANK->get('account_currency')}<br>
-                            {if trim(count_chars(strtolower($SELECTED_BANK->get('iban_no')),3)) != 'x'}
-                                IBAN: {$SELECTED_BANK->get('iban_no')}<br>
+                        {if $SELECTED_BANK}
+                            {assign var=iban value=$SELECTED_BANK->get('iban_no')|lower|replace:' ':''}
+                            {assign var=bank_routing_no value=$SELECTED_BANK->get('bank_routing_no')|lower|replace:' ':''}
+
+                            {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
+                                <input type="hidden" class="selected-bank" value="{$SELECTED_BANK->getId()}">
                             {/if}
-                            Bank: {$SELECTED_BANK->get('bank_name')}<br>
-                            Bank Address: {$SELECTED_BANK->get('bank_address')}<br>
-                            Swift Code: {$SELECTED_BANK->get('swift_code')}<br>
-                            {if trim(count_chars(strtolower($SELECTED_BANK->get('bank_routing_no')),3)) == 'x'}
-                                Bank Code: {$SELECTED_BANK->get('bank_code')}<br>
-                                Branch Code: {$SELECTED_BANK->get('branch_code')}<br>
-                            {else}
-                                Routing No: {$SELECTED_BANK->get('bank_routing_no')}<br>
-                            {/if}
-                            <br>
-                            <br>
-                            {if !empty($SELECTED_BANK->get('intermediary_bank'))}
-                                Intermediary Bank: {$SELECTED_BANK->get('intermediary_bank')}<br>
-                                Swift Code: {$SELECTED_BANK->get('intermediary_swift_code')}<br>
-                            {/if}
-                        </div>
+
+                            <div>
+                                Please transfer the payment net of charges to our bank account:<br>
+                                Beneficiary: {$SELECTED_BANK->get('beneficiary_name')}<br>
+                                Account No: {$SELECTED_BANK->get('account_no')}
+                                {$SELECTED_BANK->get('account_currency')}<br>
+
+                                {if $iban neq 'x'}
+                                    IBAN: {$SELECTED_BANK->get('iban_no')}<br>
+                                {/if}
+
+                                Bank: {$SELECTED_BANK->get('bank_name')}<br>
+                                Bank Address: {$SELECTED_BANK->get('bank_address')}<br>
+                                Swift Code: {$SELECTED_BANK->get('swift_code')}<br>
+
+                                {if $bank_routing_no neq 'x'}
+                                    Bank Code: {$SELECTED_BANK->get('bank_code')}<br>
+                                    Branch Code: {$SELECTED_BANK->get('branch_code')}<br>
+                                {else}
+                                    Routing No: {$SELECTED_BANK->get('bank_routing_no')}<br>
+                                {/if}
+
+                                <br><br>
+
+                                {if !empty($SELECTED_BANK->get('intermediary_bank'))}
+                                    Intermediary Bank: {$SELECTED_BANK->get('intermediary_bank')}<br>
+                                    Swift Code: {$SELECTED_BANK->get('intermediary_swift_code')}<br>
+                                {/if}
+                            </div>
+                        {/if}
                     </td>
                 </tr>
                 <tr>

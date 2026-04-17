@@ -234,6 +234,13 @@
                                                 {$TX.voucher_no}
                                             </a>
 
+                                        {else if in_array($TX.voucher_type, ['STI'])}
+                                            <a class="transaction-link"
+                                                href="index.php?module=Contacts&view=STIPrintPreview&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
+                                                target="_blank">
+                                                {$TX.voucher_no}
+                                            </a>
+
                                         {else if in_array($TX.voucher_type, ['SAL', 'SWD'])}
                                             {assign var="docNo" value="{$TX.voucher_no}"}
                                             {assign var="tableName" value="{$TX.table_name}"}
