@@ -10,14 +10,14 @@
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
-            src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Regular.woff') format('woff');
         }
 
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 700;
-            src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Bold.woff') format('woff');
         }
 
         * {
@@ -286,7 +286,7 @@
                             <div>
                                 If you have any questions concerning these transactions, please contact
                                 {$COMPANY->get('company_name')} at <br>Tel: {$COMPANY->get('company_phone')} or by email:
-                                relationship@global-precious-metals.com.
+                                {$COMPANY->get('email')}.
                             </div>
                         {/if}
                     </td>
@@ -296,14 +296,10 @@
                         {if isset($COMPANY)}
                             {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
                             {$COMPANY->get('company_reg_no')}){/if}<br>
-                            {$COMPANY->get('company_address')}
-                            {if $COMPANY->get('city')}, {$COMPANY->get('city')}{/if}
-                            {if $COMPANY->get('state')}, {$COMPANY->get('state')}{/if}
-                            {if $COMPANY->get('code')}, {$COMPANY->get('code')}{/if}
-                            {if $COMPANY->get('country')}, {$COMPANY->get('country')}{/if}
+                            {$COMPANY_FULL_ADDRESS}
                             <br>
                             T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('email')}<br>
                         {/if}
                     </td>
                 </tr>

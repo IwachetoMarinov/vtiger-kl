@@ -53,6 +53,8 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
             $selectedBank->set('swift_code', '');
         }
 
+        $ROOT_DIRECTORY = getenv('ROOT_DIRECTORY') ?: ($ROOT_DIRECTORY ?? null);
+
         $viewer = $this->getViewer($request);
         $viewer->assign('PRICING_OPTION', $pricingOption);
         $viewer->assign('CLIENT_TYPE', $client_type);
@@ -62,6 +64,7 @@ class Contacts_PurchaseOrderView_View extends Vtiger_Index_View
         $viewer->assign('SELECTED_BANK', $selectedBank ?? null);
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
+        $viewer->assign('ROOT_DIRECTORY', $ROOT_DIRECTORY);
         $viewer->assign('DOCNO', $request->get('docNo'));
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));
         $viewer->assign('hideCustomerInfo', $request->get('hideCustomerInfo'));

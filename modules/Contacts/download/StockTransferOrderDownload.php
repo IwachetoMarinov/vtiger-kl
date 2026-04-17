@@ -24,36 +24,37 @@ class StockTransferOrderDownload
 
         'fields' => [
             // description
-            ['name' => 'description',    'x' => 32.0, 'y' => 141.5, 'w' => 145.0],
+            ['name' => 'description',    'x' => 12.0, 'y' => 132.5, 'w' => 175.0],
             // from / to
-            ['name' => 'from_location',  'x' => 32.0, 'y' => 155.0, 'w' => 145.0],
-            ['name' => 'to_location',    'x' => 32.0, 'y' => 167.0, 'w' => 145.0],
+            ['name' => 'from_location',  'x' => 61.0, 'y' => 140.0, 'w' => 145.0],
+            ['name' => 'to_location',    'x' => 61.0, 'y' => 147.0, 'w' => 145.0],
 
             // country text input (when "Other" is chosen)
-            ['name' => 'country',        'x' => 47.0, 'y' => 209.5, 'w' => 41.0],
+            ['name' => 'country',        'x' => 28.0, 'y' => 196.0, 'w' => 41.0],
 
             // signature section
-            ['name' => 'place_input',    'x' => 41.0, 'y' => 264.0,  'w' => 48.0],
-            ['name' => 'signed_by',      'x' => 108.0, 'y' => 264.0,  'w' => 70.0],
-            ['name' => 'date_input',     'x' => 41.0, 'y' => 270.75, 'w' => 48.0],
-            ['name' => 'on_behalf_of',   'x' => 112.0, 'y' => 270.75, 'w' => 67.0],
+            ['name' => 'place_input',    'x' => 22.0, 'y' => 256.0,  'w' => 48.0],
+            ['name' => 'signed_by',      'x' => 108.0, 'y' => 256.0,  'w' => 70.0],
+            ['name' => 'date_input',     'x' => 22.0, 'y' => 265.0, 'w' => 48.0],
+            ['name' => 'on_behalf_of',   'x' => 112.0, 'y' => 265.0, 'w' => 67.0],
         ],
 
         'grids' => [
             [
-                // Request fields: metal_0_weight_0 ... metal_3_weight_8
                 'namePattern' => 'metal_{r}_weight_{c}',
-                'startX' => 57.5,
-                'startY' => 107.1,
-                'cellW'  => 13.57,
-                'cellH'  => 6.75,
-                'rows'   => 4,   // metals
-                'cols'   => 9,   // weights
-                'padX'   => 0.6,
+                'startX' => 41.2,
+                'startY' => 95.7,
+                'cellW'  => 18.10,
+                'cellH'  => 6.95,
+                'rows'   => 4,
+                'cols'   => 9,
+                'padX'   => 1.2,
                 'padY'   => 0.6,
-                'innerPad' => 1.2,
-                // grid-only opts (same as defaults, but kept here if you want to tweak later)
-                'opts' => ['da' => '/Helv 5.5 Tf 0 g'],
+                'innerPad' => 1.3,
+                'opts' => [
+                    'da' => '/Helv 5.5 Tf 0 g',
+                    'q'  => 1,
+                ],
             ],
         ],
     ];
@@ -68,13 +69,17 @@ class StockTransferOrderDownload
         // CLIENT-YYYY-STO
         $fileName = CoreDownload::safeFileName($recordModel, 'STO');
 
-        // temp paths
+        // temp paths (PDFs stay in tmp)
         $tmpDir = CoreDownload::getWritableTmpDir($root_directory);
-        [$htmlPath, $basePdfPath, $finalPdfPath] = CoreDownload::buildPaths($tmpDir, $fileName);
+        [, $basePdfPath, $finalPdfPath] = CoreDownload::buildPaths($tmpDir, $fileName);
 
-        // HTML -> base PDF
+        // HTML must be written in vtiger root so relative assets resolve
+        $htmlPath = rtrim($root_directory, "/\\") . DIRECTORY_SEPARATOR . $fileName . '.html';
+
         CoreDownload::writeFileOrFail($htmlPath, (string)$html);
-        CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath);
+        // CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath);
+        CoreDownload::runChromePdfOrFail($htmlPath, $basePdfPath);
+
         @unlink($htmlPath);
 
         // import base pdf
@@ -83,9 +88,7 @@ class StockTransferOrderDownload
         @unlink($basePdfPath);
 
         // optional debug grid
-        if ((string)$request->get('debug') === '1') {
-            CoreDownload::drawDebugGrid($pdf);
-        }
+        if ((string)$request->get('debug') === '1') CoreDownload::drawDebugGrid($pdf);
 
         // overlay fields + metals grid
         CoreDownload::applyLayout($pdf, $request, self::LAYOUT);
@@ -128,10 +131,10 @@ class StockTransferOrderDownload
 
         $opt = (string)$request->get('countryOption');
 
-        $makeCheckbox('singapore_checked',   33.5, 178.5, $opt === '1');
-        $makeCheckbox('switzerland_checked', 55.0, 178.5, $opt === '2');
-        $makeCheckbox('hongkong_checked',    78.5, 178.5, $opt === '3');
-        $makeCheckbox('dubai_checked',      100.0, 178.5, $opt === '4');
-        $makeCheckbox('other_checked',       33.5, 183.5, $opt === '5');
+        $makeCheckbox('singapore_checked',   13.0, 160.0, $opt === '1');
+        $makeCheckbox('switzerland_checked', 44.0, 160.0, $opt === '2');
+        $makeCheckbox('hongkong_checked',    78.5, 160.0, $opt === '3');
+        $makeCheckbox('dubai_checked',      112.5, 160.0, $opt === '4');
+        $makeCheckbox('other_checked',       13.5, 167.5, $opt === '5');
     }
 }

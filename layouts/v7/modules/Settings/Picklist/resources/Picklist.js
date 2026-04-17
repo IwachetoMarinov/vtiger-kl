@@ -307,7 +307,8 @@ var Settings_Picklist_Js = {
         var params = {
             submitHandler: function(form) {
 				// detect characters that would break convention for css-class names
-                var specialChars = /[\<\>\"\,\[\]\{\}\'\!\@\#\$\%\^\&\*\(\)\+\=\?\|\\\;\:\/]/;
+                // var specialChars = /[\<\>\"\,\[\]\{\}\'\!\@\#\$\%\^\&\*\(\)\+\=\?\|\\\;\:\/]/;
+				var specialChars = /[<>\"\[\]{}'!@#$%^*()+=?|\\;:]/;
 				var newValueEle = jQuery('[name="newValue"]', container);
 				var newValues = newValueEle.val();
 				var newValueArray = newValues.split(',');

@@ -11,14 +11,14 @@
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
-            src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Regular.woff') format('woff');
         }
 
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 700;
-            src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Bold.woff') format('woff');
         }
 
         * {
@@ -345,7 +345,7 @@
                                             {$barItem->itemDescription}
                                             <br><span
                                                 style="font-size: smaller;font-style: italic;max-width: 250px;display: inline-block;word-break: break-all;white-space: normal;">
-                                                {$barItem->serialNumbers}</span>
+                                                <pre>{$barItem->serialNumbers}</pre></span>
                                         </td>
 
                                         <td style="text-align:right;vertical-align: top">
@@ -380,7 +380,7 @@
                                     If you have any questions concerning these transactions, please contact
                                     <span style="font-weight: 600;">{$COMPANY->get('company_name')}</span> at <br>Tel:
                                     {$COMPANY->get('company_phone')} or by email:
-                                    relationship@global-precious-metals.com.
+                                    {$COMPANY->get('email')}.
                                 {/if}
                             </div>
                         </td>
@@ -397,7 +397,7 @@
                                         {$COMPANY->get('company_address')}<br>
                                         T: {$COMPANY->get('company_phone')}
                                         {if $COMPANY->get('company_fax')} | Fax: {$COMPANY->get('company_fax')} {/if}
-                                        | {$COMPANY->get('company_website')}<br>
+                                        | {$COMPANY->get('email')}<br>
                                     </div>
                                 {/if}
 

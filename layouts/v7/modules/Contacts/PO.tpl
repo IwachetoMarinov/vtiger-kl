@@ -6,20 +6,27 @@
     <meta charset="UTF-8">
 
     <style>
+        {{assign var="sansRegular" value="layouts/v7/resources/fonts/OpenSans-Regular.ttf"}}
+        {{assign var="sansBold" value="layouts/v7/resources/fonts/OpenSans-Bold.ttf"}}
+
+        {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
+            {assign var="rootPath" value=$ROOT_DIRECTORY|replace:'\\':'/'}
+            {assign var="sansRegular" value="file:///$rootPath/layouts/v7/resources/fonts/OpenSans-Regular.ttf"}
+            {assign var="sansBold" value="file:///$rootPath/layouts/v7/resources/fonts/OpenSans-Bold.ttf"}
+        {/if}
+
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
-            src: local('Open Sans'), local('OpenSans'),
-                url(https://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+            src: url('{$sansRegular}') format('truetype');
         }
 
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 700;
-            src: local('Open Sans Bold'), local('OpenSans-Bold'),
-                url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+            src: url('{$sansBold}') format('truetype');
         }
 
         * {
@@ -30,7 +37,7 @@
 
         body {
             font-family: 'Open Sans';
-            font-size: 9pt;
+            font-size: 8pt;
             color: #666;
         }
 
@@ -43,75 +50,85 @@
             width: 210mm;
             height: 297mm;
             margin: auto;
-            padding: 6mm;
+            padding: 4mm;
+        }
+
+        .pdf-wrapper {
+            position: relative;
+            background-color: #fff;
+            top: -7mm;
         }
 
         /* Header */
         .header-table {
             width: 100%;
-            margin-bottom: 1mm;
+            /* margin-bottom: 1mm; */
+            border-collapse: collapse;
         }
 
         .table-heading {
-            margin-bottom: 4mm;
+            margin-bottom: 2mm;
         }
 
         .header-table td {
             vertical-align: top;
         }
 
-        .logo {
-            width: 52mm;
-        }
-
         .title {
             text-align: center;
-            font-size: 13pt;
+            font-size: 12pt;
             font-weight: bold;
-            padding-top: 2mm;
+            padding-top: 1mm;
         }
 
-        /* From / To Section */
-        .from-to-table {
+        /* REAL TABLE FOR FROM / TO SECTION */
+        .company-box {
             width: 100%;
+            height: 38mm;
             border: 1px solid #000;
-            border-collapse: collapse;
-            margin-bottom: 3mm;
+            display: flex;
+            margin-top: 1mm;
         }
 
-        .from-to-table td {
-            border: 1px solid #000;
+        .company-half {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .company-left {
+            border-right: 1px solid #000;
+        }
+
+        .company-top {
+            height: 24mm;
+            display: flex;
+            border-bottom: 1px solid #000;
+        }
+
+        .company-bottom {
+            height: 14mm;
             padding: 2mm;
-            vertical-align: top;
+            overflow: hidden;
         }
 
-        .from-label {
-            width: 50mm;
-            height: 30mm;
+        .company-label {
+            width: 18mm;
+            padding: 2mm 0 0 2mm;
+            border-right: 1px solid #000;
+            flex-shrink: 0;
         }
 
-        .from-box {
-            width: 65mm;
-            height: 30mm;
-            background: repeating-linear-gradient(transparent,
-                    transparent 3.5mm,
-                    #000 3.5mm,
-                    #000 3.6mm);
-        }
-
-        .to-box {
-            width: 85mm;
-            line-height: 1.3;
-        }
-
-        .customer-label {
-            width: 50mm;
-            height: 8mm;
+        .company-content {
+            flex: 1;
+            padding: 2mm 2mm 0 2mm;
+            overflow: hidden;
+            line-height: 1.35;
         }
 
         /* Section 2 */
         .section-title {
-            margin: 2mm 0 2mm 2mm;
+            margin: 2mm 0 1mm 2mm;
         }
 
         /* Metals Table */
@@ -119,8 +136,9 @@
             width: 100%;
             border-collapse: collapse;
             border: 1px solid #000;
-            font-size: 8.5pt;
+            font-size: 8pt;
             margin-bottom: 2mm;
+            table-layout: fixed;
         }
 
         .metals-table th,
@@ -143,12 +161,12 @@
 
         /* Serials Box */
         .serials-box {
-            padding: 2mm;
+            padding: 1.5mm;
         }
 
         /* Additional Sections */
         .additional-section {
-            margin: 3mm 0;
+            margin: 1mm 0;
             line-height: 1.4;
         }
 
@@ -179,60 +197,19 @@
 
         /* Signature Section */
         .signature-section {
-            margin-top: 8mm;
-            padding: 0 4mm;
+            margin-top: 4mm;
+            padding: 0 2mm;
         }
 
         .signature-line {
             display: inline-block;
-            margin-top: 8mm;
-        }
-
-        .company-data {
-            display: flex;
-            border: 1px solid #000;
-            /* max-height: 183px; */
-            /* height: 183px; */
-        }
-
-        .company-data-item {
-            width: 50%;
-            /* font-size: 10pt; */
-            line-height: 1.2;
-        }
-
-        .company-data-item-to {
-            display: flex;
-        }
-
-        .company-data-item-from {
-            border-right: 1px solid #000;
-        }
-
-        .company-data-item-to,
-        .from-container {
-            display: flex;
-        }
-
-        .place-container {
-            padding: 2mm;
-            border-right: 1px solid #000;
-            width: 25%;
-        }
-
-        .company-container {
-            width: 75%;
-        }
-
-        .number-container {
-            padding: 2mm;
-            border-top: 1px solid #000;
+            margin-top: 4mm;
         }
 
         .main-table {
             border: 1px solid #000;
-            margin-top: 3mm;
-            padding: 3.5mm 2mm;
+            margin-top: 1mm;
+            padding: 2mm;
         }
 
         .bolder-element {
@@ -243,14 +220,10 @@
             padding: 0 4mm;
         }
 
-        .from-container-wrapper {
-            display: flex;
-        }
-
         .signature-section-item {
             display: flex;
             justify-content: space-between;
-            margin-top: 4mm;
+            margin-top: 2mm;
         }
 
         .signature-section-left {
@@ -296,10 +269,15 @@
             border: none;
             position: relative;
             padding-bottom: 0.5mm;
-            padding-bottom: 0.5mm;
             flex: 1;
             min-width: 40mm;
             border-bottom: 1px dotted #000;
+        }
+
+        .metals-table .custom-editable-input {
+            padding-top: 0.5mm;
+            padding-bottom: 0.5mm;
+            text-align: center;
         }
 
         .custom-editable-input:focus {
@@ -322,6 +300,28 @@
             height: 5mm;
             width: 5mm;
             line-height: 3.5mm;
+        }
+
+        /* Max 2 rows */
+        .company-heading {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            /* max 2 rows */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            font-size: 7.5pt;
+
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
         }
     </style>
 
@@ -382,22 +382,18 @@
         {/literal}
     {/if}
 
-    <div class="printAreaContainer">
+    <div
+        class="printAreaContainer {if isset($smarty.request.PDFDownload) && $smarty.request.PDFDownload eq true}pdf-wrapper{/if}">
 
         <!-- HEADER -->
-        <table class="header-table ">
-            <tr>
-                <td class="logo">
-                    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-                        <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
-                    {else}
-                        <img src="file:///var/www/html/layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
-                    {/if}
-                </td>
-                <td class="title"></td>
-                <td style="width:25mm;"></td>
-            </tr>
-        </table>
+        <div class="logo">
+            {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" style="width:50mm;">
+            {else}
+                <img src="file://{$ROOT_DIRECTORY}/layouts/v7/modules/Contacts/resources/gpm-new-logo.png"
+                    style="width:40mm;">
+            {/if}
+        </div>
 
         <table class="header-table table-heading">
             <tr>
@@ -406,14 +402,11 @@
         </table>
 
         <!-- FROM / TO SECTION -->
-        <div class="company-data">
-            {* Left Column *}
-            <div class="company-data-item company-data-item-from">
-                <div class="from-container-wrapper">
-                    <div class="place-container from-container">
-                        <div><strong>From:</strong></div>
-                    </div>
-                    <div class="company-container" style="min-height: 24mm; padding:2mm;">
+        <div class="company-box">
+            <div class="company-half company-left">
+                <div class="company-top">
+                    <div class="company-label"><strong>From:</strong></div>
+                    <div class="company-content">
                         <div>
                             {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
                         </div>
@@ -453,22 +446,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="number-container" style="padding-bottom: 6mm;">Customer number:
-                    <span style="font-weight: 600;"> {$RECORD_MODEL->get('cf_898')}</span>
+
+                <div class="company-bottom">
+                    Customer number:
+                    <span style="font-weight: 600;">{$RECORD_MODEL->get('cf_898')}</span>
                 </div>
             </div>
 
-
-            {* Right column *}
-            <div class="company-data-item company-data-item-to">
-                <div class="place-container"><strong>To:</strong></div>
-                <div class="company-container">
-                    <div style="padding:2mm;min-height:27mm;">
+            <div class="company-half company-right">
+                <div class="company-top">
+                    <div class="company-label"><strong>To:</strong></div>
+                    <div class="company-content">
                         <div style="text-transform: capitalize; font-weight: 600;">
                             {if isset($COMPANY)}
                                 {$COMPANY->get('company_name')}
                             {/if}
                         </div>
+
                         <div style="margin-top: 1.5mm;">
                             {if isset($COMPANY)}
                                 {$COMPANY->get('company_address')}
@@ -483,15 +477,17 @@
                             {/if}
                         </div>
                     </div>
-                    <div class="number-container">
-                        {if isset($COMPANY)}
-                            {if !empty($COMPANY->get('email'))}
-                                <p>Contact:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
-                            {/if}
-                            {if !empty($COMPANY->get('company_phone'))} <p>or <span
-                                    style="font-style: italic;">{$COMPANY->get('company_phone')}</span> or</p> {/if}
+                </div>
+
+                <div class="company-bottom">
+                    {if isset($COMPANY)}
+                        {if !empty($COMPANY->get('email'))}
+                            <p>Contact: <span style="font-style: italic;">{$COMPANY->get('email')}</span></p>
                         {/if}
-                    </div>
+                        {if !empty($COMPANY->get('company_phone'))}
+                            <p>or <span style="font-style: italic;">{$COMPANY->get('company_phone')}</span></p>
+                        {/if}
+                    {/if}
                 </div>
             </div>
         </div>
@@ -531,10 +527,22 @@
         ]}
 
             <table class="metals-table">
+                <colgroup>
+                    <col style="width:18%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                </colgroup>
                 <tr>
-                    <th style="width:18%;">Metal</th>
+                    <th>Metal</th>
                     {foreach from=$weights item=w}
-                        <th style="width:9%;">
+                        <th>
                             {$w.label}<br>
                             {if $w.grams}{$w.grams}{/if}
                         </th>
@@ -639,9 +647,9 @@
                                     Branch Code: {$SELECTED_BANK->get('branch_code')}<br>
                                 {else}
                                     Routing No: {$SELECTED_BANK->get('bank_routing_no')}<br>
+                                    <br>
                                 {/if}
 
-                                <br>
 
                                 {if !empty($SELECTED_BANK->get('intermediary_bank'))}
                                     Intermediary Bank: {$SELECTED_BANK->get('intermediary_bank')}<br>
@@ -686,7 +694,7 @@
                     </div>
                 </div>
 
-                <div class="additional-section" style="margin-top:4mm;">
+                <div class="additional-section company-heading" style="margin-top:4mm;">
                     <span class="bolder-element">4. This Purchase & Storage Order and any agreement with GPM resulting
                         therefrom shall be subject to and governed by
                         the terms and conditions of the Customer Metal Agreement executed and entered into by and
@@ -705,7 +713,7 @@
                                 <span> Place:</span> <input type="text" name="place_input"
                                     class="custom-editable-input" />
                             </div>
-                            <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                            <div class="editable-input-wrapper" style="margin-top: 2.5mm;">
                                 <span>Date:</span> <input type="text" name="date_input" class="custom-editable-input" />
                             </div>
                         </div>
@@ -715,15 +723,15 @@
                                 <span> Signed by: </span>
                                 <input type="text" name="signed_by" class="custom-editable-input" />
                             </div>
-                            <div class="editable-input-wrapper" style="margin-top: 4.5mm;">
+                            <div class="editable-input-wrapper" style="margin-top: 2.5mm;">
                                 <span> On behalf of:</span>
                                 <input type="text" name="on_behalf_of" class="custom-editable-input" />
                             </div>
                         </div>
                     </div>
 
-                    <div style="margin-top:10mm;">
-                        <div class="signature-line">...............................................</div><br>
+                    <div style="margin-top:1mm;">
+                        <div class="signature-line">.......................</div><br>
                         Signature
                     </div>
                 </div>
@@ -746,7 +754,6 @@
 
         document.getElementById('downloadBtn').addEventListener('click', function(e) {
 
-            // const checked = document.querySelector('input[name="pricing_option"]:checked');
             const firstChecked = document.querySelector('input.pricing-option-one:checked');
             const secondChecked = document.querySelector('input.pricing-option-two:checked');
 
@@ -776,7 +783,6 @@
                 url.searchParams.delete('addressOption');
             }
 
-            // Get all custom-editable-input values and append to URL as query parameters
             document.querySelectorAll('.custom-editable-input').forEach(input => {
                 if (!input.name) return;
 

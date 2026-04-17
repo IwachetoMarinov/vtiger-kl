@@ -14,6 +14,8 @@
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
 
+// include_once 'modules/Contacts/models/MetalsAPI.php';
+
 class Contacts_Detail_View extends Accounts_Detail_View
 {
 
@@ -49,8 +51,27 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$order_by = "desc";
 		$order_by_params = $request->get('orderBy');
 
+		// Test for Metal Prices 
+		// $metalsAPI = new MetalsAPI();
+		// $metals = $metalsAPI->getMetalTypes();
+
+		// REAL CUSTOMER ID FROM RECORD
+		$recordModel = $this->record->getRecord();
+		$clientID = $recordModel->get('cf_898');
+
+		$activity = new dbo_db\ActivitySummary();
+
+		$years_array  = $activity->getActivityYears($clientID);
+		$years = array_reverse($years_array);
+
 		// Check if there is no selected year set current year
-		if (empty($selected_year)) $selected_year = date('Y');
+		if (empty($selected_year)) {
+			if (is_array($years) && !empty($years)) {
+				$selected_year = max($years);
+			} else {
+				$selected_year = date('Y');
+			}
+		}
 
 		if (isset($start_date) && !empty($start_date)) $selected_year = '';
 
@@ -60,23 +81,26 @@ class Contacts_Detail_View extends Accounts_Detail_View
 
 		if (!$this->record) $this->record = Vtiger_DetailView_Model::getInstance($moduleName, $recordId);
 
-		$recordModel = $this->record->getRecord();
+		// $activity_data = $activity->getActivitySummary($clientID);
 
-		// REAL CUSTOMER ID FROM RECORD
-		$clientID = $recordModel->get('cf_898');
-
-		$activity = new dbo_db\ActivitySummary();
-		$activity_data = $activity->getActivitySummary($clientID);
+		// Get PI activity data and merge with old activity data only for DEV server
+		$activity_data = $activity->getPIActivitySummary($clientID);
 
 		$holdings = new dbo_db\HoldingsDB();
+
 		$holdings_data = $holdings->getHoldings($clientID);
 
 		$wallets = $holdings->getWalletBalances($clientID);
 
 		$certificate_id = $this->getCertificateId($recordId);
+		// Get currencies from ERP database
+		$currency_list = $activity->getTransactionCurrencies($clientID);
 
-		// Build dynamic currency list based on Activity Summary data
-		$currency_list = $this->getCurrenciesFromActivitySummary($activity_data);
+		if (!$selected_currency && is_array($wallets)) {
+			$selected_currency = $wallets[0]['Curr_Code'] ?? '';
+		} elseif (!$selected_currency && is_array($currency_list)) {
+			$selected_currency = $currency_list[0] ?? '';
+		}
 
 		if (
 			($selected_currency && in_array($selected_currency, $currency_list)) ||
@@ -94,17 +118,23 @@ class Contacts_Detail_View extends Accounts_Detail_View
 				$startTs,
 				$endTs,
 			) {
-				// Currency filter
-				if ($selected_currency && in_array($selected_currency, $currency_list)) {
-					if (($item['currency'] ?? '') !== $selected_currency) {
-						return false;
-					}
-				}
-
 				// Year filter
 				if (!empty($selected_year) && !empty($item['document_date'])) {
 					$itemYear = date('Y', strtotime($item['document_date']));
 					if ($itemYear !== (string) $selected_year) return false;
+				}
+
+				// Currency filter
+				if ($selected_currency && in_array($selected_currency, $currency_list)) {
+
+					$itemCurrency = $item['currency'] ?? '';
+					$voucherType  = $item['voucher_type'] ?? '';
+
+					// Allow MRD / MPD with empty currency
+					if (empty($itemCurrency) && in_array($voucherType, ['MRD', 'MPD'])) return true;
+
+					// Normal currency filtering
+					if ($itemCurrency !== $selected_currency) return false;
 				}
 
 				// Date range filter
@@ -119,10 +149,6 @@ class Contacts_Detail_View extends Accounts_Detail_View
 				return true;
 			}));
 		}
-
-		// Get year and remove current year from list
-		$years_array  = $this->createYearRange(2020, date('Y'));
-		$years = array_reverse($years_array);
 
 		$viewer = $this->getViewer($request);
 
@@ -140,21 +166,6 @@ class Contacts_Detail_View extends Accounts_Detail_View
 				return $dateB <=> $dateA;
 			});
 		}
-
-		// Order transactions by amount_in_account_currency ascending based on order_by param
-		// if ($order_by === 'asc') {
-		// 	usort($activity_data, function ($a, $b) {
-		// 		$amtA = isset($a['amount_in_account_currency']) ? floatval($a['amount_in_account_currency']) : 0;
-		// 		$amtB = isset($b['amount_in_account_currency']) ? floatval($b['amount_in_account_currency']) : 0;
-		// 		return $amtA <=> $amtB;
-		// 	});
-		// } elseif ($order_by === 'desc') {
-		// 	usort($activity_data, function ($a, $b) {
-		// 		$amtA = isset($a['amount_in_account_currency']) ? floatval($a['amount_in_account_currency']) : 0;
-		// 		$amtB = isset($b['amount_in_account_currency']) ? floatval($b['amount_in_account_currency']) : 0;
-		// 		return $amtB <=> $amtA;
-		// 	});
-		// }
 
 		// Assign safely to TPL
 		$viewer->assign('CLIENT_CURRENCY', $currency_list);

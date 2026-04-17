@@ -10,14 +10,14 @@
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
-            src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Regular.woff') format('woff');
         }
 
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 700;
-            src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Bold.woff') format('woff');
         }
 
         * {
@@ -182,7 +182,7 @@
                 padding: 14px 16px;
                 text-decoration: none;
                 background-color: #bea364;"
-                    href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&tableName={$smarty.request.tableName}&PDFDownload=true{if $INTENT}&fromIntent={$smarty.request.fromIntent}&hideCustomerInfo={$smarty.request.hideCustomerInfo}{/if}">Download</a>
+                    href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&tableName={$smarty.request.tableName}&docType={$smarty.request.docType}&PDFDownload=true{if $INTENT}&fromIntent={$smarty.request.fromIntent}&hideCustomerInfo={$smarty.request.hideCustomerInfo}{/if}">Download</a>
             </li>
         </ul>
     {/if}
@@ -275,7 +275,7 @@
                                     <td style="vertical-align: top">{$barItem->quantity}</td>
                                     <td style="border-bottom:none;vertical-align: top">
                                         {$barItem->longDesc} <br><span
-                                            style="font-size: smaller;font-style: italic;max-width: 250px;display: inline-block;word-break: break-all;white-space: normal;">{$barItem->serialNumbers}</span>
+                                            style="font-size: smaller;font-style: italic;max-width: 250px;display: inline-block;word-break: break-all;white-space: normal;"><pre>{$barItem->serialNumbers}</pre></span>
                                     </td>
                                     {if $barItem->metal eq 'mBTC'}
                                         <td style="text-align:right;vertical-align: top">
@@ -315,15 +315,10 @@
                         {if isset($COMPANY)}
                             {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
                             {$COMPANY->get('company_reg_no')}){/if}<br>
-                            {$COMPANY->get('company_address')}
-
-                            {if $COMPANY->get('city')}, {$COMPANY->get('city')}{/if}
-                            {if $COMPANY->get('state')}, {$COMPANY->get('state')}{/if}
-                            {if $COMPANY->get('code')}, {$COMPANY->get('code')}{/if}
-                            {if $COMPANY->get('country')}, {$COMPANY->get('country')}{/if}
+                            {$COMPANY_FULL_ADDRESS}
                             <br>
                             T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('email')}<br>
                         {/if}
                     </td>
                 </tr>

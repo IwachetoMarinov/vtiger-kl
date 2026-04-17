@@ -6,33 +6,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        @font-face {
+         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
-            src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Regular.woff') format('woff');
         }
 
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 700;
-            src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Bold.woff') format('woff');
         }
 
         * {
             box-sizing: border-box;
             margin: 0px
         }
-
-        /* .printAreaContainer {
-            height: 297mm;
-            width: 210mm;
-            border: 1px solid #fff;
-            margin: auto;
-            padding: 15mm 15mm;
-            position: relative;
-        } */
 
         .printAreaContainer {
             width: 210mm;
@@ -234,8 +225,8 @@
                                 {assign var="total_value" value=$total_value+$barItem->totalFineOz}
                                 {assign var="calcTotal" value=$calcTotal+$barItem->totalFineOz}
                                 {* Get up to 80 symbols from serials *}
-                                {assign var="serials" value=implode(", ", $barItem->serials)}
-                                {assign var="serials" value=$serials|truncate:80:"..."}
+                                {assign var="serials" value=$barItem->serialNumbers|default:''}
+                                {* {assign var="serials" value=$serials|truncate:80:"..."} *}
 
                                 <tr>
                                     <td>{number_format($barItem->quantity,0)}</td>
@@ -244,7 +235,7 @@
                                         {$barItem->itemDescription}
                                         <br>
                                         <span style="font-size:smaller;font-style:italic;">
-                                            {$serials}
+                                             <pre>{$serials}</pre>
                                         </span>
                                     </td>
 
@@ -278,16 +269,11 @@
                                     {$COMPANY->get('company_name')}
                                     {if $COMPANY->get('company_reg_no')} (Co. Reg. No. {$COMPANY->get('company_reg_no')})
                                     {/if}<br>
-                                    {$COMPANY->get('company_address')}
-
-                                    {if $COMPANY->get('city')}, {$COMPANY->get('city')}{/if}
-                                    {if $COMPANY->get('state')}, {$COMPANY->get('state')}{/if}
-                                    {if $COMPANY->get('code')}, {$COMPANY->get('code')}{/if}
-                                    {if $COMPANY->get('country')}, {$COMPANY->get('country')}{/if}
+                                     {$COMPANY_FULL_ADDRESS}
                                     <br>
                                     T: {$COMPANY->get('company_phone')}
                                     {if $COMPANY->get('company_fax')} | Fax: {$COMPANY->get('company_fax')} {/if}
-                                    | {$COMPANY->get('company_website')}<br>
+                                    | {$COMPANY->get('email')}<br>
                                 </div>
                             {/if}
 

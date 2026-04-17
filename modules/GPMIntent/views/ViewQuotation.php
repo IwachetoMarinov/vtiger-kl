@@ -10,6 +10,7 @@
  * *********************************************************************************** */
 
 // ini_set('display_errors', 1); error_reporting(E_ALL);
+include_once 'dbo_db/Helper.php';
 
 class GPMIntent_ViewQuotation_View extends GPMIntent_DocView_View
 {
@@ -64,8 +65,10 @@ class GPMIntent_ViewQuotation_View extends GPMIntent_DocView_View
 			$discount = "DISCOUNT";
 		}
 
+		$company_full_address = Helper::getCompanyFullAddress($companyRecord);
+
 		// echo "<pre>";
-		// print_r($recordModel);
+		// var_dump($intent);
 		// echo "</pre>";
 
 		$viewer = $this->getViewer($request);
@@ -77,6 +80,7 @@ class GPMIntent_ViewQuotation_View extends GPMIntent_DocView_View
 		$viewer->assign('RELATED_PRODUCTS', $products);
 		$viewer->assign('DOWNLOAD_LINK', $downloadLink);
 		$viewer->assign('COMPANY', $companyRecord);
+		$viewer->assign('COMPANY_FULL_ADDRESS', $company_full_address);
 		if ($request->get('PDFDownload')) {
 			$html = $viewer->view("$docType.tpl", $moduleName, true);
 			$this->downloadPDF($html, $request);

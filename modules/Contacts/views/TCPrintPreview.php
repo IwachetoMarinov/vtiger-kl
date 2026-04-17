@@ -2,6 +2,7 @@
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
+include_once 'dbo_db/Helper.php';
 
 class Contacts_TCPrintPreview_View extends Vtiger_Index_View
 {
@@ -33,6 +34,11 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
 
         $erpDoc = (object) $activity_data;
         $pages = $this->makeDataPages($erpDoc->barItems);
+        $company_full_address = Helper::getCompanyFullAddress($companyRecord);
+
+        // echo "<pre>";
+        // var_dump($erpDoc);
+        // echo "</pre>";
 
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
@@ -40,6 +46,7 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('OROSOFT_DOCTYPE', $docType);
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('COMPANY', $companyRecord);
+        $viewer->assign('COMPANY_FULL_ADDRESS', $company_full_address);
         $viewer->assign('PAGES', $pages);
         $viewer->assign('PAGE_COUNT', count($pages));
 

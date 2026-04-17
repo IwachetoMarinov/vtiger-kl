@@ -11,10 +11,15 @@ cache/
 wkhtml_debug.log
 pdf_debug.log
 
+node_modules/
+npm-debug.log
+package-lock.json
+
 tabdata.php
 parent_tabdata.php
-user_privileges/*
-user_privileges/**
+user_privileges/*.php
+user_privileges/**/*.php
+!user_privileges/index.html
 
 api/api_debug.log
 

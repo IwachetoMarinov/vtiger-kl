@@ -6,18 +6,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        {{assign var="sansRegular" value="layouts/v7/resources/fonts/OpenSans-Regular.woff"}}
+        {{assign var="sansBold" value="layouts/v7/resources/fonts/OpenSans-Bold.woff"}}
+
+        {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
+            {assign var="rootPath" value=$ROOT_DIRECTORY|replace:'\\':'/'}
+            {assign var="sansRegular" value="file:///$rootPath/layouts/v7/resources/fonts/OpenSans-Regular.woff"}
+            {assign var="sansBold" value="file:///$rootPath/layouts/v7/resources/fonts/OpenSans-Bold.woff"}
+        {/if}
+
         @font-face {
             font-family: 'Open Sans';
+
             font-style: normal;
             font-weight: 400;
-            src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+            src: url('{$sansRegular}') format('woff');
         }
 
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 700;
-            src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+            src: url('{$sansBold}') format('woff');
         }
 
         * {
@@ -28,16 +38,21 @@
 
         body {
             font-family: 'Open Sans';
-            font-size: 10pt;
+            font-size: 9pt;
             color: #666;
         }
 
         .printAreaContainer {
-            width: 210mm;
+            width: 200mm;
             height: 297mm;
             margin: auto;
-            padding: 4.5mm;
-            padding-top: 2mm;
+            padding: 4mm;
+        }
+
+        .pdf-wrapper {
+            position: relative;
+            background-color: #fff;
+            top: -7mm;
         }
 
         .bottom-container {
@@ -150,7 +165,7 @@
         }
 
         .editable-input-wrapper {
-            margin-top: 3mm;
+            margin-top: 2mm;
             display: flex;
             align-items: center;
             gap: 2mm;
@@ -185,7 +200,7 @@
 
         /* Signature Section */
         .signature-section {
-            margin-top: 5mm;
+            margin-top: 2mm;
             padding: 0 4mm;
         }
 
@@ -203,9 +218,17 @@
             width: 57%;
         }
 
+        /* .custom-editable-input {
+            border: none;
+            position: relative;
+            padding-bottom: 1mm;
+            flex: 1;
+            min-width: 40mm;
+            border-bottom: 1px dotted #000;
+        } */
         .custom-editable-input {
             border: none;
-            possition: relative;
+            position: relative;
             padding-bottom: 1mm;
             flex: 1;
             min-width: 40mm;
@@ -272,16 +295,16 @@
         {else}
             {assign var="end" value=($end+14)}
         {/if}
-        <div class="printAreaContainer">
+        <div
+            class="printAreaContainer {if isset($smarty.request.PDFDownload) && $smarty.request.PDFDownload eq true}pdf-wrapper{/if}">
             <table class="print-tbl">
                 <tr>
                     <td>
-                        {if isset($smarty.request.PDFDownload) && $smarty.request.PDFDownload eq true}
-                            <img src="file:///var/www/html/layouts/v7/modules/Contacts/resources/gpm-new-logo.png"
-                                style="max-height: 100%; float:left;width: 196px;" />
+                        {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                            <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" style="width:50mm;">
                         {else}
-                            <img src='layouts/v7/modules/Contacts/resources/gpm-new-logo.png'
-                                style="max-height: 100%; float:left;width: 196px;" />
+                            <img src="file://{$ROOT_DIRECTORY}/layouts/v7/modules/Contacts/resources/gpm-new-logo.png"
+                                style="width:40mm;">
                         {/if}
                         <div style="font-size: 11pt;margin-top: 27mm; float:right;">
                             <span>From: {$RECORD_MODEL->get('cf_898')}</span>
@@ -290,7 +313,7 @@
                 </tr>
                 <tr>
                     <td style="height: 20mm;text-align: left">
-                        <div style="max-width:50%">
+                        <div>
                             {if isset($COMPANY)}
                                 <div style="margin-top: 4mm;">To:
                                     <span style="font-weight: 700; text-transform: capitalize;">
@@ -311,7 +334,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="height: 20mm; text-decoration: underline;text-align: right;">
+                    <td style="height: 10mm; text-decoration: underline;text-align: right;">
                         <strong>COLLECTION REQUEST</strong>
                     </td>
                 </tr>
@@ -338,17 +361,16 @@
                 </tr>
             </table>
 
-
             {assign var="location" value=$ERP_DOCUMENT.barItems[0]->warehouse}
 
-            <div style="margin-top: 3mm;">I/We hereby wish to collect the Stored Metal detailed below at the following
+            <div style="margin-top: 2mm;">I/We hereby wish to collect the Stored Metal detailed below at the following
                 location:
                 <p style="font-style: italic;font-weight: 600;">{$location}</p>
             </div>
 
             {assign var="targetRows" value=[0, 1, 2, 3, 4, 5, 6]}
 
-            <table class="print-tbl" style="margin-top:5mm;">
+            <table class="print-tbl" style="margin-top: 2.5mm;">
                 <tr>
 
                     <td style="font-size: 9pt; vertical-align: top;">
@@ -370,9 +392,9 @@
                                             <input type="text" name="qty_{$smarty.foreach.rowloop.iteration}"
                                                 style="width:100%; border:0;" />
                                         </td>
-                                        <td style="height:12mm; vertical-align:top;">
+                                        <td style="height:9.5mm; vertical-align:top;">
                                             <textarea name="desc_{$smarty.foreach.rowloop.iteration}"
-                                                style="width:100%; height:12mm; border:0; resize:none; overflow:hidden;"></textarea>
+                                                style="width:100%; height:9.5mm; border:0; resize:none; overflow:hidden;"></textarea>
                                         </td>
                                         <td>
                                             <input type="text" name="serial_{$smarty.foreach.rowloop.iteration}"
@@ -413,13 +435,14 @@
                 <input type="text" name="collection_date" class="editable-input" />
             </div>
 
-            <div style="margin-top: 3mm;">
+            <div style="margin-top: 2mm;">
                 {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                     <input type="checkbox" name="id_option">
                 {else}
                     <span class="custom-checkbox"></span>
                 {/if}
-                <span>I/We will personally collect the Stored Metal at the Storage Facility and will be holding
+                <span style="display: inline-block; margin-left: 2mm;">I/We will personally collect the Stored Metal at the
+                    Storage Facility and will be holding
                     ID/Passport number</span>
             </div>
             <div>
@@ -439,7 +462,7 @@
                 <input type="text" name="company_input" class="editable-input editable-full-input" />
             </div>
 
-            <span style="display: inline-block; margin-top: 3mm;">
+            <span style="display: inline-block; margin-top: 2mm;">
                 <span>holding ID/Passport number</span>
                 <input type="text" name="holding_passport_number" class="editable-input" style="padding:0 1mm;"
                     {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}style="display: inline-block; margin-top: 2mm;"
@@ -466,40 +489,31 @@
             <div class="signature-section">
                 <div class="signature-section-item">
                     <div class="signature-section-left">
-                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 2mm;">
                             <span> Place:</span> <input type="text" name="place_input" class="custom-editable-input" />
                         </div>
-                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 2mm;">
                             <span>Date:</span> <input type="text" name="date_input" class="custom-editable-input" />
                         </div>
                     </div>
 
                     <div class="signature-section-right">
-                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 2mm;">
                             <span> Signed by: </span>
                             <input type="text" name="signed_by" class="custom-editable-input" />
                         </div>
-                        <div class="editable-input-wrapper" style="margin-top: 3mm;">
+                        <div class="editable-input-wrapper" style="margin-top: 2mm;">
                             <span> On behalf of:</span>
                             <input type="text" name="on_behalf_of" class="custom-editable-input" />
                         </div>
                     </div>
                 </div>
 
-                <div style="margin-top:10mm;">
+                <div style="margin-top:7mm;">
                     <div>...............................................</div>
                     <div>Signature</div>
                 </div>
             </div>
-
-            {* <div style="margin-top: 3mm;" class="bottom-container">
-                    <div class="bottom-container-item">
-                        <div style="border-bottom: 1px solid #000;margin-bottom:2mm;height: 50px;background-color:#dce6f9;">
-                        </div>
-                        <p>Signature</p>
-                    </div>
-                    <div class="bottom-container-item"></div>
-                </div> *}
         </div>
 
     {/for}

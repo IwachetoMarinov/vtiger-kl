@@ -6,20 +6,27 @@
     <meta charset="UTF-8">
 
     <style>
+        {{assign var="sansRegular" value="layouts/v7/resources/fonts/OpenSans-Regular.woff"}}
+        {{assign var="sansBold" value="layouts/v7/resources/fonts/OpenSans-Bold.woff"}}
+
+         {if isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload eq true}
+            {assign var="rootPath" value=$ROOT_DIRECTORY|replace:'\\':'/'}
+            {assign var="sansRegular" value="file:///$rootPath/layouts/v7/resources/fonts/OpenSans-Regular.woff"}
+            {assign var="sansBold" value="file:///$rootPath/layouts/v7/resources/fonts/OpenSans-Bold.woff"}
+        {/if}
+
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
-            src: local('Open Sans'), local('OpenSans'),
-                url(https://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+            src: url('{$sansRegular}') format('woff');
         }
 
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 700;
-            src: local('Open Sans Bold'), local('OpenSans-Bold'),
-                url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+            src: url('{$sansBold}') format('woff');
         }
 
         * {
@@ -31,7 +38,6 @@
         body {
             font-family: 'Open Sans';
             font-size: 10pt;
-            /* font-size: 9pt; */
             color: #666;
         }
 
@@ -39,13 +45,28 @@
             width: 210mm;
             height: 297mm;
             margin: auto;
-            padding: 6mm;
+            padding: 4mm;
         }
 
-        /* Header */
+        .pdf-wrapper {
+            position: relative;
+            background-color: #fff;
+            top: -7mm;
+        }
+
+        /* .printAreaContainer {
+            width: 198mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            padding: 6mm;
+        } */
+
+        /* HEADER */
+
         .header-table {
             width: 100%;
-            margin-bottom: 4mm;
+            border-collapse: collapse;
+            margin-bottom: 2mm;
         }
 
         .header-table td {
@@ -60,70 +81,83 @@
             text-align: center;
             font-size: 13pt;
             font-weight: bold;
-            padding-top: 3mm;
+            padding-top: 1mm;
         }
 
-        /* From / To Section */
-        .from-to-table {
+        /* ======= FROM / TO BLOCK (FIXED HEIGHT) ======= */
+        .company-box {
             width: 100%;
+            height: 38mm;
             border: 1px solid #000;
-            border-collapse: collapse;
-            margin-bottom: 3mm;
+            display: flex;
+            margin-top: 1mm;
         }
 
-        .from-to-table td {
-            border: 1px solid #000;
+        .company-half {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .company-left {
+            border-right: 1px solid #000;
+        }
+
+        .company-top {
+            height: 24mm;
+            display: flex;
+            border-bottom: 1px solid #000;
+        }
+
+        .company-bottom {
+            height: 14mm;
             padding: 2mm;
-            vertical-align: top;
+            overflow: hidden;
         }
 
-        .from-label {
-            width: 50mm;
-            height: 30mm;
+        .company-label {
+            width: 18mm;
+            padding: 2mm 0 0 2mm;
+            border-right: 1px solid #000;
+            flex-shrink: 0;
         }
 
-        .from-box {
-            width: 65mm;
-            height: 30mm;
-            background: repeating-linear-gradient(transparent,
-                    transparent 3.5mm,
-                    #000 3.5mm,
-                    #000 3.6mm);
+        .company-content {
+            flex: 1;
+            padding: 2mm 2mm 0 2mm;
+            overflow: hidden;
+            line-height: 1.35;
         }
 
-        .to-box {
-            width: 85mm;
-            line-height: 1.3;
-        }
+        /* SECTION */
 
-        .customer-label {
-            width: 50mm;
-            height: 8mm;
-        }
-
-        /* Section 2 */
         .section-title {
             margin: 2mm 0;
         }
 
-        /* Metals Table */
+        /* METALS TABLE */
+
         .metals-table {
             width: 100%;
             border-collapse: collapse;
             border: 1px solid #000;
-            font-size: 8.5pt;
+            font-size: 8pt;
+            margin-top: 4mm;
             margin-bottom: 2mm;
+            table-layout: fixed;
         }
 
         .metals-table th,
         .metals-table td {
             border: 1px solid #000;
-            padding: 1mm;
+            padding: 0.6mm;
             text-align: center;
+            overflow: hidden;
+            word-wrap: break-word;
         }
 
         .metals-table th {
-            background-color: #f0f0f0;
+            background: #f0f0f0;
             font-weight: bold;
         }
 
@@ -133,14 +167,16 @@
             padding-left: 2mm;
         }
 
-        /* Serials Box */
+        /* SERIAL BOX */
+
         .serials-box {
             min-height: 15mm;
             padding: 2mm;
             margin-bottom: 2mm;
         }
 
-        /* Additional Sections */
+        /* TEXT BLOCKS */
+
         .additional-section {
             margin: 3mm 0;
             line-height: 1.4;
@@ -154,15 +190,8 @@
             margin-left: 5mm;
         }
 
-        .line {
-            display: inline-block;
-        }
+        /* BANK DETAILS */
 
-        .long-line {
-            display: inline-block;
-        }
-
-        /* Bank Details Section */
         .bank-details {
             margin: 2mm 0;
         }
@@ -171,7 +200,8 @@
             margin-bottom: 1.5mm;
         }
 
-        /* Signature Section */
+        /* SIGNATURE */
+
         .signature-section {
             margin-top: 8mm;
         }
@@ -192,54 +222,15 @@
 
         .signature-line {
             display: inline-block;
-            margin-top: 8mm;
+            margin-top: 5mm;
         }
 
-        .company-data {
-            display: flex;
-            border: 1px solid #000;
-            max-height: 183px;
-            height: 183px;
-        }
-
-        .company-data-item {
-            width: 50%;
-            font-size: 10pt;
-            line-height: 1.2;
-        }
-
-        .company-data-item-to {
-            display: flex;
-        }
-
-        .company-data-item-from {
-            border-right: 1px solid #000;
-        }
-
-        .company-data-item-to,
-        .from-container {
-            display: flex;
-        }
-
-        .place-container {
-            padding: 2mm;
-            border-right: 1px solid #000;
-            width: 25%;
-        }
-
-        .company-container {
-            width: 75%;
-        }
-
-        .number-container {
-            padding: 2mm;
-            border-top: 1px solid #000;
-        }
+        /* MAIN BLOCK */
 
         .main-table {
             border: 1px solid #000;
-            margin-top: 5mm;
-            padding: 3.5mm 2mm;
+            margin-top: 3mm;
+            padding: 2mm 1.5mm;
         }
 
         .bolder-element {
@@ -250,9 +241,7 @@
             padding: 0 4mm;
         }
 
-        .from-container-wrapper {
-            display: flex;
-        }
+        /* INPUTS */
 
         .editable-input-wrapper {
             display: flex;
@@ -267,6 +256,12 @@
             flex: 1;
             min-width: 40mm;
             border-bottom: 1px dotted #000;
+        }
+
+        .metals-table .custom-editable-input {
+            padding-top: 0.5mm;
+            padding-bottom: 0.5mm;
+            text-align: center;
         }
 
         .custom-editable-table-input {
@@ -296,22 +291,18 @@
         </ul>
     {/if}
 
-    <div class="printAreaContainer">
+    <div
+        class="printAreaContainer {if isset($smarty.request.PDFDownload) && $smarty.request.PDFDownload eq true}pdf-wrapper{/if}">
 
         <!-- HEADER -->
-        <table class="header-table" style="margin-bottom: 1mm;">
-            <tr>
-                <td class="logo">
-                    {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
-                        <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
-                    {else}
-                        <img src="file:///var/www/html/layouts/v7/modules/Contacts/resources/gpm-new-logo.png" width="100%">
-                    {/if}
-                </td>
-                <td class="title"></td>
-                <td style="width:25mm;"></td>
-            </tr>
-        </table>
+        <div class="logo">
+            {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
+                <img src="layouts/v7/modules/Contacts/resources/gpm-new-logo.png" style="width:50mm;">
+            {else}
+                <img src="file://{$ROOT_DIRECTORY}/layouts/v7/modules/Contacts/resources/gpm-new-logo.png"
+                    style="width:40mm;">
+            {/if}
+        </div>
 
         <table class="header-table">
             <tr>
@@ -320,14 +311,11 @@
         </table>
 
         <!-- FROM / TO SECTION -->
-        <div class="company-data">
-            {* Left Column *}
-            <div class="company-data-item company-data-item-from">
-                <div class="from-container-wrapper">
-                    <div class="place-container from-container">
-                        <div><strong>From:</strong></div>
-                    </div>
-                    <div class="company-container" style="min-height: 24mm; padding:2mm;">
+        <div class="company-box">
+            <div class="company-half company-left">
+                <div class="company-top">
+                    <div class="company-label"><strong>From:</strong></div>
+                    <div class="company-content">
                         <div>
                             {$RECORD_MODEL->get('firstname')} {$RECORD_MODEL->get('lastname')}<br>
                         </div>
@@ -367,21 +355,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="number-container" style="padding-bottom: 6mm;">Customer number:
-                    <span style="font-weight: 600;"> {$RECORD_MODEL->get('cf_898')}</span>
+
+                <div class="company-bottom">
+                    Customer number:
+                    <span style="font-weight: 600;">{$RECORD_MODEL->get('cf_898')}</span>
                 </div>
             </div>
 
-            {* Right column *}
-            <div class="company-data-item company-data-item-to">
-                <div class="place-container"><strong>To:</strong></div>
-                <div class="company-container">
-                    <div style="padding:2mm;min-height:27mm;">
+            <div class="company-half company-right">
+                <div class="company-top">
+                    <div class="company-label"><strong>To:</strong></div>
+                    <div class="company-content">
                         <div style="text-transform: capitalize; font-weight: 600;">
                             {if isset($COMPANY)}
                                 {$COMPANY->get('company_name')}
                             {/if}
                         </div>
+
                         <div style="margin-top: 1.5mm;">
                             {if isset($COMPANY)}
                                 {$COMPANY->get('company_address')}
@@ -396,27 +386,27 @@
                             {/if}
                         </div>
                     </div>
-                    <div class="number-container">
-                        {if isset($COMPANY)}
-                            {if !empty($COMPANY->get('email'))}
-                                <p>Contact:<span style="font-style: italic;"> {$COMPANY->get('email')}</span></p>
-                            {/if}
-                            {if !empty($COMPANY->get('company_phone'))} <p>or<span
-                                    style="font-style: italic;">{$COMPANY->get('company_phone')}</span> or</p> {/if}
+                </div>
+
+                <div class="company-bottom">
+                    {if isset($COMPANY)}
+                        {if !empty($COMPANY->get('email'))}
+                            <p>Contact: <span style="font-style: italic;">{$COMPANY->get('email')}</span></p>
                         {/if}
-                    </div>
+                        {if !empty($COMPANY->get('company_phone'))}
+                            <p>or <span style="font-style: italic;">{$COMPANY->get('company_phone')}</span></p>
+                        {/if}
+                    {/if}
                 </div>
             </div>
         </div>
 
-        <!-- SECTION 1 -->
         <section class="main-table">
             <div class="additional-section bolder-element">
                 <strong>1.</strong> This Sale Order is subject to and governed by the terms and conditions of the
                 Customer Metal Agreement (CMA) executed and entered into by and between me/us and GPM.
             </div>
 
-            <!-- SECTION 2 -->
             <div class="section-title bolder-element">
                 <strong>2.</strong> I/We hereby wish to sell to
                 <span style="text-transform: capitalize;">
@@ -428,7 +418,6 @@
                 the following precious metals:
             </div>
 
-            <!-- METALS TABLE -->
             {assign var="metals" value=[
             'Gold 999.9',
             'Silver 999.0',
@@ -449,10 +438,22 @@
         ]}
 
             <table class="metals-table">
+                <colgroup>
+                    <col style="width:18%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                    <col style="width:9.11%;">
+                </colgroup>
                 <tr>
-                    <th style="width:18%;">Metal</th>
+                    <th>Metal</th>
                     {foreach from=$weights item=w}
-                        <th style="width:9%;">
+                        <th>
                             {$w.label}<br>
                             {if $w.grams}{$w.grams}{/if}
                         </th>
@@ -474,14 +475,11 @@
                 {/foreach}
             </table>
 
-
-            <!-- SERIALS BOX -->
             <div class="serials-box">
                 <p>If applicable, please specify the serial numbers of the items to be sold:</p>
                 <input type="text" name="serial_numbers" class="custom-editable-input full-width" />
             </div>
 
-            <!-- SECTION 3 -->
             <div class="additional-section">
                 If the metal to be sold is not currently in storage with GPM, please specify the
                 exact pick-up location and the details of the person authorised to release the metal to GPM (if
@@ -499,7 +497,6 @@
                 </div>
             </div>
 
-            <!-- SECTION 4 -->
             <div class="additional-section bolder-element ">
                 <strong>3.</strong> I/We acknowledge that:
                 <div class="indent">
@@ -512,12 +509,10 @@
                 </div>
             </div>
 
-            <!-- SECTION 5 -->
             <div class="additional-section bolder-element">
                 <strong>4.</strong> The sales proceeds agreed upon shall be transferred to my/our bank account:
             </div>
 
-            <!-- BANK DETAILS -->
             <div class="details-container">
                 <div class="bank-details">
                     <div class="bank-row editable-input-wrapper">
@@ -545,7 +540,6 @@
                     </div>
                 </div>
 
-                <!-- SIGNATURE SECTION -->
                 <div class="signature-section">
                     <div class="signature-section-item">
                         <div class="signature-section-left">
@@ -570,7 +564,7 @@
                         </div>
                     </div>
 
-                    <div style="margin-top:10mm;">
+                    <div style="margin-top:4mm;">
                         <div class="signature-line">...............................................</div><br>
                         Signature
                     </div>
@@ -592,7 +586,6 @@
                 url.searchParams.delete('clientName');
             }
 
-            // Get all custom-editable-input values and append to URL as query parameters
             document.querySelectorAll('.custom-editable-input').forEach(input => {
                 if (!input.name) return;
 

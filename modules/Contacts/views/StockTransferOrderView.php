@@ -1,7 +1,7 @@
 <?php
 
-include_once 'dbo_db/ActivitySummary.php';
-include_once 'dbo_db/HoldingsDB.php';
+// include_once 'dbo_db/ActivitySummary.php';
+// include_once 'dbo_db/HoldingsDB.php';
 include_once 'modules/Contacts/download/StockTransferOrderDownload.php';
 
 class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
@@ -55,11 +55,14 @@ class Contacts_StockTransferOrderView_View extends Vtiger_Index_View
             $selectedBank->set('swift_code', '');
         }
 
+        $ROOT_DIRECTORY = getenv('ROOT_DIRECTORY') ?: ($ROOT_DIRECTORY ?? null);
+
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', 1);
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
+        $viewer->assign('ROOT_DIRECTORY', $ROOT_DIRECTORY);
         $viewer->assign('CLIENT_TYPE', $client_type);
         $viewer->assign('COUNTRY_OPTION', $country_type ?? null);
         $viewer->assign('CUSTOM_COUNTRY', $custom_country ?? "");

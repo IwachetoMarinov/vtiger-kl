@@ -137,23 +137,6 @@
                             </tr>
                         </table>
 
-                        {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($INTENT->get('modifiedtime'), $INTENT_CURRENCY)}
-
-                        <!-- Remarks -->
-                        {* {if isset($COMPANY) && $COMPANY->get('company_gst_no')} *}
-
-                            {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
-                                <div style="margin-bottom: 2mm;">
-                                    {if $INTENT_CURRENCY eq 'SGD'}
-                                        *Remarks: USD/SGD exchange rate at SGD {$exchangeRateInfo['rate']} / USD
-                                    {else}
-                                        *Remarks: {$INTENT_CURRENCY}/SGD exchange rate at SGD
-                                        {$exchangeRateInfo['rate']} / {$INTENT_CURRENCY}
-                                    {/if}
-                                </div>
-                            {/if}
-                        {* {/if} *}
-
                         <!-- Bank info -->
                         {if isset($SELECTED_BANK) && $SELECTED_BANK}
                             {assign var=ROUTING value=$SELECTED_BANK->get('bank_routing_no')}
@@ -185,16 +168,11 @@
                         {if isset($COMPANY)}
                             {$COMPANY->get('company_name')}
                             {if $COMPANY->get('company_reg_no')}(Co. Reg. No. {$COMPANY->get('company_reg_no')}){/if}<br>
-                            {$COMPANY->get('company_address')}
-
-                            {if $COMPANY->get('city')}, {$COMPANY->get('city')}{/if}
-                            {if $COMPANY->get('state')}, {$COMPANY->get('state')}{/if}
-                            {if $COMPANY->get('code')}, {$COMPANY->get('code')}{/if}
-                            {if $COMPANY->get('country')}, {$COMPANY->get('country')}{/if}
+                             {$COMPANY_FULL_ADDRESS}
                             <br>
                             T: {$COMPANY->get('company_phone')}
                             {if $COMPANY->get('company_fax')} | Fax: {$COMPANY->get('company_fax')}{/if}
-                            | {$COMPANY->get('company_website')}<br>
+                            | {$COMPANY->get('email')}<br>
                         {/if}
                     </td>
                 </tr>

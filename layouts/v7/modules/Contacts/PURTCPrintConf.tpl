@@ -59,7 +59,7 @@
                 style="color: white;text-align: center;padding: 10px;text-decoration: none;background-color: #bea364;"
                 href="#" onclick="
      var hide = document.getElementById('hideCustomerInfo')?.checked ? 1 : 0;
-     window.location.href='index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&tableName={$smarty.request.tableName}&hideCustomerInfo=' + hide;
+     window.location.href='index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&tableName={$smarty.request.tableName}&docType={$smarty.request.docType}&hideCustomerInfo=' + hide;
      return false;
    ">
                 Save

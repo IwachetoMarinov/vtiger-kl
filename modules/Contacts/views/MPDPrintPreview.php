@@ -2,6 +2,7 @@
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
+include_once 'dbo_db/Helper.php';
 
 class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
 {
@@ -30,11 +31,14 @@ class Contacts_MPDPrintPreview_View extends Vtiger_Index_View
         $activity = new dbo_db\ActivitySummary();
         $erpData = $activity->getDocumentPrintPreviewData($docNo, $tableName);
 
+        $company_full_address = Helper::getCompanyFullAddress($companyRecord);
+
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('PAGES', $this->makeDataPage($erpData['barItems']));
         $viewer->assign('HIDE_BP_INFO', false);
         $viewer->assign('COMPANY', $companyRecord);
+        $viewer->assign('COMPANY_FULL_ADDRESS', $company_full_address);
         $viewer->assign('ERP_DOCUMENT', $erpData);
         $viewer->assign('DOCNO', $request->get('docNo'));
         $viewer->assign('PDFDownload', $request->get('PDFDownload'));

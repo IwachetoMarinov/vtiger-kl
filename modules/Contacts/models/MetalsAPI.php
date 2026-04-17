@@ -10,10 +10,12 @@ use helpers\DBConnection;
 class MetalsAPI
 {
     private $connection;
+    private $database_prefix;
 
     public function __construct()
     {
         $this->connection = DBConnection::getConnection();
+        $this->database_prefix = DBConnection::getDatabasePrefix();
     }
 
     public function getLatestPriceByName($metal, $currency)
@@ -31,6 +33,47 @@ class MetalsAPI
         }
 
         return null;
+    }
+
+    public function getMetalTypes()
+    {
+        if (!$this->connection) return [];
+
+        if (!$this->connection) return [];
+
+        // $params = [];
+        // $where  = '';
+
+        // if ($date) {
+        //     $where = "WHERE [Date] = ?";
+        //     $params[] = $date;
+        // }
+
+        $sql = "SELECT * FROM $this->database_prefix.[DW_Items]";
+        // $sql = "SELECT * FROM $this->database_prefix.[DW_MetalType]";
+
+        echo "<pre>";
+        echo "SQL: $sql\n";
+        echo "</pre>";
+
+        $stmt = sqlsrv_query($this->connection, $sql, $params);
+
+        if ($stmt === false) die(print_r(sqlsrv_errors(), true));
+
+        $data = [];
+        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+            $data[] = $row;
+        }
+
+        sqlsrv_free_stmt($stmt);
+
+
+        echo "<pre>";
+        echo "Metals Type data: \n";
+        print_r($data);
+        echo "</pre>";
+
+        return $data;
     }
 
     public function getMetals()
@@ -56,7 +99,7 @@ class MetalsAPI
         }
 
         $sql = "SELECT [Date],[MT_Code],[Curr_Code],[SpotPriceUSD],[Exc_Rate],[SpotPriceCurr]
-        FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_SpotPrice]
+        FROM $this->database_prefix.[DW_SpotPrice]
         $where
         ORDER BY [Date] DESC, [Curr_Code]";
 
@@ -91,7 +134,7 @@ class MetalsAPI
             $params[] = $date;
         }
 
-        $sql = "SELECT * FROM [HFS_SQLEXPRESS].[GPM].[dbo].[DW_ExcRateHistoric] $where ORDER BY [Exc_Date] DESC";
+        $sql = "SELECT * FROM $this->database_prefix.[DW_ExcRateHistoric] $where ORDER BY [Exc_Date] DESC";
 
         $stmt = sqlsrv_query($this->connection, $sql, $params);
 
@@ -102,6 +145,8 @@ class MetalsAPI
             if (isset($row['Exc_Date']) && $row['Exc_Date'] instanceof DateTime) {
                 $row['Exc_Date'] = $row['Exc_Date']->format('Y-m-d');
             }
+            // Divide to 100 every rate to get the correct value as per MetalsAPI 
+            $row['100CurrToSGD'] = isset($row['100CurrToSGD']) ? $row['100CurrToSGD'] / 100 : null;
             $data[] = $row;
         }
 

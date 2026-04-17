@@ -10,14 +10,14 @@
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
-            src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Regular.woff') format('woff');
         }
 
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 700;
-            src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Bold.woff') format('woff');
         }
 
         * {
@@ -236,7 +236,7 @@
                 </tr>
                 <tr>
                     <td style="text-align: right;font-size: 9pt">
-                        <table class="activity-tbl" style="margin-top:5mm; width: 40%">
+                        <table class="activity-tbl" style="margin-top:5mm; width: 50%">
                             <tr>
                                 <th colspan="2">REFERENCE VALUE AS PER THE</th>
                             </tr>
@@ -245,10 +245,15 @@
                                 <td style="text-align:center">{$LBMA_DATE}</td>
                             </tr>
                             {assign var="spot_price" value={$ERP_HOLDINGMETALS[0]['spot_price']|default:0} }
-                            <tr>
-                                <th>Gold</th>
-                                <td style="text-align:center">US$ {number_format($spot_price, 2, '.', ',')} / Oz..</td>
-                            </tr>
+                            {foreach item=metal from=$METALS}
+                                <tr>
+                                    <th>{if isset($metal['MT_Name'])}{$metal['MT_Name']}{/if}</th>
+                                    <td style="text-align:center">
+                                        {if isset($metal['Spot_Price'])}
+                                            USD {number_format($metal['Spot_Price'], 2, '.', ',')} / Oz.
+                                        {/if}</td>
+                                </tr>
+                            {/foreach}
                         </table>
                     </td>
                 </tr>
@@ -269,7 +274,8 @@
                             {foreach item=HOLDINGS key=location from=$ERP_HOLDINGS}
                                 <tr class="no-border">
                                     <td></td>
-                                    <td><strong>{vtranslate($location,'MetalPrice')}</strong></td>
+                                    <td><strong>{$location}</strong></td>
+                                    {* <td><strong>{vtranslate($location,'MetalPrice')}</strong></td> *}
                                     <td style='text-align:right'></td>
                                     <td style='text-align:right'></td>
                                 </tr>
@@ -280,12 +286,12 @@
                                         <td>
                                             {$HOLDING->longDesc} <br>
                                             <span style="font-size: smaller;font-style: italic;">
-                                                {$HOLDING->serials}
+                                                <pre>{$HOLDING->serials}</pre>
                                             </span>
                                         </td>
 
                                         <td style='vertical-align: top;text-align:right'>
-                                            {number_format($HOLDING->pureOz * $HOLDING->quantity,4)}
+                                            {number_format($HOLDING->pureOz ,4)}
                                         </td>
                                         {* {assign var=CRYPTO value=['MBTC','ETH']}
                                         {if in_array(strtoupper($HOLDING->metal),$CRYPTO) }
@@ -321,7 +327,7 @@
                             {if $COMPANY->get('country')}, {$COMPANY->get('country')}{/if}
                             <br>
                             T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('email')}<br>
                         {/if}
                     </td>
                 </tr>

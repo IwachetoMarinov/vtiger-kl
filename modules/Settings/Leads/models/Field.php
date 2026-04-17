@@ -8,13 +8,15 @@
  * All Rights Reserved.
  *************************************************************************************/
 
-class Settings_Leads_Field_Model extends Vtiger_Field_Model {
+class Settings_Leads_Field_Model extends Vtiger_Field_Model
+{
 
 	/**
 	 * Function to get field data type
 	 * @return <String> data type
 	 */
-	public function getFieldDataType() {
+	public function getFieldDataType()
+	{
 		$fieldDataType = '';
 		$uitype = $this->get('uitype');
 		if ($uitype == '9') {
@@ -24,10 +26,16 @@ class Settings_Leads_Field_Model extends Vtiger_Field_Model {
 		if (!$fieldDataType) {
 			$webserviceField = $this->getWebserviceFieldObject();
 			$fieldDataType = $webserviceField->getFieldDataType();
-			switch($fieldDataType) {
-				case 'text' : $fieldDataType = 'textArea'; break;
-				case 'boolean' : $fieldDataType = 'checkBox'; break;
-			    case 'multipicklist' : $fieldDataType = 'multiSelectCombo'; break;
+			switch ($fieldDataType) {
+				case 'text':
+					$fieldDataType = 'textArea';
+					break;
+				case 'boolean':
+					$fieldDataType = 'checkBox';
+					break;
+				case 'multipicklist':
+					$fieldDataType = 'multiSelectCombo';
+					break;
 			}
 		}
 		return $fieldDataType;
@@ -37,7 +45,8 @@ class Settings_Leads_Field_Model extends Vtiger_Field_Model {
 	 * Function to get clean instance
 	 * @return <Settings_Leads_Field_Model>
 	 */
-	public static function getCleanInstance() {
+	public static function getCleanInstance()
+	{
 		return new self();
 	}
 
@@ -47,14 +56,31 @@ class Settings_Leads_Field_Model extends Vtiger_Field_Model {
 	 * @param <String> $module
 	 * @return <Settings_Leads_Field_Model> field model
 	 */
-	public static function getInstance($value, $module = false) {
+	// public static function getInstance($value, $module = false) {
+	// 	$fieldModel = parent::getInstance($value, $module);
+	// 	$objectProperties = get_object_vars($fieldModel);
+
+	// 	$fieldModel = new self();
+	// 	foreach	($objectProperties as $properName => $propertyValue) {
+	// 		$fieldModel->$properName = $propertyValue;
+	// 	}
+	// 	return $fieldModel;
+	// }
+	public static function getInstance($value, $module = false)
+	{
 		$fieldModel = parent::getInstance($value, $module);
+
+		if (!$fieldModel || !is_object($fieldModel)) {
+			return false;
+		}
+
 		$objectProperties = get_object_vars($fieldModel);
 
-		$fieldModel = new self();
-		foreach	($objectProperties as $properName => $propertyValue) {
-			$fieldModel->$properName = $propertyValue;
+		$fieldModelInstance = new self();
+		foreach ($objectProperties as $propertyName => $propertyValue) {
+			$fieldModelInstance->$propertyName = $propertyValue;
 		}
-		return $fieldModel;
+
+		return $fieldModelInstance;
 	}
 }

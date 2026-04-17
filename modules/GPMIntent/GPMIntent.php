@@ -107,7 +107,7 @@ class GPMIntent extends Vtiger_CRMEntity
 				//Edit Mode
 				$this->saveItemLine();
 				$this->addClientIdFromERPNumber();
-				$this->addIntroducer();
+				// $this->addIntroducer();
 			} else {
 				if ($_REQUEST['action'] == 'MassSave') {
 					//Massediting
@@ -119,7 +119,7 @@ class GPMIntent extends Vtiger_CRMEntity
 			//Create Mode
 			$this->saveItemLine();
 			$this->addClientIdFromERPNumber();
-			$this->addIntroducer();
+			// $this->addIntroducer();
 		}
 	}
 
@@ -159,7 +159,7 @@ class GPMIntent extends Vtiger_CRMEntity
 	}
 
 
-	function addIntroducer()
+	protected function addIntroducer()
 	{
 		$db = PearDatabase::getInstance();
 		$erpNumber = $this->column_fields['contact_erp_no'];

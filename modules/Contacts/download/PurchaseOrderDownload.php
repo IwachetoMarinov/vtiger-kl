@@ -21,30 +21,33 @@ class PurchaseOrderDownload
         ],
 
         'fields' => [
-            ['name' => 'currency',     'x' => 60.0,  'y' => 138.0,  'w' => 38.5, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'location',     'x' => 102.0, 'y' => 152.5,  'w' => 40.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'address',      'x' => 72.0,  'y' => 159.3,  'w' => 55.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'country',      'x' => 49.0,  'y' => 175.5,  'w' => 45.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'currency',     'x' => 43.0,  'y' => 132.0,  'w' => 40.5, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'location',     'x' => 91.0, 'y' => 149.5,  'w' => 42.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'address',      'x' => 57.0,  'y' => 157.3,  'w' => 60.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'country',      'x' => 32.0,  'y' => 175.5,  'w' => 60.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
 
-            ['name' => 'place_input',  'x' => 41.0,  'y' => 254.5,  'w' => 45.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'signed_by',    'x' => 109.0, 'y' => 254.5,  'w' => 65.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'date_input',   'x' => 41.0,  'y' => 263.0,  'w' => 45.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
-            ['name' => 'on_behalf_of', 'x' => 112.0, 'y' => 263.0,  'w' => 62.0],
+            ['name' => 'place_input',  'x' => 21.0,  'y' => 258.6,  'w' => 50.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'signed_by',    'x' => 108.0, 'y' => 258.6,  'w' => 69.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'date_input',   'x' => 22.0,  'y' => 265.5,  'w' => 50.0, 'opts' => ['da' => '/Helv 6.5 Tf 0 g']],
+            ['name' => 'on_behalf_of', 'x' => 112.0, 'y' => 265.5,  'w' => 66.0],
         ],
 
         'grids' => [
             [
                 'namePattern' => 'metal_{r}_weight_{c}',
-                'startX' => 57.3,
-                'startY' => 111.0,
-                'cellW'  => 13.57,
-                'cellH'  => 6.25,
+                'startX' => 42.0,
+                'startY' => 101.0,
+                'cellW'  => 18.0,
+                'cellH'  => 7.00,
                 'rows'   => 4,
                 'cols'   => 9,
-                'padX'   => 0.6,
-                'padY'   => 0.33,
+                'padX'   => 0.65,
+                'padY'   => 0.40,
                 'innerPad' => 1.2,
-                'opts' => ['da' => '/Helv 5.5 Tf 0 g'],
+                'opts' => [
+                    'da' => '/Helv 5.5 Tf 0 g',
+                    'q'  => 1, // <-- center align (PDF /Q = 1)
+                ],
             ],
         ],
     ];
@@ -60,12 +63,17 @@ class PurchaseOrderDownload
         $fileName = CoreDownload::safeFileName($recordModel, 'PO');
 
         // temp paths
+        // temp paths (PDFs stay in tmp)
         $tmpDir = CoreDownload::getWritableTmpDir($root_directory);
-        [$htmlPath, $basePdfPath, $finalPdfPath] = CoreDownload::buildPaths($tmpDir, $fileName);
+        [, $basePdfPath, $finalPdfPath] = CoreDownload::buildPaths($tmpDir, $fileName);
 
-        // HTML -> base PDF
+        // HTML must be written in vtiger root so relative assets resolve
+        $htmlPath = rtrim($root_directory, "/\\") . DIRECTORY_SEPARATOR . $fileName . '.html';
+
         CoreDownload::writeFileOrFail($htmlPath, (string)$html);
-        CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath);
+        // CoreDownload::runWkhtmltopdfOrFail($htmlPath, $basePdfPath);
+        CoreDownload::runChromePdfOrFail($htmlPath, $basePdfPath);
+
         @unlink($htmlPath);
 
         // Import base PDF
@@ -74,9 +82,7 @@ class PurchaseOrderDownload
         @unlink($basePdfPath);
 
         // Debug grid
-        if ((string)$request->get('debug') === '1') {
-            CoreDownload::drawDebugGrid($pdf);
-        }
+        if ((string)$request->get('debug') === '1')  CoreDownload::drawDebugGrid($pdf);
 
         // Overlay text fields + metals grid
         CoreDownload::applyLayout($pdf, $request, self::LAYOUT);
@@ -121,10 +127,10 @@ class PurchaseOrderDownload
         $countryChk    = (string)$request->get('countryOption') === '1';
         $addressChk    = (string)$request->get('addressOption') === '1';
 
-        $makeCheckbox('country_checked',   35.0, 154.5, $countryChk);
-        $makeCheckbox('address_checked',   35.0, 161.3, $addressChk);
+        $makeCheckbox('country_checked',   14.0, 150.5, $countryChk);
+        $makeCheckbox('address_checked',   14.0, 158.0, $addressChk);
 
-        $makeCheckbox('pricing_option_1',  34.0, 226.5, $firstPricing);
-        $makeCheckbox('pricing_option_2',  34.0, 233.5, $secondPricing);
+        $makeCheckbox('pricing_option_1',  12.0, 232.5, $firstPricing);
+        $makeCheckbox('pricing_option_2',  12.0, 239.5, $secondPricing);
     }
 }

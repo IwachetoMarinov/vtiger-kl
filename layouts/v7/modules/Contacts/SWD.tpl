@@ -6,18 +6,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        @font-face {
+         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
-            src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Regular.woff') format('woff');
         }
 
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 700;
-            src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Bold.woff') format('woff');
         }
 
         * {
@@ -184,7 +184,7 @@
             {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
                 <li style="float:right">
                     <a style="display: block;color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
-                        href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&tableName={$smarty.request.tableName}&PDFDownload=true&bank={$SELECTED_BANK->getId()}{if $INTENT}&fromIntent={$smarty.request.fromIntent}&hideCustomerInfo={$smarty.request.hideCustomerInfo}{/if}">Download</a>
+                        href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&tableName={$smarty.request.tableName}&docType={$smarty.request.docType}&PDFDownload=true&bank={$SELECTED_BANK->getId()}{if $INTENT}&fromIntent={$smarty.request.fromIntent}&hideCustomerInfo={$smarty.request.hideCustomerInfo}{/if}">Download</a>
                 </li>
             {/if}
 
@@ -250,7 +250,7 @@
                 {/if}
                 <tr>
                     <td style="text-align: right;font-size: 9pt">
-                        All amounts in currency
+                        All amounts in {$ERP_DOCUMENT->currency}
                     </td>
                 </tr>
                 <tr>
@@ -265,7 +265,7 @@
                             <tr>
                                 <td colspan="2" style="text-align:center">{$smarty.request.docNo}</td>
                                 <td style="text-align:center">{$ERP_DOCUMENT->documentDate}</td>
-                                <td style="text-align:center">{$ERP_DOCUMENT->deliveryDate}</td>
+                                <td style="text-align:center">{$ERP_DOCUMENT->postingDate}</td>
                                 <td style="text-align:center">Purchase & Storage</td>
                             </tr>
                         </table>
@@ -311,8 +311,9 @@
                                     <tr>
                                         <td style="vertical-align: top">{$barItem->quantity}</td>
                                         <td style="border-bottom:none;vertical-align: top">
-                                            {$barItem->longDesc} <br><span
-                                                style="font-size: smaller;font-style: italic;max-width: 250px;display: inline-block;word-break: break-all;white-space: normal;">{$barItem->serialNumbers}</span>
+                                            {$barItem->itemDescription} <br><span
+                                                style="font-size: smaller;font-style: italic;max-width: 250px;display: inline-block;word-break: break-all;white-space: normal;">
+                                                <pre>{$barItem->serialNumbers}</pre></span>
                                         </td>
                                         {if $barItem->metal eq 'mBTC'}
                                             <td style="text-align:right;vertical-align: top">
@@ -321,7 +322,7 @@
                                             <td style="text-align:right;vertical-align: top">
                                                 {number_format($total/$barItem->quantity,2)}</td>
                                         {/if}
-                                        <td style="text-align:right;vertical-align: top">{number_format($barItem->pureOz,4)}
+                                        <td style="text-align:right;vertical-align: top">{number_format($barItem->totalFineOz,4)}
                                         </td>
                                         <td style="text-align:right;vertical-align: top">{number_format($total,2)}</td>
                                     </tr>
@@ -378,10 +379,10 @@
                             {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
                                 <div>
                                     {if $ERP_DOCUMENT->currency eq 'SGD'}
-                                        *Remarks: USD/SGD exchange rate at SGD {$exchangeRateInfo['rate']} / USD
+                                        *Remarks: USD/SGD exchange rate at SGD {number_format($exchangeRateInfo['rate'],4)} / USD
                                     {else}
                                         *Remarks: {$ERP_DOCUMENT->currency}/SGD exchange rate at SGD
-                                        {$exchangeRateInfo['rate']} / {$ERP_DOCUMENT->currency}
+                                        {number_format($exchangeRateInfo['rate'],4)} / {$ERP_DOCUMENT->currency}
                                     {/if}
                                 </div>
                             {/if}
@@ -419,16 +420,10 @@
                         {if isset($COMPANY)}
                             {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
                             {$COMPANY->get('company_reg_no')}){/if}<br>
-                            {$COMPANY->get('company_address')}
-
-
-                            {if $COMPANY->get('city')}, {$COMPANY->get('city')}{/if}
-                            {if $COMPANY->get('state')}, {$COMPANY->get('state')}{/if}
-                            {if $COMPANY->get('code')}, {$COMPANY->get('code')}{/if}
-                            {if $COMPANY->get('country')}, {$COMPANY->get('country')}{/if}
+                             {$COMPANY_FULL_ADDRESS}
                             <br>
                             T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('email')}<br>
                         {/if}
                     </td>
                 </tr>

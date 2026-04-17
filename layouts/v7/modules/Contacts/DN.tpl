@@ -10,14 +10,14 @@
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
-            src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Regular.woff') format('woff');
         }
 
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 700;
-            src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Bold.woff') format('woff');
         }
 
         * {
@@ -331,10 +331,10 @@
                         {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
                             <div>
                                 {if $ERP_DOCUMENT->currency eq 'SGD'}
-                                    *Remarks: USD/SGD exchange rate at SGD {$exchangeRateInfo['rate']} / USD
+                                    *Remarks: USD/SGD exchange rate at SGD {number_format($exchangeRateInfo['rate'],4)} / USD
                                 {else}
                                     *Remarks: {$ERP_DOCUMENT->currency}/SGD exchange rate at SGD
-                                    {$exchangeRateInfo['rate']} / {$ERP_DOCUMENT->currency}
+                                    {number_format($exchangeRateInfo['rate'],4)} / {$ERP_DOCUMENT->currency}
                                 {/if}
                             </div>
                         {/if}
@@ -376,15 +376,10 @@
                         {if isset($COMPANY)}
                             {$COMPANY->get('company_name')} {if !empty($COMPANY->get('company_reg_no'))}(Co. Reg. No.
                             {$COMPANY->get('company_reg_no')}){/if}<br>
-                            {$COMPANY->get('company_address')}
-
-                            {if $COMPANY->get('city')}, {$COMPANY->get('city')} {/if}
-                            {if $COMPANY->get('state')}, {$COMPANY->get('state')} {/if}
-                            {if $COMPANY->get('code')}, {$COMPANY->get('code')} {/if}
-                            {if $COMPANY->get('country')}, {$COMPANY->get('country')} {/if}
+                            {$COMPANY_FULL_ADDRESS}
                             <br>
                             T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                            {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('email')}<br>
                         {/if}
                     </td>
                 </tr>

@@ -9,6 +9,9 @@
  * *********************************************************************************** */
 // ini_set('display_errors', 1);error_reporting(E_ALL);
 
+include_once 'dbo_db/ProformaInvoice.php';
+include_once 'dbo_db/Helper.php';
+
 class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 {
 	public function process(Vtiger_Request $request)
@@ -30,6 +33,7 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 		$fields = $moduleModel->getFields();
 
 		$targetLabel = 'Currency';
+		$table_name = 'DW_DocPI';
 
 		$fieldName = null;
 		foreach ($fields as $f) {
@@ -41,17 +45,17 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 
 		$intent_currency = $fieldName ? $intent->get($fieldName) : '';
 
-		// echo "<pre>";
-		// print_r($intent_currency);
-		// echo "</pre>";
-
 		if (empty($contactId)) throw new AppException("Intent has no related Contact ID.");
 
 		$recordModel = Vtiger_Record_Model::getInstanceById($contactId, 'Contacts');
 
 		if (!$recordModel) throw new AppException("Contact not found for ID: $contactId");
 
-		$companyId = $recordModel->get('company_id');
+		// $client_id = $recordModel->get('cf_898');
+		// $proformaInvoice = new dbo_db\ProformaInvoice();
+		// $erp_data = $proformaInvoice->getProformaInvoice("$client_id",  $table_name);
+
+		// $companyId = $recordModel->get('company_id');
 
 		$companyRecord = null;
 		$allBankAccounts = [];
@@ -93,6 +97,8 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 			$selectedBank->set('swift_code', '');
 		}
 
+		$company_full_address = Helper::getCompanyFullAddress($companyRecord);
+
 		// ✅ Prepare viewer
 		$viewer = $this->getViewer($request);
 		$viewer->assign('RECORD_MODEL', $recordModel);
@@ -103,6 +109,7 @@ class GPMIntent_ViewProformaInvoice_View extends GPMIntent_DocView_View
 		$viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);
 		$viewer->assign('SELECTED_BANK', $selectedBank);
 		$viewer->assign('COMPANY', $companyRecord);
+		$viewer->assign('COMPANY_FULL_ADDRESS', $company_full_address);
 
 		// ✅ Render / download
 		if ($request->get('PDFDownload')) {

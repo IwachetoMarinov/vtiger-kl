@@ -2,6 +2,7 @@
 
 include_once 'dbo_db/ActivitySummary.php';
 include_once 'dbo_db/HoldingsDB.php';
+include_once 'dbo_db/Helper.php';
 
 class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
 {
@@ -21,6 +22,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
     public function process(Vtiger_Request $request)
     {
         $docNo = $request->get('docNo');
+        $docType = $request->get('docType');
         $tableName = $request->get('tableName');
         $moduleName = $request->getModule();
         $recordModel = $this->record->getRecord();
@@ -39,7 +41,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
 
         $average_spot_price = $this->getAverageSpotPrice($activity_data['barItems'] ?? []);
 
-        $docType = $activity_data['voucherType'] ?? "";
+        // $docType = $activity_data['voucherType'] ?? "";
         $erpDoc = (object) $activity_data;
 
         if ($docType == "DN"  && $tableName !== "DW_DocSTI ") {
@@ -89,6 +91,12 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
             $intent = Vtiger_Record_Model::getInstanceById($request->get('fromIntent'), 'GPMIntent');
         }
 
+        $company_full_address = Helper::getCompanyFullAddress($companyRecord);
+
+        // echo "<pre>";
+        // print_r($erpDoc);
+        // echo "</pre>";
+
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);
         $viewer->assign('ALL_BANK_ACCOUNTS', $allBankAccounts);
@@ -97,6 +105,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $viewer->assign('HIDE_BP_INFO', $request->get('hideCustomerInfo'));
         $viewer->assign('INTENT', $intent);
         $viewer->assign('COMPANY', $companyRecord);
+        $viewer->assign('COMPANY_FULL_ADDRESS', $company_full_address);
         $viewer->assign('AVERAGE_SPOT_PRICE', $average_spot_price);
         $viewer->assign('PAGES', $this->makeDataPage($erpDoc->barItems, $docType));
         if ($request->get('PDFDownload')) {
@@ -137,7 +146,7 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $totalSpotPrice = 0.00;
         $count = 0;
 
-        if(empty($items)) return $totalSpotPrice;
+        if (empty($items)) return $totalSpotPrice;
 
         foreach ($items as $item) {
             if (isset($item->averageSpotPrice) && $item->averageSpotPrice > 0) {
@@ -157,11 +166,8 @@ class Contacts_DocumentPrintPreview_View extends Vtiger_Index_View
         $recordModel = $this->record->getRecord();
         $clientID = $recordModel->get('cf_898');
         $docType = substr($request->get('docNo'), 0, 3);
-        if ($docType == 'SWD' || $docType == 'SAL') {
-            $docType = 'SI';
-        } elseif ($docType == 'PWD' || $docType == 'PUR') {
-            $docType = 'PI';
-        }
+
+        if ($docType == 'PWD' || $docType == 'PUR') $docType = 'PI';
 
         $year = date('Y');
         // Get last part of docNo after last '/'

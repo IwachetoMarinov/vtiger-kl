@@ -21,6 +21,11 @@ class DBConnection
             $server_name = $_ENV['DB_SERVER_NAME'] ?? getenv('DB_SERVER_NAME') ?: '';
             $db_name = $_ENV['DB_EXTERNAL_NAME'] ?? getenv('DB_EXTERNAL_NAME') ?: '';
 
+            // echo "<pre>";
+            // echo "Credentials:\n";
+            // var_dump($db_username, $db_password, $server_name, $db_name);
+            // echo "</pre>";
+
             if (!$db_username || !$db_password || !$server_name || !$db_name) return null;
 
             $serverName = $server_name;
@@ -39,6 +44,22 @@ class DBConnection
 
             self::$connection = $conn;
             return self::$connection;
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    public static function getDatabasePrefix()
+    {
+        if (self::$connection === null) return null;
+
+        try {
+            $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
+            $dotenv->safeLoad();
+
+            $db_prefix = $_ENV['DB_PREFIX'] ?? getenv('DB_PREFIX') ?: '';
+
+            return $db_prefix ?: null;
         } catch (\Throwable $e) {
             return null;
         }

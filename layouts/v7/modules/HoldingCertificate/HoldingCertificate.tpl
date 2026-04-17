@@ -4,18 +4,18 @@
 <head>
     <title>CERTIFICATE OF OWNERSHIP</title>
     <style>
-        @font-face {
+         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
-            src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Regular.woff') format('woff');
         }
 
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 700;
-            src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Bold.woff') format('woff');
         }
 
         * {
@@ -208,7 +208,7 @@
                                     {$COMPANY->get('company_reg_no')}){/if}</p>
                                 <p style='margin-top: 0px; color: #9e9d9d;'>{$COMPANY->get('company_address')}<br>
                                     T: {$COMPANY->get('company_phone')} {if !empty($COMPANY->get('company_fax'))}| Fax:
-                                    {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('company_website')}<br>
+                                    {$COMPANY->get('company_fax')} {/if} | {$COMPANY->get('email')}<br>
                                 </p>
                             {/if}
                         </div>

@@ -11,14 +11,14 @@
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
-            src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Regular.woff') format('woff');
         }
 
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 700;
-            src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+            src: url('layouts/v7/resources/fonts/OpenSans-Bold.woff') format('woff');
         }
 
         * {
@@ -196,9 +196,10 @@
                 background-color: #333;">
             <li style="float:right">
                 {assign var="hideInfo" value=$smarty.request.hideCustomerInfo|default:0}
+                {assign var="hideDisc" value=$smarty.request.hideDiscount|default:0}
                 {assign var="docNo" value=$smarty.request.docNo|default:''}
                 <a style="display: block;color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
-                    href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$docNo}&tableName={$smarty.request.tableName}&PDFDownload=true&hideCustomerInfo={$hideInfo}">
+                    href="index.php?module=Contacts&view=TCPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$docNo}&tableName={$smarty.request.tableName}&PDFDownload=true&hideCustomerInfo={$hideInfo}&hideDiscount={$hideDisc}{if $INTENT}&fromIntent={$smarty.request.fromIntent|escape:'url'}{/if}">
                     Download
                 </a>
             </li>
@@ -279,9 +280,12 @@
                             All amounts in {$ERP_DOCUMENT->currency}
                         </td>
                     </tr>
+
                     <tr>
                         {assign var="metalPrice" value=($ERP_DOCUMENT->barItems[0]->spotPrice)}
                         {assign var="transactionType" value=($ERP_DOCUMENT->barItems[0]->transactionType)}
+                        {assign var="hideDiscount" value=$smarty.request.hideDiscount|default:0}
+
                         <td style="font-size: 9pt; vertical-align: top;">
                             <table class="activity-tbl" style="margin-bottom:5mm">
                                 <tr>
@@ -306,9 +310,11 @@
                                     <th style="width:10%;">QTY</th>
                                     <th style="width:40%;">DESCRIPTION</th>
                                     <th style="width:12.5%;text-align:center">FINE OZ.</th>
-                                    <th style="width:12.5%;text-align:center">
-                                        {if $ERP_DOCUMENT->voucherType eq 'PUR'}DISCOUNT{else}PREMIUM{/if}(%)
-                                    </th>
+                                    {if !$hideDiscount}
+                                        <th style="width:12.5%;text-align:center">
+                                            {if $ERP_DOCUMENT->voucherType eq 'PUR'}DISCOUNT{else}PREMIUM{/if}(%)
+                                        </th>
+                                    {/if}
                                     <th style="width:25%;text-align:center">TOTAL {$ERP_DOCUMENT->currency}</th>
                                 </tr>
 
@@ -325,12 +331,8 @@
                                     {* Build serial list safely *}
                                     {assign var="serials" value=$serials|cat:implode(',', $barItem->serials)|cat:','}
 
-                                    {* balanceAmount old way *}
-                                    {* {assign var="balanceAmount" value=($barItem->spotPrice * $barItem->totalFineOz) * (1 + ($barItem->premium / 100))} *}
-
                                     {* balanceAmount NEW way *}
                                     {assign var="balanceAmount" value=($barItem->totalItemAmount)}
-
                                     {assign var="calcTotal" value=$calcTotal+$balanceAmount}
 
                                     <tr>
@@ -340,19 +342,21 @@
                                             {$barItem->itemDescription}
                                             <br><span
                                                 style="font-size: smaller;font-style: italic;max-width: 250px;display: inline-block;word-break: break-all;white-space: normal; font-size: 9px;">
-                                                {$barItem->serialNumbers}</span>
+                                                <pre>{$barItem->serialNumbers}</pre>
+                                            </span>
                                         </td>
 
                                         <td style="text-align:right;vertical-align: top">
                                             {number_format($barItem->totalFineOz,4)}
                                         </td>
 
-                                        {if $barItem->premium > 0 && $metalPrice > 0}
+                                        {if !$hideDiscount}
                                             <td style="text-align:right;vertical-align: top">
-                                                {number_format($barItem->premium,2)} %
-                                            </td>
-                                        {else}
-                                            <td style="text-align:right;vertical-align: top">0 %</td>
+                                                {if $barItem->premium !== ""}
+                                                    {number_format($barItem->premium, 2)}%
+                                                {else}
+                                                    -
+                                                {/if}</td>
                                         {/if}
 
                                         <td style="text-align:right;vertical-align: top">
@@ -361,9 +365,14 @@
                                     </tr>
                                 {/for}
 
+                                {assign var="colspan" value=3}
+                                {if !$hideDiscount}
+                                    {assign var="colspan" value=$colspan+1}
+                                {/if}
+
                                 {if $page eq count($PAGES)}
                                     <tr>
-                                        <th style="width:75%;" colspan="4">TOTAL TRADE AMOUNT:</th>
+                                        <th style="width:75%;" colspan="{$colspan}">TOTAL TRADE AMOUNT:</th>
                                         <td style="text-align:right"><strong>{$ERP_DOCUMENT->currency}
                                                 {number_format(($calcTotal),2)} </strong>
                                         </td>
@@ -376,16 +385,14 @@
                                     If you have any questions concerning these transactions, please contact
                                     <span style="font-weight: 600;">{$COMPANY->get('company_name')}</span> at <br>Tel:
                                     {$COMPANY->get('company_phone')} or by email:
-                                    relationship@global-precious-metals.com.
+                                    {$COMPANY->get('email')}.
                                 {/if}
                             </div>
                         </td>
                     </tr>
 
-                    {* <pre>{var_dump($COMPANY)}</pre> *}
-
                     <tr>
-                        <td style='font-size: 8pt;font-weight: bold;width: 85%'>
+                        <td style='font-size: 8pt;font-weight: bold;width: 85%; position: absolute;bottom: 14px;'>
                             <div style="margin-top: 2mm;">
                                 {if isset($COMPANY)}
                                     <div style="float:left">
@@ -393,16 +400,11 @@
                                         {if $COMPANY->get('company_reg_no')} (Co. Reg. No.
                                         {$COMPANY->get('company_reg_no')}){/if}
                                         <br>
-                                        {$COMPANY->get('company_address')}
-
-                                        {if $COMPANY->get('city')}, {$COMPANY->get('city')}{/if}
-                                        {if $COMPANY->get('state')}, {$COMPANY->get('state')}{/if}
-                                        {if $COMPANY->get('code')}, {$COMPANY->get('code')}{/if}
-                                        {if $COMPANY->get('country')}, {$COMPANY->get('country')}{/if}
+                                        {$COMPANY_FULL_ADDRESS}
                                         <br>
                                         T: {$COMPANY->get('company_phone')}
                                         {if $COMPANY->get('company_fax')} | Fax: {$COMPANY->get('company_fax')} {/if}
-                                        | {$COMPANY->get('company_website')}<br>
+                                        | {$COMPANY->get('email')}<br>
                                     </div>
                                 {/if}
 
