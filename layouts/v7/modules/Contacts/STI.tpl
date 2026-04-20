@@ -316,11 +316,11 @@
                             </tr>
                         </table>
 
-                        <br>
-                        <br>
-                        {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency)}
+                        {* <br>
+                        <br> *}
+                        {* {assign var="exchangeRateInfo" value=MASForex_Record_Model::getLatestExchangeRateByCurrency($ERP_DOCUMENT->documentDate, $ERP_DOCUMENT->currency)} *}
 
-                        {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
+                        {* {if !empty($exchangeRateInfo) && isset($exchangeRateInfo['rate'])}
                             <div>
                                 {if $ERP_DOCUMENT->currency eq 'SGD'}
                                     *Remarks: USD/SGD exchange rate at SGD {number_format($exchangeRateInfo['rate'],4)} / USD
@@ -329,7 +329,7 @@
                                     {number_format($exchangeRateInfo['rate'],4)} / {$ERP_DOCUMENT->currency}
                                 {/if}
                             </div>
-                        {/if}
+                        {/if} *}
                         <br>
                         <br>
                         {if $SELECTED_BANK}
