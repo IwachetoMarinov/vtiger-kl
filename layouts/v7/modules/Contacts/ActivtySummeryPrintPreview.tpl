@@ -389,8 +389,8 @@
                             </table>
                             {if $PAGES eq $page}
                                 <div style="text-align: right;font-size: 9pt;margin-top: 2mm">
-                                    {if $endingBalance > 0 } This amount is owed to you by GPM.{/if}
-                                    {if $endingBalance < 0 } This amount is owed from you to GPM.{/if}
+                                    {if $endingBalance > 0 } This amount is owed to you.{/if}
+                                    {if $endingBalance < 0 } This amount is owed to GPM.{/if}
                                 </div>
                             {/if}
                         </td>
