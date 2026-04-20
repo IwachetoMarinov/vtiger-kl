@@ -23,6 +23,8 @@ class Contacts_ActivitySummaryService
         // 3. Fetch all transactions for this client in the given date range
         $activities = $activity->getMonthlyTransactions($client_id, $start_date, $end_date);
 
+        if (empty($activities) || !is_array($activities)) return;
+
         // 4. Get Contact record model (used for template rendering)
         $contactRecord = $this->getContactRecordByClientId($client_id);
 
