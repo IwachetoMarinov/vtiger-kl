@@ -34,7 +34,7 @@ class Contacts_MonthlyTransactionCron
             $service->generateAndStoreForClient($client_id, $date_range);
 
             // break after first iteration for testing, remove this in production
-            break;
+            // break;
         }
     }
 

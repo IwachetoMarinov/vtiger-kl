@@ -79,6 +79,33 @@ class Contacts_ActivitySummaryService
 
         // 17. Store generated PDF in vTiger Documents module
         $this->storePdfInDocuments($pdfPath, $client_id, $selected_year, $selected_currency);
+
+        // 18. Insert into monthly transactions table for record-keeping
+        $this->insertIntoMonthlyTransactions($client_id, $start_date, $end_date, $selected_currency);
+
+        // 19. Cleanup generated PDF file
+        if (file_exists($pdfPath)) unlink($pdfPath);
+    }
+
+    protected function insertIntoMonthlyTransactions($client_id, $start_date, $end_date, $currency)
+    {
+        $db = PearDatabase::getInstance();
+        $result = $db->pquery(
+            "SELECT 1 FROM vtiger_monthly_transactions 
+     WHERE client_id = ? AND start_date = ? AND end_date = ?",
+            [$client_id, $start_date, $end_date]
+        );
+
+        $description = sprintf('Monthly activity summary for client_id %s, period: %s to %s, currency: %s', $client_id, $start_date, $end_date, $currency);
+
+
+        if ($db->num_rows($result) == 0) {
+            $db->pquery(
+                "INSERT INTO vtiger_monthly_transactions (client_id, start_date, end_date, description, created_at)
+     VALUES (?, ?, ?, ?, NOW())",
+                [$client_id, $start_date, $end_date, $description]
+            );
+        }
     }
 
     protected function getContactRecordByClientId($client_id)
