@@ -196,9 +196,9 @@ class CollectionRequestDownload
 
         // adjusted widths
         $ratioQty    = 0.050;
-        $ratioDesc   = 0.665;
-        $ratioSerial = 0.175;
-        $ratioFine   = 0.110;
+        $ratioDesc   = 0.660;
+        $ratioSerial = 0.200;
+        $ratioFine   = 0.100;
 
         // computed widths
         $wQty    = $wTable * $ratioQty;
@@ -251,7 +251,7 @@ class CollectionRequestDownload
             );
 
             // FINE OZ.
-            $pdf->SetXY($xFine + 0.18, $y + 0.7);
+            $pdf->SetXY($xFine + 0.27, $y + 0.7);
             $pdf->TextField(
                 "fine_oz_$i",
                 $wFine - 0.45,

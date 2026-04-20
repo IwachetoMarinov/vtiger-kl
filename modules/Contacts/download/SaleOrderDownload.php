@@ -24,22 +24,22 @@ class SaleOrderDownload
             ['name' => 'serial_numbers',         'x' => 12.0,  'y' => 147.0,  'w' => 155.0],
             ['name' => 'pick_up_location',       'x' => 35.5,  'y' => 169.5,  'w' => 147.0],
 
-            ['name' => 'authorised_person_name', 'x' => 53.0,  'y' => 178.0, 'w' => 64.0],
-            ['name' => 'authorised_person_id',   'x' => 142.0, 'y' => 178.0, 'w' => 64.0],
+            ['name' => 'authorised_person_name', 'x' => 57.0,  'y' => 178.0, 'w' => 60.0],
+            ['name' => 'authorised_person_id',   'x' => 145.0, 'y' => 178.0, 'w' => 61.0],
 
             ['name' => 'bank_name',              'x' => 31.0,  'y' => 216.5,  'w' => 135.0],
             ['name' => 'bank_address',           'x' => 35.0,  'y' => 224.0,  'w' => 135.0],
             ['name' => 'bank_code',              'x' => 34.0,  'y' => 231.5,  'w' => 61.0],
-            ['name' => 'swift_code',             'x' => 124.0, 'y' => 231.5,  'w' => 65.0],
+            ['name' => 'swift_code',             'x' => 127.0, 'y' => 231.5,  'w' => 65.0],
 
             ['name' => 'account_no',             'x' => 34.0,  'y' => 238.0,  'w' => 57.0],
-            ['name' => 'account_currency',       'x' => 132.0, 'y' => 238.0,  'w' => 59.0],
+            ['name' => 'account_currency',       'x' => 133.0, 'y' => 238.0,  'w' => 59.0],
 
-            ['name' => 'place_input',            'x' => 22.0,  'y' => 252.5,  'w' => 65.0],
-            ['name' => 'signed_by',              'x' => 109.0, 'y' => 252.5,  'w' => 75.0],
+            ['name' => 'place_input',            'x' => 21.0,  'y' => 252.5,  'w' => 65.0],
+            ['name' => 'signed_by',              'x' => 110.0, 'y' => 252.5,  'w' => 75.0],
 
-            ['name' => 'date_input',             'x' => 22.0,  'y' => 260.3,  'w' => 65.0],
-            ['name' => 'on_behalf_of',           'x' => 113.0, 'y' => 260.3,  'w' => 72.0],
+            ['name' => 'date_input',             'x' => 21.0,  'y' => 260.3,  'w' => 65.0],
+            ['name' => 'on_behalf_of',           'x' => 114.0, 'y' => 260.3,  'w' => 72.0],
         ],
 
         'grids' => [
