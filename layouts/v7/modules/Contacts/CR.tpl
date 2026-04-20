@@ -382,7 +382,7 @@
                     </tr>
                 </table>
 
-              
+
             </div>
         </div>
 
@@ -390,15 +390,15 @@
 
     <script>
         document.getElementById('downloadBtn').addEventListener('click', function(e) {
-            const companyName = document.querySelector('input[name="company_option"]');
+            const companyOption = document.querySelector('input[name="company_option"]');
             const idOption = document.querySelector('input[name="id_option"]');
 
             const url = new URL(this.href);
 
-            if (companyName && companyName.checked) {
-                url.searchParams.set('companyName', "1");
+            if (companyOption && companyOption.checked) {
+                url.searchParams.set('companyOption', "1");
             } else {
-                url.searchParams.delete('companyName');
+                url.searchParams.delete('companyOption');
             }
 
             if (idOption && idOption.checked) {
