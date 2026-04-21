@@ -14,15 +14,11 @@ class Contacts_MonthlyTransactionCron
 
     public function process()
     {
+        // 0. Check if not first day of the month, if yes then exit (to avoid running on the first day of the month)
+        if (date('d') !== '01') return;
+
         // 1. Build date range for the current month
         $date_range = $this->buildMonthlyDateRange();
-
-        // Hardcoded date range for testing, replace with above line in production only for testing
-        // SHOULD BE REMOVED IN PRODUCTION
-        // $date_range = [
-        //     "2026-01-31",
-        //     "2026-03-31",
-        // ];
 
         $service = new Contacts_ActivitySummaryService();
 
