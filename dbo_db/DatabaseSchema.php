@@ -24,7 +24,9 @@ class DatabaseSchema
 
     public function getTables()
     {
-        if (!$this->connection) die(print_r(sqlsrv_errors(), true));
+        if (!$this->connection) {
+            throw new \Exception("Database connection failed.");
+        }
 
         $sql = "SELECT DISTINCT TABLE_SCHEMA FROM INFORMATION_SCHEMA.TABLES";
         print_r(GetDBRows::getRows($this->connection, $sql, []));

@@ -355,7 +355,6 @@ class ActivitySummary
     protected function getSingleTransaction($doc_no, $table_name = "DW_TxHx")
     {
         if (!$doc_no || !$this->connection) {
-            die(print_r(sqlsrv_errors(), true));
             return [];
         }
 
