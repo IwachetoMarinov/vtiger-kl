@@ -65,14 +65,14 @@
 									</button>
 								</a>
 							</span>
-							<span class="pull-right" style="margin-right:10px;">
+							{* <span class="pull-right" style="margin-right:10px;">
 								<button id="generateHoldingCertificate"
 									data-certificateid="{$CERTIFICATE_HOLDING|default:''}"
 									class="btn btn-default vteWidgetCreateButton" type="button">
 									<span class="fa fa-certificate"></span>
 									&nbsp;Certificate
 								</button>
-							</span>
+							</span> *}
 						</div>
 					</span>
 				</div>

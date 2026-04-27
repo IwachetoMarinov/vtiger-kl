@@ -252,7 +252,8 @@
                                         <td>
                                             <span>{$barItem->itemDescription}</span> <br />
                                             <span style="font-size:smaller;font-style:italic;">
-                                               <pre> {$barItem->serialNumbers}</pre></span>
+                                                <pre> {$barItem->serialNumbers}</pre>
+                                            </span>
                                         </td>
 
                                         <td style="text-align:right;"> {number_format($barItem->totalFineOz,4)}</td>
@@ -293,11 +294,12 @@
 
                     <!-- Signed by -->
                     <tr>
-                        <td style="padding-top:5mm; width:50%;">
+                        <td style="padding-top:5mm; width:44%;">
                             <span>Signed by:</span>
                             <span>................................</span>
                         </td>
-                        <td style="padding-top:5mm; width:50%;">
+                        <td style="padding-top:5mm; width:4%;"></td>
+                        <td style="padding-top:5mm; width:52%;">
                             <span>Signed by:</span>
                             <span>................................</span>
                         </td>
@@ -305,11 +307,12 @@
 
                     <!-- On behalf of -->
                     <tr>
-                        <td style="padding-top:5mm;">
+                        <td style="padding-top:5mm; width: 44%;">
                             <span>On behalf of:</span>
                             <span>...........................</span>
                         </td>
-                        <td style="padding-top:5mm;">
+                        <td style="padding-top:5mm; width:4%;"></td>
+                        <td style="padding-top:5mm; width:52%;">
                             <span>On behalf of:</span>
 
                             {if isset($COMPANY)}
@@ -326,7 +329,7 @@
             <div style="margin-top:5mm;">
                 <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
                     <tr>
-                        <td width="48%" valign="top">
+                        <td width="44%" valign="top">
                             <div style="height:100px;"></div>
                             <div style="border-bottom:1px solid #000; margin-bottom:2mm;"></div>
                             <p style="margin:0;">Signature</p>
@@ -334,7 +337,7 @@
 
                         <td width="4%"></td>
 
-                        <td width="48%" valign="top">
+                        <td width="52%" valign="top">
                             <div style="height:100px;"></div>
                             <div style="border-bottom:1px solid #000; margin-bottom:2mm;"></div>
                             <p style="margin:0;">Signature</p>

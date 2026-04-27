@@ -231,56 +231,60 @@ Vtiger_Edit_Js(
         line.find(".item_fineoz").val(itemTotalFineOz.toFixed(8));
       }
     },
+
     calculateTheCurrentLineItemUSD: function (line) {
       var thisInstance = this;
-      itemTotalOz = line.find(".item_fineoz").val();
-      // indicativeSpotPrice = jQuery('input[name="indicative_spot_price"]').val();
-      indicativeSpotPrice = jQuery(
+
+      itemTotalOz =
+        parseFloat(
+          (line.find(".item_fineoz").val() || "").toString().replace(/,/g, ""),
+        ) || 0;
+
+      var exactSpotPriceRaw = jQuery('input[name="spot_price"]').val();
+      var indicativeSpotPriceRaw = jQuery(
         'input[name="indicative_spot_price"], input[name="cf_1136"]',
       ).val();
-      exactSpotPrice = jQuery('input[name="spot_price"]').val();
-      currentSpotPrice =
-        parseFloat(exactSpotPrice) > 0 ? exactSpotPrice : indicativeSpotPrice;
 
-      item_pre_disc = line.find(".item_premium").val();
+      var exactSpotPrice = parseFloat(
+        (exactSpotPriceRaw || "").toString().replace(/,/g, ""),
+      );
+
+      var indicativeSpotPrice = parseFloat(
+        (indicativeSpotPriceRaw || "").toString().replace(/,/g, ""),
+      );
+
+      currentSpotPrice =
+        !isNaN(exactSpotPrice) && exactSpotPrice > 0
+          ? exactSpotPrice
+          : indicativeSpotPrice || 0;
+
+      item_pre_disc =
+        parseFloat(
+          (line.find(".item_premium").val() || "").toString().replace(/,/g, ""),
+        ) || 0;
 
       item_pre_disc_usd = line.find(".item_premium_usd").val();
 
-      prem_disc = 0;
+      prem_disc = 1;
       if (jQuery('select[name="gpm_order_type"]').val() == "Sale") {
         prem_disc = 1 - item_pre_disc / 100;
       } else {
         prem_disc = 1 + item_pre_disc / 100;
       }
 
-      // if (+item_pre_disc_usd !== 0) {
-      //   console.log("item_pre_disc_usd is not zero");
-
-      //   itemUSD =
-      //     itemTotalOz * currentSpotPrice + parseFloat(item_pre_disc_usd);
-      // } else {
-      //   itemUSD = itemTotalOz * currentSpotPrice * prem_disc;
-
-      //   line
-      //     .find(".item_premium_usd")
-      //     .val(itemUSD - itemTotalOz * currentSpotPrice);
-      // }
-
       var premiumPercent = parseFloat(item_pre_disc) || 0;
       var premiumUsdField = line.find(".item_premium_usd");
       var premiumUsd = parseFloat(premiumUsdField.val()) || 0;
 
-      // ALWAYS recompute from %
-      // USD field is DERIVED, not a switch
       itemUSD = itemTotalOz * currentSpotPrice * prem_disc;
 
       var calculatedPremiumUsd = itemUSD - itemTotalOz * currentSpotPrice;
 
-      // update USD premium every time
       premiumUsdField.val(calculatedPremiumUsd.toFixed(6));
 
       line.find(".item_value_usd").val(itemUSD.toFixed(2));
     },
+
     calculateTotal: function () {
       totalOz = 0;
       totalUsd = 0;
@@ -299,7 +303,8 @@ Vtiger_Edit_Js(
       var thisInstance = this;
       jQuery("body").on(
         "change",
-        ".item_metal, .item_qty, .item_premium, .item_premium_usd",
+        ".item_metal, .item_qty, .item_premium",
+        // ".item_metal, .item_qty, .item_premium, .item_premium_usd",
         function (e) {
           line = jQuery(e.currentTarget).closest("div.item_infromation_input");
 
@@ -317,10 +322,8 @@ Vtiger_Edit_Js(
         "change.select2",
         function (e) {
           forexDate = JSON.parse(jQuery("#GPMForexValue").val());
-          console.log("forexDate", forexDate);
 
           selectedCurrency = jQuery(e.currentTarget).val();
-          console.log("selectedCurrency", selectedCurrency);
 
           if (selectedCurrency == "USD") {
             jQuery('input[name="indicative_fx_spot"]').val(1);
@@ -379,6 +382,56 @@ Vtiger_Edit_Js(
         },
       );
     },
+
+    registerChangeDiscountValues: function () {
+      var thisInstance = this;
+
+      jQuery("body").on("change", ".item_premium_usd", function (e) {
+        var line = jQuery(e.currentTarget).closest(
+          "div.item_infromation_input",
+        );
+
+        var itemTotalOz =
+          parseFloat(
+            (line.find(".item_fineoz").val() || "")
+              .toString()
+              .replace(/,/g, ""),
+          ) || 0;
+
+        var exactSpotPriceRaw = jQuery('input[name="spot_price"]').val();
+        var indicativeSpotPriceRaw = jQuery(
+          'input[name="indicative_spot_price"], input[name="cf_1136"]',
+        ).val();
+
+        var exactSpotPrice = parseFloat(
+          (exactSpotPriceRaw || "").toString().replace(/,/g, ""),
+        );
+
+        var indicativeSpotPrice = parseFloat(
+          (indicativeSpotPriceRaw || "").toString().replace(/,/g, ""),
+        );
+
+        var currentSpotPrice =
+          !isNaN(exactSpotPrice) && exactSpotPrice > 0
+            ? exactSpotPrice
+            : indicativeSpotPrice || 0;
+
+        var premiumUsd =
+          parseFloat(
+            (line.find(".item_premium_usd").val() || "")
+              .toString()
+              .replace(/,/g, ""),
+          ) || 0;
+
+        // NEW LOGIC: base value + usd premium
+        var itemUSD = itemTotalOz * currentSpotPrice + premiumUsd;
+
+        line.find(".item_value_usd").val(itemUSD.toFixed(2));
+        thisInstance.calculateTotal();
+        thisInstance.calculateForeignValue();
+      });
+    },
+
     registerEditOrCreate: function () {
       var thisInstance = this;
       if (jQuery('input[name="record"]').val() > 0) {
@@ -501,6 +554,8 @@ Vtiger_Edit_Js(
       this.registerEditOrCreate();
       this.registerSpotPriceChange();
       this.setFineOzForNoneStrdBars();
+      // New function to change USD value on premium change without changing the premium USD value
+      this.registerChangeDiscountValues();
     },
   },
 );

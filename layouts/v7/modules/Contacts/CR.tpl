@@ -314,10 +314,8 @@
                         {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                             <input type="checkbox" name="id_option">
                         {else}
-                            {if isset($ID_OPTION) && $ID_OPTION eq 1}
-                                <span
-                                    style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
-                            {/if}
+                            <span
+                                style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">{if isset($ID_OPTION) && $ID_OPTION eq 1}✔{/if}</span>
                         {/if}
                         <span>I/We will personally collect the Stored Metal at the Storage Facility and will be holding
                             ID/Passport number</span>
@@ -328,10 +326,8 @@
                         {if !isset($smarty.request.PDFDownload) || $smarty.request.PDFDownload neq true}
                             <input type="checkbox" name="company_option">
                         {else}
-                            {if isset($COMPANY_OPTION) && $COMPANY_OPTION eq 1}
-                                <span
-                                    style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">✔</span>
-                            {/if}
+                            <span
+                                style="font-size: 3.5mm; border:1px solid #000; padding:2px 2px; display:inline-block;height:5mm;width:5mm;line-height:3.5mm;">{if isset($COMPANY_OPTION) && $COMPANY_OPTION eq 1}✔{/if}</span>
                         {/if}
 
                         <span>I/We hereby authorise Mr/Mrs/Representatives of the company </span>
@@ -360,25 +356,25 @@
                 </div>
                 <table style="width:100%; margin-top:4mm; border-collapse:collapse;">
                     <tr>
-                        <td style="width:35%;"></td>
+                        <td style="width:50%;"></td>
                         <td>Date:</td>
                     </tr>
                 </table>
 
                 <table style="width:100%; margin-top:4mm; border-collapse:collapse;">
                     <tr>
-                        <td style="width:35%;">Signed by:</td>
+                        <td style="width:50%;">Signed by:</td>
                         <td>On behalf of:</td>
                     </tr>
                 </table>
 
                 <table style="width:100%; margin-top:3mm; border-collapse:collapse;">
                     <tr>
-                        <td style="width:50%; vertical-align:top;">
+                        <td style="width:48%; vertical-align:top;">
                             <div style="border-bottom:1px solid #000; height:80px; margin-bottom:2mm;"></div>
                             <p>Signature</p>
                         </td>
-                        <td style="width:50%;"></td>
+                        <td style="width:52%;"></td>
                     </tr>
                 </table>
 
