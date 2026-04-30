@@ -261,7 +261,7 @@ class Contacts_ActivitySummaryService
         // Determine upload directory (vTiger storage)
         // $uploadDir = decideFilePath();
         $basePath = realpath(dirname(__DIR__, 3));
-        $uploadDir = $basePath . '/' . decideFilePath();
+        $uploadDir = $basePath . '/storage/';
 
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0775, true);
