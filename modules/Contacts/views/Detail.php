@@ -188,7 +188,8 @@ class Contacts_Detail_View extends Accounts_Detail_View
 		$headerScripts = parent::getHeaderScripts($request);
 
 		$jsFileNames = array(
-			'modules.Contacts.resources.MultiDocUpload'
+			'modules.Contacts.resources.YTDReports',
+			'modules.Contacts.resources.MultiDocUpload',
 		);
 
 		$jsScripts = $this->checkAndConvertJsScripts($jsFileNames);

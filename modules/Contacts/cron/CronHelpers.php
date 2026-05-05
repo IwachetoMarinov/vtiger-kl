@@ -4,12 +4,20 @@
 
 class Contacts_CronHelpers
 {
+    // public static function buildMonthlyDateRange()
+    // {
+    //     $year = date('Y');
+    //     $month = date('m');
+    //     $startDate = date('Y-m-d', strtotime("$year-$month-01"));
+    //     $endDate = date('Y-m-t', strtotime($startDate));
+    //     return [$startDate, $endDate];
+    // }
+
     public static function buildMonthlyDateRange()
     {
-        $year = date('Y');
-        $month = date('m');
-        $startDate = date('Y-m-d', strtotime("$year-$month-01"));
-        $endDate = date('Y-m-t', strtotime($startDate));
+        $startDate = date('Y-m-01', strtotime('first day of last month'));
+        $endDate   = date('Y-m-t', strtotime('last month'));
+
         return [$startDate, $endDate];
     }
 
@@ -88,6 +96,134 @@ class Contacts_CronHelpers
         if (file_exists($htmlPath)) unlink($htmlPath);
 
         return $pdfPath;
+    }
+
+    public static function logYTDReport(string $client_id, string $start_date, string $end_date, int $activityDocId)
+    {
+        $db = PearDatabase::getInstance();
+
+        $db->pquery(
+            "INSERT INTO vtiger_ytdreports_log 
+        (client_id, period_start, period_end, activity_summary_docid, status)
+        VALUES (?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE 
+            activity_summary_docid = VALUES(activity_summary_docid),
+            status = 'completed'",
+            [
+                $client_id,
+                $start_date,
+                $end_date,
+                $activityDocId,
+                'completed'
+            ]
+        );
+    }
+
+    public static function logYTDReportHoldings(string $client_id, string $start_date, string $end_date, int $holdingsDocId)
+    {
+        $db = PearDatabase::getInstance();
+
+        $db->pquery(
+            "INSERT INTO vtiger_ytdreports_log
+        (client_id, period_start, period_end, holdings_docid, status)
+        VALUES (?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+            holdings_docid = VALUES(holdings_docid),
+            status = 'completed'",
+            [
+                $client_id,
+                $start_date,
+                $end_date,
+                $holdingsDocId,
+                'completed'
+            ]
+        );
+    }
+
+    public static function createYTDReportRecord(
+        string $client_id,
+        string $start_date,
+        string $end_date,
+        int $documentId,
+        string $reportType
+    ) {
+        global $adb, $current_user;
+
+        self::initExecutionUser();
+
+        $contactRecord = self::getContactRecordByClientId($client_id);
+        if (!$contactRecord) return 0;
+
+        $contactId = $contactRecord->getId();
+
+        require_once 'modules/YTDReports/YTDReports.php';
+
+        $report = CRMEntity::getInstance('YTDReports');
+        $report->column_fields['ytdreportsname'] = sprintf(
+            '%s - %s - %s to %s',
+            $reportType,
+            $client_id,
+            $start_date,
+            $end_date
+        );
+        $report->column_fields['client_id'] = $client_id;
+        $report->column_fields['assigned_user_id'] = $current_user->id;
+
+        $report->save('YTDReports');
+
+        $reportId = $report->id;
+
+        // Link YTDReports record to generated Document
+        $adb->pquery(
+            "INSERT INTO vtiger_crmentityrel (crmid, module, relcrmid, relmodule)
+     VALUES (?, ?, ?, ?)",
+            [$reportId, 'YTDReports', $documentId, 'Documents']
+        );
+
+        // Link report to Contact
+        $adb->pquery(
+            "INSERT INTO vtiger_crmentityrel (crmid, module, relcrmid, relmodule)
+         VALUES (?, ?, ?, ?)",
+            [$contactId, 'Contacts', $reportId, 'YTDReports']
+        );
+
+        // Link report to generated Document
+        $adb->pquery(
+            "INSERT INTO vtiger_crmentityrel (crmid, module, relcrmid, relmodule)
+         VALUES (?, ?, ?, ?)",
+            [$reportId, 'YTDReports', $documentId, 'Documents']
+        );
+
+        return $reportId;
+    }
+
+    public static function ytdReportExists(
+        string $client_id,
+        string $start_date,
+        string $end_date,
+        string $reportType
+    ): bool {
+        $db = PearDatabase::getInstance();
+
+        $name = sprintf(
+            '%s - %s - %s to %s',
+            $reportType,
+            $client_id,
+            $start_date,
+            $end_date
+        );
+
+        $result = $db->pquery(
+            "SELECT ce.crmid
+         FROM vtiger_crmentity ce
+         INNER JOIN vtiger_ytdreports y ON y.ytdreportsid = ce.crmid
+         WHERE ce.deleted = 0
+         AND y.ytdreportsname = ?
+         LIMIT 1",
+            [$name]
+        );
+
+        return $db->num_rows($result) > 0;
     }
 
     public static function storePdfInDocuments(string $pdfPath, string $client_id, string $selected_year, string $selected_currency, string $titlePrefix = 'Monthly Activity Summary - %s - %s%s')
@@ -200,6 +336,8 @@ class Contacts_CronHelpers
          VALUES (?, ?)",
             [$contactId, $documentId]
         );
+
+        return $documentId;
     }
 
     protected static function initExecutionUser()
@@ -217,8 +355,6 @@ class Contacts_CronHelpers
 
         return $current_user;
     }
-
-
 
     protected static function getContactInfoByClientId(string $client_id)
     {

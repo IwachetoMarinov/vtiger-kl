@@ -23,7 +23,7 @@ class Contacts_DetailView_Model extends Accounts_DetailView_Model
         $moduleModel = $this->getModule();
         $recordModel = $this->getRecord();
         $moduleName = $moduleModel->getName();
-        $recordId = $recordModel->getId();  
+        $recordId = $recordModel->getId();
 
         $linkModelList = parent::getDetailViewLinks($linkParams);
 
@@ -68,6 +68,17 @@ class Contacts_DetailView_Model extends Accounts_DetailView_Model
                 'linkicon' => '',
                 'linktarget' => '_blank',
             );
+            $linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
+        }
+
+        if (Users_Privileges_Model::isPermitted($moduleName, 'DetailView', $recordId)) {
+            $basicActionLink = array(
+                'linktype' => 'DETAILVIEWBASIC',
+                'linklabel' => 'Generate YTD Report',
+                'linkurl' => 'javascript:generateYTDReport(' . $recordId . ');',
+                'linkicon' => '',
+            );
+
             $linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
         }
 
