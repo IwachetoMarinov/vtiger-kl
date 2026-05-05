@@ -4,8 +4,6 @@
 include_once 'CronHelpers.php';
 include_once 'StatementOfHoldingsService.php';
 
-ini_set('display_errors', 1); error_reporting(E_ALL);
-
 // TEST cron job 
 // /usr/bin/php /var/www/html/monthly_sh.php
 // /usr/bin/php /var/www/html/monthly_transaction.php
@@ -14,10 +12,8 @@ class Contacts_MonthlyStatementOfHoldings
 {
     public function process()
     {
-        echo "Starting Monthly Statement of Holdings Cron...\n";
-
         // 1. Check if not first day of the month, if yes then exit (to avoid running on the first day of the month)
-        // if (date('d') !== '01') return;
+        if (date('d') !== '01') return;
 
         // 2. Build date range for the current month
         $date_range = Contacts_CronHelpers::buildMonthlyDateRange();
@@ -25,12 +21,9 @@ class Contacts_MonthlyStatementOfHoldings
         // 3 Get all Party codes (client IDs) to process monthly transactions for each client
         $clint_ids =  Contacts_CronHelpers::fetchClientIds();
 
-        echo "Fetched client IDs: " . implode(', ', $clint_ids) . "\n" . 'Clinent count: ' . count($clint_ids) . "\n";
-
         $service = new Contacts_StatementOfHoldingsService();
 
         foreach ($clint_ids as $client_id) {
-            echo "Processing client ID: $client_id, Date Range: " . json_encode($date_range) . "\n";
             $service->processClient($client_id, $date_range);
         }
     }
