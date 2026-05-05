@@ -28,15 +28,11 @@ class Contacts_MonthlyTransactionCron
         // Loop through each client and process their transactions for the month
         foreach ($clint_ids as $client_id) {
             $service->generateAndStoreForClient($client_id, $date_range);
-
-            // break after first iteration for testing, remove this in production
-            // break;
         }
     }
 
     protected function buildMonthlyDateRange()
     {
-        // Get curent month and year        $month = date('m');
         $year = date('Y');
         $month = date('m');
         $startDate = date('Y-m-d', strtotime("$year-$month-01"));
