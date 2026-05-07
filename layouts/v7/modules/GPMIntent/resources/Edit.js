@@ -432,6 +432,60 @@ Vtiger_Edit_Js(
       });
     },
 
+    registerSubmitPremiumUsdRecalculate: function () {
+      var thisInstance = this;
+
+      jQuery("form").on("submit", function () {
+        jQuery("#item_container > div.item_infromation_input").each(
+          function (index) {
+            var line = jQuery(this);
+
+            var itemTotalOz =
+              parseFloat(
+                (line.find(".item_fineoz").val() || "")
+                  .toString()
+                  .replace(/,/g, ""),
+              ) || 0;
+
+            var exactSpotPrice = parseFloat(
+              (jQuery('input[name="spot_price"]').val() || "")
+                .toString()
+                .replace(/,/g, ""),
+            );
+
+            var indicativeSpotPrice = parseFloat(
+              (
+                jQuery(
+                  'input[name="indicative_spot_price"], input[name="cf_1136"]',
+                ).val() || ""
+              )
+                .toString()
+                .replace(/,/g, ""),
+            );
+
+            var currentSpotPrice =
+              !isNaN(exactSpotPrice) && exactSpotPrice > 0
+                ? exactSpotPrice
+                : indicativeSpotPrice || 0;
+
+            var premiumUsd =
+              parseFloat(
+                (line.find(".item_premium_usd").val() || "")
+                  .toString()
+                  .replace(/,/g, ""),
+              ) || 0;
+
+            var itemUSD = itemTotalOz * currentSpotPrice + premiumUsd;
+
+            line.find(".item_value_usd").val(itemUSD.toFixed(2));
+          },
+        );
+
+        thisInstance.calculateTotal();
+        thisInstance.calculateForeignValue();
+      });
+    },
+
     registerEditOrCreate: function () {
       var thisInstance = this;
       if (jQuery('input[name="record"]').val() > 0) {
@@ -556,6 +610,7 @@ Vtiger_Edit_Js(
       this.setFineOzForNoneStrdBars();
       // New function to change USD value on premium change without changing the premium USD value
       this.registerChangeDiscountValues();
+      this.registerSubmitPremiumUsdRecalculate();
     },
   },
 );
