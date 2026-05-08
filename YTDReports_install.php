@@ -197,3 +197,31 @@ $adb->pquery("
 ", []);
 
 echo "YTD reports log table checked/created\n";
+
+
+$ytdModule = Vtiger_Module::getInstance('YTDReports');
+
+if ($contactsModule && $ytdModule) {
+
+    $relationExists = $adb->pquery(
+        "SELECT 1
+         FROM vtiger_relatedlists
+         WHERE tabid = ?
+         AND related_tabid = ?",
+        [$contactsModule->id, $ytdModule->id]
+    );
+
+    if ($adb->num_rows($relationExists) == 0) {
+
+        $contactsModule->setRelatedList(
+            $ytdModule,
+            'YTD Reports',
+            ['ADD', 'SELECT'],
+            'get_related_list'
+        );
+
+        echo "YTD Reports relation added\n";
+    } else {
+        echo "YTD Reports relation already exists\n";
+    }
+}
