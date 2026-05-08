@@ -13,7 +13,7 @@ class Contacts_MonthlyStatementOfHoldings
     public function process()
     {
         // 1. Check if not first day of the month, if yes then exit (to avoid running on the first day of the month)
-        if (date('d') !== '01') return;
+        // if (date('d') !== '01') return;
 
         // 2. Build date range for the current month
         $date_range = Contacts_CronHelpers::buildMonthlyDateRange();
@@ -24,6 +24,8 @@ class Contacts_MonthlyStatementOfHoldings
         $service = new Contacts_StatementOfHoldingsService();
 
         foreach ($clint_ids as $client_id) {
+            echo "Processing client ID: $client_id for date range: " . $date_range['start'] . " to " . $date_range['end'] . "\n";
+
             $service->processClient($client_id, $date_range);
         }
     }
