@@ -24,7 +24,7 @@ class Contacts_MonthlyStatementOfHoldings
         $service = new Contacts_StatementOfHoldingsService();
 
         foreach ($clint_ids as $client_id) {
-            echo "Processing client ID: $client_id for date range: " . $date_range['start'] . " to " . $date_range['end'] . "\n";
+            echo "Processing client ID: $client_id for date range: " . $date_range[0] . " to " . $date_range[1] . "\n";
 
             $service->processClient($client_id, $date_range);
         }

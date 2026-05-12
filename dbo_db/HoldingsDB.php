@@ -7,9 +7,11 @@ include_once 'data/CRMEntity.php';
 include_once 'modules/Users/Users.php';
 include_once 'helpers/DBConnection.php';
 include_once 'helpers/DBSettings.php';
+include_once 'adapters/HoldingsMapper.php';
 
 use helpers\DBConnection;
 use helpers\DBSettings;
+use adapters\HoldingsMapper;
 
 class HoldingsDB
 {
@@ -30,13 +32,8 @@ class HoldingsDB
 
         if (!$this->connection) return [];
 
-        $where = '';
-        $params = [];
-
-        if ($customer_id) {
-            $where .= "WHERE Party_Code = ?";
-            $params[] = $customer_id;
-        }
+        $where = "WHERE Party_Code = ?";
+        $params[] = $customer_id;
 
         if ($start_date) {
             $where .= empty($where) ? "WHERE" : " AND";
@@ -145,7 +142,8 @@ class HoldingsDB
 
             sqlsrv_free_stmt($stmt);
 
-            return $this->formatHoldingsData($summary);
+            // return $this->formatHoldingsData($summary);
+            return HoldingsMapper::mapDocHoldingRows($summary);
         } catch (\Throwable $e) {
             return [];
         }
@@ -259,73 +257,75 @@ class HoldingsDB
 
         sqlsrv_free_stmt($stmt);
 
-        $results = [];
-        foreach ($summary as $item) {
-            $quantity = $item['Qty'] ? $item['Qty'] : $item['Quantity'] ?? 1;
-            $serial = $item['Ser_No_List'] ? $item['Ser_No_List'] : $item['Ser_No'] ?? 1;
+        return HoldingsMapper::mapStockHoldingRows($summary);
 
-            $results[] = [
-                'serial_no' => $serial,
-                'gross_oz' => $item['GrossOz'] ?? 0,
-                'fine_oz' => $item['FineOz'] ?? 0,
-                'purity' => $item['Purity'] ?? 0,
-                'acq_tx_no' => $item['Acq_Tx_No'] ?? '',
-                'item_code' => $item['Item_Code'],
-                'description' => $item['Item_Desc'],
-                'quantity' => $quantity,
-                'location' => $item['WH_Code'] ?? '',
-                'brand' => $item['Brand'] ?? '',
-                'mt_code' => $item['MT_Code'] ?? '',
-                "metal" => $this->getMetalName($item['MT_Code'] ?? ''),
-            ];
-        }
-        return $results;
+        // $results = [];
+        // foreach ($summary as $item) {
+        //     $quantity = $item['Qty'] ? $item['Qty'] : $item['Quantity'] ?? 1;
+        //     $serial = $item['Ser_No_List'] ? $item['Ser_No_List'] : $item['Ser_No'] ?? 1;
+
+        //     $results[] = [
+        //         'serial_no' => $serial,
+        //         'gross_oz' => $item['GrossOz'] ?? 0,
+        //         'fine_oz' => $item['FineOz'] ?? 0,
+        //         'purity' => $item['Purity'] ?? 0,
+        //         'acq_tx_no' => $item['Acq_Tx_No'] ?? '',
+        //         'item_code' => $item['Item_Code'],
+        //         'description' => $item['Item_Desc'],
+        //         'quantity' => $quantity,
+        //         'location' => $item['WH_Code'] ?? '',
+        //         'brand' => $item['Brand'] ?? '',
+        //         'mt_code' => $item['MT_Code'] ?? '',
+        //         "metal" => $this->getMetalName($item['MT_Code'] ?? ''),
+        //     ];
+        // }
+        // return $results;
     }
 
-    private function formatHoldingsData($data)
-    {
-        $results = [];
-        foreach ($data as $item) {
-            $results[] = [
-                'spot_date' => $item['Spot_Date'] instanceof \DateTime ? $item['Spot_Date']->format('Y-m-d') : $item['Spot_Date'],
-                'spot_price' => $item['Spot_Price'] ?? '',
-                'location' => $item['WH_Code'] ?? '',
-                'description' => $item['Item_Desc'] ?? '',
-                'quantity' => $item['Qty'] ?? 0,
-                'serial_no' => $item['Ser_No_List'] ? $this->sanitizeSerials($item['Ser_No_List']) :  '',
-                'fine_oz' => $item['FineOz'] ?? 0,
-                'total' => $item['Total'] ?? 0,
-            ];
-        }
-        return $results;
-    }
+    // private function formatHoldingsData($data)
+    // {
+    //     $results = [];
+    //     foreach ($data as $item) {
+    //         $results[] = [
+    //             'spot_date' => $item['Spot_Date'] instanceof \DateTime ? $item['Spot_Date']->format('Y-m-d') : $item['Spot_Date'],
+    //             'spot_price' => $item['Spot_Price'] ?? '',
+    //             'location' => $item['WH_Code'] ?? '',
+    //             'description' => $item['Item_Desc'] ?? '',
+    //             'quantity' => $item['Qty'] ?? 0,
+    //             'serial_no' => $item['Ser_No_List'] ? $this->sanitizeSerials($item['Ser_No_List']) :  '',
+    //             'fine_oz' => $item['FineOz'] ?? 0,
+    //             'total' => $item['Total'] ?? 0,
+    //         ];
+    //     }
+    //     return $results;
+    // }
 
-    protected function getMetalName($code): string
-    {
-        if (!$code) return '';
+    // protected function getMetalName($code): string
+    // {
+    //     if (!$code) return '';
 
-        $metal_names = [
-            'XAU' => 'Gold',
-            'XAG' => 'Silver',
-            'XPT' => 'Platinum',
-            'XPD' => 'Palladium',
-            'XPL' => 'Palladium',
-            'MBTC' => 'mBitCoin',
-        ];
+    //     $metal_names = [
+    //         'XAU' => 'Gold',
+    //         'XAG' => 'Silver',
+    //         'XPT' => 'Platinum',
+    //         'XPD' => 'Palladium',
+    //         'XPL' => 'Palladium',
+    //         'MBTC' => 'mBitCoin',
+    //     ];
 
-        return $metal_names[$code] ?? '';
-    }
+    //     return $metal_names[$code] ?? '';
+    // }
 
-    protected function sanitizeSerials($serials): string
-    {
-        if (!$serials) return '';
+    // protected function sanitizeSerials($serials): string
+    // {
+    //     if (!$serials) return '';
 
-        // 1. Remove trailing semicolons
-        $serials = preg_replace('/;+$/', '', $serials);
+    //     // 1. Remove trailing semicolons
+    //     $serials = preg_replace('/;+$/', '', $serials);
 
-        // 2. Replace multiple semicolons in the middle with newline
-        $serials = preg_replace('/;{2,}/', "\n", $serials);
+    //     // 2. Replace multiple semicolons in the middle with newline
+    //     $serials = preg_replace('/;{2,}/', "\n", $serials);
 
-        return $serials;
-    }
+    //     return $serials;
+    // }
 }
