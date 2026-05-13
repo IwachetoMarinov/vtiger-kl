@@ -90,6 +90,10 @@ class Contacts_Detail_View extends Accounts_Detail_View
 
 		$holdings_data = $holdings->getHoldings($clientID);
 
+		echo "<pre>";
+		print_r($holdings_data);
+		echo "</pre>";
+
 		$wallets = $holdings->getWalletBalances($clientID);
 
 		$certificate_id = $this->getCertificateId($recordId);
