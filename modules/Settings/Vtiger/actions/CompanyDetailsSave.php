@@ -29,7 +29,7 @@ class Settings_Vtiger_CompanyDetailsSave_Action extends Settings_Vtiger_Basic_Ac
 		header('Location: ' . $reloadUrl);
 	}
 
-	public function Save(Vtiger_Request $request)
+	public function SaveDebug(Vtiger_Request $request)
 	{
 		echo '<pre>';
 
@@ -81,7 +81,7 @@ class Settings_Vtiger_CompanyDetailsSave_Action extends Settings_Vtiger_Basic_Ac
 		exit;
 	}
 
-	public function SaveBackup(Vtiger_Request $request)
+	public function Save(Vtiger_Request $request)
 	{
 		$moduleModel = Settings_Vtiger_CompanyDetails_Model::getInstance();
 		$status = false;
