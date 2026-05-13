@@ -346,51 +346,6 @@ class ActivitySummary
         return ActivitySummaryMapper::mapSingleTransaction($summary[0]);
     }
 
-    protected function getSingleTransactionOld($doc_no, $table_name = "DW_TxHx")
-    {
-        if (!$doc_no || !$this->connection) return [];
-
-        $where = "WHERE [Tx_No] = ?";
-        $params[] = $doc_no;
-
-        $sql = "SELECT * FROM $this->database_prefix.[$table_name] $where";
-        $summary = GetDBRows::getRows($this->connection, $sql, $params);
-
-        if (count($summary) === 0) return [];
-        $row = $summary[0];
-
-        $tx_type  = isset($row['Tx_Type']) ? $row['Tx_Type'] : null;
-
-        if (!$tx_type && isset($row['Doc_Type'])) $tx_type = $row['Doc_Type'];
-
-        $posting_date = isset($row['Appr_Date']) && $row['Appr_Date'] instanceof \DateTime
-            ? $row['Appr_Date']->format('Y-m-d')
-            : ($row['Appr_Date'] ?? null);
-
-        if (!$posting_date && isset($row['Del_Date'])) {
-            $posting_date = isset($row['Del_Date']) && $row['Del_Date'] instanceof \DateTime
-                ? $row['Del_Date']->format('Y-m-d')
-                : ($row['Del_Date'] ?? null);
-        }
-
-        return [
-            'docNo'        => $row['Tx_No'] ?? '',
-            'GST'          => true,
-            'voucherType'  => $tx_type ?? '',
-            'currency'     => $row['Curr_Code'] ?? '',
-            'description'  => $row['Description'] ?? '',
-            'doctype'      => $tx_type ?? '',
-            'documentDate' =>
-            isset($row['Tx_Date']) && $row['Tx_Date'] instanceof \DateTime
-                ? $row['Tx_Date']->format('Y-m-d')
-                : ($row['Tx_Date'] ?? null),
-            'postingDate' => $posting_date,
-            'grandTotal'   => isset($row['Tx_Amt']) ? (float)$row['Tx_Amt'] : 0.00,
-            'totalusdVal'  => isset($row['Matched_Amt']) ? (float)$row['Matched_Amt'] : 0.00,
-        ];
-    }
-
-
     protected function mapTransactionItems($summary, $transaction)
     {
         $items = [];

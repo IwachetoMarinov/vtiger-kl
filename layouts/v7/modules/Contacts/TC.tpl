@@ -212,6 +212,15 @@
         </ul>
         <script type="text/javascript" src="layouts/v7/modules/Contacts/resources/PrintConf.js"></script>
         {include file='TCPrintConf.tpl'|vtemplate_path:'Contacts'}
+
+        {assign var="transactionWarningExcludes" value=['description', 'grand_total', 'matched_amt']}
+        {assign var="barItemWarningExcludes" value=[]}
+
+        {include file='TCWarnings.tpl'|vtemplate_path:'Contacts'
+            ERP_DOCUMENT=$ERP_DOCUMENT
+            TRANSACTION_WARNING_EXCLUDES=$transactionWarningExcludes
+            BARITEM_WARNING_EXCLUDES=$barItemWarningExcludes
+        }
     {/if}
 
 
