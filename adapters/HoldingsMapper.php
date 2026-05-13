@@ -10,7 +10,7 @@ class HoldingsMapper
 
         return [
             'spot_date' => self::formatDate(
-                self::firstValue($item, ['Spottt_Date'], null, $warnings, 'spot_date')
+                self::firstValue($item, ['Spot_Date'], null, $warnings, 'spot_date')
             ),
             'spot_price' => self::firstValue($item, ['Spot_Price'], 0, $warnings, 'spot_price'),
             'location' => self::firstValue($item, ['WH_Code'], '', $warnings, 'location'),
