@@ -125,6 +125,7 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model
 	// }
 	public function saveLogo($logoName)
 	{
+		file_put_contents('/tmp/logo_called.txt', date('c') . ' saveLogo called: ' . $logoName . PHP_EOL, FILE_APPEND);
 		$uploadDir = rtrim(vglobal('root_directory'), '/') . '/' . $this->logoPath;
 
 		if (!is_dir($uploadDir)) mkdir($uploadDir, 0775, true);
