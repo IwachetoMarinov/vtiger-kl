@@ -125,7 +125,7 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model
 	// }
 	public function saveLogo($logoName)
 	{
-		file_put_contents('/tmp/logo_called.txt', date('c') . ' saveLogo called: ' . $logoName . PHP_EOL, FILE_APPEND);
+		die('SAVELOGO HIT: ' . htmlspecialchars($logoName));
 		$uploadDir = rtrim(vglobal('root_directory'), '/') . '/' . $this->logoPath;
 
 		if (!is_dir($uploadDir)) mkdir($uploadDir, 0775, true);
@@ -137,16 +137,6 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model
 		}
 
 		if (!move_uploaded_file($_FILES['logo']['tmp_name'], $targetFile)) {
-
-			file_put_contents(
-				'/tmp/logo_debug.txt',
-				"tmp=" . $_FILES['logo']['tmp_name'] . PHP_EOL .
-					"target=" . $targetFile . PHP_EOL .
-					"exists_tmp=" . (file_exists($_FILES['logo']['tmp_name']) ? 'YES' : 'NO') . PHP_EOL .
-					"is_uploaded=" . (is_uploaded_file($_FILES['logo']['tmp_name']) ? 'YES' : 'NO') . PHP_EOL .
-					"dir_writable=" . (is_writable(dirname($targetFile)) ? 'YES' : 'NO') . PHP_EOL,
-				FILE_APPEND
-			);
 
 			throw new Exception('move_uploaded_file failed');
 		}
