@@ -21,7 +21,7 @@ class ActivitySummaryMapper
 
             'matched_amt' => self::firstValue($item, ['Matched_Amt', 'Match_Amt', 'Matched_Amount'], 0, $warnings, 'matched_amt'),
             'tx_amount' => self::firstValue($item, ['TxAmt', 'Tx_Amt', 'Transaction_Amount'], 0, $warnings, 'tx_amount'),
-            'currency' => self::firstValue($item, ['Curr_Codettt', 'Currencyttt'], '', $warnings, 'currency'),
+            'currency' => self::firstValue($item, ['Curr_Code', 'Currency'], '', $warnings, 'currency'),
             'document_date' => self::firstValue($item, ['Tx_Date', 'Document_Date'], null, $warnings, 'document_date'),
             'posting_date' => self::firstValue($item, ['Appr_Date', 'Posting_Date'], null, $warnings, 'posting_date'),
 
@@ -124,11 +124,13 @@ class ActivitySummaryMapper
             }
         }
 
-        $warnings[] = sprintf(
-            'Missing %s. Expected one of: %s',
-            $fieldName,
-            implode(', ', $keys)
-        );
+        if (!in_array($fieldName, self::$excludedWarningFields, true)) {
+            $warnings[] = sprintf(
+                'Missing %s. Expected one of: %s',
+                $fieldName,
+                implode(', ', $keys)
+            );
+        }
 
         return $default;
     }
@@ -144,4 +146,11 @@ class ActivitySummaryMapper
     {
         return isset($value) ? (float) $value : 0.00;
     }
+
+    private static array $excludedWarningFields = [
+        'transaction_2',
+        'transaction_3',
+        'table_name_2',
+        'table_name_3',
+    ];
 }
