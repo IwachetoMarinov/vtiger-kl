@@ -4,6 +4,12 @@
 {assign var="transactionWarningsCount" value=0}
 {assign var="barItemWarningsCount" value=0}
 
+{assign var="firstBarItem" value=null}
+
+{if isset($ERP_DOCUMENT->barItems) && $ERP_DOCUMENT->barItems|@count gt 0}
+    {assign var="firstBarItem" value=$ERP_DOCUMENT->barItems[0]}
+{/if}
+
 {foreach from=$ERP_DOCUMENT->_warnings|default:[] item=warning}
     {assign var="warningField" value=$warning.field|default:''}
 
@@ -12,15 +18,15 @@
     {/if}
 {/foreach}
 
-{foreach from=$ERP_DOCUMENT->barItems|default:[] item=barItem}
-    {foreach from=$barItem->_warnings|default:[] item=warning}
+{if $firstBarItem}
+    {foreach from=$firstBarItem->_warnings|default:[] item=warning}
         {assign var="warningField" value=$warning.field|default:''}
 
         {if !$warningField || !in_array($warningField, $barItemWarningExcludes)}
             {assign var="barItemWarningsCount" value=$barItemWarningsCount+1}
         {/if}
     {/foreach}
-{/foreach}
+{/if}
 
 {assign var="totalWarnings" value=$transactionWarningsCount+$barItemWarningsCount}
 
@@ -65,49 +71,33 @@
                 </div>
             {/if}
 
-            {if $barItemWarningsCount gt 0}
+            {if $barItemWarningsCount gt 0 && $firstBarItem}
                 <div>
                     <h4 style="margin-top:0;color:#b94a48;">
                         Bar Item Warnings ({$barItemWarningsCount})
                     </h4>
 
-                    {foreach from=$ERP_DOCUMENT->barItems|default:[] item=barItem name=barItemLoop}
+                    <div style="border:1px solid #ddd;padding:12px;margin-bottom:15px;border-radius:4px;">
+                        <div style="margin-bottom:8px;">
+                            <strong>Bar Item Mapping</strong>
 
-                        {assign var="visibleBarItemWarningCount" value=0}
-
-                        {foreach from=$barItem->_warnings|default:[] item=warning}
-                            {assign var="warningField" value=$warning.field|default:''}
-
-                            {if !$warningField || !in_array($warningField, $barItemWarningExcludes)}
-                                {assign var="visibleBarItemWarningCount" value=$visibleBarItemWarningCount+1}
+                            {if isset($firstBarItem->description) && $firstBarItem->description neq ''}
+                                - {$firstBarItem->description}
                             {/if}
-                        {/foreach}
+                        </div>
 
-                        {if $visibleBarItemWarningCount gt 0}
-                            <div style="border:1px solid #ddd;padding:12px;margin-bottom:15px;border-radius:4px;">
-                                <div style="margin-bottom:8px;">
-                                    <strong>Bar Item #{$smarty.foreach.barItemLoop.iteration}</strong>
+                        <ul style="margin:0;padding-left:20px;">
+                            {foreach from=$firstBarItem->_warnings|default:[] item=warning}
+                                {assign var="warningField" value=$warning.field|default:''}
 
-                                    {if isset($barItem->description) && $barItem->description neq ''}
-                                        - {$barItem->description}
-                                    {/if}
-                                </div>
-
-                                <ul style="margin:0;padding-left:20px;">
-                                    {foreach from=$barItem->_warnings|default:[] item=warning}
-                                        {assign var="warningField" value=$warning.field|default:''}
-
-                                        {if !$warningField || !in_array($warningField, $barItemWarningExcludes)}
-                                            <li style="margin-bottom:5px;">
-                                                {$warning.message|default:$warning}
-                                            </li>
-                                        {/if}
-                                    {/foreach}
-                                </ul>
-                            </div>
-                        {/if}
-
-                    {/foreach}
+                                {if !$warningField || !in_array($warningField, $barItemWarningExcludes)}
+                                    <li style="margin-bottom:5px;">
+                                        {$warning.message|default:$warning}
+                                    </li>
+                                {/if}
+                            {/foreach}
+                        </ul>
+                    </div>
                 </div>
             {/if}
 
