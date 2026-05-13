@@ -63,26 +63,30 @@ class HoldingsMapper
     }
 
     private static function firstValue(
-        array $item,
-        array $keys,
-        $default,
-        array &$warnings,
-        string $fieldName
-    ) {
-        foreach ($keys as $key) {
-            if (isset($item[$key]) && $item[$key] !== '') {
-                return $item[$key];
-            }
+    array $item,
+    array $keys,
+    $default,
+    array &$warnings,
+    string $fieldName
+) {
+    foreach ($keys as $key) {
+        if (isset($item[$key]) && $item[$key] !== '') {
+            return $item[$key];
         }
+    }
 
-        $warnings[] = sprintf(
+    $warnings[] = [
+        'field' => $fieldName,
+        'keys' => $keys,
+        'message' => sprintf(
             'Missing %s. Expected one of: %s',
             $fieldName,
             implode(', ', $keys)
-        );
+        ),
+    ];
 
-        return $default;
-    }
+    return $default;
+}
 
     private static function formatDate($value)
     {

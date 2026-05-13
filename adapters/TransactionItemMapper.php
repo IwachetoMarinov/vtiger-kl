@@ -177,14 +177,20 @@ class TransactionItemMapper
         string $fieldName
     ) {
         foreach ($keys as $key) {
-            if (isset($item[$key]) && $item[$key] !== '') return $item[$key];
+            if (isset($item[$key]) && $item[$key] !== '') {
+                return $item[$key];
+            }
         }
 
-        $warnings[] = sprintf(
-            'Missing %s. Expected one of: %s',
-            $fieldName,
-            implode(', ', $keys)
-        );
+        $warnings[] = [
+            'field' => $fieldName,
+            'keys' => $keys,
+            'message' => sprintf(
+                'Missing %s. Expected one of: %s',
+                $fieldName,
+                implode(', ', $keys)
+            ),
+        ];
 
         return $default;
     }

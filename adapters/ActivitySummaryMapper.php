@@ -121,13 +121,15 @@ class ActivitySummaryMapper
             }
         }
 
-        if (!in_array($fieldName, self::$excludedWarningFields, true)) {
-            $warnings[] = sprintf(
+        $warnings[] = [
+            'field' => $fieldName,
+            'keys' => $keys,
+            'message' => sprintf(
                 'Missing %s. Expected one of: %s',
                 $fieldName,
                 implode(', ', $keys)
-            );
-        }
+            ),
+        ];
 
         return $default;
     }
