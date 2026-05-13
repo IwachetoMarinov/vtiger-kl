@@ -42,27 +42,6 @@ class ActivitySummary
 
         $results  = [];
         foreach ($summary as $item) {
-            // $description = $item['Description'] ? $item['Description'] : $item['Tx_Desc'] ?? '';
-
-            // $results[] = [
-            //     'voucher_no' => $item['Tx_No'] ?? '',
-            //     'voucher_type' => $item['Tx_Type'] ?? '',
-            //     'description' => $description,
-            //     'scr_description' => $item['SCR_Desc'] ?? '',
-            //     'table_name' => $item['Tx1_TblName'] ?? '',
-            //     'transaction_2' => $item['Tx2'] ?? '',
-            //     'table_name_2' => $item['Tx2_TblName'] ?? '',
-            //     'transaction_3' => $item['Tx3'] ?? '',
-            //     'table_name_3' => $item['Tx3_TblName'] ?? '',
-            //     'usd_val' => $item['Matched_Amt'] ? floatval($item['Matched_Amt']) : 0.00,
-            //     'doctype' => $item['Description'] ?? '',
-            //     'currency' => $item['Curr_Code'] ?? '',
-            //     'document_date' => $item['Tx_Date'] instanceof \DateTime ? $item['Tx_Date']->format('Y-m-d') : $item['Tx_Date'],
-            //     'posting_date' => $item['Appr_Date'] instanceof \DateTime ? $item['Appr_Date']->format('Y-m-d') : $item['Appr_Date'],
-            //     'мatched_аmt' => isset($item['Matched_Amt']) ? floatval($item['Matched_Amt']) : 0.00,
-            //     'amount_in_account_currency' =>
-            //     isset($item['TxAmt']) ? (float) $item['TxAmt'] : (isset($item['Tx_Amt']) ? (float) $item['Tx_Amt'] : 0.00),
-            // ];
             $results[] = ActivitySummaryMapper::mapTransactionRow($item);
         }
 

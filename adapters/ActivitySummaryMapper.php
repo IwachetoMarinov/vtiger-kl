@@ -47,8 +47,8 @@ class ActivitySummaryMapper
             'doctype' => $normalized['description'],
             'currency' => $normalized['currency'],
             'document_date' => self::formatDate($normalized['document_date']),
-            'posting_date' => self::formatDate($normalized['posting_date']),
-            'matched_amt' => self::toFloat($normalized['matched_amt']),
+            // 'posting_date' => self::formatDate($normalized['posting_date']),
+            // 'matched_amt' => self::toFloat($normalized['matched_amt']),
             'amount_in_account_currency' => self::toFloat($normalized['tx_amount']),
             '_warnings' => $normalized['_warnings'],
         ];

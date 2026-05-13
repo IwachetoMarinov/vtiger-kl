@@ -1070,3 +1070,11 @@ C:\laragon\www\vtiger-gpm\includes\Loader.php::includeOnce::191<br>
 C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::vimport::15<br>
 C:\laragon\www\vtiger-gpm\index.php::include_once::23<br>
 
+Traced on 2026-05-13 10:39:43
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::checkFileAccessForInclusion::65<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::includeOnce::191<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::vimport::15<br>
+C:\laragon\www\vtiger-gpm\index.php::include_once::23<br>
+
