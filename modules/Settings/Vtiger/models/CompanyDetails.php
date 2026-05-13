@@ -136,7 +136,18 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model
 		}
 
 		if (!move_uploaded_file($_FILES['logo']['tmp_name'], $targetFile)) {
-			throw new Exception('Logo upload failed: cannot move uploaded file to ' . $targetFile);
+
+			file_put_contents(
+				'/tmp/logo_debug.txt',
+				"tmp=" . $_FILES['logo']['tmp_name'] . PHP_EOL .
+					"target=" . $targetFile . PHP_EOL .
+					"exists_tmp=" . (file_exists($_FILES['logo']['tmp_name']) ? 'YES' : 'NO') . PHP_EOL .
+					"is_uploaded=" . (is_uploaded_file($_FILES['logo']['tmp_name']) ? 'YES' : 'NO') . PHP_EOL .
+					"dir_writable=" . (is_writable(dirname($targetFile)) ? 'YES' : 'NO') . PHP_EOL,
+				FILE_APPEND
+			);
+
+			throw new Exception('move_uploaded_file failed');
 		}
 
 		@chmod($targetFile, 0664);
