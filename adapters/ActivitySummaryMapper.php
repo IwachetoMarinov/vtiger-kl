@@ -43,7 +43,6 @@ class ActivitySummaryMapper
             'table_name_2' => $normalized['table_name_2'],
             'transaction_3' => $normalized['transaction_3'],
             'table_name_3' => $normalized['table_name_3'],
-            'usd_val' => self::toFloat($normalized['matched_amt']),
             'doctype' => $normalized['description'],
             'currency' => $normalized['currency'],
             'document_date' => self::formatDate($normalized['document_date']),
