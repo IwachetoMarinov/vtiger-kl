@@ -36,9 +36,9 @@ class Contacts_TCPrintPreview_View extends Vtiger_Index_View
         $pages = $this->makeDataPages($erpDoc->barItems);
         $company_full_address = Helper::getCompanyFullAddress($companyRecord);
 
-        echo "<pre>";
-        var_dump($erpDoc);
-        echo "</pre>";
+        // echo "<pre>";
+        // var_dump($erpDoc);
+        // echo "</pre>";
 
         $viewer = $this->getViewer($request);
         $viewer->assign('RECORD_MODEL', $recordModel);

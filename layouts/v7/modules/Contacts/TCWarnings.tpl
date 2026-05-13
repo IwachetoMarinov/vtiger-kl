@@ -2,7 +2,7 @@
 {assign var="barItemWarningExcludes" value=$BARITEM_WARNING_EXCLUDES|default:[]}
 
 {assign var="transactionWarningsCount" value=0}
-{assign var="itemWarningsCount" value=0}
+{assign var="barItemWarningsCount" value=0}
 
 {foreach from=$ERP_DOCUMENT->_warnings|default:[] item=warning}
     {assign var="warningField" value=$warning.field|default:''}
@@ -12,17 +12,17 @@
     {/if}
 {/foreach}
 
-{foreach from=$ERP_DOCUMENT->items|default:[] item=item}
-    {foreach from=$item._warnings|default:[] item=warning}
+{foreach from=$ERP_DOCUMENT->barItems|default:[] item=barItem}
+    {foreach from=$barItem->_warnings|default:[] item=warning}
         {assign var="warningField" value=$warning.field|default:''}
 
         {if !$warningField || !in_array($warningField, $barItemWarningExcludes)}
-            {assign var="itemWarningsCount" value=$itemWarningsCount+1}
+            {assign var="barItemWarningsCount" value=$barItemWarningsCount+1}
         {/if}
     {/foreach}
 {/foreach}
 
-{assign var="totalWarnings" value=$transactionWarningsCount+$itemWarningsCount}
+{assign var="totalWarnings" value=$transactionWarningsCount+$barItemWarningsCount}
 
 {if $totalWarnings gt 0}
 
@@ -65,35 +65,36 @@
                 </div>
             {/if}
 
-            {if $itemWarningsCount gt 0}
+            {if $barItemWarningsCount gt 0}
                 <div>
                     <h4 style="margin-top:0;color:#b94a48;">
-                        Item Warnings ({$itemWarningsCount})
+                        Bar Item Warnings ({$barItemWarningsCount})
                     </h4>
 
-                    {foreach from=$ERP_DOCUMENT->items|default:[] item=item name=itemLoop}
-                        {assign var="visibleItemWarningCount" value=0}
+                    {foreach from=$ERP_DOCUMENT->barItems|default:[] item=barItem name=barItemLoop}
 
-                        {foreach from=$item._warnings|default:[] item=warning}
+                        {assign var="visibleBarItemWarningCount" value=0}
+
+                        {foreach from=$barItem->_warnings|default:[] item=warning}
                             {assign var="warningField" value=$warning.field|default:''}
 
                             {if !$warningField || !in_array($warningField, $barItemWarningExcludes)}
-                                {assign var="visibleItemWarningCount" value=$visibleItemWarningCount+1}
+                                {assign var="visibleBarItemWarningCount" value=$visibleBarItemWarningCount+1}
                             {/if}
                         {/foreach}
 
-                        {if $visibleItemWarningCount gt 0}
+                        {if $visibleBarItemWarningCount gt 0}
                             <div style="border:1px solid #ddd;padding:12px;margin-bottom:15px;border-radius:4px;">
                                 <div style="margin-bottom:8px;">
-                                    <strong>Item #{$smarty.foreach.itemLoop.iteration}</strong>
+                                    <strong>Bar Item #{$smarty.foreach.barItemLoop.iteration}</strong>
 
-                                    {if isset($item.description) && $item.description neq ''}
-                                        - {$item.description}
+                                    {if isset($barItem->description) && $barItem->description neq ''}
+                                        - {$barItem->description}
                                     {/if}
                                 </div>
 
                                 <ul style="margin:0;padding-left:20px;">
-                                    {foreach from=$item._warnings|default:[] item=warning}
+                                    {foreach from=$barItem->_warnings|default:[] item=warning}
                                         {assign var="warningField" value=$warning.field|default:''}
 
                                         {if !$warningField || !in_array($warningField, $barItemWarningExcludes)}
@@ -105,6 +106,7 @@
                                 </ul>
                             </div>
                         {/if}
+
                     {/foreach}
                 </div>
             {/if}

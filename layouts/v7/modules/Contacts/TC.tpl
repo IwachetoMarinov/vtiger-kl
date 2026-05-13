@@ -109,10 +109,6 @@
             font-size: 20pt;
         }
 
-        .hidden {
-            /*display: none;*/
-        }
-
         table.content-table th {
             border: 1px dotted #666666;
             font-size: 10pt;
@@ -209,10 +205,9 @@
                 text-align: center;
                 padding: 14px;cursor: pointer;">Settings</span>
             </li>
-
-
+            
             {assign var="transactionWarningExcludes" value=['description', 'grand_total', 'matched_amt']}
-            {assign var="barItemWarningExcludes" value=[]}
+            {assign var="barItemWarningExcludes" value=['metal_code', 'metal_name', 'metal_type_code', 'warehouse', 'tx_amount', 'avg_spot_price', 'posting_date', 'item_code', 'fine_oz', 'gross_oz', 'purity', 'total_item_dc_amount', 'weight', 'bar_number', 'remarks', 'other_charge', 'narration', 'long_desc']}
 
             {include file='TCWarnings.tpl'|vtemplate_path:'Contacts'
                 ERP_DOCUMENT=$ERP_DOCUMENT

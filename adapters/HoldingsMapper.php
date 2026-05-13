@@ -2,6 +2,10 @@
 
 namespace adapters;
 
+include_once 'adapters/AdapterHelper.php';
+
+use adapters\AdapterHelper;
+
 class HoldingsMapper
 {
     public static function mapDocHoldingRow(array $item): array
@@ -9,18 +13,18 @@ class HoldingsMapper
         $warnings = [];
 
         return [
-            'spot_date' => self::formatDate(
-                self::firstValue($item, ['Spot_Date'], null, $warnings, 'spot_date')
+            'spot_date' => AdapterHelper::formatDate(
+                AdapterHelper::firstValue($item, ['Spot_Date'], null, $warnings, 'spot_date')
             ),
-            'spot_price' => self::firstValue($item, ['Spot_Price'], 0, $warnings, 'spot_price'),
-            'location' => self::firstValue($item, ['WH_Code'], '', $warnings, 'location'),
-            'description' => self::firstValue($item, ['Item_Desc'], '', $warnings, 'description'),
-            'quantity' => self::firstValue($item, ['Qty'], 0, $warnings, 'quantity'),
+            'spot_price' => AdapterHelper::firstValue($item, ['Spot_Price'], 0, $warnings, 'spot_price'),
+            'location' => AdapterHelper::firstValue($item, ['WH_Code'], '', $warnings, 'location'),
+            'description' => AdapterHelper::firstValue($item, ['Item_Desc'], '', $warnings, 'description'),
+            'quantity' => AdapterHelper::firstValue($item, ['Qty'], 0, $warnings, 'quantity'),
             'serial_no' => self::sanitizeSerials(
-                self::firstValue($item, ['Ser_No_List'], '', $warnings, 'serial_no')
+                AdapterHelper::firstValue($item, ['Ser_No_List'], '', $warnings, 'serial_no')
             ),
-            'fine_oz' => self::firstValue($item, ['FineOz'], 0, $warnings, 'fine_oz'),
-            'total' => self::firstValue($item, ['Total'], 0, $warnings, 'total'),
+            'fine_oz' => AdapterHelper::firstValue($item, ['FineOz'], 0, $warnings, 'fine_oz'),
+            'total' => AdapterHelper::firstValue($item, ['Total'], 0, $warnings, 'total'),
             '_warnings' => $warnings,
         ];
     }
@@ -29,19 +33,19 @@ class HoldingsMapper
     {
         $warnings = [];
 
-        $mtCode = self::firstValue($item, ['MT_Code'], '', $warnings, 'mt_code');
+        $mtCode = AdapterHelper::firstValue($item, ['MT_Code'], '', $warnings, 'mt_code');
 
         return [
-            'serial_no' => self::firstValue($item, ['Ser_No_List', 'Ser_No'], '', $warnings, 'serial_no'),
-            'gross_oz' => self::firstValue($item, ['GrossOz'], 0, $warnings, 'gross_oz'),
-            'fine_oz' => self::firstValue($item, ['FineOz'], 0, $warnings, 'fine_oz'),
-            'purity' => self::firstValue($item, ['Purity'], 0, $warnings, 'purity'),
-            'acq_tx_no' => self::firstValue($item, ['Acq_Tx_No'], '', $warnings, 'acq_tx_no'),
-            'item_code' => self::firstValue($item, ['Item_Code'], '', $warnings, 'item_code'),
-            'description' => self::firstValue($item, ['Item_Desc'], '', $warnings, 'description'),
-            'quantity' => self::firstValue($item, ['Qty', 'Quantity'], 1, $warnings, 'quantity'),
-            'location' => self::firstValue($item, ['WH_Code'], '', $warnings, 'location'),
-            'brand' => self::firstValue($item, ['Brand'], '', $warnings, 'brand'),
+            'serial_no' => AdapterHelper::firstValue($item, ['Ser_No_List', 'Ser_No'], '', $warnings, 'serial_no'),
+            'gross_oz' => AdapterHelper::firstValue($item, ['GrossOz'], 0, $warnings, 'gross_oz'),
+            'fine_oz' => AdapterHelper::firstValue($item, ['FineOz'], 0, $warnings, 'fine_oz'),
+            'purity' => AdapterHelper::firstValue($item, ['Purity'], 0, $warnings, 'purity'),
+            'acq_tx_no' => AdapterHelper::firstValue($item, ['Acq_Tx_No'], '', $warnings, 'acq_tx_no'),
+            'item_code' => AdapterHelper::firstValue($item, ['Item_Code'], '', $warnings, 'item_code'),
+            'description' => AdapterHelper::firstValue($item, ['Item_Desc'], '', $warnings, 'description'),
+            'quantity' => AdapterHelper::firstValue($item, ['Qty', 'Quantity'], 1, $warnings, 'quantity'),
+            'location' => AdapterHelper::firstValue($item, ['WH_Code'], '', $warnings, 'location'),
+            'brand' => AdapterHelper::firstValue($item, ['Brand'], '', $warnings, 'brand'),
             'mt_code' => $mtCode,
             'metal' => self::getMetalName($mtCode),
             '_warnings' => $warnings,
@@ -60,41 +64,6 @@ class HoldingsMapper
         return array_map(function ($item) {
             return self::mapStockHoldingRow($item);
         }, $data);
-    }
-
-    private static function firstValue(
-    array $item,
-    array $keys,
-    $default,
-    array &$warnings,
-    string $fieldName
-) {
-    foreach ($keys as $key) {
-        if (isset($item[$key]) && $item[$key] !== '') {
-            return $item[$key];
-        }
-    }
-
-    $warnings[] = [
-        'field' => $fieldName,
-        'keys' => $keys,
-        'message' => sprintf(
-            'Missing %s. Expected one of: %s',
-            $fieldName,
-            implode(', ', $keys)
-        ),
-    ];
-
-    return $default;
-}
-
-    private static function formatDate($value)
-    {
-        if ($value instanceof \DateTime) {
-            return $value->format('Y-m-d');
-        }
-
-        return $value;
     }
 
     private static function getMetalName($code): string
