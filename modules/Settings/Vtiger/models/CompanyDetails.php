@@ -116,36 +116,12 @@ class Settings_Vtiger_CompanyDetails_Model extends Settings_Vtiger_Module_Model
 	/**
 	 * Function to save the logoinfo
 	 */
-	// public function saveLogo($logoName)
-	// {
-	// 	$uploadDir = vglobal('root_directory') . '/' . $this->logoPath;
-	// 	$logoName = $uploadDir . $logoName;
-	// 	move_uploaded_file($_FILES["logo"]["tmp_name"], $logoName);
-	// 	copy($logoName, $uploadDir . 'application.ico');
-	// }
 	public function saveLogo($logoName)
 	{
-		die('SAVELOGO HIT: ' . htmlspecialchars($logoName));
-		$uploadDir = rtrim(vglobal('root_directory'), '/') . '/' . $this->logoPath;
-
-		if (!is_dir($uploadDir)) mkdir($uploadDir, 0775, true);
-
-		$targetFile = $uploadDir . basename($logoName);
-
-		if (empty($_FILES['logo']['tmp_name']) || !is_uploaded_file($_FILES['logo']['tmp_name'])) {
-			throw new Exception('Logo upload failed: PHP did not receive uploaded file');
-		}
-
-		if (!move_uploaded_file($_FILES['logo']['tmp_name'], $targetFile)) {
-
-			throw new Exception('move_uploaded_file failed');
-		}
-
-		@chmod($targetFile, 0664);
-
-		if (file_exists($targetFile)) {
-			@copy($targetFile, $uploadDir . 'application.ico');
-		}
+		$uploadDir = vglobal('root_directory') . '/' . $this->logoPath;
+		$logoName = $uploadDir . $logoName;
+		move_uploaded_file($_FILES["logo"]["tmp_name"], $logoName);
+		copy($logoName, $uploadDir . 'application.ico');
 	}
 
 	/**
