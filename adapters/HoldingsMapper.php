@@ -19,7 +19,7 @@ class HoldingsMapper
             'spot_price' => AdapterHelper::firstValue($item, ['Spot_Price'], 0, $warnings, 'spot_price'),
             'location' => AdapterHelper::firstValue($item, ['WH_Code'], '', $warnings, 'location'),
             'description' => AdapterHelper::firstValue($item, ['Item_Desc'], '', $warnings, 'description'),
-            'quantity' => AdapterHelper::firstValue($item, ['Qty'], 0, $warnings, 'quantity'),
+            'quantity' => AdapterHelper::firstValue($item, ['Qty', "Quantity"], 0, $warnings, 'quantity'),
             'serial_no' => self::sanitizeSerials(
                 AdapterHelper::firstValue($item, ['Ser_No_List'], '', $warnings, 'serial_no')
             ),

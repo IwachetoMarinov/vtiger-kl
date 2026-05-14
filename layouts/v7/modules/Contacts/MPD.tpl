@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-         @font-face {
+        @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
@@ -98,6 +98,41 @@
                     Download
                 </a>
             </li>
+
+            {assign var="transactionWarningExcludes" value=['description', 'grand_total', 'matched_amt', 'currency', 'voucher_type']}
+            {assign var="barItemWarningExcludes" value=[
+                "transaction_type",
+                "currency",
+                "metal_code",
+                "metal_name",
+                "metal_type_code",
+                "tx_amount",
+                "spot_price",
+                "avg_spot_price",
+                "posting_date",
+                "exchange_rate",
+                "fine_oz",
+                "gross_oz",
+                "purity",
+                "item_price",
+                "unit_price",
+                "premium_perc",
+                "premium_final",
+                "total_item_amount",
+                "total_item_dc_amount",
+                "weight",
+                "narration",
+                "bar_number",
+                "other_charge",
+                "long_desc",
+                "remarks"
+            ]}
+
+            {include file='TCWarnings.tpl'|vtemplate_path:'Contacts'
+                            ERP_DOCUMENT=$ERP_DOCUMENT
+                            TRANSACTION_WARNING_EXCLUDES=$transactionWarningExcludes
+                            BARITEM_WARNING_EXCLUDES=$barItemWarningExcludes
+                        }
         </ul>
     {/if}
 
@@ -182,7 +217,6 @@
                 </tr>
 
                 <tr>
-                    {assign var="metalPrice" value=$ERP_DOCUMENT.barItems[0]->price}
                     <td style="font-size:9pt;height:168mm;vertical-align:top;">
 
                         <table class="activity-tbl" style="margin-bottom:5mm">
@@ -235,7 +269,7 @@
                                         {$barItem->itemDescription}
                                         <br>
                                         <span style="font-size:smaller;font-style:italic;">
-                                             <pre>{$serials}</pre>
+                                            <pre>{$serials}</pre>
                                         </span>
                                     </td>
 
@@ -269,7 +303,7 @@
                                     {$COMPANY->get('company_name')}
                                     {if $COMPANY->get('company_reg_no')} (Co. Reg. No. {$COMPANY->get('company_reg_no')})
                                     {/if}<br>
-                                     {$COMPANY_FULL_ADDRESS}
+                                    {$COMPANY_FULL_ADDRESS}
                                     <br>
                                     T: {$COMPANY->get('company_phone')}
                                     {if $COMPANY->get('company_fax')} | Fax: {$COMPANY->get('company_fax')} {/if}

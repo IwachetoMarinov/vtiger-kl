@@ -1094,3 +1094,99 @@ C:\laragon\www\vtiger-gpm\includes\Loader.php::includeOnce::191<br>
 C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::vimport::15<br>
 C:\laragon\www\vtiger-gpm\index.php::include_once::23<br>
 
+Traced on 2026-05-13 14:09:43
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::checkFileAccessForInclusion::65<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::includeOnce::191<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::vimport::15<br>
+C:\laragon\www\vtiger-gpm\index.php::include_once::23<br>
+
+Traced on 2026-05-13 14:35:43
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::checkFileAccessForInclusion::65<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::includeOnce::191<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::vimport::15<br>
+C:\laragon\www\vtiger-gpm\index.php::include_once::23<br>
+
+Traced on 2026-05-13 14:42:43
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::checkFileAccessForInclusion::65<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::includeOnce::191<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::vimport::15<br>
+C:\laragon\www\vtiger-gpm\index.php::include_once::23<br>
+
+Traced on 2026-05-14 08:53:11
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::checkFileAccessForInclusion::65<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::includeOnce::191<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::vimport::15<br>
+C:\laragon\www\vtiger-gpm\index.php::include_once::23<br>
+
+Traced on 2026-05-14 09:00:11
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::checkFileAccessForInclusion::65<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::includeOnce::191<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::vimport::15<br>
+C:\laragon\www\vtiger-gpm\index.php::include_once::23<br>
+
+Traced on 2026-05-14 09:22:11
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::checkFileAccessForInclusion::65<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::includeOnce::191<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::vimport::15<br>
+C:\laragon\www\vtiger-gpm\index.php::include_once::23<br>
+
+Traced on 2026-05-14 10:03:11
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::checkFileAccessForInclusion::65<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::includeOnce::191<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::vimport::15<br>
+C:\laragon\www\vtiger-gpm\index.php::include_once::23<br>
+
+Traced on 2026-05-14 10:37:11
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::checkFileAccessForInclusion::65<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::includeOnce::191<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::vimport::15<br>
+C:\laragon\www\vtiger-gpm\index.php::include_once::23<br>
+
+Traced on 2026-05-14 12:39:11
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::checkFileAccessForInclusion::65<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::includeOnce::191<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::vimport::15<br>
+C:\laragon\www\vtiger-gpm\index.php::include_once::23<br>
+
+Traced on 2026-05-14 12:53:11
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::checkFileAccessForInclusion::65<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::includeOnce::191<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::vimport::15<br>
+C:\laragon\www\vtiger-gpm\index.php::include_once::23<br>
+
+Traced on 2026-05-14 12:57:11
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::checkFileAccessForInclusion::65<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::includeOnce::191<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::vimport::15<br>
+C:\laragon\www\vtiger-gpm\index.php::include_once::23<br>
+
+Traced on 2026-05-14 13:16:11
+FileAccessForInclusion - 
+C:\laragon\www\vtiger-gpm\include\utils\CommonUtils.php::checkFileAccessForInclusion::388<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::checkFileAccessForInclusion::65<br>
+C:\laragon\www\vtiger-gpm\includes\Loader.php::includeOnce::191<br>
+C:\laragon\www\vtiger-gpm\includes\main\WebUI.php::vimport::15<br>
+C:\laragon\www\vtiger-gpm\index.php::include_once::23<br>
+

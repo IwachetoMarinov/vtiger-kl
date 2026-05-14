@@ -98,6 +98,95 @@
             flex-wrap: wrap;
             margin-top: 3mm;
         }
+
+        .transaction-history-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .erp-warning-btn {
+            border: none;
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #fff;
+            margin-left: 16px;
+        }
+
+        .erp-connection-warning {
+            background-color: #d9534f;
+        }
+
+        .erp-connection-warning:hover {
+            background-color: #c9302c;
+        }
+
+        .erp-fields-warning {
+            background-color: #f0ad4e;
+        }
+
+        .erp-fields-warning:hover {
+            background-color: #ec971f;
+        }
+
+        .erp-warning-modal-overlay {
+            display: none;
+            position: fixed;
+            z-index: 99999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.55);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .erp-warning-modal {
+            width: 520px;
+            max-width: calc(100% - 40px);
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+
+        .erp-warning-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #d9534f;
+            color: #fff;
+        }
+
+        .erp-warning-modal-header h4 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .erp-warning-modal-close {
+            border: none;
+            background: transparent;
+            color: #fff;
+            font-size: 24px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .erp-warning-modal-body {
+            padding: 16px;
+            color: #333;
+            font-size: 13px;
+            line-height: 1.5;
+            word-break: break-word;
+            max-height: 300px;
+            overflow-y: auto;
+        }
     </style>
 
     <div class="summaryWidgetContainer">
@@ -109,7 +198,39 @@
                     <h4 class="display-inline-block" style="font-size: 18px; margin: 0; padding: 0;">
                         TRANSACTION HISTORY
                     </h4>
+
+                    {if !empty($ERP_CONNECTION_ERROR)}
+                        <button type="button" class="erp-warning-btn erp-connection-warning"
+                            data-warning-title="ERP Connection Issue"
+                            data-warning-message="{$ERP_CONNECTION_ERROR|escape:'html'}">
+                            ERP Connection Issue
+                        </button>
+                    {/if}
+
+                    {assign var="piWarningExcludes" value=['transaction_2', 'table_name_2', 'transaction_3', 'table_name_3', 'matched_amt', 'posting_date', 'currency']}
+
+                    {include file='ERPWarningsButton.tpl'|vtemplate_path:'Contacts'
+                                ERP_WARNING_DATA=$OROSOFT_TRANSACTION
+                                ERP_WARNING_TITLE='Orosoft Transaction Warnings'
+                                ERP_WARNING_BUTTON_LABEL='Transaction Warnings'
+                                ERP_WARNING_CLASS='erp-fields-warning'
+                                ERP_WARNING_EXCLUDES=$piWarningExcludes
+                            }
                 </span>
+
+                <div id="erp-warning-modal-overlay" class="erp-warning-modal-overlay">
+                    <div class="erp-warning-modal">
+                        <div class="erp-warning-modal-header">
+                            <h4 id="erp-warning-modal-title">ERP Warning</h4>
+
+                            <button type="button" class="erp-warning-modal-close">
+                                ×
+                            </button>
+                        </div>
+
+                        <div id="erp-warning-modal-body" class="erp-warning-modal-body"></div>
+                    </div>
+                </div>
 
                 <span class="span12 margin0px" style="margin-left: 0;">
                     <div class="row-fluid">
@@ -298,20 +419,6 @@
                                         {/if}
                                     </td>
 
-
-                                    {* <td style="width: 140px;">
-                                        {if $TX.voucher_type == 'SAL'}
-                                            <a href="index.php?module=Contacts&view=CollectionAcknowledgement&record={$RECORD->getId()}&docNo={$TX.voucher_no}&recordType={$TX.doctype}&tableName={$TX.table_name}"
-                                                target="_blank">
-                                                <button type="button" class="btn btn-default module-buttons">
-                                                    {$TX.voucher_no}
-                                                </button>
-                                            </a>
-                                        {else}
-                                            {$TX.voucher_no}
-                                        {/if}
-                                    </td> *}
-
                                     <!-- INV button (only for Sales/Purchase Invoice) -->
                                     <td>
                                         {if in_array($TX.voucher_type, ['PUR', 'PWD'])}
@@ -413,3 +520,55 @@
     </div>
 
 {/strip}
+
+<script>
+    (function() {
+        function openWarningModal(title, message) {
+            var overlay = document.getElementById('erp-warning-modal-overlay');
+            var titleEl = document.getElementById('erp-warning-modal-title');
+            var bodyEl = document.getElementById('erp-warning-modal-body');
+
+            if (!overlay || !titleEl || !bodyEl) {
+                return;
+            }
+
+            titleEl.innerHTML = title || 'ERP Warning';
+            bodyEl.innerHTML = message || '';
+            overlay.style.display = 'flex';
+        }
+
+        function closeWarningModal() {
+            var overlay = document.getElementById('erp-warning-modal-overlay');
+
+            if (overlay) {
+                overlay.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('click', function(event) {
+            var warningButton = event.target.closest('.erp-warning-btn');
+
+            if (warningButton) {
+                openWarningModal(
+                    warningButton.getAttribute('data-warning-title'),
+                    warningButton.getAttribute('data-warning-message')
+                );
+
+                return;
+            }
+
+            if (
+                event.target.classList.contains('erp-warning-modal-overlay') ||
+                event.target.classList.contains('erp-warning-modal-close')
+            ) {
+                closeWarningModal();
+            }
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeWarningModal();
+            }
+        });
+    })();
+</script>

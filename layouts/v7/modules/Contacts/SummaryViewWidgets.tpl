@@ -9,6 +9,16 @@
 *
 ********************************************************************************/
 -->*}
+<style>
+    .erp-holdings-warning {
+        background-color: #337ab7;
+    }
+
+    .erp-holdings-warning:hover {
+        background-color: #286090;
+    }
+</style>
+
 {strip}
 	{foreach item=DETAIL_VIEW_WIDGET from=$DETAILVIEW_LINKS['DETAILVIEWWIDGET']}
 		{if ($DETAIL_VIEW_WIDGET->getLabel() eq 'Documents') }
@@ -73,6 +83,18 @@
 									&nbsp;Certificate
 								</button>
 							</span> *}
+
+							<span class="pull-right" style="margin-right:6px;">
+								{assign var="holdingsWarningExcludes" value=[]}
+
+								{include file='ERPWarningsButton.tpl'|vtemplate_path:'Contacts'
+									ERP_WARNING_DATA=$HOLDINGS
+									ERP_WARNING_TITLE='Holdings Warnings'
+									ERP_WARNING_BUTTON_LABEL='Holdings Warnings'
+									ERP_WARNING_CLASS='erp-holdings-warning'
+									ERP_WARNING_EXCLUDES=$holdingsWarningExcludes
+								}
+							</span>
 						</div>
 					</span>
 				</div>

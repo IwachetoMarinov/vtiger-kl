@@ -162,15 +162,48 @@ class ActivitySummary
     {
         $errors = \sqlsrv_errors();
 
-        if (!$errors || !is_array($errors))
-            return 'Database connection is temporarily unavailable.';
+        if (!$errors || !is_array($errors)) return null;
 
         $messages = [];
+
         foreach ($errors as $error) {
-            $messages[] = $error['message'] ?? 'Unknown SQL Server error.';
+            $message = $error['message'] ?? '';
+            $sqlState = $error['SQLSTATE'] ?? '';
+            $code = $error['code'] ?? null;
+
+            // Ignore informational SQL Server messages
+            if (
+                $sqlState === '01000' &&
+                in_array($code, [5701, 5703])
+            ) {
+                continue;
+            }
+
+            // Remove Microsoft / driver prefixes
+            $message = preg_replace('/(\[.*?\])+/', '', $message);
+            $message = trim($message);
+
+            // Human readable replacements
+            if (stripos($message, 'Login failed for user') !== false) {
+                $message = 'Authentication with the ERP database failed.';
+            }
+
+            if (stripos($message, 'Cannot open database') !== false) {
+                $message = 'The ERP database is currently unavailable.';
+            }
+
+            if (!empty($message)) {
+                $messages[] = $message;
+            }
         }
 
-        return implode(' | ', $messages);
+        // Remove duplicates
+        $messages = array_unique($messages);
+
+        // If nothing meaningful remains
+        if (empty($messages)) return null;
+
+        return implode(' ', $messages);
     }
 
     public function getActivityYears($customer_id = null)
