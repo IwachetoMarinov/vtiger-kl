@@ -149,6 +149,41 @@
                     Download
                 </a>
             </li>
+
+            {assign var="transactionWarningExcludes" value=["voucher_type", "description", "grand_total", "matched_amt", "currency"]}
+            {assign var="barItemWarningExcludes" value=[
+                "transaction_type",
+                "currency",
+                "metal_code",
+                "metal_name",
+                "metal_type_code",
+                "tx_amount",
+                "spot_price",
+                "avg_spot_price",
+                "posting_date",
+                "exchange_rate",
+                "fine_oz",
+                "gross_oz",
+                "item_price",
+                "unit_price",
+                "purity",
+                "premium_perc",
+                "premium_final",
+                "total_item_amount",
+                "total_item_dc_amount",
+                "weight",
+                "bar_number",
+                "remarks",
+                "other_charge",
+                "narration",
+                "long_desc"
+            ]}
+
+            {include file='TCWarnings.tpl'|vtemplate_path:'Contacts'
+                    ERP_DOCUMENT=$ERP_DOCUMENT
+                    TRANSACTION_WARNING_EXCLUDES=$transactionWarningExcludes
+                    BARITEM_WARNING_EXCLUDES=$barItemWarningExcludes
+                }
         </ul>
     {/if}
 

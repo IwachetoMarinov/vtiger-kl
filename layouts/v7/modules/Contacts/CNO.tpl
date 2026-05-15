@@ -186,6 +186,45 @@
                     <a style="display: block;color: white;text-align: center;padding: 14px 16px;text-decoration: none;background-color: #bea364;"
                         href="index.php?module=Contacts&view=NotePrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&tableName={$smarty.request.tableName}&PDFDownload=true&bank={$SELECTED_BANK->getId()}&hideCustomerInfo={$smarty.request.hideCustomerInfo}">Download</a>
                 </li>
+
+                {assign var="transactionWarningExcludes" value=["description", "posting_date", "grand_total", "matched_amt"]}
+                {assign var="barItemWarningExcludes" value=[
+                            "quantity",
+                            "metal_code",
+                            "metal_name",
+                            "metal_type",
+                            "metal_type_code",
+                            "warehouse",
+                            "tx_amount",
+                            "spot_price",
+                            "avg_spot_price",
+                            "posting_date",
+                            "item_code",
+                            "item_description",
+                            "fine_oz",
+                            "total_fine_oz",
+                            "gross_oz",
+                            "purity",
+                            "item_price",
+                            "unit_price",
+                            "premium_perc",
+                            "premium_final",
+                            "total_item_amount",
+                            "total_item_dc_amount",
+                            "serial_numbers",
+                            "weight",
+                            "bar_number",
+                            "remarks",
+                            "other_charge",
+                            "long_desc",
+                            "narration"
+                        ]}
+
+                {include file='TCWarnings.tpl'|vtemplate_path:'Contacts'
+                                ERP_DOCUMENT=$ERP_DOCUMENT
+                                TRANSACTION_WARNING_EXCLUDES=$transactionWarningExcludes
+                                BARITEM_WARNING_EXCLUDES=$barItemWarningExcludes
+                            }
             {/if}
         </ul>
     {/if}

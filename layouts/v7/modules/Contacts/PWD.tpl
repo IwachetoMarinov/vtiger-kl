@@ -184,6 +184,33 @@
                 background-color: #bea364;"
                     href="index.php?module=Contacts&view=DocumentPrintPreview&record={$RECORD_MODEL->getId()}&docNo={$smarty.request.docNo}&tableName={$smarty.request.tableName}&docType={$smarty.request.docType}&PDFDownload=true{if $INTENT}&fromIntent={$smarty.request.fromIntent}{/if}&hideCustomerInfo={$smarty.request.hideCustomerInfo}">Download</a>
             </li>
+
+            {assign var="transactionWarningExcludes" value=['description', 'grand_total']}
+            {assign var="barItemWarningExcludes" value=[
+                "metal_name",
+                "metal_type_code",
+                "warehouse",
+                "tx_amount",
+                "avg_spot_price",
+                "posting_date",
+                "item_code",
+                "fine_oz",
+                "gross_oz",
+                "purity",
+                "total_item_dc_amount",
+                "weight",
+                "remarks",
+                "other_charge",
+                "narration",
+                "bar_number",
+                "field"
+            ]}
+
+            {include file='TCWarnings.tpl'|vtemplate_path:'Contacts'
+                ERP_DOCUMENT=$ERP_DOCUMENT
+                TRANSACTION_WARNING_EXCLUDES=$transactionWarningExcludes
+                BARITEM_WARNING_EXCLUDES=$barItemWarningExcludes
+            }
         </ul>
     {/if}
     <div class="printAreaContainer">
