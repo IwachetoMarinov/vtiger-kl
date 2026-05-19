@@ -165,6 +165,7 @@
                 "fine_oz",
                 "gross_oz",
                 "item_price",
+                "item_code",
                 "unit_price",
                 "purity",
                 "premium_perc",
