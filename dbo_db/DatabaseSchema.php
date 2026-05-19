@@ -31,7 +31,6 @@ class DatabaseSchema
         $sql = "SELECT DISTINCT TABLE_SCHEMA FROM INFORMATION_SCHEMA.TABLES";
         print_r(GetDBRows::getRows($this->connection, $sql, []));
 
-
         $tables = GetDBRows::getRows($this->connection, $sql, []);
 
         var_dump($tables);

@@ -3,6 +3,7 @@
 
 {assign var="transactionWarningsCount" value=0}
 {assign var="barItemWarningsCount" value=0}
+{assign var="missingBarItemsWarning" value=false}
 
 {assign var="erpWarnings" value=[]}
 {assign var="barItems" value=[]}
@@ -10,7 +11,7 @@
 {assign var="barItemWarnings" value=[]}
 {assign var="barItemDescription" value=''}
 
-{* Safely read ERP document warnings and bar items *}
+{* Read ERP warnings and bar items *}
 {if isset($ERP_DOCUMENT)}
     {if is_object($ERP_DOCUMENT)}
         {if isset($ERP_DOCUMENT->_warnings)}
@@ -31,12 +32,17 @@
     {/if}
 {/if}
 
-{* Safely get first bar item *}
+{* Missing bar items warning *}
+{if is_array($barItems) && $barItems|@count eq 0}
+    {assign var="missingBarItemsWarning" value=true}
+{/if}
+
+{* First bar item *}
 {if is_array($barItems) && $barItems|@count gt 0}
     {assign var="firstBarItem" value=$barItems[0]}
 {/if}
 
-{* Safely read first bar item warnings and description *}
+{* First bar item warnings and description *}
 {if $firstBarItem}
     {if is_object($firstBarItem)}
         {if isset($firstBarItem->_warnings)}
@@ -93,6 +99,10 @@
 
 {assign var="totalWarnings" value=$transactionWarningsCount+$barItemWarningsCount}
 
+{if $missingBarItemsWarning}
+    {assign var="totalWarnings" value=$totalWarnings+1}
+{/if}
+
 {if $totalWarnings gt 0}
 
     <li style="float:right">
@@ -148,6 +158,22 @@
                             {/if}
                         {/foreach}
                     </ul>
+                </div>
+            {/if}
+
+            {if $missingBarItemsWarning}
+                <div style="margin-bottom:25px;">
+                    <h4 style="margin-top:0;color:#b94a48;">
+                        Bar Item Warnings (1)
+                    </h4>
+
+                    <div style="border:1px solid #ddd;padding:12px;margin-bottom:15px;border-radius:4px;">
+                        <ul style="margin:0;padding-left:20px;">
+                            <li style="margin-bottom:5px;">
+                                Missing bar item mapping. No bar items were found for this transaction.
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             {/if}
 
