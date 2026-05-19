@@ -72,11 +72,16 @@ class Contacts_CronHelpers
 
         $fileName = sprintf($file_name_prefix, $client_id, $startDate, $endDate);
 
-        // Temporary HTML + final PDF paths
         $basePath = realpath(dirname(__DIR__, 3));
         $tmpDir = sys_get_temp_dir();
 
         if (!$basePath) throw new Exception('Cannot resolve base path');
+
+        $tmpLayouts = sys_get_temp_dir() . '/layouts';
+
+        if (!file_exists($tmpLayouts)) {
+            symlink($basePath . '/layouts', $tmpLayouts);
+        }
 
         $htmlPath = $tmpDir . '/' . $fileName . '.html';
         $pdfPath  = $tmpDir . '/' . $fileName . '.pdf';
@@ -85,13 +90,28 @@ class Contacts_CronHelpers
 
         $inputFile = 'file://' . $htmlPath;
 
-        $command = '/usr/bin/wkhtmltopdf --enable-local-file-access -L 0 -R 0 -B 0 -T 0 '
+        // $command = '/usr/bin/wkhtmltopdf --enable-local-file-access -L 0 -R 0 -B 0 -T 0 '
+        //     . escapeshellarg($inputFile) . ' '
+        //     . escapeshellarg($pdfPath) . ' 2>&1';
+
+        $wkhtmltopdfBinary = trim(shell_exec('which wkhtmltopdf'));
+
+        if (!$wkhtmltopdfBinary) {
+            throw new Exception('wkhtmltopdf binary not found');
+        }
+
+        $command = $wkhtmltopdfBinary .
+            ' --enable-local-file-access -L 0 -R 0 -B 0 -T 0 '
             . escapeshellarg($inputFile) . ' '
             . escapeshellarg($pdfPath) . ' 2>&1';
 
         $output = [];
         $returnVar = 0;
         exec($command, $output, $returnVar);
+
+        if (file_exists($pdfPath)) {
+            echo "PDF SIZE INSIDE generatePdf: " . filesize($pdfPath) . "\n";
+        }
 
         if (file_exists($htmlPath)) unlink($htmlPath);
 
@@ -230,26 +250,25 @@ class Contacts_CronHelpers
     {
         global $adb, $current_user;
 
-        // Ensure vTiger execution context (required for CRMEntity->save)
         self::initExecutionUser();
 
-        // Validate PDF existence
-        if (!file_exists($pdfPath)) throw new Exception("PDF file does not exist: " . $pdfPath);
+        if (!file_exists($pdfPath)) {
+            throw new Exception("PDF file does not exist: " . $pdfPath);
+        }
 
-        // Get Contact + Owner info
         $contactInfo = self::getContactInfoByClientId($client_id);
 
-        if (!$contactInfo) throw new Exception("No contact found for client_id: " . $client_id);
+        if (!$contactInfo) {
+            throw new Exception("No contact found for client_id: " . $client_id);
+        }
 
-        $contactId = $contactInfo['contact_id'];     // Contact record ID
-        $contactOwnerId = $contactInfo['owner_id'];  // Owner of the contact
+        $contactId = $contactInfo['contact_id'];
+        $contactOwnerId = $contactInfo['owner_id'];
 
-        // File metadata
         $fileName = basename($pdfPath);
         $fileSize = filesize($pdfPath);
         $mimeType = 'application/pdf';
 
-        // Document title
         $documentTitle = sprintf(
             $titlePrefix,
             $client_id,
@@ -257,29 +276,34 @@ class Contacts_CronHelpers
             $selected_currency ? ' - ' . $selected_currency : ''
         );
 
-        // Create Document record
         $notes = CRMEntity::getInstance('Documents');
         $notes->column_fields['notes_title'] = $documentTitle;
         $notes->column_fields['filename'] = $fileName;
-        $notes->column_fields['filelocationtype'] = 'I'; // Internal file
+        $notes->column_fields['filelocationtype'] = 'I';
         $notes->column_fields['filestatus'] = 1;
         $notes->column_fields['filesize'] = $fileSize;
         $notes->column_fields['filetype'] = $mimeType;
         $notes->column_fields['folderid'] = 1;
-        $notes->column_fields['notecontent'] = 'Auto-generated monthly activity summary.';
-        $notes->column_fields['assigned_user_id'] = $contactOwnerId; // Assign to client owner
+        $notes->column_fields['notecontent'] = 'Auto-generated monthly PDF report.';
+        $notes->column_fields['assigned_user_id'] = $contactOwnerId;
 
-        // Save Document (triggers workflows/events)
         $notes->save('Documents');
 
         $documentId = $notes->id;
-        if (!$documentId) throw new Exception('Failed to create Documents record.');
 
-        // Create attachment entry
+        if (!$documentId) {
+            throw new Exception('Failed to create Documents record.');
+        }
+
         $attachmentId = $adb->getUniqueID('vtiger_crmentity');
 
-        // Determine upload directory (vTiger storage)
         $basePath = realpath(dirname(__DIR__, 3));
+
+        if (!$basePath) {
+            throw new Exception('Cannot resolve base path');
+        }
+
+        // Match existing working vtiger behavior in your DEV/LIVE DB rows
         $uploadDir = $basePath . '/storage/';
 
         if (!is_dir($uploadDir)) {
@@ -289,12 +313,27 @@ class Contacts_CronHelpers
         $storedFileName = $attachmentId . '_' . $fileName;
         $destination = $uploadDir . $storedFileName;
 
-        // MOVE instead of copy
-        if (!rename($pdfPath, $destination)) {
-            throw new Exception('Failed to move PDF to storage: ' . $destination);
+        if (!copy($pdfPath, $destination)) {
+            throw new Exception('Failed to copy PDF to storage: ' . $destination);
         }
 
-        // Insert attachment entity
+        @unlink($pdfPath);
+
+        chmod($destination, 0644);
+
+        // Required on STAGING/LIVE with SELinux
+        exec(
+            'chcon -t httpd_sys_content_t ' . escapeshellarg($destination) . ' 2>&1',
+            $chconOutput,
+            $chconReturn
+        );
+
+        if ($chconReturn !== 0) throw new Exception('Failed to set SELinux context: ' . implode("\n", $chconOutput));
+
+        if (!file_exists($destination)) throw new Exception('Stored PDF missing: ' . $destination);
+
+        if (filesize($destination) === 0) throw new Exception('Stored PDF is empty: ' . $destination);
+
         $adb->pquery(
             "INSERT INTO vtiger_crmentity
         (crmid, smcreatorid, smownerid, setype, description, createdtime, modifiedtime, presence, deleted)
@@ -310,10 +349,10 @@ class Contacts_CronHelpers
             ]
         );
 
-        // Insert attachment file record
         $adb->pquery(
-            "INSERT INTO vtiger_attachments (attachmentsid, name, description, type, path)
-         VALUES (?, ?, ?, ?, ?)",
+            "INSERT INTO vtiger_attachments
+        (attachmentsid, name, description, type, path)
+        VALUES (?, ?, ?, ?, ?)",
             [
                 $attachmentId,
                 $fileName,
@@ -323,17 +362,15 @@ class Contacts_CronHelpers
             ]
         );
 
-        // Link attachment to Document
         $adb->pquery(
             "INSERT INTO vtiger_seattachmentsrel (crmid, attachmentsid)
-         VALUES (?, ?)",
+        VALUES (?, ?)",
             [$documentId, $attachmentId]
         );
 
-        // Relate Document to Contact (so it appears in UI)
         $adb->pquery(
             "INSERT INTO vtiger_senotesrel (crmid, notesid)
-         VALUES (?, ?)",
+        VALUES (?, ?)",
             [$contactId, $documentId]
         );
 

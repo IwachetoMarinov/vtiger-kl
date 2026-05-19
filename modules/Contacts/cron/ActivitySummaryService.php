@@ -33,7 +33,6 @@ class Contacts_ActivitySummaryService
 
         // 3. Fetch all transactions for this client in the given date range
         $activities = $activity->getMonthlyTransactions($client_id, $start_date, $end_date);
-
         echo "Client ID: $client_id - Found " . count($activities) . " transactions from $start_date to $end_date\n";
 
         if (!is_array($activities) || count($activities) === 0) return;
@@ -45,7 +44,9 @@ class Contacts_ActivitySummaryService
         $currency_list = $activity->getTransactionCurrencies($client_id);
 
         // 6. Select default currency (first available)
-        $selected_currency = !empty($currency_list) ? $currency_list[0] : '';
+        $selected_currency = !empty($currency_list) && !empty($currency_list[0])
+            ? (string) $currency_list[0]
+            : 'USD';
 
         // 7. Get company information (used in PDF header)
         $company_record = Contacts_DefaultCompany_View::process();
@@ -88,14 +89,24 @@ class Contacts_ActivitySummaryService
         $templatePath = dirname(__DIR__, 3) . '/layouts/v7/modules/Contacts/ActivtySummeryPrintPreview.tpl';
         $html = $smarty->fetch('file:' . $templatePath);
 
+        // echo $html; // For debugging - outputs the generated HTML content
+        // die('DEBUG STOP BEFORE PDF - ActivitySummaryService.php');
+
         // 15. Generate PDF from HTML using wkhtmltopdf
-        $pdfPath = Contacts_CronHelpers::generatePdf($html, $client_id, $date_range, 'Monthly Activity Summary - %s - %s%s');
+        $pdfPath = Contacts_CronHelpers::generatePdf($html, $client_id, $date_range, 'Monthly_Activity_Summary_%s_%s_to_%s');
 
         // 16. If PDF generation failed → stop here
         if (!file_exists($pdfPath)) return;
 
         // 17. Store generated PDF in vTiger Documents module
-        $activityDocId =  $this->storePdfInDocuments($pdfPath, $client_id, $selected_year, $selected_currency);
+        // $activityDocId =  $this->storePdfInDocuments($pdfPath, $client_id, $selected_year, $selected_currency);
+        $activityDocId = Contacts_CronHelpers::storePdfInDocuments(
+            $pdfPath,
+            $client_id,
+            $selected_year,
+            $selected_currency,
+            'Monthly Activity Summary - %s - %s%s'
+        );
 
         // 18. Log the generated report in vtiger_ytdreports_log table
         Contacts_CronHelpers::logYTDReport($client_id, $start_date, $end_date, $activityDocId);
@@ -113,9 +124,6 @@ class Contacts_ActivitySummaryService
         } catch (Exception $e) {
             echo "Error inserting into monthly transactions: " . $e->getMessage() . "\n";
         }
-
-        // 20. Cleanup generated PDF file
-        if (file_exists($pdfPath)) unlink($pdfPath);
     }
 
     protected function insertIntoMonthlyTransactions(string $client_id, string $start_date, string $end_date, string $currency)
@@ -203,26 +211,25 @@ class Contacts_ActivitySummaryService
     {
         global $adb, $current_user;
 
-        // Ensure vTiger execution context (required for CRMEntity->save)
         $this->initExecutionUser();
 
-        // Validate PDF existence
-        if (!file_exists($pdfPath)) throw new Exception("PDF file does not exist: " . $pdfPath);
+        if (!file_exists($pdfPath)) {
+            throw new Exception("PDF file does not exist: " . $pdfPath);
+        }
 
-        // Get Contact + Owner info
         $contactInfo = $this->getContactInfoByClientId($client_id);
 
-        if (!$contactInfo) throw new Exception("No contact found for client_id: " . $client_id);
+        if (!$contactInfo) {
+            throw new Exception("No contact found for client_id: " . $client_id);
+        }
 
-        $contactId = $contactInfo['contact_id'];     // Contact record ID
-        $contactOwnerId = $contactInfo['owner_id'];  // Owner of the contact
+        $contactId = $contactInfo['contact_id'];
+        $contactOwnerId = $contactInfo['owner_id'];
 
-        // File metadata
         $fileName = basename($pdfPath);
         $fileSize = filesize($pdfPath);
         $mimeType = 'application/pdf';
 
-        // Document title
         $documentTitle = sprintf(
             'Monthly Activity Summary - %s - %s%s',
             $client_id,
@@ -230,32 +237,41 @@ class Contacts_ActivitySummaryService
             $selected_currency ? ' - ' . $selected_currency : ''
         );
 
-        // Create Document record
         $notes = CRMEntity::getInstance('Documents');
         $notes->column_fields['notes_title'] = $documentTitle;
         $notes->column_fields['filename'] = $fileName;
-        $notes->column_fields['filelocationtype'] = 'I'; // Internal file
+        $notes->column_fields['filelocationtype'] = 'I';
         $notes->column_fields['filestatus'] = 1;
         $notes->column_fields['filesize'] = $fileSize;
         $notes->column_fields['filetype'] = $mimeType;
         $notes->column_fields['folderid'] = 1;
         $notes->column_fields['notecontent'] = 'Auto-generated monthly activity summary.';
-        $notes->column_fields['assigned_user_id'] = $contactOwnerId; // Assign to client owner
+        $notes->column_fields['assigned_user_id'] = $contactOwnerId;
 
-        // Save Document (triggers workflows/events)
         $notes->save('Documents');
 
         $documentId = $notes->id;
-        if (!$documentId) throw new Exception('Failed to create Documents record.');
 
-        // Create attachment entry
+        if (!$documentId) {
+            throw new Exception('Failed to create Documents record.');
+        }
+
         $attachmentId = $adb->getUniqueID('vtiger_crmentity');
 
-        // Determine upload directory (vTiger storage)
-        // $uploadDir = decideFilePath();
         $basePath = realpath(dirname(__DIR__, 3));
-        // $uploadDir = $basePath . '/' . decideFilePath();
-        $uploadDir = $basePath . '/storage/';
+
+        if (!$basePath) {
+            throw new Exception('Cannot resolve base path.');
+        }
+
+        /*
+     * IMPORTANT:
+     * decideFilePath() must be called only once.
+     * Same relative path is used for DB.
+     * Same relative path + base path is used for physical file move.
+     */
+        $relativeUploadDir = decideFilePath();
+        $uploadDir = $basePath . '/' . $relativeUploadDir;
 
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0775, true);
@@ -264,20 +280,22 @@ class Contacts_ActivitySummaryService
         $storedFileName = $attachmentId . '_' . $fileName;
         $destination = $uploadDir . $storedFileName;
 
-        // MOVE instead of copy
         if (!rename($pdfPath, $destination)) {
             throw new Exception('Failed to move PDF to storage: ' . $destination);
         }
 
-        // Insert attachment entity
+        if (!file_exists($destination) || filesize($destination) === 0) {
+            throw new Exception('Stored PDF is missing or empty: ' . $destination);
+        }
+
         $adb->pquery(
             "INSERT INTO vtiger_crmentity
         (crmid, smcreatorid, smownerid, setype, description, createdtime, modifiedtime, presence, deleted)
         VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?)",
             [
                 $attachmentId,
-                $current_user->id,   // Technical creator (admin)
-                $contactOwnerId,     // Business owner (client owner)
+                $current_user->id,
+                $contactOwnerId,
                 'Documents Attachment',
                 $documentTitle,
                 1,
@@ -285,30 +303,30 @@ class Contacts_ActivitySummaryService
             ]
         );
 
-        // Insert attachment file record
         $adb->pquery(
-            "INSERT INTO vtiger_attachments (attachmentsid, name, description, type, path)
-         VALUES (?, ?, ?, ?, ?)",
+            "INSERT INTO vtiger_attachments
+        (attachmentsid, name, description, type, path)
+        VALUES (?, ?, ?, ?, ?)",
             [
                 $attachmentId,
                 $fileName,
                 $documentTitle,
                 $mimeType,
-                $uploadDir
+                $relativeUploadDir
             ]
         );
 
-        // Link attachment to Document
         $adb->pquery(
-            "INSERT INTO vtiger_seattachmentsrel (crmid, attachmentsid)
-         VALUES (?, ?)",
+            "INSERT INTO vtiger_seattachmentsrel
+        (crmid, attachmentsid)
+        VALUES (?, ?)",
             [$documentId, $attachmentId]
         );
 
-        // Relate Document to Contact (so it appears in UI)
         $adb->pquery(
-            "INSERT INTO vtiger_senotesrel (crmid, notesid)
-         VALUES (?, ?)",
+            "INSERT INTO vtiger_senotesrel
+        (crmid, notesid)
+        VALUES (?, ?)",
             [$contactId, $documentId]
         );
 

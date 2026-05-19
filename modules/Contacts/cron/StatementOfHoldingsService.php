@@ -84,14 +84,29 @@ class Contacts_StatementOfHoldingsService
         // echo $html;
 
         // 13. Generate PDF from HTML and store it in Documents module
-        $pdfPath = Contacts_CronHelpers::generatePdf($html, $client_id, $date_range, 'Monthly Statement of Holdings - %s - %s%s');
+        // $pdfPath = Contacts_CronHelpers::generatePdf($html, $client_id, $date_range, 'Monthly Statement of Holdings - %s - %s%s');
+        $pdfPath = Contacts_CronHelpers::generatePdf(
+            $html,
+            $client_id,
+            $date_range,
+            'Monthly_Statement_of_Holdings_%s_%s_to_%s'
+        );
 
         // 16. If PDF generation failed → stop here
         if (!file_exists($pdfPath)) return;
 
         // 17. Store generated PDF in vTiger Documents module
         $selected_year = date('Y', strtotime($date_range[0]));
-        $holdingsDocId = Contacts_CronHelpers::storePdfInDocuments($pdfPath, $client_id, $selected_year, "USD", 'Statement of Holdings - %s - %s to %s');
+
+        // $holdingsDocId = Contacts_CronHelpers::storePdfInDocuments($pdfPath, $client_id, $selected_year, "USD", 'Statement of Holdings - %s - %s to %s');
+        $holdingsDocId = Contacts_CronHelpers::storePdfInDocuments(
+            $pdfPath,
+            $client_id,
+            $selected_year,
+            "USD",
+            'Statement of Holdings - %s - %s%s'
+        );
+
         Contacts_CronHelpers::createYTDReportRecord(
             $client_id,
             $start_date,
@@ -107,9 +122,6 @@ class Contacts_StatementOfHoldingsService
             $end_date,
             $holdingsDocId
         );
-
-        // 19. Cleanup generated PDF file
-        if (file_exists($pdfPath)) unlink($pdfPath);
     }
 
     private function groupHoldingsByLocation(array $holdings): array

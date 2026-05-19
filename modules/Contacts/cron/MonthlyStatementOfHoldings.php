@@ -5,8 +5,8 @@ include_once 'CronHelpers.php';
 include_once 'StatementOfHoldingsService.php';
 
 // TEST cron job 
-// /usr/bin/php /var/www/html/monthly_sh.php
-// /usr/bin/php /var/www/html/monthly_transaction.php
+// /usr/bin/php /var/www/html/gpm-zu/monthly_sh.php
+// /usr/bin/php /var/www/html/gpm-zu/monthly_transaction.php
 
 class Contacts_MonthlyStatementOfHoldings
 {
@@ -24,12 +24,22 @@ class Contacts_MonthlyStatementOfHoldings
         // 3 Get all Party codes (client IDs) to process monthly transactions for each client
         $clint_ids =  Contacts_CronHelpers::fetchClientIds();
 
+        echo "Processing Statement of Holdings for " . count($clint_ids) . " clients...\n";
+        echo "Date Range: " . $date_range[0] . " to " . $date_range[1] . "\n";
+
         $service = new Contacts_StatementOfHoldingsService();
 
         foreach ($clint_ids as $client_id) {
-            echo "Processing client ID: $client_id for date range: " . $date_range[0] . " to " . $date_range[1] . "\n";
-
-            $service->processClient($client_id, $date_range);
+            try {
+                echo "\nProcessing client ID: $client_id\n";
+                $service->processClient($client_id, $date_range);
+                echo "Finished processing client ID: $client_id\n";
+            } catch (Throwable $e) {
+                echo "\nERROR processing client {$client_id}\n";
+                echo $e->getMessage() . "\n";
+                echo $e->getFile() . ':' . $e->getLine() . "\n";
+                return 0;
+            }
         }
     }
 }
