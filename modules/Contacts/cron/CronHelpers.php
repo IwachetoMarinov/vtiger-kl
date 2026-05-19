@@ -94,11 +94,21 @@ class Contacts_CronHelpers
         //     . escapeshellarg($inputFile) . ' '
         //     . escapeshellarg($pdfPath) . ' 2>&1';
 
-        $wkhtmltopdfBinary = trim(shell_exec('which wkhtmltopdf'));
+        $possibleBinaries = [
+            '/usr/local/bin/wkhtmltopdf',
+            '/usr/bin/wkhtmltopdf',
+        ];
 
-        if (!$wkhtmltopdfBinary) {
-            throw new Exception('wkhtmltopdf binary not found');
+        $wkhtmltopdfBinary = null;
+
+        foreach ($possibleBinaries as $binary) {
+            if (is_executable($binary)) {
+                $wkhtmltopdfBinary = $binary;
+                break;
+            }
         }
+
+        if (!$wkhtmltopdfBinary) throw new Exception('wkhtmltopdf binary not found');
 
         $command = $wkhtmltopdfBinary .
             ' --enable-local-file-access -L 0 -R 0 -B 0 -T 0 '
