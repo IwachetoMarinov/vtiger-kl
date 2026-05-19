@@ -284,3 +284,9 @@ sudo chmod -R 775 /var/www/html/crm_kl/cache/import`
    `sudo crontab -u www-data -e`
    add: press 1 and add: 
    `0 4 1 * * /usr/bin/php /var/www/html/gpm-zu/monthly_transaction.php`
+
+47. TEST cron job 
+DEV - `/usr/bin/php /var/www/html/gpm-kl/monthly_sh.php`
+LIVE - `/usr/bin/php /var/www/html/crm_kl/monthly_sh.php`
+DEV - `/usr/bin/php /var/www/html/gpm-du/monthly_transaction.php`  
+LIVE - `/usr/bin/php /var/www/html/crm_kl/monthly_transaction.php`  
