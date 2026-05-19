@@ -208,8 +208,11 @@
                 'weight',
                 'remarks',
                 'other_charge',
+                'item_price',
                 'narration',
                 'long_desc',
+                'premium_final',
+                'exchange_rate',
                 'serial_numbers',
                 'bar_number'
             ]}
