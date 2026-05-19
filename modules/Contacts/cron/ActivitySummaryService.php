@@ -62,9 +62,18 @@ class Contacts_ActivitySummaryService
 
         // 11. Initialize Smarty template engine
         $smarty = new Smarty();
-        $smarty->setCompileDir(dirname(__DIR__, 3) . '/test/templates_c/');
-        $smarty->setCacheDir(dirname(__DIR__, 3) . '/test/cache/');
-        $smarty->setConfigDir(dirname(__DIR__, 3) . '/test/config/');
+        // $smarty->setCompileDir(dirname(__DIR__, 3) . '/test/templates_c/');
+        // $smarty->setCacheDir(dirname(__DIR__, 3) . '/test/cache/');
+        // $smarty->setConfigDir(dirname(__DIR__, 3) . '/test/config/');
+        $smartyTmp = sys_get_temp_dir() . '/crm_kl_smarty_' . get_current_user();
+
+        if (!is_dir($smartyTmp . '/templates_c')) mkdir($smartyTmp . '/templates_c', 0775, true);
+        if (!is_dir($smartyTmp . '/cache')) mkdir($smartyTmp . '/cache', 0775, true);
+        if (!is_dir($smartyTmp . '/config')) mkdir($smartyTmp . '/config', 0775, true);
+
+        $smarty->setCompileDir($smartyTmp . '/templates_c/');
+        $smarty->setCacheDir($smartyTmp . '/cache/');
+        $smarty->setConfigDir($smartyTmp . '/config/');
 
         // 12. Register custom template resolver for vTiger templates
         $templateRoot = dirname(__DIR__, 3) . '/layouts/v7/modules';
