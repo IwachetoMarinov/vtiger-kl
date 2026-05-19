@@ -105,7 +105,7 @@ class MetalsAPI
 
         $stmt = sqlsrv_query($this->connection, $sql, $params);
 
-       if ($stmt === false) return [];
+        if ($stmt === false) return [];
 
         $data = [];
         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
@@ -116,6 +116,40 @@ class MetalsAPI
         }
 
         sqlsrv_free_stmt($stmt);
+
+        return $data;
+    }
+
+    public function checkDB()
+    {
+        if (!$this->connection) return [];
+
+        // Currency SQL - to check if connection and fetching is working fine
+        // $sql = "SELECT [Curr_Code],[Curr_Name],[Country] FROM $this->database_prefix.[DW_Currency]";
+
+        // Transaction history SQL - to check if connection and fetching is working fine
+        $sql = "SELECT * FROM $this->database_prefix.[DW_TxHxV2] WHERE Party_Code = 'D2106'";
+
+        echo '<pre>';
+        echo "Checking Metals API DB Connection and Data Fetching: \n";
+        var_dump($sql);
+        echo '</pre>';
+
+        $stmt = sqlsrv_query($this->connection, $sql);
+
+        if ($stmt === false) throw new \Exception('Metal types data is temporarily unavailable.');
+
+        $data = [];
+        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+            $data[] = $row;
+        }
+
+        sqlsrv_free_stmt($stmt);
+
+        echo '<pre>';
+        echo "DB Connection and Data Fetching Result: \n";
+        var_dump($data);
+        echo '</pre>';
 
         return $data;
     }

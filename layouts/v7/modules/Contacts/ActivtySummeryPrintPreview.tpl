@@ -193,9 +193,26 @@
                 text-align: center;
                 padding: 14px;cursor: pointer;">Settings</span>
             </li>
+            
+            {assign var="activityWarningExcludes" value=[
+                'scr_description',
+                'transaction_2',
+                'transaction_3',
+                'table_name_2',
+                'table_name_3',
+                'matched_amt',
+                'posting_date'
+            ]}
+
+            {include file='ActivitySummaryWarnings.tpl'|vtemplate_path:'Contacts'
+                TRANSACTIONS=$TRANSACTIONS
+                ACTIVITY_WARNING_EXCLUDES=$activityWarningExcludes
+            }
         </ul>
+
         <script type="text/javascript" src="layouts/v7/modules/Contacts/resources/ASPrintConf.js"></script>
         {include file='ASPrintConf.tpl'|vtemplate_path:'Contacts'}
+
         </ul>
     {/if}
 

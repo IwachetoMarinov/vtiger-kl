@@ -47,6 +47,7 @@ class Contacts_HoldingPrintPreview_View extends Vtiger_Index_View
                 'quantity' => isset($item['quantity']) ? (int) $item['quantity'] : 0,
                 'spot_price' => isset($item['spot_price']) ? (int) $item['spot_price'] : 0,
                 'longDesc' => $item['description'],
+                '_warnings' => $item['_warnings'] ?? [],
             ];
         }
 

@@ -189,6 +189,13 @@
       		background-color: #bea364;"
                     href="index.php?module=Contacts&view=HoldingPrintPreview&record={$RECORD_MODEL->getId()}&PDFDownload=true">Download</a>
             </li>
+
+            {assign var="holdingWarningExcludes" value=[]}
+
+            {include file='HoldingWarnings.tpl'|vtemplate_path:'Contacts'
+                HOLDINGS=$ERP_HOLDINGS
+                HOLDING_WARNING_EXCLUDES=$holdingWarningExcludes
+            }
         </ul>
     {/if}
     <div class="printAreaContainer">

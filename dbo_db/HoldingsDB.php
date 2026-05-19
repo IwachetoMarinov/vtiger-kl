@@ -191,7 +191,8 @@ class HoldingsDB
 
             sqlsrv_free_stmt($stmt);
 
-            return $this->formatHoldingsData($summary);
+            // return $this->formatHoldingsData($summary);
+            return HoldingsMapper::mapDocHoldingRows($summary);
         } catch (\Throwable $e) {
             return [];
         }
