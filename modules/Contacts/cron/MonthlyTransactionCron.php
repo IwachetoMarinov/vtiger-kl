@@ -20,9 +20,6 @@ class Contacts_MonthlyTransactionCron
         // 1. Build date range for the current month
         $date_range = $this->buildMonthlyDateRange();
 
-        // TEST RANGE
-        $date_range = ['2026-05-01', '2026-05-31'];
-
         $service = new Contacts_ActivitySummaryService();
 
         // 2 Get all Party codes (client IDs) to process monthly transactions for each client
@@ -34,9 +31,7 @@ class Contacts_MonthlyTransactionCron
         // Loop through each client and process their transactions for the month
         foreach ($clint_ids as $client_id) {
             try {
-                echo "\nProcessing client ID: $client_id\n";
                 $service->generateAndStoreForClient($client_id, $date_range);
-                echo "Finished processing client ID: $client_id\n";
             } catch (Throwable $e) {
                 echo "\nERROR processing client {$client_id}\n";
                 echo $e->getMessage() . "\n";

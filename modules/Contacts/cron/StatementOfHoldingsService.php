@@ -18,15 +18,15 @@ class Contacts_StatementOfHoldingsService
         $start_date = !empty($date_range) ? $date_range[0] : date('Y-m-01');
         $end_date = !empty($date_range) ? $date_range[1] : date('Y-m-t');
 
-        // if (Contacts_CronHelpers::ytdReportExists(
-        //     $client_id,
-        //     $start_date,
-        //     $end_date,
-        //     'Statement of Holdings'
-        // )) {
-        //     echo "Statement of Holdings already exists for client {$client_id}, period {$start_date} to {$end_date}\n";
-        //     return 0;
-        // }
+        if (Contacts_CronHelpers::ytdReportExists(
+            $client_id,
+            $start_date,
+            $end_date,
+            'Statement of Holdings'
+        )) {
+            echo "Statement of Holdings already exists for client {$client_id}, period {$start_date} to {$end_date}\n";
+            return 0;
+        }
 
         // 2. Fetch Statement of Holdings data for the client and date range
         $holdings = $this->fetchHoldings($client_id, $date_range, $holding);
@@ -93,7 +93,6 @@ class Contacts_StatementOfHoldingsService
         // echo $html;
 
         // 13. Generate PDF from HTML and store it in Documents module
-        // $pdfPath = Contacts_CronHelpers::generatePdf($html, $client_id, $date_range, 'Monthly Statement of Holdings - %s - %s%s');
         $pdfPath = Contacts_CronHelpers::generatePdf(
             $html,
             $client_id,
@@ -107,7 +106,6 @@ class Contacts_StatementOfHoldingsService
         // 17. Store generated PDF in vTiger Documents module
         $selected_year = date('Y', strtotime($date_range[0]));
 
-        // $holdingsDocId = Contacts_CronHelpers::storePdfInDocuments($pdfPath, $client_id, $selected_year, "USD", 'Statement of Holdings - %s - %s to %s');
         $holdingsDocId = Contacts_CronHelpers::storePdfInDocuments(
             $pdfPath,
             $client_id,
