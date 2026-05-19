@@ -331,14 +331,17 @@ class Contacts_CronHelpers
 
         chmod($destination, 0644);
 
-        // Required on STAGING/LIVE with SELinux
+        // SELinux fix (non-fatal)
+        $chconOutput = [];
+        $chconReturn = 0;
+
         exec(
             'chcon -t httpd_sys_content_t ' . escapeshellarg($destination) . ' 2>&1',
             $chconOutput,
             $chconReturn
         );
 
-        if ($chconReturn !== 0) throw new Exception('Failed to set SELinux context: ' . implode("\n", $chconOutput));
+        if ($chconReturn !== 0) echo "WARNING: chcon failed: " . implode("\n", $chconOutput) . "\n";
 
         if (!file_exists($destination)) throw new Exception('Stored PDF missing: ' . $destination);
 
