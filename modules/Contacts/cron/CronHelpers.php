@@ -65,12 +65,29 @@ class Contacts_CronHelpers
         return Vtiger_Record_Model::getInstanceById($row['contactid'], 'Contacts');
     }
 
-    public static function generatePdf($html, $client_id, $date_range, string $file_name_prefix = '%s-AS-%s-%s')
+    public static function buildActivitySummaryDocumentName(string $client_id, string $as_of_date): string
     {
-        $startDate = date('d-M-Y', strtotime($date_range[0]));
-        $endDate = date('d-M-Y', strtotime($date_range[1]));
+        $asOf = date('j M Y', strtotime($as_of_date));
 
-        $fileName = sprintf($file_name_prefix, $client_id, $startDate, $endDate);
+        return $client_id . ' - AS as of ' . $asOf;
+    }
+
+    public static function buildStatementOfHoldingsDocumentName(string $client_id, string $period_date): string
+    {
+        $period = date('M Y', strtotime($period_date));
+
+        return $client_id . ' - SH&V (' . $period . ')';
+    }
+
+    public static function generatePdf($html, $client_id, $date_range, string $file_name_prefix = '%s-AS-%s-%s', ?string $baseFileName = null)
+    {
+        if ($baseFileName !== null) {
+            $fileName = $baseFileName;
+        } else {
+            $startDate = date('d-M-Y', strtotime($date_range[0]));
+            $endDate = date('d-M-Y', strtotime($date_range[1]));
+            $fileName = sprintf($file_name_prefix, $client_id, $startDate, $endDate);
+        }
 
         $basePath = realpath(dirname(__DIR__, 3));
         $tmpDir = sys_get_temp_dir();
@@ -256,8 +273,14 @@ class Contacts_CronHelpers
         return $db->num_rows($result) > 0;
     }
 
-    public static function storePdfInDocuments(string $pdfPath, string $client_id, string $selected_year, string $selected_currency, string $titlePrefix = 'Monthly Activity Summary - %s - %s%s')
-    {
+    public static function storePdfInDocuments(
+        string $pdfPath,
+        string $client_id,
+        string $selected_year,
+        string $selected_currency,
+        string $titlePrefix = 'Monthly Activity Summary - %s - %s%s',
+        ?string $documentTitle = null
+    ) {
         global $adb, $current_user;
 
         self::initExecutionUser();
@@ -279,12 +302,14 @@ class Contacts_CronHelpers
         $fileSize = filesize($pdfPath);
         $mimeType = 'application/pdf';
 
-        $documentTitle = sprintf(
-            $titlePrefix,
-            $client_id,
-            $selected_year,
-            $selected_currency ? ' - ' . $selected_currency : ''
-        );
+        if ($documentTitle === null) {
+            $documentTitle = sprintf(
+                $titlePrefix,
+                $client_id,
+                $selected_year,
+                $selected_currency ? ' - ' . $selected_currency : ''
+            );
+        }
 
         $notes = CRMEntity::getInstance('Documents');
         $notes->column_fields['notes_title'] = $documentTitle;

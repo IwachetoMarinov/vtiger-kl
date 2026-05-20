@@ -93,12 +93,8 @@ class Contacts_StatementOfHoldingsService
         // echo $html;
 
         // 13. Generate PDF from HTML and store it in Documents module
-        $pdfPath = Contacts_CronHelpers::generatePdf(
-            $html,
-            $client_id,
-            $date_range,
-            'Monthly_Statement_of_Holdings_%s_%s_to_%s'
-        );
+        $documentName = Contacts_CronHelpers::buildStatementOfHoldingsDocumentName($client_id, $start_date);
+        $pdfPath = Contacts_CronHelpers::generatePdf($html, $client_id, $date_range, '', $documentName);
 
         // 16. If PDF generation failed → stop here
         if (!file_exists($pdfPath)) return;
@@ -111,7 +107,8 @@ class Contacts_StatementOfHoldingsService
             $client_id,
             $selected_year,
             "USD",
-            'Statement of Holdings - %s - %s%s'
+            'Statement of Holdings - %s - %s%s',
+            $documentName
         );
 
         Contacts_CronHelpers::createYTDReportRecord(
