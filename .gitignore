@@ -2,6 +2,7 @@ vendor/*
 test/*
 !vendor/.htaccess
 .vscode/*
+.cursor/
 config.inc.php
 .htaccess
 logs/

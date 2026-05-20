@@ -91,23 +91,36 @@ class BankAccount_Record_Model extends Vtiger_Record_Model
         return $instances;
     }
 
-
-    public static function OLDgetInstancesByCompanyID($comId)
+    public function getIban()
     {
-        $db = PearDatabase::getInstance();
+        $fieldName = $this->getFieldNameByLabel('Beneficiary IBAN No');
 
-        $relatedModuleResult = $db->pquery('select bankaccountid from vtiger_bankaccount AS A JOIN vtiger_crmentity AS B ON (A.bankaccountid = B.crmid )  where B.deleted = 0 and related_entity = ? ', array($comId));
-        $rows = $db->num_rows($relatedModuleResult);
-        $instances = [];
-        for ($i = 0; $i < $rows; $i++) {
-            $recordId = $db->query_result($relatedModuleResult, $i, 'bankaccountid');
-            $focus = CRMEntity::getInstance('BankAccount');
-            $focus->id = $recordId;
-            $focus->retrieve_entity_info($recordId, 'BankAccount');
-            $modelClassName = Vtiger_Loader::getComponentClassName('Model', 'Record', 'BankAccount');
-            $instance = new $modelClassName();
-            $instances[] = $instance->setData($focus->column_fields)->set('id', $recordId)->setModule('BankAccount')->setEntity($focus);
+        if (empty($fieldName)) {
+            return $this->get('iban_no') ?: $this->get('cf_1149');
         }
-        return $instances;
+
+        return $this->get($fieldName);
+    }
+
+    private function getFieldNameByLabel($fieldLabel)
+    {
+        global $adb;
+
+        $result = $adb->pquery(
+            "SELECT vtiger_field.fieldname
+             FROM vtiger_field
+             INNER JOIN vtiger_tab ON vtiger_tab.tabid = vtiger_field.tabid
+             WHERE vtiger_tab.name = ?
+             AND vtiger_field.fieldlabel = ?
+             AND vtiger_field.presence IN (0, 2)
+             LIMIT 1",
+            ['BankAccount', $fieldLabel]
+        );
+
+        if ($adb->num_rows($result) === 0) {
+            return null;
+        }
+
+        return $adb->query_result($result, 0, 'fieldname');
     }
 }

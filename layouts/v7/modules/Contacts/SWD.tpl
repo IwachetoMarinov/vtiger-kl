@@ -419,30 +419,7 @@
                         {* {/if} *}
                         <br>
                         <br>
-                        <div>
-                            Please transfer the payment net of charges to our bank account:<br>
-                            Beneficiary: {$SELECTED_BANK->get('beneficiary_name')}<br>
-                            Account No: {$SELECTED_BANK->get('account_no')}
-                            {$SELECTED_BANK->get('account_currency')}<br>
-                            {if trim(count_chars(strtolower($SELECTED_BANK->get('iban_no')),3)) != 'x'}
-                                IBAN: {$SELECTED_BANK->get('iban_no')}<br>
-                            {/if}
-                            Bank: {$SELECTED_BANK->get('bank_name')}<br>
-                            Bank Address: {$SELECTED_BANK->get('bank_address')}<br>
-                            Swift Code: {$SELECTED_BANK->get('swift_code')}<br>
-                            {if trim(count_chars(strtolower($SELECTED_BANK->get('bank_routing_no')),3)) == 'x'}
-                                Bank Code: {$SELECTED_BANK->get('bank_code')}<br>
-                                Branch Code: {$SELECTED_BANK->get('branch_code')}<br>
-                            {else}
-                                Routing No: {$SELECTED_BANK->get('bank_routing_no')}<br>
-                            {/if}
-                            <br>
-                            <br>
-                            {if !empty($SELECTED_BANK->get('intermediary_bank'))}
-                                Intermediary Bank: {$SELECTED_BANK->get('intermediary_bank')}<br>
-                                Swift Code: {$SELECTED_BANK->get('intermediary_swift_code')}<br>
-                            {/if}
-                        </div>
+                        {include file='BankDetails.tpl'|vtemplate_path:'Contacts' selected_bank=$SELECTED_BANK}
                     </td>
                 </tr>
                 <tr>

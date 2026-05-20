@@ -660,41 +660,7 @@
                 <div style="margin-left: 2mm; margin-top:2mm;">
                     <p>(b) to <span class="bolder-element">GPM’s bank account</span> as follows:</p>
                     <div style="padding-left: 5mm;">
-                        {if $SELECTED_BANK}
-                            {assign var=iban value=$SELECTED_BANK->get('iban_no')|lower|replace:' ':''}
-                            {assign var=bank_routing_no value=$SELECTED_BANK->get('bank_routing_no')|lower|replace:' ':''}
-
-                            {if isset($SELECTED_BANK) && $SELECTED_BANK && method_exists($SELECTED_BANK, 'getId')}
-                                <input type="hidden" class="selected-bank" value="{$SELECTED_BANK->getId()}">
-                            {/if}
-
-                            <div>
-                                Please transfer the payment net of charges to our bank account:<br>
-                                Beneficiary: {$SELECTED_BANK->get('beneficiary_name')}<br>
-                                Account No: {$SELECTED_BANK->get('account_no')}
-                                <br>
-
-                                {if $iban neq 'x'}
-                                    IBAN: {$SELECTED_BANK->get('iban_no')}<br>
-                                {/if}
-
-                                Bank: {$SELECTED_BANK->get('bank_name')}<br>
-                                Bank Address: {$SELECTED_BANK->get('bank_address')}<br>
-                                Swift Code: {$SELECTED_BANK->get('swift_code')}<br>
-
-                                {if $bank_routing_no neq 'x'}
-                                    Bank Code: {$SELECTED_BANK->get('bank_code')}<br>
-                                    Branch Code: {$SELECTED_BANK->get('branch_code')}<br>
-                                {else}
-                                    Routing No: {$SELECTED_BANK->get('bank_routing_no')}<br>
-                                {/if}
-
-                                {if !empty($SELECTED_BANK->get('intermediary_bank'))}
-                                    Intermediary Bank: {$SELECTED_BANK->get('intermediary_bank')}<br>
-                                    Swift Code: {$SELECTED_BANK->get('intermediary_swift_code')}<br>
-                                {/if}
-                            </div>
-                        {/if}
+                        {include file='BankDetails.tpl'|vtemplate_path:'Contacts' selected_bank=$SELECTED_BANK}
                     </div>
                 </div>
             </div>

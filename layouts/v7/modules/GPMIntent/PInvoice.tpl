@@ -138,26 +138,7 @@
                         </table>
 
                         <!-- Bank info -->
-                        {if isset($SELECTED_BANK) && $SELECTED_BANK}
-                            {assign var=ROUTING value=$SELECTED_BANK->get('bank_routing_no')}
-                        {else}
-                            {assign var=ROUTING value=''}
-                        {/if}
-                        <div>
-                            Please transfer the payment net of charges to our bank account:<br><br>
-                            Beneficiary: {if $SELECTED_BANK}{$SELECTED_BANK->get('beneficiary_name')}{/if}<br>
-                            Account No: {if $SELECTED_BANK}{$SELECTED_BANK->get('account_no')}
-                            {$SELECTED_BANK->get('account_currency')}{/if}<br>
-                            {if $ROUTING && trim(count_chars(strtolower($ROUTING),3)) == 'x'}
-                                Bank Code: {$SELECTED_BANK->get('bank_code')}<br>
-                                Branch Code: {$SELECTED_BANK->get('branch_code')}<br>
-                            {else}
-                                Routing No: {$ROUTING}<br>
-                            {/if}
-                            Bank: {if $SELECTED_BANK}{$SELECTED_BANK->get('bank_name')}{/if}<br>
-                            Bank Address: {if $SELECTED_BANK}{$SELECTED_BANK->get('bank_address')}{/if}<br>
-                            Swift Code: {if $SELECTED_BANK}{$SELECTED_BANK->get('swift_code')}{/if}<br>
-                        </div>
+                        {include file='BankDetails.tpl'|vtemplate_path:'Contacts' selected_bank=$SELECTED_BANK}
 
                     </td>
                 </tr>
