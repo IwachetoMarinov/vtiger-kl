@@ -65,11 +65,26 @@ class Contacts_CronHelpers
         return Vtiger_Record_Model::getInstanceById($row['contactid'], 'Contacts');
     }
 
-    public static function buildActivitySummaryDocumentName(string $client_id, string $as_of_date): string
+    // Add comments here: Builds the date range for the current year and month
+    // The date range is from the first day of the year to the last day of the previous month
+    public static function buildYearMonthDateRange()
     {
-        $asOf = date('j M Y', strtotime($as_of_date));
+        $startDate = date('Y-01-01');
+        $endDate = date('Y-m-t', strtotime('last month'));
+        return [$startDate, $endDate];
+    }
 
-        return $client_id . ' - AS as of ' . $asOf;
+    /**
+     * Human-readable document title + attachment name for monthly Activity Summary (AS).
+     * Example: D2002 - AS as of 31 Jan 2026 — uses period **end** date (month-end "as of").
+     */
+    public static function getMonthlyActivitySummaryDocumentTitle(string $clientId, string $periodEndDateYmd, ?string $currency = null): string
+    {
+        $ts = strtotime($periodEndDateYmd);
+        if ($ts === false) {
+            $ts = time();
+        }
+        return sprintf('%s - AS as of %s %s', $clientId, date('j M Y', $ts), $currency ? ' - ' . $currency : '');
     }
 
     public static function buildStatementOfHoldingsDocumentName(string $client_id, string $period_date): string
@@ -187,12 +202,27 @@ class Contacts_CronHelpers
         );
     }
 
+    public static function buildYtdReportName(
+        string $reportType,
+        string $client_id,
+        string $start_date,
+        string $end_date,
+        ?string $currency = null
+    ): string {
+        $name = sprintf('%s - %s - %s to %s', $reportType, $client_id, $start_date, $end_date);
+        if ($currency !== null && $currency !== '') {
+            $name .= ' - ' . $currency;
+        }
+        return $name;
+    }
+
     public static function createYTDReportRecord(
         string $client_id,
         string $start_date,
         string $end_date,
         int $documentId,
-        string $reportType
+        string $reportType,
+        ?string $currency = null
     ) {
         global $adb, $current_user;
 
@@ -206,13 +236,15 @@ class Contacts_CronHelpers
         require_once 'modules/YTDReports/YTDReports.php';
 
         $report = CRMEntity::getInstance('YTDReports');
-        $report->column_fields['ytdreportsname'] = sprintf(
-            '%s - %s - %s to %s',
+
+        $report->column_fields['ytdreportsname'] = self::buildYtdReportName(
             $reportType,
             $client_id,
             $start_date,
-            $end_date
+            $end_date,
+            $currency
         );
+
         $report->column_fields['client_id'] = $client_id;
         $report->column_fields['assigned_user_id'] = $current_user->id;
 
@@ -248,17 +280,12 @@ class Contacts_CronHelpers
         string $client_id,
         string $start_date,
         string $end_date,
-        string $reportType
+        string $reportType,
+        ?string $currency = null
     ): bool {
         $db = PearDatabase::getInstance();
 
-        $name = sprintf(
-            '%s - %s - %s to %s',
-            $reportType,
-            $client_id,
-            $start_date,
-            $end_date
-        );
+        $name = self::buildYtdReportName($reportType, $client_id, $start_date, $end_date, $currency);
 
         $result = $db->pquery(
             "SELECT ce.crmid
@@ -277,7 +304,7 @@ class Contacts_CronHelpers
         string $pdfPath,
         string $client_id,
         string $selected_year,
-        string $selected_currency,
+        ?string $selected_currency = null,
         string $titlePrefix = 'Monthly Activity Summary - %s - %s%s',
         ?string $documentTitle = null
     ) {

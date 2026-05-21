@@ -21,70 +21,72 @@ class Contacts_ActivitySummaryService
         $start_date = !empty($date_range) ? $date_range[0] : date('Y-m-01');
         $end_date = !empty($date_range) ? $date_range[1] : date('Y-m-t');
 
+        // 3. Get curreny list for the client
+        $currency_list = $activity->getTransactionCurrencies($client_id);
+
+        //   4. Loop through each currency and process the activity summary
+        foreach ($currency_list as $currency) {
+            $this->processClient($client_id, $currency, $selected_year, $start_date, $end_date, $activity);
+        }
+
+        // 5. Create a new record for all currencies
+        $this->processClient($client_id, null, $selected_year, $start_date, $end_date, $activity);
+    }
+
+    protected function processClient(string $client_id, $currency = null, string $selected_year, string $start_date, string $end_date, dbo_db\ActivitySummary $activity)
+    {
+
+        //   1. Check if the activity summary already exists for the client and period
         if (Contacts_CronHelpers::ytdReportExists(
             $client_id,
             $start_date,
             $end_date,
-            'Activity Summary'
+            'Activity Summary',
+            $currency
         )) {
             echo "Activity Summary already exists for client {$client_id}, period {$start_date} to {$end_date}\n";
             return 0;
         }
 
-        // 3. Fetch all transactions for this client in the given date range
-        $activities = $activity->getMonthlyTransactions($client_id, $start_date, $end_date);
+        // 2. Fetch all transactions for this client in the given date range
+        $activities = $activity->getMonthlyTransactions($client_id, $start_date, $end_date, $currency);
+
         echo "Client ID: $client_id - Found " . count($activities) . " transactions from $start_date to $end_date\n";
 
         if (!is_array($activities) || count($activities) === 0) return;
 
-        // 4. Get Contact record model (used for template rendering)
+        // 3. Get Contact record model (used for template rendering)
         $contactRecord = $this->getContactRecordByClientId($client_id);
 
-        // 5. Get all currencies used by this client
-        $currency_list = $activity->getTransactionCurrencies($client_id);
-
-        // 6. Select default currency (first available)
-        $selected_currency = !empty($currency_list) && !empty($currency_list[0])
-            ? (string) $currency_list[0]
-            : 'USD';
-
-        // 7. Get company information (used in PDF header)
+        // 4. Get company information (used in PDF header)
         $company_record = Contacts_DefaultCompany_View::process();
 
-        // 8. Build full company address string
+        // 5. Build full company address string
         $company_full_address = Helper::getCompanyFullAddress($company_record);
 
-        // 9. Get opening balance for this client and period
-        $opening_balance = $activity->getActivitySummaryOpeningBalance($client_id, $selected_currency, $start_date);
+        // 6. Get opening balance for this client and period
+        $opening_balance = $activity->getActivitySummaryOpeningBalance($client_id, $currency, $start_date);
 
-        // 10. Calculate pagination (for PDF layout)
+        // 7. Calculate pagination (for PDF layout)
         $pages = $this->makeDataPage($activities);
 
-        // 11. Initialize Smarty template engine
+        // 8. Initialize Smarty template engine
         $smarty = new Smarty();
-        // $smarty->setCompileDir(dirname(__DIR__, 3) . '/test/templates_c/');
-        // $smarty->setCacheDir(dirname(__DIR__, 3) . '/test/cache/');
-        // $smarty->setConfigDir(dirname(__DIR__, 3) . '/test/config/');
-        $smartyTmp = sys_get_temp_dir() . '/crm_kl_smarty_' . get_current_user();
+        $smarty->setCompileDir(dirname(__DIR__, 3) . '/test/templates_c/');
+        $smarty->setCacheDir(dirname(__DIR__, 3) . '/test/cache/');
+        $smarty->setConfigDir(dirname(__DIR__, 3) . '/test/config/');
 
-        if (!is_dir($smartyTmp . '/templates_c')) mkdir($smartyTmp . '/templates_c', 0775, true);
-        if (!is_dir($smartyTmp . '/cache')) mkdir($smartyTmp . '/cache', 0775, true);
-        if (!is_dir($smartyTmp . '/config')) mkdir($smartyTmp . '/config', 0775, true);
-
-        $smarty->setCompileDir($smartyTmp . '/templates_c/');
-        $smarty->setCacheDir($smartyTmp . '/cache/');
-        $smarty->setConfigDir($smartyTmp . '/config/');
-
-        // 12. Register custom template resolver for vTiger templates
+        // 9. Register custom template resolver for vTiger templates
         $templateRoot = dirname(__DIR__, 3) . '/layouts/v7/modules';
         $smarty->registerPlugin('modifier', 'vtemplate_path', function ($templateName, $moduleName) use ($templateRoot) {
             return $templateRoot . '/' . $moduleName . '/' . $templateName;
         });
 
-        // 13. Assign all variables required by the template
+        // 10. Assign all variables required by the template
         $ROOT_DIRECTORY = getenv('ROOT_DIRECTORY') ?: ($ROOT_DIRECTORY ?? null);
         $smarty->assign('ROOT_DIRECTORY', $ROOT_DIRECTORY);
         $smarty->assign('RECORD_MODEL', $contactRecord);
+        $smarty->assign('CURRENCY', $currency ?? 'All');
         $smarty->assign('TRANSACTIONS', $activities);
         $smarty->assign('COMPANY', $company_record);
         $smarty->assign('PAGES', $pages);
@@ -94,46 +96,54 @@ class Contacts_ActivitySummaryService
         $smarty->assign('EARLIEST_DATE', $start_date ? date('Y-M-d', strtotime($start_date)) : null);
         $smarty->assign('LATEST_DATE', $end_date ? date('Y-M-d', strtotime($end_date)) : null);
 
-        // 14. Render HTML from Smarty template
+        // 11. Render HTML from Smarty template
         $templatePath = dirname(__DIR__, 3) . '/layouts/v7/modules/Contacts/ActivtySummeryPrintPreview.tpl';
         $html = $smarty->fetch('file:' . $templatePath);
 
-        // 15. Generate PDF from HTML using wkhtmltopdf
-        $documentName = Contacts_CronHelpers::buildActivitySummaryDocumentName($client_id, $start_date);
-        $pdfPath = Contacts_CronHelpers::generatePdf($html, $client_id, $date_range, '', $documentName);
+        // echo $html;
+        // return;
+        // die();
 
-        // 16. If PDF generation failed → stop here
+        $date_range = [$start_date, $end_date];
+
+        // 12. Generate PDF from HTML using wkhtmltopdf
+        $pdfPath = Contacts_CronHelpers::generatePdf($html, $client_id, $date_range, 'Monthly_Activity_Summary_%s_%s_to_%s');
+
+        // 13. If PDF generation failed → stop here
         if (!file_exists($pdfPath)) return;
 
-        // 17. Store generated PDF in vTiger Documents module
+        // 14. Store generated PDF in vTiger Documents module
+        $docDisplayName = Contacts_CronHelpers::getMonthlyActivitySummaryDocumentTitle($client_id, $end_date, $currency);
         $activityDocId = Contacts_CronHelpers::storePdfInDocuments(
             $pdfPath,
             $client_id,
             $selected_year,
-            $selected_currency,
+            $currency,
             'Monthly Activity Summary - %s - %s%s',
-            $documentName
+            $docDisplayName
         );
 
-        // 18. Log the generated report in vtiger_ytdreports_log table
+        // 15. Log the generated report in vtiger_ytdreports_log table
         Contacts_CronHelpers::logYTDReport($client_id, $start_date, $end_date, $activityDocId);
+
         Contacts_CronHelpers::createYTDReportRecord(
             $client_id,
             $start_date,
             $end_date,
             $activityDocId,
-            'Activity Summary'
+            'Activity Summary',
+            $currency
         );
 
-        // 19. Insert into monthly transactions table for record-keeping
+        // 16. Insert into monthly transactions table for record-keeping
         try {
-            $this->insertIntoMonthlyTransactions($client_id, $start_date, $end_date, $selected_currency);
+            $this->insertIntoMonthlyTransactions($client_id, $start_date, $end_date, $currency);
         } catch (Exception $e) {
             echo "Error inserting into monthly transactions: " . $e->getMessage() . "\n";
         }
     }
 
-    protected function insertIntoMonthlyTransactions(string $client_id, string $start_date, string $end_date, string $currency)
+    protected function insertIntoMonthlyTransactions(string $client_id, string $start_date, string $end_date, ?string $currency = null)
     {
         $db = PearDatabase::getInstance();
         $result = $db->pquery(
@@ -142,8 +152,7 @@ class Contacts_ActivitySummaryService
             [$client_id, $start_date, $end_date]
         );
 
-        $description = sprintf('Monthly activity summary for client_id %s, period: %s to %s, currency: %s', $client_id, $start_date, $end_date, $currency);
-
+        $description = sprintf('Monthly activity summary for client_id %s, period: %s to %s, currency: %s', $client_id, $start_date, $end_date, $currency ?? 'All');
 
         if ($db->num_rows($result) == 0) {
             $db->pquery(

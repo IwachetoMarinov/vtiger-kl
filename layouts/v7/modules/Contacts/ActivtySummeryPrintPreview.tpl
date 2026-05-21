@@ -223,7 +223,7 @@
 
     {assign var="start" value=0}
     {assign var="end" value=1}
-    {assign var="currency" value=$smarty.request.ActivtySummeryCurrency|default:''}
+    {assign var="currency" value=$smarty.request.ActivtySummeryCurrency|default:$CURRENCY|default:'USD'}
 
     {for $page=1 to $PAGES}
         {if $page eq 1}

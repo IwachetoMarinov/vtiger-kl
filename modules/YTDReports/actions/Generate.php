@@ -26,9 +26,10 @@ class YTDReports_Generate_Action extends Vtiger_Action_Controller
             if (!$client_id)  throw new Exception('Client ID not found');
 
             $date_range = Contacts_CronHelpers::buildMonthlyDateRange();
+            $activity_date_range = Contacts_CronHelpers::buildYearMonthDateRange();
 
             $activityService = new Contacts_ActivitySummaryService();
-            $activityService->generateAndStoreForClient(strval($client_id), $date_range);
+            $activityService->generateAndStoreForClient(strval($client_id), $activity_date_range);
 
             $holdingsService = new Contacts_StatementOfHoldingsService();
             $holdingsService->processClient(strval($client_id), $date_range);
