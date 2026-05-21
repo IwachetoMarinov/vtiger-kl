@@ -329,7 +329,7 @@ class ActivitySummary
         return $items;
     }
 
-    public function getMonthlyTransactions($client_id, $start_date, $end_date)
+    public function getMonthlyTransactions($client_id, $start_date, $end_date, $currency = null)
     {
         if (!$client_id || !$this->connection || !$start_date || !$end_date) return [];
 
@@ -349,8 +349,12 @@ class ActivitySummary
                 $params[] = $end_date;
             }
 
-            // $sql = "SELECT * FROM $this->database_prefix.[DW_TxHxv2] $where order by [Tx_Date] DESC";
-            $sql = "SELECT * FROM $this->database_prefix.[DW_TxHx] $where order by [Tx_Date] DESC";
+            if ($currency) {
+                $where .= " AND [Curr_Code] = ?";
+                $params[] = $currency;
+            }
+
+            $sql = "SELECT * FROM {$this->database_prefix}.[DW_TxHxv2] {$where} ORDER BY [Tx_Date] DESC";
 
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
