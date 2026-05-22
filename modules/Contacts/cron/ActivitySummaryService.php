@@ -45,7 +45,7 @@ class Contacts_ActivitySummaryService
             $currency
         )) {
             echo "Activity Summary already exists for client {$client_id}, period {$start_date} to {$end_date}\n";
-            return 0;
+            return;
         }
 
         // 2. Fetch all transactions for this client in the given date range
