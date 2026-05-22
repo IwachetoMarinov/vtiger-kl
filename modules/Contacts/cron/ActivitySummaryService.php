@@ -86,7 +86,7 @@ class Contacts_ActivitySummaryService
         $ROOT_DIRECTORY = getenv('ROOT_DIRECTORY') ?: ($ROOT_DIRECTORY ?? null);
         $smarty->assign('ROOT_DIRECTORY', $ROOT_DIRECTORY);
         $smarty->assign('RECORD_MODEL', $contactRecord);
-        $smarty->assign('CURRENCY', $currency ?? 'All');
+        $smarty->assign('CURRENCY', $currency ?? 'All Currencies');
         $smarty->assign('TRANSACTIONS', $activities);
         $smarty->assign('COMPANY', $company_record);
         $smarty->assign('PAGES', $pages);
