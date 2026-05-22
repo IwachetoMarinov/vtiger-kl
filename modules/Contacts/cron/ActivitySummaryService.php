@@ -37,16 +37,16 @@ class Contacts_ActivitySummaryService
     {
 
         //   1. Check if the activity summary already exists for the client and period
-        // if (Contacts_CronHelpers::ytdReportExists(
-        //     $client_id,
-        //     $start_date,
-        //     $end_date,
-        //     'Activity Summary',
-        //     $currency
-        // )) {
-        //     echo "Activity Summary already exists for client {$client_id}, period {$start_date} to {$end_date}\n";
-        //     return 0;
-        // }
+        if (Contacts_CronHelpers::ytdReportExists(
+            $client_id,
+            $start_date,
+            $end_date,
+            'Activity Summary',
+            $currency
+        )) {
+            echo "Activity Summary already exists for client {$client_id}, period {$start_date} to {$end_date}\n";
+            return 0;
+        }
 
         // 2. Fetch all transactions for this client in the given date range
         $activities = $activity->getMonthlyTransactions($client_id, $start_date, $end_date, $currency);
