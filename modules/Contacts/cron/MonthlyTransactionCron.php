@@ -29,7 +29,7 @@ class Contacts_MonthlyTransactionCron
 
         echo "Processing Activity Summaries for " . count($clint_ids) . " clients...\n";
         echo "Date Range: " . $date_range[0] . " to " . $date_range[1] . "\n";
-        
+
         // Loop through each client and process their transactions for the month
         foreach ($clint_ids as $client_id) {
             try {
@@ -38,7 +38,7 @@ class Contacts_MonthlyTransactionCron
                 echo "\nERROR processing client {$client_id}\n";
                 echo $e->getMessage() . "\n";
                 echo $e->getFile() . ':' . $e->getLine() . "\n";
-                return 0;
+                continue; // Continue with the next client even if there's an error with the current one
             }
         }
     }
