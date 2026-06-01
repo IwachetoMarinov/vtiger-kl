@@ -143,7 +143,7 @@ class Contacts_CronHelpers
         if (!$wkhtmltopdfBinary) throw new Exception('wkhtmltopdf binary not found');
 
         $command = $wkhtmltopdfBinary .
-            ' --enable-local-file-access -L 0 -R 0 -B 0 -T 0 '
+            ' --enable-local-file-access --print-media-type --disable-smart-shrinking -L 0 -R 0 -B 0 -T 0 '
             . escapeshellarg($inputFile) . ' '
             . escapeshellarg($pdfPath) . ' 2>&1';
 
