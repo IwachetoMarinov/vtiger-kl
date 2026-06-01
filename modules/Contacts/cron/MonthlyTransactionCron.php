@@ -15,7 +15,7 @@ class Contacts_MonthlyTransactionCron
     public function process()
     {
         // 0. Check if not last day of the month, if yes then exit (to avoid running on the last day of the month)
-        if (date('d') !== date('t')) return;
+        // if (date('d') !== date('t')) return;
 
         // 1. Build date range for the current month
         $date_range = $this->buildYearMonthDateRange();
