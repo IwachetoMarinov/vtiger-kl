@@ -354,7 +354,7 @@ class ActivitySummary
                 $params[] = $currency;
             }
 
-            $sql = "SELECT * FROM {$this->database_prefix}.[DW_TxHxv2] {$where} ORDER BY [Tx_Date] DESC";
+            $sql = "SELECT * FROM {$this->database_prefix}.[DW_TxHxv2] {$where} ORDER BY [Tx_Date] ASC";
 
             $summary = GetDBRows::getRows($this->connection, $sql, $params);
 
