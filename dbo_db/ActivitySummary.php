@@ -360,6 +360,9 @@ class ActivitySummary
 
             $results  = [];
             foreach ($summary as $item) {
+                $doctype = strtoupper(explode('/', $item['Tx_No'] ?? '')[0]);
+                if ($doctype === 'SO') continue;
+
                 $description = $item['Description'] ? $item['Description'] : $item['Tx_Desc'] ?? '';
 
                 $results[] = [
