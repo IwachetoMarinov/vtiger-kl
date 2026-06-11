@@ -71,16 +71,16 @@ class Contacts_DetailView_Model extends Accounts_DetailView_Model
             $linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
         }
 
-        if (Users_Privileges_Model::isPermitted($moduleName, 'DetailView', $recordId)) {
-            $basicActionLink = array(
-                'linktype' => 'DETAILVIEWBASIC',
-                'linklabel' => 'Generate YTD Report',
-                'linkurl' => 'javascript:generateYTDReport(' . $recordId . ');',
-                'linkicon' => '',
-            );
+        // if (Users_Privileges_Model::isPermitted($moduleName, 'DetailView', $recordId)) {
+        //     $basicActionLink = array(
+        //         'linktype' => 'DETAILVIEWBASIC',
+        //         'linklabel' => 'Generate YTD Report',
+        //         'linkurl' => 'javascript:generateYTDReport(' . $recordId . ');',
+        //         'linkicon' => '',
+        //     );
 
-            $linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
-        }
+        //     $linkModelList['DETAILVIEW'][] = Vtiger_Link_Model::getInstanceFromValues($basicActionLink);
+        // }
 
         return $linkModelList;
     }
